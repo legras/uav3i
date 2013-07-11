@@ -14,9 +14,6 @@ import com.deev.interaction.uav3i.model.MediaStorefront;
  */
 public class Launcher
 {
-  // Pour test push...
-  // Comment 2
-  
 	public static String REGION;
 	public static double REF_HEIGHT = 1305.;
 	public static boolean TUIO = false;
