@@ -38,8 +38,8 @@ public class Launcher
 				final MainFrame frame = new MainFrame(domain);
 				frame.setVisible(true);	
 				frame.requestFocusInWindow();
-				if (FULLSCREEN)
-					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+//				if (FULLSCREEN)
+//					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 			  }
 		});
 		

@@ -40,7 +40,7 @@ public class MainFrame extends JFrame
 		try
 		{
 			setUndecorated(true);
-			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			//screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			setBounds(0, 0, screenSize.width, screenSize.height);
 			
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
