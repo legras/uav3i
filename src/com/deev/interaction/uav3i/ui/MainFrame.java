@@ -59,21 +59,23 @@ public class MainFrame extends JFrame
 		
 		JLayeredPane lpane = this.getLayeredPane();
 		
-		MapGround grnd = null;
+//		MapGround grnd = null;
+		GoogleMap grnd = null;
 		BufferedImage image;
-		try
-		{
-			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
-			grnd = new MapGround(image);
+//		try
+//		{
+//			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
+			//grnd = new MapGround(image);
+			grnd = new GoogleMap();
 			grnd.setBounds(0, 0, screenSize.width, screenSize.height);
 			lpane.add(grnd, new Integer(-20));
-			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
-		}
-		catch (IOException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
+//		}
+//		catch (IOException e1)
+//		{
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 
 		SymbolMap map = new SymbolMap(domain);
 		map.setBounds(0, 0, screenSize.width, screenSize.height);

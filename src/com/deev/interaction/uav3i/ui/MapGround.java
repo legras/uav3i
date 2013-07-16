@@ -55,7 +55,7 @@ public class MapGround extends Map
 		_transform.translate(-_center.x+getWidth()/_ppm/2., _center.y+getHeight()/_ppm/2.);
 	}
 	
-	public boolean checkBounds()
+	public boolean checkBounds() // Non appelée.
 	{
 		boolean modified = false;
 		

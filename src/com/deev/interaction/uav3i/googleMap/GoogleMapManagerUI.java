@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import com.deev.interaction.uav3i.ui.GoogleMap;
+
 /**
  * IHM de l'indicateur de chargement des cartes Google.
  * 
@@ -26,7 +28,8 @@ public class GoogleMapManagerUI extends JPanel
   private Color notLoaded = new Color(255, 117, 33);
   private Color allLoaded = new Color(0, 127, 14);
   
-  private MapZone mapZone;
+  //private MapZone mapZone;
+  private GoogleMap googleMap;
   
   //private boolean started  = false;
   private boolean X        = false;
@@ -45,9 +48,11 @@ public class GoogleMapManagerUI extends JPanel
   /**
    * Create the panel.
    */
-  public GoogleMapManagerUI(MapZone mapZone)
+  //public GoogleMapManagerUI(MapZone mapZone)
+  public GoogleMapManagerUI(GoogleMap googleMap)
   {
-    this.mapZone = mapZone;
+    //this.mapZone = mapZone;
+    this.googleMap = googleMap;
     setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
   }
   //-----------------------------------------------------------------------------
@@ -85,7 +90,8 @@ public class GoogleMapManagerUI extends JPanel
   //-----------------------------------------------------------------------------
   public synchronized void start()
   {
-    mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    //mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    googleMap.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     NW = N = NE = W = X = E = SW = S = SE = finished = drawConpleted = false;
     notifyAll();
   }
@@ -182,7 +188,8 @@ public class GoogleMapManagerUI extends JPanel
     g2D.setColor(allLoaded);
     g2D.fillRect(0, 0, 46, 46);
     drawConpleted = true;
-    mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+    //mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+    googleMap.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
   }
   //-----------------------------------------------------------------------------
   public void setNW(boolean nW)             { NW            = nW;       }
