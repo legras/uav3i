@@ -64,113 +64,113 @@ public class SymbolMap extends Map
 		
 		g2.setRenderingHints(rh);
 
-		// --------- GRID --------------------------------------------------
-		while (metersToPixels(_gridstep ) < 200.)
-			_gridstep *= 10.;
-
-		while (metersToPixels(_gridstep) > 400.)
-			_gridstep /= 10.;
-
-		double xmin, ymax; // meters
-
-		Point2D.Double origin = pixelsToMeters(new Point2D.Double(0., 0.));
-		xmin = _gridstep * (Math.floor(origin.x/_gridstep) - 1);
-		ymax = _gridstep * (Math.floor(origin.y/_gridstep) + 1);
-
-//		if (_trueGrid)
+//		// --------- GRID --------------------------------------------------
+//		while (metersToPixels(_gridstep ) < 200.)
+//			_gridstep *= 10.;
+//
+//		while (metersToPixels(_gridstep) > 400.)
+//			_gridstep /= 10.;
+//
+//		double xmin, ymax; // meters
+//
+//		Point2D.Double origin = pixelsToMeters(new Point2D.Double(0., 0.));
+//		xmin = _gridstep * (Math.floor(origin.x/_gridstep) - 1);
+//		ymax = _gridstep * (Math.floor(origin.y/_gridstep) + 1);
+//
+////		if (_trueGrid)
+////		{
+////			g2.setPaint(Color.WHITE);
+////			g2.setStroke(new BasicStroke(.5f));
+////
+////			Point2D.Double p = metersToPixels(new Point2D.Double(xmin, 0.));
+////
+////			for (double x=xmin; p.x < getWidth(); x+=_gridstep)
+////			{
+////				p = metersToPixels(new Point2D.Double(x, 0.));
+////				g2.draw(new Line2D.Double(p.x, 0., p.x, getHeight()));
+////
+////				AffineTransform old = g2.getTransform();
+////
+////				g2.translate(p.x, getHeight());
+////				g2.rotate(-Math.PI/2.);
+////				g2.drawString(String.format(Locale.US, "%.0f", x), 2, -2);
+////
+////				g2.setTransform(old);
+////			}
+////
+////			p = metersToPixels(new Point2D.Double(xmin, ymax));
+////
+////			for (double y=ymax; p.y < getHeight(); y-=_gridstep)
+////			{		
+////				p = metersToPixels(new Point2D.Double(xmin, y));
+////				g2.draw(new Line2D.Double(0., p.y, getWidth(), p.y));
+////
+////				g2.drawString(String.format(Locale.US, "%.0f", y) + " m", 2, (int) p.y-2);
+////			}
+////		}
+////		else
+////		{
+////			g2.setPaint(new Color(1.f, 1.f, 1.f, .3f));
+////			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+////			
+////			Point2D.Double p;
+////			double L = 6.;
+////			
+////			p  =  metersToPixels(new Point2D.Double(xmin, ymax));
+////			for (double x=xmin; p.x < getWidth(); x+=_gridstep)
+////			{
+////				p = metersToPixels(new Point2D.Double(x, ymax));
+////				for (double y=ymax; p.y < getHeight(); y-=_gridstep)
+////				{
+////					p = metersToPixels(new Point2D.Double(x, y));
+////					g2.draw(new Line2D.Double(p.x-L, p.y, p.x+L, p.y));
+////					g2.draw(new Line2D.Double(p.x, p.y-L, p.x, p.y+L));
+////				}
+////			}
+////		}
+//
+//		g2.setPaint(new Color(1.f, 1.f, 1.f, .7f));
+//		g2.setStroke(new BasicStroke(.5f));
+//
+//		Point2D.Double p = metersToPixels(new Point2D.Double(xmin, 0.));
+//
+//		for (double x=xmin; p.x < getWidth(); x+=_gridstep)
 //		{
-//			g2.setPaint(Color.WHITE);
-//			g2.setStroke(new BasicStroke(.5f));
+//			p = metersToPixels(new Point2D.Double(x, 0.));
 //
-//			Point2D.Double p = metersToPixels(new Point2D.Double(xmin, 0.));
+//			AffineTransform old = g2.getTransform();
 //
-//			for (double x=xmin; p.x < getWidth(); x+=_gridstep)
-//			{
-//				p = metersToPixels(new Point2D.Double(x, 0.));
-//				g2.draw(new Line2D.Double(p.x, 0., p.x, getHeight()));
+//			g2.translate(p.x, getHeight());
+//			g2.rotate(-Math.PI/2.);
+//			g2.drawString(String.format(Locale.US, "%.0f", x), 20, -2);
 //
-//				AffineTransform old = g2.getTransform();
+//			g2.setTransform(old);
+//		}
 //
-//				g2.translate(p.x, getHeight());
-//				g2.rotate(-Math.PI/2.);
-//				g2.drawString(String.format(Locale.US, "%.0f", x), 2, -2);
+//		p = metersToPixels(new Point2D.Double(xmin, ymax));
 //
-//				g2.setTransform(old);
-//			}
+//		for (double y=ymax; p.y < getHeight(); y-=_gridstep)
+//		{		
+//			p = metersToPixels(new Point2D.Double(xmin, y));
+//			g2.drawString(String.format(Locale.US, "%.0f", y), 4, (int) p.y-2);
+//		}
 //
-//			p = metersToPixels(new Point2D.Double(xmin, ymax));
+//		g2.setPaint(new Color(1.f, 1.f, 1.f, .3f));
+//		g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
 //
+//		double L = 6.;
+//
+//		p  =  metersToPixels(new Point2D.Double(xmin, ymax));
+//		for (double x=xmin; p.x < getWidth(); x+=_gridstep)
+//		{
+//			p = metersToPixels(new Point2D.Double(x, ymax));
 //			for (double y=ymax; p.y < getHeight(); y-=_gridstep)
-//			{		
-//				p = metersToPixels(new Point2D.Double(xmin, y));
-//				g2.draw(new Line2D.Double(0., p.y, getWidth(), p.y));
-//
-//				g2.drawString(String.format(Locale.US, "%.0f", y) + " m", 2, (int) p.y-2);
-//			}
-//		}
-//		else
-//		{
-//			g2.setPaint(new Color(1.f, 1.f, 1.f, .3f));
-//			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
-//			
-//			Point2D.Double p;
-//			double L = 6.;
-//			
-//			p  =  metersToPixels(new Point2D.Double(xmin, ymax));
-//			for (double x=xmin; p.x < getWidth(); x+=_gridstep)
 //			{
-//				p = metersToPixels(new Point2D.Double(x, ymax));
-//				for (double y=ymax; p.y < getHeight(); y-=_gridstep)
-//				{
-//					p = metersToPixels(new Point2D.Double(x, y));
-//					g2.draw(new Line2D.Double(p.x-L, p.y, p.x+L, p.y));
-//					g2.draw(new Line2D.Double(p.x, p.y-L, p.x, p.y+L));
-//				}
+//				p = metersToPixels(new Point2D.Double(x, y));
+//				g2.draw(new Line2D.Double(p.x-L, p.y, p.x+L, p.y));
+//				g2.draw(new Line2D.Double(p.x, p.y-L, p.x, p.y+L));
 //			}
 //		}
-
-		g2.setPaint(new Color(1.f, 1.f, 1.f, .7f));
-		g2.setStroke(new BasicStroke(.5f));
-
-		Point2D.Double p = metersToPixels(new Point2D.Double(xmin, 0.));
-
-		for (double x=xmin; p.x < getWidth(); x+=_gridstep)
-		{
-			p = metersToPixels(new Point2D.Double(x, 0.));
-
-			AffineTransform old = g2.getTransform();
-
-			g2.translate(p.x, getHeight());
-			g2.rotate(-Math.PI/2.);
-			g2.drawString(String.format(Locale.US, "%.0f", x), 20, -2);
-
-			g2.setTransform(old);
-		}
-
-		p = metersToPixels(new Point2D.Double(xmin, ymax));
-
-		for (double y=ymax; p.y < getHeight(); y-=_gridstep)
-		{		
-			p = metersToPixels(new Point2D.Double(xmin, y));
-			g2.drawString(String.format(Locale.US, "%.0f", y), 4, (int) p.y-2);
-		}
-
-		g2.setPaint(new Color(1.f, 1.f, 1.f, .3f));
-		g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
-
-		double L = 6.;
-
-		p  =  metersToPixels(new Point2D.Double(xmin, ymax));
-		for (double x=xmin; p.x < getWidth(); x+=_gridstep)
-		{
-			p = metersToPixels(new Point2D.Double(x, ymax));
-			for (double y=ymax; p.y < getHeight(); y-=_gridstep)
-			{
-				p = metersToPixels(new Point2D.Double(x, y));
-				g2.draw(new Line2D.Double(p.x-L, p.y, p.x+L, p.y));
-				g2.draw(new Line2D.Double(p.x, p.y-L, p.x, p.y+L));
-			}
-		}
 
 
 		

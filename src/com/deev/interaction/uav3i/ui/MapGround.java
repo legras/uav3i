@@ -39,6 +39,7 @@ public class MapGround extends Map
 	 */
 	public MapGround(BufferedImage image)
 	{
+    System.out.println("MapGround -> constructeur");
 		_image = image;
 		_center = new Point2D.Double(0., 0.);
 	
@@ -46,10 +47,12 @@ public class MapGround extends Map
 		_offset.translate(0., -_image.getHeight());
 		
 		setPPM(1.);
+    System.out.println("MapGround -> construit");
 	}
 	
 	public void updateTransform()
 	{		
+    System.out.println("MapGround -> updateTransform");
 		_transform = new AffineTransform();
 		_transform.setToScale(_ppm, _ppm);
 		_transform.translate(-_center.x+getWidth()/_ppm/2., _center.y+getHeight()/_ppm/2.);
@@ -57,6 +60,7 @@ public class MapGround extends Map
 	
 	public boolean checkBounds()
 	{
+    System.out.println("MapGround -> checkBounds");
 		boolean modified = false;
 		
 		if (_center.x < _cXmin)
@@ -87,7 +91,8 @@ public class MapGround extends Map
 	}
 	
 	public void paintComponent(Graphics g)
-	{	
+	{
+	  //System.out.println("MapGround -> paintComponent");
 		Graphics2D g2 = (Graphics2D) g;
 		
 		g2.transform(_transform);
@@ -101,6 +106,7 @@ public class MapGround extends Map
 	@Override
 	public void panPx(double dx, double dy)
 	{
+    System.out.println("MapGround -> panPx");
 		double x = _center.x;
 		double y = _center.y;
 				
@@ -113,6 +119,7 @@ public class MapGround extends Map
 	@Override
 	public void zoomPx(double zfactor, double x, double y)
 	{
+    System.out.println("MapGround -> zoomPx");
 		// if (zfactor < 1. && _ppm > 10.)
 		// 	return;
 		
@@ -126,11 +133,13 @@ public class MapGround extends Map
 	
 	public Point2D.Double getCenter()
 	{
+    System.out.println("MapGround -> getCenter");
 		return _center;
 	}
 	
 	public void setCenter(Point2D.Double center)
 	{
+    System.out.println("MapGround -> setCenter");
 		_center = center;
 	}
 	
@@ -139,11 +148,13 @@ public class MapGround extends Map
 	 */
 	public double getPPM()
 	{
+    System.out.println("MapGround -> getPPM");
 		return _ppm;
 	}
 	
 	public void setPPM(double ppm)
 	{
+    System.out.println("MapGround -> setPPM");
 		_ppm = ppm;
 		
 		_cXmin = getWidth()/2./_ppm;
@@ -155,6 +166,7 @@ public class MapGround extends Map
 	@Override
 	public void alignWith(Map map)
 	{
+    System.out.println("MapGround -> alignWith");
 		Point2D.Double center = map.getCenter();
 		
 		_center.x = center.x;
