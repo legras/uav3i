@@ -35,7 +35,8 @@ public class MainFrame extends JFrame
 	{
 		super();
 
-		Dimension screenSize = new Dimension(1366, 768);
+//    Dimension screenSize = new Dimension(1366, 768);
+    Dimension screenSize = new Dimension(500, 400);
 		
 		try
 		{
@@ -66,8 +67,8 @@ public class MainFrame extends JFrame
 //		{
 //			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
 			//grnd = new MapGround(image);
-			grnd = new GoogleMap();
-			grnd.setBounds(0, 0, screenSize.width, screenSize.height);
+			grnd = new GoogleMap(screenSize);
+      grnd.setBounds(0, 0, screenSize.width, screenSize.height);
 			lpane.add(grnd, new Integer(-20));
 //			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
 //		}

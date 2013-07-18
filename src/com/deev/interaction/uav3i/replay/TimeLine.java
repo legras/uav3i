@@ -57,10 +57,11 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		this.screenWidth = screenWidth;
 		
 		centerXPosition = screenWidth/2;
-		timeLineHeight = 200;
+    timeLineHeight = 200;
+    //timeLineHeight = 0;
 		lineYPosition = screenHeight-timeLineHeight/2;
 		
-		// TODO dŽgager dureeMission
+		// TODO dï¿½gager dureeMission
 		dureeMission = 1000000;
 		minScale = screenWidth/(dureeMission)*2.f;
 		
