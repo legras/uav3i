@@ -83,10 +83,10 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		
 		g2.setPaint(new Color(0.2f, 0.2f, 0.6f, 1.f));
 				
-		g2.fillRect(rect.x, (int) (rect.height-timeLineHeight), rect.x+rect.width, rect.y+rect.height);
-		g2.fillRect(rect.x, rect.y, rect.x + 10, rect.y + rect.height);
-		g2.fillRect(rect.x+rect.width-10, rect.y, rect.x + rect.width, rect.y + rect.height);
-		g2.fillRect(rect.x, rect.y, rect.x+rect.width, rect.y+10);
+//		g2.fillRect(rect.x, (int) (rect.height-timeLineHeight), rect.x+rect.width, rect.y+rect.height);
+//		g2.fillRect(rect.x, rect.y, rect.x + 10, rect.y + rect.height);
+//		g2.fillRect(rect.x+rect.width-10, rect.y, rect.x + rect.width, rect.y + rect.height);
+//		g2.fillRect(rect.x, rect.y, rect.x+rect.width, rect.y+10);
 		
 		g2.setPaint(new Color(0.2f, 0.2f, 0.2f, 1.f));
 		

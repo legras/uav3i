@@ -28,6 +28,10 @@ public class GoogleMap extends Map
    * La taille de la carte est donc :
    *   - Width : screen width - 20 (10, bordure gauche et 10, bordure droite).
    *   - Height : screen height - 210 (200, TimeLine et 10, bordure supérieure).
+   *   
+   * Note du 18/07/2013 : suppression de la bordure bleue de la carte. Il n'est
+   * plus nécessaire de 10 pixels à G, à D et en haut. Ne prendre en compte que
+   * la hauteur de la TimeLine qui ne fait que 200 pixels/.
    */
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 5750148745670298949L;
@@ -49,8 +53,8 @@ public class GoogleMap extends Map
     mapManagerUI = new GoogleMapManagerUI(this);
 
     adaptDim = new AffineTransform();
-    double mapAreaWidth = screenSize.getWidth() - 20;
-    double mapAreaHeight = screenSize.getHeight() - 210;
+    double mapAreaWidth = screenSize.getWidth();
+    double mapAreaHeight = screenSize.getHeight() - 200;
     int mapWidth  = 640;
     int mapHeight = (int) (640.0 * (mapAreaHeight / mapAreaWidth));
     double agrandissement = mapAreaWidth / (mapWidth * mapScale);
@@ -85,9 +89,8 @@ public class GoogleMap extends Map
   public void paintComponent(Graphics g)
   { 
     Graphics2D g2D = (Graphics2D) g;
-    int decal = 10;
     g2D.transform(adaptDim);
-    g2D.drawImage(mapManager.getMap_X(), decal, decal, null);
+    g2D.drawImage(mapManager.getMap_X(), 0, 0, null);
 
 //    
 //    g2.transform(_transform);
