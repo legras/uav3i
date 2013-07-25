@@ -43,8 +43,8 @@ public class GoogleMapGround extends Map
   private GoogleMapManagerUI mapManagerUI;
   private BufferedImage      map;
   private Dimension          screenSize;
-  private AffineTransform    adaptDim;
-  private double             agrandissement;
+  private AffineTransform    scaleTransform;
+  private double             imageScale;
   //-----------------------------------------------------------------------------
   /**
    * @param screenSize windows size.
@@ -71,8 +71,8 @@ public class GoogleMapGround extends Map
         mapWidth = 640;
       else
         mapWidth = (int) mapAreaWidth / mapScale;
-      agrandissement = mapAreaWidth / (mapWidth * mapScale);
-      mapHeight = (int) (mapAreaHeight / mapScale / agrandissement);
+      imageScale = mapAreaWidth / (mapWidth * mapScale);
+      mapHeight = (int) (mapAreaHeight / mapScale / imageScale);
     }
     else
     {
@@ -80,16 +80,16 @@ public class GoogleMapGround extends Map
         mapHeight= 640;
       else
         mapHeight = (int) mapAreaHeight / mapScale;
-      agrandissement = mapAreaHeight / (mapHeight * mapScale);
-      mapWidth = (int) (mapAreaWidth / mapScale / agrandissement);
+      imageScale = mapAreaHeight / (mapHeight * mapScale);
+      mapWidth = (int) (mapAreaWidth / mapScale / imageScale);
     }
     
     
-    System.out.println("mapWidth = " + mapWidth + " / mapHeight = " + mapHeight + " / agrandissement = " + agrandissement);
+    System.out.println("mapWidth = " + mapWidth + " / mapHeight = " + mapHeight + " / imageScale = " + imageScale);
 
     // Gestion de la transformation de la carte (adaptation à la taille)
-    adaptDim = new AffineTransform();
-    adaptDim.setToScale(agrandissement, agrandissement);
+    scaleTransform = new AffineTransform();
+    scaleTransform.setToScale(imageScale, imageScale);
 
     try
     {
@@ -119,31 +119,30 @@ public class GoogleMapGround extends Map
   public void paintComponent(Graphics g)
   { 
     Graphics2D g2D = (Graphics2D) g;
-    g2D.transform(adaptDim);
-    //g2D.drawImage(mapManager.getMap_X(), 0, 0, null);
+    // Application de la mise à l'échelle de l'image.
+    g2D.transform(scaleTransform);
     g2D.drawImage(map, 0, 0, null);
-
-//    
-//    g2.transform(_transform);
-//    g2.drawImage(_image, _offset, null);
   }
   //-----------------------------------------------------------------------------
   public void updateTransform()
   {
-//    _transform = new AffineTransform();
-//    _transform.setToScale(_ppm, _ppm);
-//    _transform.translate(-_center.x+getWidth()/_ppm/2., _center.y+getHeight()/_ppm/2.);
+    // _transform = new AffineTransform();
+    // _transform.setToScale(_ppm, _ppm);
+    // _transform.translate(-_center.x+getWidth()/_ppm/2., _center.y+getHeight()/_ppm/2.);
   }
   //-----------------------------------------------------------------------------
   @Override
   public void panPx(double dx, double dy)
   {
-    int realPanX = (int) (dx/agrandissement);
-    int realPanY = (int) (dy/agrandissement);
+    // On doit tenir compte du coefficient d'agrandissement de l'image pour
+    // récupérer un déplacement correct dans la carte.
+    int realPanX = (int) (dx/imageScale);
+    int realPanY = (int) (dy/imageScale);
+    // Mise à jour de la carte suivant le déplacement.
     map = mapManager.getPartOfFullMap(realPanX, realPanY);
   }
   //-----------------------------------------------------------------------------
-  public void setMap(int panDeltaX, int panDeltaY)
+  public void updateMap(int panDeltaX, int panDeltaY)
   {
   }
   //-----------------------------------------------------------------------------

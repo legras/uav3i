@@ -35,11 +35,11 @@ public class MainFrame extends JFrame
 	{
 		super();
 
-//    Dimension screenSize = new Dimension(1366, 768);
+    Dimension screenSize = new Dimension(1366, 768);
 //    Dimension screenSize = new Dimension(25, 212);
-//  Dimension screenSize = new Dimension(1280, 400);
+//    Dimension screenSize = new Dimension(1280, 400);
 //    Dimension screenSize = new Dimension(1400, 400);
-    Dimension screenSize = new Dimension(200, 1500);
+//    Dimension screenSize = new Dimension(200, 1500);
 //    Dimension screenSize = new Dimension(500, 400);
 		
 		try

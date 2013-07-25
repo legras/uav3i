@@ -457,7 +457,7 @@ public class GoogleMapManager
                     "&maptype=" + maptype.value +
                     "&sensor=" + sensor +
                     "&key=" + key;
-    System.out.println("####### urlMap = " + urlMap);
+    //System.out.println("####### urlMap = " + urlMap);
     return urlMap;
   }
   //-----------------------------------------------------------------------------
@@ -552,9 +552,9 @@ public class GoogleMapManager
     int y = height*scale - deltaY;
 
     // Gestion du dépassement des images en cache.
-    if(x < 0)          x = 0;
+    if(x < 0)                x = 0;
     if(x > 2 * width*scale)  x = 2 * width*scale;
-    if(y < 0)          y = 0;
+    if(y < 0)                y = 0;
     if(y > 2 * height*scale) y = 2 * height*scale;
 
     return maps.get("fullmap").getSubimage(x, y, width*scale, height*scale);
