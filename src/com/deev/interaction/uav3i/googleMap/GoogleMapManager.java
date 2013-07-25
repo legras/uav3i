@@ -447,16 +447,18 @@ public class GoogleMapManager
   private String getUrlMap(GoogleMapCoordinate coordinate)
   {
     // http://maps.googleapis.com/maps/api/staticmap?center=48.404130,-4.408229&zoom=15&size=600x300&sensor=false&key=AIzaSyDxsS6bEqdCrOjyel9tUsyWtpvMhcq0RV4
-    return "http://maps.googleapis.com/maps/api/staticmap?" +
-           "center=" + coordinate.latitude + "," + coordinate.longitude +
-           //"&markers=size:normal|color:blue|" + coordinate.latitude + "," + coordinate.longitude +
-           "&zoom=" + zoom +
-           "&size=" + width + "x"+ height +
-           "&scale=" + scale +
-           "&format=" + format.value +
-           "&maptype=" + maptype.value +
-           "&sensor=" + sensor +
-           "&key=" + key;
+    String urlMap = "http://maps.googleapis.com/maps/api/staticmap?" +
+                    "center=" + coordinate.latitude + "," + coordinate.longitude +
+                    //"&markers=size:normal|color:blue|" + coordinate.latitude + "," + coordinate.longitude +
+                    "&zoom=" + zoom +
+                    "&size=" + width + "x"+ height +
+                    "&scale=" + scale +
+                    "&format=" + format.value +
+                    "&maptype=" + maptype.value +
+                    "&sensor=" + sensor +
+                    "&key=" + key;
+    System.out.println("####### urlMap = " + urlMap);
+    return urlMap;
   }
   //-----------------------------------------------------------------------------
   /**

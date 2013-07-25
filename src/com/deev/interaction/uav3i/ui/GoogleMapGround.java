@@ -63,10 +63,28 @@ public class GoogleMapGround extends Map
     // de la fenêtre et 200 pixels de moins en hauteur (hauteur de la TimeLine).
     double mapAreaWidth = screenSize.getWidth();
     double mapAreaHeight = screenSize.getHeight() - 200;
-    int mapWidth  = 640;
-    // 
-    int mapHeight = (int) (640.0 * (mapAreaHeight / mapAreaWidth));
-    agrandissement = mapAreaWidth / (mapWidth * mapScale);
+    
+    int mapWidth, mapHeight = -1;
+    if(mapAreaWidth > mapAreaHeight)
+    {
+      if(mapAreaWidth >= 640 * mapScale)
+        mapWidth = 640;
+      else
+        mapWidth = (int) mapAreaWidth / mapScale;
+      agrandissement = mapAreaWidth / (mapWidth * mapScale);
+      mapHeight = (int) (mapAreaHeight / mapScale / agrandissement);
+    }
+    else
+    {
+      if(mapAreaHeight>= 640 * mapScale)
+        mapHeight= 640;
+      else
+        mapHeight = (int) mapAreaHeight / mapScale;
+      agrandissement = mapAreaHeight / (mapHeight * mapScale);
+      mapWidth = (int) (mapAreaWidth / mapScale / agrandissement);
+    }
+    
+    
     System.out.println("mapWidth = " + mapWidth + " / mapHeight = " + mapHeight + " / agrandissement = " + agrandissement);
 
     // Gestion de la transformation de la carte (adaptation à la taille)
