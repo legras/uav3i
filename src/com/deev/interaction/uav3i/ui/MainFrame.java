@@ -35,13 +35,14 @@ public class MainFrame extends JFrame
 	{
 		super();
 
-    Dimension screenSize = new Dimension(1366, 768);
+//    Dimension screenSize = new Dimension(1366, 768);
+    Dimension screenSize = new Dimension(1280, 400);
 //    Dimension screenSize = new Dimension(500, 400);
 		
 		try
 		{
 			setUndecorated(true);
-			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			//screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			setBounds(0, 0, screenSize.width, screenSize.height);
 			
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
@@ -61,13 +62,13 @@ public class MainFrame extends JFrame
 		JLayeredPane lpane = this.getLayeredPane();
 		
 //		MapGround grnd = null;
-		GoogleMap grnd = null;
+		GoogleMapGround grnd = null;
 		BufferedImage image;
 //		try
 //		{
 //			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
 			//grnd = new MapGround(image);
-			grnd = new GoogleMap(screenSize);
+			grnd = new GoogleMapGround(screenSize);
       grnd.setBounds(0, 0, screenSize.width, screenSize.height);
 			lpane.add(grnd, new Integer(-20));
 //			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
@@ -89,6 +90,11 @@ public class MainFrame extends JFrame
 		fingerpane.setTopMap(map);
 		lpane.add(fingerpane, new Integer(-2));
 		
+		MapInteractionPane mapInteractionPane = new MapInteractionPane(grnd);
+		mapInteractionPane.setBounds(0, 0, screenSize.width, screenSize.height);
+    lpane.add(mapInteractionPane, new Integer(-4));
+		
+		
 		ComponentLayer clayer = new ComponentLayer();
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
@@ -104,6 +110,7 @@ public class MainFrame extends JFrame
 		
 		Animator.addComponent(fingerpane);
 		Animator.addComponent(tm);
+		Animator.addComponent(mapInteractionPane);
 		Animator.go();
 
 		this.addWindowListener(new WindowAdapter()
@@ -125,6 +132,7 @@ public class MainFrame extends JFrame
 		
 		_glass.addTouchable(fingerpane);
 		_glass.addTouchable(tm);
+		_glass.addTouchable(mapInteractionPane);
 		
 		setGlassPane(_glass); // niveau affichage superieur
 				

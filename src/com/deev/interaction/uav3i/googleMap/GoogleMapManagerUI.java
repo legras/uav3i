@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import com.deev.interaction.uav3i.ui.GoogleMap;
+import com.deev.interaction.uav3i.ui.GoogleMapGround;
 
 /**
  * IHM de l'indicateur de chargement des cartes Google.
@@ -29,7 +29,7 @@ public class GoogleMapManagerUI extends JPanel
   private Color allLoaded = new Color(0, 127, 14);
   
   //private MapZone mapZone;
-  private GoogleMap googleMap;
+  private GoogleMapGround googleMap;
   
   //private boolean started  = false;
   private boolean X        = false;
@@ -49,7 +49,7 @@ public class GoogleMapManagerUI extends JPanel
    * Create the panel.
    */
   //public GoogleMapManagerUI(MapZone mapZone)
-  public GoogleMapManagerUI(GoogleMap googleMap)
+  public GoogleMapManagerUI(GoogleMapGround googleMap)
   {
     //this.mapZone = mapZone;
     this.googleMap = googleMap;
