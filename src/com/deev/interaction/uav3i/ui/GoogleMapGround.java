@@ -93,12 +93,15 @@ public class GoogleMapGround extends Map
 
     try
     {
-          // Baie de douarnenez.
-          // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.184951,-4.296429);
-          // Télécom Bretagne
-          // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.359407,-4.57013);
-          // Lac d'Annecy
-      GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(45.845064,6.184616);
+      // Vallon-Pont'Arc
+      GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(44.393285,4.395304);
+      // Baie de douarnenez.
+      // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.184951,-4.296429);
+      // Télécom Bretagne
+      // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.359407,-4.57013);
+      // Lac d'Annecy
+      // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(45.845064,6.184616);
+      
       mapManager = new GoogleMapManager(initialCenter,
                                         mapWidth, mapHeight,    // Taille (en pixels) de la carte
                                         mapZoom,                // Niveau de zoom initial
@@ -106,6 +109,7 @@ public class GoogleMapGround extends Map
                                         ImageFormat.PNG8,       // Format initial de l'image
                                         Maptype.ROADMAP,        // Type initial de la carte
                                         //Maptype.TERRAIN,        // Type initial de la carte
+                                        //Maptype.SATELLITE,        // Type initial de la carte
                                         mapManagerUI);          // Référence vers l'indicateur
       mapManager.go();
       map = mapManager.getMap_X();
@@ -136,14 +140,48 @@ public class GoogleMapGround extends Map
   {
     // On doit tenir compte du coefficient d'agrandissement de l'image pour
     // récupérer un déplacement correct dans la carte.
-    int realPanX = (int) (dx/imageScale);
-    int realPanY = (int) (dy/imageScale);
+    int realPanDeltaX = (int) (dx/imageScale);
+    int realPanDeltaY = (int) (dy/imageScale);
     // Mise à jour de la carte suivant le déplacement.
-    map = mapManager.getPartOfFullMap(realPanX, realPanY);
+    map = mapManager.getPartOfFullMap(realPanDeltaX, realPanDeltaY);
   }
   //-----------------------------------------------------------------------------
   public void updateMap(int panDeltaX, int panDeltaY)
   {
+    // On doit tenir compte du coefficient d'agrandissement de l'image pour
+    // récupérer un déplacement correct dans la carte.
+    int realPanDeltaX = (int) (panDeltaX/imageScale);
+    int realPanDeltaY = (int) (panDeltaY/imageScale);
+    // Gestion du dépassement : les coordonnées de la souris sont données
+    // par rapport à l'écran et non à l'IHM.
+    if(Math.abs(realPanDeltaX/mapManager.getScale()) > mapManager.getWidth())
+    {
+      if(panDeltaX > 0) realPanDeltaX = mapManager.getWidth();
+      else              realPanDeltaX = -mapManager.getWidth();
+    }
+    if(Math.abs(realPanDeltaY/mapManager.getScale()) > mapManager.getHeight())
+    {
+      if(panDeltaY > 0) realPanDeltaY = mapManager.getHeight();
+      else              realPanDeltaY = -mapManager.getHeight();
+    }
+    try
+    {
+      GoogleMapCoordinate gc = mapManager.getMapCoordinateAt(mapManager.getWidth()*mapManager.getScale()/2 - realPanDeltaX, 
+                                                             mapManager.getHeight()*mapManager.getScale()/2 - realPanDeltaY);
+      mapManager.setCoordinate_X(gc);
+      mapManager.go();
+      map = mapManager.getMap_X();
+    }
+    catch (CoordinateOutOfBoundsException | IOException e)
+    {
+      e.printStackTrace();
+    }
+    
+  }
+  //-----------------------------------------------------------------------------
+  public boolean isDrawConpleted()
+  {
+    return mapManagerUI.isDrawConpleted();
   }
   //-----------------------------------------------------------------------------
 }

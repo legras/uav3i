@@ -3,12 +3,9 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -67,26 +64,30 @@ public class MapInteractionPane extends JComponent implements Touchable
   @Override
   public void updateTouch(float x, float y, Object touchref)
   {
-    // panStarted : indicateur de déplacement dans la carte. Il est positionné à
-    // true au début du déplacement et à false à la fin (par la méthode removeTouch).
-    if(!panStarted)
-    {
-      CircleAnim circleAnim = new CircleAnim(x, y, Color.RED);
-      Animator.addAnimation(circleAnim);
-      anims.add(circleAnim);
+//    // Il est impossible de faire un pan si l'ensemble des 9 cartes n'a pas
+//    // été téléchargé.
+//    if(googleMapGround.isDrawConpleted())
+//    {
+      // panStarted : indicateur de déplacement dans la carte. Il est positionné à
+      // true au début du déplacement et à false à la fin (par la méthode removeTouch).
+      if(!panStarted)
+      {
+        CircleAnim circleAnim = new CircleAnim(x, y, Color.RED);
+        Animator.addAnimation(circleAnim);
+        anims.add(circleAnim);
 
-      panStarted = true;
-      panStartX = (int) x;
-      panStartY = (int) y;
-    }
-    else
-    {
-      panDeltaX = ((int) x) - panStartX;
-      panDeltaY = ((int) y) - panStartY;
-      //googleMapGround.setMap(panDeltaX, panDeltaY);
-      googleMapGround.panPx(panDeltaX, panDeltaY);
-    }
-
+        panStarted = true;
+        panStartX = (int) x;
+        panStartY = (int) y;
+      }
+      else
+      {
+        panDeltaX = ((int) x) - panStartX;
+        panDeltaY = ((int) y) - panStartY;
+        //googleMapGround.setMap(panDeltaX, panDeltaY);
+        googleMapGround.panPx(panDeltaX, panDeltaY);
+      }
+//    }
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -95,9 +96,7 @@ public class MapInteractionPane extends JComponent implements Touchable
     System.out.println("####### removeTouch(" + x + ", " + y + ")");
     panStarted = false;
     anims = new ArrayList<Animation>();
-//    CircleAnim circleAnim = new CircleAnim(x, y, Color.BLUE);
-//    Animator.addAnimation(circleAnim);
-//    anims.add(circleAnim);
+
     ImageLighteningAnim imageLighteningAnim;
     try
     {
@@ -112,6 +111,7 @@ public class MapInteractionPane extends JComponent implements Touchable
       e.printStackTrace();
     }
     
+    googleMapGround.updateMap(panDeltaX, panDeltaY);
   }
   //-----------------------------------------------------------------------------
   @Override
