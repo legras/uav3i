@@ -5,6 +5,7 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -28,10 +29,6 @@ public class GoogleMapManagerUI extends JPanel
   private Color notLoaded = new Color(255, 117, 33);
   private Color allLoaded = new Color(0, 127, 14);
   
-  //private MapZone mapZone;
-  private GoogleMapGround googleMap;
-  
-  //private boolean started  = false;
   private boolean X        = false;
   private boolean NW       = false;
   private boolean N        = false;
@@ -49,11 +46,11 @@ public class GoogleMapManagerUI extends JPanel
    * Create the panel.
    */
   //public GoogleMapManagerUI(MapZone mapZone)
-  public GoogleMapManagerUI(GoogleMapGround googleMap)
+  //public GoogleMapManagerUI(GoogleMapGround googleMap)
+  public GoogleMapManagerUI()
   {
-    //this.mapZone = mapZone;
-    this.googleMap = googleMap;
-    setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+    //setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+    setBorder(null);
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -61,7 +58,7 @@ public class GoogleMapManagerUI extends JPanel
   {
     // Création de l'image à la première utilisation.
     if(fond == null)
-      fond = new BufferedImage(46, 46, BufferedImage.TYPE_INT_RGB);
+      fond = new BufferedImage(46, 46, BufferedImage.TYPE_INT_ARGB);
     
     // Récupération du contexte graphique.
     Graphics2D g2D = (Graphics2D) fond.getGraphics();
@@ -90,8 +87,6 @@ public class GoogleMapManagerUI extends JPanel
   //-----------------------------------------------------------------------------
   public synchronized void start()
   {
-    //mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-    googleMap.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     NW = N = NE = W = X = E = SW = S = SE = finished = drawConpleted = false;
     notifyAll();
   }
@@ -188,20 +183,18 @@ public class GoogleMapManagerUI extends JPanel
     g2D.setColor(allLoaded);
     g2D.fillRect(0, 0, 46, 46);
     drawConpleted = true;
-    //mapZone.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-    googleMap.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
   }
   //-----------------------------------------------------------------------------
-  public void setNW(boolean nW)             { NW            = nW;       }
-  public void setN(boolean n)               { N             = n;        }
-  public void setNE(boolean nE)             { NE            = nE;       }
-  public void setW(boolean w)               { W             = w;        }
-  public void setX(boolean x)               { X             = x;        }
-  public void setE(boolean e)               { E             = e;        }
-  public void setSW(boolean sW)             { SW            = sW;       }
-  public void setS(boolean s)               { S             = s;        }
-  public void setSE(boolean sE)             { SE            = sE;       }
-  public void setFinished(boolean finished) { this.finished = finished; }
+  public void setNW()       { NW       = true; }
+  public void setN()        { N        = true; }
+  public void setNE()       { NE       = true; }
+  public void setW()        { W        = true; }
+  public void setX()        { X        = true; }
+  public void setE()        { E        = true; }
+  public void setSW()       { SW       = true; }
+  public void setS()        { S        = true; }
+  public void setSE()       { SE       = true; }
+  public void setFinished() { finished = true; }
   //-----------------------------------------------------------------------------
   public boolean isDrawConpleted()
   {
@@ -227,6 +220,17 @@ public class GoogleMapManagerUI extends JPanel
         try { wait(); } catch (InterruptedException e) { e.printStackTrace(); }
       }
     }
+  }
+  //-----------------------------------------------------------------------------
+  public BufferedImage getImage()
+  {
+    int width  = this.getWidth();
+    int height = this.getHeight();
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = image.createGraphics();
+    this.paintAll(g);
+    g.dispose();
+    return image;
   }
   //-----------------------------------------------------------------------------
 }

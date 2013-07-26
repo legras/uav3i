@@ -53,7 +53,6 @@ public class ImageLighteningAnim implements Animation
       }
     }
 
-    
     return life -= time;
   }
   //-----------------------------------------------------------------------------

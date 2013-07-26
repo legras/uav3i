@@ -160,7 +160,7 @@ public class GoogleMapManager
   /**
    * Debug : si {@code true}, affiche la limite des cartes individuelles sur la carte assemblée.
    */
-  private boolean drawSeparationOnFullMap   = true;
+  private boolean drawSeparationOnFullMap   = false;
   /**
    * Référence vers le composant graphique visualisant l'état d'avancement du
    * chargement du cache des cartes adjacentes. Voir {@link GoogleMapManagerUI}.
@@ -314,7 +314,7 @@ public class GoogleMapManager
   {
     maps.put("X", loadMap("X",  mapCoordinate_X,  writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setX(true);
+      googleMapManagerUI.setX();
   }
   //-----------------------------------------------------------------------------
   /**
@@ -327,35 +327,35 @@ public class GoogleMapManager
   {
     maps.put("NE", loadMap("NE", adjacentMapsCoordinate.get("NE"), writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setNE(true);
+      googleMapManagerUI.setNE();
     
     maps.put("E",  loadMap("E",  adjacentMapsCoordinate.get("E"),  writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setE(true);
+      googleMapManagerUI.setE();
     
     maps.put("SE", loadMap("SE", adjacentMapsCoordinate.get("SE"), writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setSE(true);
+      googleMapManagerUI.setSE();
     
     maps.put("S",  loadMap("S",  adjacentMapsCoordinate.get("S"),  writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setS(true);
+      googleMapManagerUI.setS();
     
     maps.put("SW", loadMap("SW", adjacentMapsCoordinate.get("SW"), writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setSW(true);
+      googleMapManagerUI.setSW();
     
     maps.put("W",  loadMap("W",  adjacentMapsCoordinate.get("W"),  writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setW(true);
+      googleMapManagerUI.setW();
     
     maps.put("NW", loadMap("NW", adjacentMapsCoordinate.get("NW"), writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setNW(true);
+      googleMapManagerUI.setNW();
     
     maps.put("N",  loadMap("N",  adjacentMapsCoordinate.get("N"),  writeElementaryMapsOnDisk));
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setN(true);
+      googleMapManagerUI.setN();
   }
   //-----------------------------------------------------------------------------
   /**
@@ -412,7 +412,7 @@ public class GoogleMapManager
       ImageIO.write(fullmap, "png", new File("images générées/full map.png"));
     
     if(googleMapManagerUI != null)
-      googleMapManagerUI.setFinished(true);
+      googleMapManagerUI.setFinished();
   }
   //-----------------------------------------------------------------------------
   /**

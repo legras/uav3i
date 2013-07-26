@@ -19,6 +19,7 @@ import javax.swing.JLayeredPane;
 import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.ComponentLayer;
 import com.deev.interaction.common.ui.FingerPane;
+import com.deev.interaction.uav3i.googleMap.GoogleMapManagerUI;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 
@@ -37,7 +38,7 @@ public class MainFrame extends JFrame
 
     Dimension screenSize = new Dimension(1366, 768);
 //    Dimension screenSize = new Dimension(25, 212);
-//    Dimension screenSize = new Dimension(1280, 400);
+//    Dimension screenSize = new Dimension(1280, 600);
 //    Dimension screenSize = new Dimension(1400, 400);
 //    Dimension screenSize = new Dimension(200, 1500);
 //    Dimension screenSize = new Dimension(500, 400);
@@ -45,7 +46,7 @@ public class MainFrame extends JFrame
 		try
 		{
 			setUndecorated(true);
-			//screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			setBounds(0, 0, screenSize.width, screenSize.height);
 			
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
@@ -65,15 +66,11 @@ public class MainFrame extends JFrame
 		JLayeredPane lpane = this.getLayeredPane();
 		
 //		MapGround grnd = null;
-		GoogleMapGround grnd = null;
-		BufferedImage image;
+//		BufferedImage image;
 //		try
 //		{
 //			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
 			//grnd = new MapGround(image);
-			grnd = new GoogleMapGround(screenSize);
-      grnd.setBounds(0, 0, screenSize.width, screenSize.height);
-			lpane.add(grnd, new Integer(-20));
 //			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
 //		}
 //		catch (IOException e1)
@@ -82,7 +79,16 @@ public class MainFrame extends JFrame
 //			e1.printStackTrace();
 //		}
 
-		SymbolMap map = new SymbolMap(domain);
+    // ******* Carte Google *******
+    GoogleMapManagerUI mapManagerUI       = new GoogleMapManagerUI();
+    GoogleMapGround    grnd               = new GoogleMapGround(screenSize, mapManagerUI);
+    MapInteractionPane mapInteractionPane = new MapInteractionPane(grnd, mapManagerUI);
+    grnd.setBounds(0, 0, screenSize.width, screenSize.height);
+    lpane.add(grnd, new Integer(-20));
+    mapInteractionPane.setBounds(0, 0, screenSize.width, screenSize.height);
+    lpane.add(mapInteractionPane, new Integer(-4));
+
+    SymbolMap map = new SymbolMap(domain);
 		map.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(map, new Integer(-10));
 		map.alignWith(grnd);
@@ -92,12 +98,7 @@ public class MainFrame extends JFrame
 		fingerpane.setBounds(0, 0, screenSize.width, screenSize.height);
 		fingerpane.setTopMap(map);
 		lpane.add(fingerpane, new Integer(-2));
-		
-		MapInteractionPane mapInteractionPane = new MapInteractionPane(grnd);
-		mapInteractionPane.setBounds(0, 0, screenSize.width, screenSize.height);
-    lpane.add(mapInteractionPane, new Integer(-4));
-		
-		
+
 		ComponentLayer clayer = new ComponentLayer();
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));

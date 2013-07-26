@@ -40,7 +40,7 @@ public class GoogleMapGround extends Map
 //  AffineTransform _transform;
 
   private GoogleMapManager   mapManager;
-  private GoogleMapManagerUI mapManagerUI;
+  //private GoogleMapManagerUI mapManagerUI;
   private BufferedImage      map;
   private Dimension          screenSize;
   private AffineTransform    scaleTransform;
@@ -49,10 +49,10 @@ public class GoogleMapGround extends Map
   /**
    * @param screenSize windows size.
    */
-  public GoogleMapGround(Dimension screenSize)
+  //public GoogleMapGround(Dimension screenSize)
+  public GoogleMapGround(Dimension screenSize, GoogleMapManagerUI mapManagerUI)
   {
     this.screenSize = screenSize;
-    mapManagerUI = new GoogleMapManagerUI(this);
     
     // Caractéristiques inititales de la carte.
     //int mapScale  = 1;
@@ -84,8 +84,14 @@ public class GoogleMapGround extends Map
       mapWidth = (int) (mapAreaWidth / mapScale / imageScale);
     }
     
-    
     System.out.println("mapWidth = " + mapWidth + " / mapHeight = " + mapHeight + " / imageScale = " + imageScale);
+    System.out.println("mapAreaWidth = " + mapAreaWidth + " ("+(int)(mapAreaWidth/imageScale-56/imageScale)+")" + " / mapAreaHeight = " + mapAreaHeight);
+
+    // Composant pour l'affichage de l'état de téléchargement des cartes Google.
+//    mapManagerUI = new GoogleMapManagerUI();
+//    mapManagerUI.setBounds(10, 10, 46, 46);
+//    this.add(mapManagerUI);
+
 
     // Gestion de la transformation de la carte (adaptation à la taille)
     scaleTransform = new AffineTransform();
@@ -152,6 +158,7 @@ public class GoogleMapGround extends Map
     // récupérer un déplacement correct dans la carte.
     int realPanDeltaX = (int) (panDeltaX/imageScale);
     int realPanDeltaY = (int) (panDeltaY/imageScale);
+    
     // Gestion du dépassement : les coordonnées de la souris sont données
     // par rapport à l'écran et non à l'IHM.
     if(Math.abs(realPanDeltaX/mapManager.getScale()) > mapManager.getWidth())
@@ -177,11 +184,6 @@ public class GoogleMapGround extends Map
       e.printStackTrace();
     }
     
-  }
-  //-----------------------------------------------------------------------------
-  public boolean isDrawConpleted()
-  {
-    return mapManagerUI.isDrawConpleted();
   }
   //-----------------------------------------------------------------------------
 }

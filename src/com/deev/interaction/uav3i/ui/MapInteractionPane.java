@@ -16,34 +16,36 @@ import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.CircleAnim;
 import com.deev.interaction.common.ui.ImageLighteningAnim;
 import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.uav3i.googleMap.GoogleMapManagerUI;
 
 public class MapInteractionPane extends JComponent implements Touchable
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 7524614533712153989L;
   
+  private GoogleMapGround    googleMapGround;
+  private GoogleMapManagerUI mapManagerUI;
+
   //private HashMap<Object, Animation> anims;
   private List<Animation> anims = new ArrayList<Animation>();
-  private GoogleMapGround googleMapGround;
   
   private boolean panStarted = false;
   private int panStartX, panStartY;
   private int panDeltaX, panDeltaY;
   private BufferedImage panIcon;
+  private boolean dodoMapManagerUI = false;
   
   //-----------------------------------------------------------------------------
-  public MapInteractionPane(GoogleMapGround googleMapGround)
+  public MapInteractionPane(GoogleMapGround googleMapGround, GoogleMapManagerUI mapManagerUI)
   {
     this.googleMapGround = googleMapGround;
-    try
-    {
-      panIcon = ImageIO.read(this.getClass().getResource("panIcon.png"));
-    }
-    catch (IOException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    this.mapManagerUI    = mapManagerUI;
+    
+    mapManagerUI.setBounds(10, 10, 46, 46);
+    this.add(mapManagerUI);
+
+    try { panIcon = ImageIO.read(this.getClass().getResource("panIcon.png")); }
+    catch (IOException e) { e.printStackTrace(); }
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -64,10 +66,10 @@ public class MapInteractionPane extends JComponent implements Touchable
   @Override
   public void updateTouch(float x, float y, Object touchref)
   {
-//    // Il est impossible de faire un pan si l'ensemble des 9 cartes n'a pas
-//    // été téléchargé.
-//    if(googleMapGround.isDrawConpleted())
-//    {
+    // Il est impossible de faire un pan si l'ensemble des 9 cartes n'a pas
+    // été téléchargé.
+    if(mapManagerUI.isDrawConpleted())
+    {
       // panStarted : indicateur de déplacement dans la carte. Il est positionné à
       // true au début du déplacement et à false à la fin (par la méthode removeTouch).
       if(!panStarted)
@@ -87,31 +89,36 @@ public class MapInteractionPane extends JComponent implements Touchable
         //googleMapGround.setMap(panDeltaX, panDeltaY);
         googleMapGround.panPx(panDeltaX, panDeltaY);
       }
-//    }
+    }
   }
   //-----------------------------------------------------------------------------
   @Override
   public void removeTouch(float x, float y, Object touchref)
   {
     System.out.println("####### removeTouch(" + x + ", " + y + ")");
-    panStarted = false;
-    anims = new ArrayList<Animation>();
+    if(panStarted)
+    {
+      panStarted = false;
+      anims = new ArrayList<Animation>();
 
-    ImageLighteningAnim imageLighteningAnim;
-    try
-    {
-      imageLighteningAnim = new ImageLighteningAnim(ImageIO.read(this.getClass().getResource("panIcon.png")),
-                                                    panStartX + panDeltaX - panIcon.getWidth()/2,
-                                                    panStartY + panDeltaY - panIcon.getHeight()/2);
-      Animator.addAnimation(imageLighteningAnim);
-      anims.add(imageLighteningAnim);
+      ImageLighteningAnim imageLighteningAnim;
+      try
+      {
+        imageLighteningAnim = new ImageLighteningAnim(ImageIO.read(this.getClass().getResource("panIcon.png")),
+                                                      panStartX + panDeltaX - panIcon.getWidth()/2,
+                                                      panStartY + panDeltaY - panIcon.getHeight()/2);
+        Animator.addAnimation(imageLighteningAnim);
+        anims.add(imageLighteningAnim);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+      
+      dodoMapManagerUI = false;
+      mapManagerUI.setVisible(true);
+      googleMapGround.updateMap(panDeltaX, panDeltaY);
     }
-    catch (IOException e)
-    {
-      e.printStackTrace();
-    }
-    
-    googleMapGround.updateMap(panDeltaX, panDeltaY);
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -147,6 +154,15 @@ public class MapInteractionPane extends JComponent implements Touchable
                    panStartX + panDeltaX - panIcon.getWidth()/2,
                    panStartY+panDeltaY - panIcon.getHeight()/2,
                    null);
+    
+    if(!dodoMapManagerUI && mapManagerUI.isDrawConpleted())
+    {
+      ImageLighteningAnim anim = new ImageLighteningAnim(mapManagerUI.getImage(), 10, 10);
+      Animator.addAnimation(anim);
+      anims.add(anim);
+      mapManagerUI.setVisible(false);
+      dodoMapManagerUI = true;
+    }
   }
   //-----------------------------------------------------------------------------
 }
