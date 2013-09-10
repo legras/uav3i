@@ -57,7 +57,7 @@ public class GoogleMapGround extends Map
     // Caractéristiques inititales de la carte.
     //int mapScale  = 1;
     int mapScale  = 2;
-    int mapZoom   = 12;
+    int mapZoom   = 10;
 
     // Calcul des dimensions de la carte qui doit s'afficher dans toute la largeur
     // de la fenêtre et 200 pixels de moins en hauteur (hauteur de la TimeLine).
@@ -100,11 +100,11 @@ public class GoogleMapGround extends Map
     try
     {
       // Vallon-Pont'Arc
-      GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(44.393285,4.395304);
+      // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(44.393285,4.395304);
       // Baie de douarnenez.
       // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.184951,-4.296429);
       // Télécom Bretagne
-      // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.359407,-4.57013);
+      GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(48.359407,-4.57013);
       // Lac d'Annecy
       // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(45.845064,6.184616);
       
@@ -116,6 +116,7 @@ public class GoogleMapGround extends Map
                                         Maptype.ROADMAP,        // Type initial de la carte
                                         //Maptype.TERRAIN,        // Type initial de la carte
                                         //Maptype.SATELLITE,        // Type initial de la carte
+                                        //Maptype.HYBRID,        // Type initial de la carte
                                         mapManagerUI);          // Référence vers l'indicateur
       mapManager.go();
       map = mapManager.getMap_X();

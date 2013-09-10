@@ -51,6 +51,7 @@ public class MapInteractionPane extends JComponent implements Touchable
   @Override
   public float getInterestForPoint(float x, float y)
   {
+    //return 0.0f;
     return 100.0f;
   }
   //-----------------------------------------------------------------------------

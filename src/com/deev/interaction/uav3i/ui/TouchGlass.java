@@ -181,7 +181,6 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	@Override
 	public void addTouch(float x, float y, Object touchref)
 	{
-    //System.out.println("Touch� !");
     System.out.println("TouchGlass - addTouch(" + x + ", " + y + ")");
 		synchronized (_touchables)
 		{

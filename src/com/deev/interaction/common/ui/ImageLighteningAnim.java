@@ -44,15 +44,15 @@ public class ImageLighteningAnim implements Animation
         int alpha = (rgba >>24 ) & 0xFF;
         if(alpha != 0)
         {
-          int rouge = (rgba >>16 ) & 0xFF;
-          int vert = (rgba >> 8 ) & 0xFF;
-          int bleu = rgba & 0xFF;
+          int rouge = (rgba >> 16 ) & 0xFF;
+          int vert  = (rgba >> 8 ) & 0xFF;
+          int bleu  = rgba & 0xFF;
           int newValue = (alphaValue<<24)+(rouge<<16)+(vert<<8)+bleu;
           image.setRGB(w, h, newValue);
         }
       }
     }
-
+    
     return life -= time;
   }
   //-----------------------------------------------------------------------------

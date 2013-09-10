@@ -409,7 +409,7 @@ public class GoogleMapManager
     
     // Sauvegarde éventuelle de la carte sur le disque.
     if(writeFullMapsOnDisk)
-      ImageIO.write(fullmap, "png", new File("images générées/full map.png"));
+      ImageIO.write(fullmap, "png", new File("full map.png"));
     
     if(googleMapManagerUI != null)
       googleMapManagerUI.setFinished();
@@ -457,7 +457,7 @@ public class GoogleMapManager
                     "&maptype=" + maptype.value +
                     "&sensor=" + sensor +
                     "&key=" + key;
-    //System.out.println("####### urlMap = " + urlMap);
+    System.out.println("####### urlMap = " + urlMap);
     return urlMap;
   }
   //-----------------------------------------------------------------------------
