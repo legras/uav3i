@@ -109,15 +109,15 @@ public class GoogleMapGround extends Map
       // GoogleMapCoordinate initialCenter = new GoogleMapCoordinate(45.845064,6.184616);
       
       mapManager = new GoogleMapManager(initialCenter,
-                                        mapWidth, mapHeight,    // Taille (en pixels) de la carte
-                                        mapZoom,                // Niveau de zoom initial
-                                        mapScale,               // Coefficient d'agrandissement initial
-                                        ImageFormat.PNG8,       // Format initial de l'image
-                                        Maptype.ROADMAP,        // Type initial de la carte
-                                        //Maptype.TERRAIN,        // Type initial de la carte
-                                        //Maptype.SATELLITE,        // Type initial de la carte
-                                        //Maptype.HYBRID,        // Type initial de la carte
-                                        mapManagerUI);          // Référence vers l'indicateur
+                                        mapWidth, mapHeight,  // Taille (en pixels) de la carte
+                                        mapZoom,              // Niveau de zoom initial
+                                        mapScale,             // Coefficient d'agrandissement initial
+                                        ImageFormat.PNG8,     // Format initial de l'image
+                                        Maptype.ROADMAP,      // Type initial de la carte
+                                        //Maptype.TERRAIN,    // Type initial de la carte
+                                        //Maptype.SATELLITE,  // Type initial de la carte
+                                        //Maptype.HYBRID,     // Type initial de la carte
+                                        mapManagerUI);        // Référence vers l'indicateur
       mapManager.go();
       map = mapManager.getMap_X();
     }

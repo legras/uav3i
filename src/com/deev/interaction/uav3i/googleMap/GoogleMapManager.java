@@ -409,11 +409,15 @@ public class GoogleMapManager
     
     // Sauvegarde éventuelle de la carte sur le disque.
     if(writeFullMapsOnDisk)
-      ImageIO.write(fullmap, "png", new File("full map.png"));
+      ImageIO.write(fullmap, format.getFileExtension(), new File("full_map." + format.getFileExtension()));
     
     if(googleMapManagerUI != null)
       googleMapManagerUI.setFinished();
+    
+    System.out.println("Temps global = " + global + " ms");
+    global = 0;
   }
+  private long global = 0;
   //-----------------------------------------------------------------------------
   /**
    * Chargement d'une carte Google.
@@ -428,12 +432,13 @@ public class GoogleMapManager
   private BufferedImage loadMap(String nom, GoogleMapCoordinate coordinate, boolean writeImageOnDisk)
       throws MalformedURLException, IOException
   {
-//    long start = System.currentTimeMillis();
+    long start = System.currentTimeMillis();
     BufferedImage map = ImageIO.read(new URL(getUrlMap(coordinate)));
     // Sauvegarde éventuelle de la carte sur le disque.
     if(writeImageOnDisk)
-      ImageIO.write(map, format.getFileExtension(), new File("images générées/" + nom + ".png"));
-//    long end = System.currentTimeMillis();
+      ImageIO.write(map, format.getFileExtension(), new File(nom + "." + format.getFileExtension()));
+    long end = System.currentTimeMillis();
+    global += (end - start);
 //    System.out.println("Temps de chargement de " + nom + " = " + (end - start) + " ms");
     return map;
   }

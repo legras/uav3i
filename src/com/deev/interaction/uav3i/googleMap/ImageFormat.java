@@ -26,9 +26,11 @@ public enum ImageFormat
       case PNG8:
       case PNG32:
         ext = "png";
+        break;
       case JPG:
       case JPG_BASELINE:
         ext = "jpg";
+        break;
       case GIF:
         ext = "gif";
     }

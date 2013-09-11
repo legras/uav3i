@@ -196,7 +196,7 @@ public class GoogleMapManagerUI extends JPanel
   public void setSE()       { SE       = true; }
   public void setFinished() { finished = true; }
   //-----------------------------------------------------------------------------
-  public boolean isDrawConpleted()
+  public boolean isDrawCompleted()
   {
     return drawConpleted;
   }

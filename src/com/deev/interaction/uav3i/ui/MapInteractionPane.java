@@ -69,7 +69,7 @@ public class MapInteractionPane extends JComponent implements Touchable
   {
     // Il est impossible de faire un pan si l'ensemble des 9 cartes n'a pas
     // été téléchargé.
-    if(mapManagerUI.isDrawConpleted())
+    if(mapManagerUI.isDrawCompleted())
     {
       // panStarted : indicateur de déplacement dans la carte. Il est positionné à
       // true au début du déplacement et à false à la fin (par la méthode removeTouch).
@@ -156,7 +156,7 @@ public class MapInteractionPane extends JComponent implements Touchable
                    panStartY+panDeltaY - panIcon.getHeight()/2,
                    null);
     
-    if(!dodoMapManagerUI && mapManagerUI.isDrawConpleted())
+    if(!dodoMapManagerUI && mapManagerUI.isDrawCompleted())
     {
       ImageLighteningAnim anim = new ImageLighteningAnim(mapManagerUI.getImage(), 10, 10);
       Animator.addAnimation(anim);
