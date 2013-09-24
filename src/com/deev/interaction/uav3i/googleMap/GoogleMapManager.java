@@ -462,7 +462,7 @@ public class GoogleMapManager
                     "&maptype=" + maptype.value +
                     "&sensor=" + sensor +
                     "&key=" + key;
-    System.out.println("####### urlMap = " + urlMap);
+    //System.out.println("####### urlMap = " + urlMap);
     return urlMap;
   }
   //-----------------------------------------------------------------------------
