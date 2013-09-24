@@ -81,8 +81,10 @@ public class MainFrame extends JFrame
 
     // ******* Carte Google *******
     GoogleMapManagerUI mapManagerUI       = new GoogleMapManagerUI();
-    GoogleMapGround    grnd               = new GoogleMapGround(screenSize, mapManagerUI);
-    MapInteractionPane mapInteractionPane = new MapInteractionPane(grnd, mapManagerUI);
+    //GoogleMapGround    grnd               = new GoogleMapGround(screenSize, mapManagerUI);
+    OsmMapGround grnd = new OsmMapGround();
+    //GoogleMapInteractionPane mapInteractionPane = new GoogleMapInteractionPane(grnd, mapManagerUI);
+    OsmMapInteractionPanel mapInteractionPane = new OsmMapInteractionPanel(grnd);
     grnd.setBounds(0, 0, screenSize.width, screenSize.height);
     lpane.add(grnd, new Integer(-20));
     mapInteractionPane.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -141,7 +143,7 @@ public class MainFrame extends JFrame
 		setGlassPane(_glass); // niveau affichage superieur
 				
 		_glass.setVisible(true);
-		grnd.updateTransform();
+		//grnd.updateTransform();
 	}
 	
 	public TouchGlass getGlass()

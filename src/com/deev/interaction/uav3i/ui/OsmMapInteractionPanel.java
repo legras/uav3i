@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,33 +17,22 @@ import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.CircleAnim;
 import com.deev.interaction.common.ui.ImageLighteningAnim;
 import com.deev.interaction.common.ui.Touchable;
-import com.deev.interaction.uav3i.googleMap.GoogleMapManagerUI;
 
-public class MapInteractionPane extends JComponent implements Touchable
+public class OsmMapInteractionPanel extends JComponent implements Touchable
 {
   //-----------------------------------------------------------------------------
-  private static final long serialVersionUID = 7524614533712153989L;
-  
-  private GoogleMapGround    googleMapGround;
-  private GoogleMapManagerUI mapManagerUI;
-
-  //private HashMap<Object, Animation> anims;
+  private static final long serialVersionUID = 6264763662244222715L;
+  private OsmMapGround osmMapGround;
+//  private boolean panStarted = false;
+//  private int panStartX, panStartY;
+//  private int panDeltaX, panDeltaY;
+  private Point lastDragPoint;
   private List<Animation> anims = new ArrayList<Animation>();
-  
-  private boolean panStarted = false;
-  private int panStartX, panStartY;
-  private int panDeltaX, panDeltaY;
   private BufferedImage panIcon;
-  private boolean dodoMapManagerUI = false;
-  
   //-----------------------------------------------------------------------------
-  public MapInteractionPane(GoogleMapGround googleMapGround, GoogleMapManagerUI mapManagerUI)
+  public OsmMapInteractionPanel(OsmMapGround osmMapGround)
   {
-    this.googleMapGround = googleMapGround;
-    this.mapManagerUI    = mapManagerUI;
-    
-    mapManagerUI.setBounds(10, 10, 46, 46);
-    this.add(mapManagerUI);
+    this.osmMapGround = osmMapGround;
 
     try { panIcon = ImageIO.read(this.getClass().getResource("panIcon.png")); }
     catch (IOException e) { e.printStackTrace(); }
@@ -51,63 +41,58 @@ public class MapInteractionPane extends JComponent implements Touchable
   @Override
   public float getInterestForPoint(float x, float y)
   {
-    //return 0.0f;
     return 100.0f;
   }
   //-----------------------------------------------------------------------------
   @Override
   public void addTouch(float x, float y, Object touchref)
   {
-//    CircleAnim circleAnim = new CircleAnim(x, y, Color.RED);
-//    Animator.addAnimation(circleAnim);
-//    anims.add(circleAnim);
-//    System.out.println("MapInteractionPane : c'est moi qu'ait chopé le touch !!!");
   }
   //-----------------------------------------------------------------------------
   @Override
   public void updateTouch(float x, float y, Object touchref)
   {
-    // Il est impossible de faire un pan si l'ensemble des 9 cartes n'a pas
-    // été téléchargé.
-    if(mapManagerUI.isDrawCompleted())
+    System.out.println("####### updateTouch(" + x + ", " + y + ", ...)");
+    
+    Point p = new Point((int)x, (int)y);
+    if (lastDragPoint != null)
     {
-      // panStarted : indicateur de déplacement dans la carte. Il est positionné à
-      // true au début du déplacement et à false à la fin (par la méthode removeTouch).
-      if(!panStarted)
-      {
-        CircleAnim circleAnim = new CircleAnim(x, y, Color.RED);
-        Animator.addAnimation(circleAnim);
-        anims.add(circleAnim);
-
-        panStarted = true;
-        panStartX = (int) x;
-        panStartY = (int) y;
-      }
-      else
-      {
-        panDeltaX = ((int) x) - panStartX;
-        panDeltaY = ((int) y) - panStartY;
-        //googleMapGround.setMap(panDeltaX, panDeltaY);
-        googleMapGround.panPx(panDeltaX, panDeltaY);
-      }
+      int diffx = lastDragPoint.x - p.x;
+      int diffy = lastDragPoint.y - p.y;
+      osmMapGround.getMapViewer().moveMap(diffx, diffy);
     }
+    lastDragPoint = p;
+    
+    
+//    if(!panStarted)
+//    {
+//      panStarted = true;
+//      panStartX = (int) x;
+//      panStartY = (int) y;
+//    }
+//    else
+//    {
+//      panDeltaX = ((int) x) - panStartX;
+//      panDeltaY = ((int) y) - panStartY;
+//      //googleMapGround.panPx(panDeltaX, panDeltaY);
+//      osmMapGround.getMapViewer().moveMap(panDeltaX, panDeltaY);
+//    }
   }
   //-----------------------------------------------------------------------------
   @Override
   public void removeTouch(float x, float y, Object touchref)
   {
     System.out.println("####### removeTouch(" + x + ", " + y + ")");
-    if(panStarted)
+    if (lastDragPoint != null)
     {
-      panStarted = false;
       anims = new ArrayList<Animation>();
 
       ImageLighteningAnim imageLighteningAnim;
       try
       {
         imageLighteningAnim = new ImageLighteningAnim(ImageIO.read(this.getClass().getResource("panIcon.png")),
-                                                      panStartX + panDeltaX - panIcon.getWidth()/2,
-                                                      panStartY + panDeltaY - panIcon.getHeight()/2);
+                                                      lastDragPoint.x - panIcon.getWidth()/2,
+                                                      lastDragPoint.y - panIcon.getHeight()/2);
         Animator.addAnimation(imageLighteningAnim);
         anims.add(imageLighteningAnim);
       }
@@ -115,17 +100,33 @@ public class MapInteractionPane extends JComponent implements Touchable
       {
         e.printStackTrace();
       }
-      
-      dodoMapManagerUI = false;
-      mapManagerUI.setVisible(true);
-      googleMapGround.updateMap(panDeltaX, panDeltaY);
+      lastDragPoint = null;
     }
+    
+//    if(panStarted)
+//    {
+//      panStarted = false;
+//      anims = new ArrayList<Animation>();
+//
+//      ImageLighteningAnim imageLighteningAnim;
+//      try
+//      {
+//        imageLighteningAnim = new ImageLighteningAnim(ImageIO.read(this.getClass().getResource("panIcon.png")),
+//                                                      panStartX + panDeltaX - panIcon.getWidth()/2,
+//                                                      panStartY + panDeltaY - panIcon.getHeight()/2);
+//        Animator.addAnimation(imageLighteningAnim);
+//        anims.add(imageLighteningAnim);
+//      }
+//      catch (IOException e)
+//      {
+//        e.printStackTrace();
+//      }
+//    }
   }
   //-----------------------------------------------------------------------------
   @Override
   public void canceltouch(Object touchref)
   {
-    System.out.println("MapInteractionPane : canceltouch()");
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
@@ -150,20 +151,11 @@ public class MapInteractionPane extends JComponent implements Touchable
     if(animToBeRemoved != null)
       anims.remove(animToBeRemoved);
     
-    if(panStarted)
+    if(lastDragPoint != null)
       g2.drawImage(panIcon,
-                   panStartX + panDeltaX - panIcon.getWidth()/2,
-                   panStartY+panDeltaY - panIcon.getHeight()/2,
+                   lastDragPoint.x - panIcon.getWidth()/2,
+                   lastDragPoint.y - panIcon.getHeight()/2,
                    null);
-    
-    if(!dodoMapManagerUI && mapManagerUI.isDrawCompleted())
-    {
-      ImageLighteningAnim anim = new ImageLighteningAnim(mapManagerUI.getImage(), 10, 10);
-      Animator.addAnimation(anim);
-      anims.add(anim);
-      mapManagerUI.setVisible(false);
-      dodoMapManagerUI = true;
-    }
   }
   //-----------------------------------------------------------------------------
 }
