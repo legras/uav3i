@@ -35,6 +35,7 @@ public class MainFrame extends JFrame
 	public MainFrame(String domain)
 	{
 		super();
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     Dimension screenSize = new Dimension(1366, 768);
 //    Dimension screenSize = new Dimension(25, 212);

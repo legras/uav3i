@@ -22,19 +22,21 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 6264763662244222715L;
-  private OsmMapGround osmMapGround;
-//  private boolean panStarted = false;
-//  private int panStartX, panStartY;
-//  private int panDeltaX, panDeltaY;
-  private Point lastDragPoint;
+
+  private OsmMapGround    osmMapGround;
+  private Point           lastDragPoint;
   private List<Animation> anims = new ArrayList<Animation>();
-  private BufferedImage panIcon;
+  private BufferedImage   panIcon, icon3i;
   //-----------------------------------------------------------------------------
   public OsmMapInteractionPanel(OsmMapGround osmMapGround)
   {
     this.osmMapGround = osmMapGround;
 
-    try { panIcon = ImageIO.read(this.getClass().getResource("panIcon.png")); }
+    try
+    {
+      panIcon = ImageIO.read(this.getClass().getResource("panIcon.png"));
+      icon3i  = ImageIO.read(this.getClass().getResource("3i_icon_small.png"));
+    }
     catch (IOException e) { e.printStackTrace(); }
   }
   //-----------------------------------------------------------------------------
@@ -52,7 +54,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   @Override
   public void updateTouch(float x, float y, Object touchref)
   {
-    System.out.println("####### updateTouch(" + x + ", " + y + ", ...)");
+    //System.out.println("####### updateTouch(" + x + ", " + y + ", ...)");
     
     Point p = new Point((int)x, (int)y);
     if (lastDragPoint != null)
@@ -62,27 +64,13 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
       osmMapGround.getMapViewer().moveMap(diffx, diffy);
     }
     lastDragPoint = p;
-    
-    
-//    if(!panStarted)
-//    {
-//      panStarted = true;
-//      panStartX = (int) x;
-//      panStartY = (int) y;
-//    }
-//    else
-//    {
-//      panDeltaX = ((int) x) - panStartX;
-//      panDeltaY = ((int) y) - panStartY;
-//      //googleMapGround.panPx(panDeltaX, panDeltaY);
-//      osmMapGround.getMapViewer().moveMap(panDeltaX, panDeltaY);
-//    }
   }
   //-----------------------------------------------------------------------------
   @Override
   public void removeTouch(float x, float y, Object touchref)
   {
-    System.out.println("####### removeTouch(" + x + ", " + y + ")");
+    //System.out.println("####### removeTouch(" + x + ", " + y + ")");
+    
     if (lastDragPoint != null)
     {
       anims = new ArrayList<Animation>();
@@ -102,26 +90,6 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
       }
       lastDragPoint = null;
     }
-    
-//    if(panStarted)
-//    {
-//      panStarted = false;
-//      anims = new ArrayList<Animation>();
-//
-//      ImageLighteningAnim imageLighteningAnim;
-//      try
-//      {
-//        imageLighteningAnim = new ImageLighteningAnim(ImageIO.read(this.getClass().getResource("panIcon.png")),
-//                                                      panStartX + panDeltaX - panIcon.getWidth()/2,
-//                                                      panStartY + panDeltaY - panIcon.getHeight()/2);
-//        Animator.addAnimation(imageLighteningAnim);
-//        anims.add(imageLighteningAnim);
-//      }
-//      catch (IOException e)
-//      {
-//        e.printStackTrace();
-//      }
-//    }
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -138,7 +106,10 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   protected void paintComponent(Graphics g)
   {
     Graphics2D g2 = (Graphics2D) g;
-    
+
+    // logo 3i
+    g2.drawImage(icon3i, 10, 10, null);
+
     Animation animToBeRemoved = null;
     for(Animation anim : anims)
     {
