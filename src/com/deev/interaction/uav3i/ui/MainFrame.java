@@ -36,6 +36,15 @@ public class MainFrame extends JFrame
 	{
 		super();
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    try
+    {
+      setIconImage(ImageIO.read(this.getClass().getResource("3i_icon_small.png")));
+    }
+    catch (IOException e1)
+    {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
 
     Dimension screenSize = new Dimension(1366, 768);
 //    Dimension screenSize = new Dimension(25, 212);

@@ -35,7 +35,8 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
     try
     {
       panIcon = ImageIO.read(this.getClass().getResource("panIcon.png"));
-      icon3i  = ImageIO.read(this.getClass().getResource("3i_icon_small.png"));
+      //icon3i  = ImageIO.read(this.getClass().getResource("3i_icon_small.png"));
+      icon3i  = ImageIO.read(this.getClass().getResource("3i_icon.png"));
     }
     catch (IOException e) { e.printStackTrace(); }
   }
@@ -62,6 +63,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
       int diffx = lastDragPoint.x - p.x;
       int diffy = lastDragPoint.y - p.y;
       osmMapGround.getMapViewer().moveMap(diffx, diffy);
+      //System.out.println("####### updateTouch --> osmMapGround.getMapViewer().moveMap(" + diffx + ", " + diffy + ")");
     }
     lastDragPoint = p;
   }

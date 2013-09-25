@@ -1,9 +1,12 @@
 package com.deev.interaction.uav3i.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
+import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOpenAerialTileSource;
+import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 public class OsmMapGround extends Map
@@ -14,16 +17,23 @@ public class OsmMapGround extends Map
   //-----------------------------------------------------------------------------
   public OsmMapGround()
   {
-    mapViewer = new JMapViewer(false);
-    mapViewer.setDisplayPositionByLatLon(48.359407, -4.57013, 11);
-    mapViewer.setTileSource(new OsmTileSource.Mapnik());
-
-    mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
+    mapViewer = new JMapViewer(true);
+    mapViewer.setDisplayPositionByLatLon(48.359407, -4.57013, 10);
+    mapViewer.setTileGridVisible(true);
+    //mapViewer.setZoomContolsVisible(false);
+    //mapViewer.setZoomButtonStyle(JMapViewer.ZOOM_BUTTON_STYLE.VERTICAL);
+    
+    //mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
     //mapViewer.setTileSource(new BingAerialTileSource());
     //mapViewer.setTileSource(new OsmTileSource.CycleMap());
+    //mapViewer.setTileSource(new MapQuestOpenAerialTileSource());
+    //mapViewer.setTileSource(new MapQuestOsmTileSource());
     
     this.setLayout(new BorderLayout());
-    this.add(mapViewer, BorderLayout.CENTER);
+    this.add(mapViewer);
+    
+//    System.out.println("------------------> " + mapViewer.getPosition());
+//    System.out.println("------------------> " + mapViewer.getPosition(100,100));
   }
   //-----------------------------------------------------------------------------
   public JMapViewer getMapViewer()
