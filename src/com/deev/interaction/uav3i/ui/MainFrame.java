@@ -4,12 +4,10 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
-import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -19,7 +17,6 @@ import javax.swing.JLayeredPane;
 import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.ComponentLayer;
 import com.deev.interaction.common.ui.FingerPane;
-import com.deev.interaction.uav3i.googleMap.GoogleMapManagerUI;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 
@@ -90,8 +87,6 @@ public class MainFrame extends JFrame
 //		}
 
     // ******* Carte Google *******
-    GoogleMapManagerUI mapManagerUI       = new GoogleMapManagerUI();
-    //GoogleMapGround    grnd               = new GoogleMapGround(screenSize, mapManagerUI);
     OsmMapGround grnd = new OsmMapGround();
     //GoogleMapInteractionPane mapInteractionPane = new GoogleMapInteractionPane(grnd, mapManagerUI);
     OsmMapInteractionPanel mapInteractionPane = new OsmMapInteractionPanel(grnd);
