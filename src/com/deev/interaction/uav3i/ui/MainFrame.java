@@ -112,6 +112,7 @@ public class MainFrame extends JFrame
 		
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
+		TimeLine.tl = tm;
 		tm.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(tm, new Integer(-3));
 		

@@ -4,5 +4,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/JMapViewer.jar"/>
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
+	<classpathentry kind="lib" path="lib/gnu.getopt-1.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/ivy-java-1.2.6.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-regexp-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/jcoord-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

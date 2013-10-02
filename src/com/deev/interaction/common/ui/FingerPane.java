@@ -95,7 +95,7 @@ public class FingerPane extends JComponent implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		return 10.f;
+		return 1.f;
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class FingerPane extends JComponent implements Touchable
 	}
 
 	@Override
-	public void canceltouch(Object touchref)
+	public void cancelTouch(Object touchref)
 	{
 		Animator.removeAnimation(_drawings.get(touchref));
 		_drawings.remove(touchref);

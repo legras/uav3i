@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.ui;
+package eu.telecom.bretagne.maps;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -44,7 +44,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   @Override
   public float getInterestForPoint(float x, float y)
   {
-    return 5.0f;
+    return 1.0f;
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -71,7 +71,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   @Override
   public void removeTouch(float x, float y, Object touchref)
   {
-    //System.out.println("####### removeTouch(" + x + ", " + y + ")");
+    //System.out.println("###### removeTouch(" + x + ", " + y + ")");
     
     if (lastDragPoint != null)
     {
@@ -101,8 +101,8 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-   * La m��thode paintComponent n'est pas en charge du rendu de la carte (c'est
-   * �� la charge de la classe GoogleMapGround) mais uniquement des animations.
+   * La methode paintComponent n'est pas en charge du rendu de la carte (c'est
+   * a la charge de la classe GoogleMapGround) mais uniquement des animations.
    */
   @Override
   protected void paintComponent(Graphics g)

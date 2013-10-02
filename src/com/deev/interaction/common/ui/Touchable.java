@@ -18,5 +18,5 @@ public interface Touchable
 	
 	void removeTouch(float x, float y, Object touchref);
 	
-	void canceltouch(Object touchref);
+	void cancelTouch(Object touchref);
 }

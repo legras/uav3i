@@ -227,13 +227,13 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	}
 
 	@Override
-	public void canceltouch(Object touchref)
+	public void cancelTouch(Object touchref)
 	{
 		synchronized (_touches)
 		{
 			Touchable T = _touches.get(touchref);
 			
-			T.canceltouch(touchref);
+			T.cancelTouch(touchref);
 		}
 	}
 }

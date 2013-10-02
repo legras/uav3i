@@ -20,6 +20,8 @@ import com.deev.interaction.uav3i.model.MediaStorefront;
 
 public class TimeLine extends JComponent implements Touchable, Animation
 {
+	public static TimeLine tl = null;
+	
 	Media selectedMedia;
 	
 	Curseur curseurTemps;
@@ -157,10 +159,10 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	public float getInterestForPoint(float x, float y)
 	{
 		Rectangle rect = this.getBounds();
-		float interest=1.f;
+		float interest = -1.f;
 		
 		if (y > rect.height - timeLineHeight - Painter.buttonYSize)
-			interest = 20.f;
+			interest = 10.f;
 		return interest;
 	}
 
@@ -300,7 +302,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	}
 
 	@Override
-	public void canceltouch(Object touchref)
+	public void cancelTouch(Object touchref)
 	{
 		// TODO Auto-generated method stub
 	}
