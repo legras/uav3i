@@ -1,6 +1,5 @@
-package eu.telecom.bretagne.maps;
+package eu.telecom_bretagne.uav3i.maps;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;

@@ -1,4 +1,4 @@
-package eu.telecom.bretagne.maps;
+package eu.telecom_bretagne.uav3i.maps;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

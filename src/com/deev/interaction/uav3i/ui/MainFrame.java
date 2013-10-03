@@ -19,7 +19,6 @@ import com.deev.interaction.common.ui.ComponentLayer;
 import com.deev.interaction.common.ui.FingerPane;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
-
 /*
  * 
  * 
