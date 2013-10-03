@@ -1,4 +1,8 @@
 
+/**
+ * Quelques petits tests sur l'opérateur '>>'. À garder pour le moment...
+ * @author Philippe TANGUY
+ */
 public class Test
 {
 
