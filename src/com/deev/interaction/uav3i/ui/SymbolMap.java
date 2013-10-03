@@ -37,7 +37,7 @@ public class SymbolMap extends Map
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
 		
-	public SymbolMap(String domain)
+	public SymbolMap()
 	{
 		super();
 		

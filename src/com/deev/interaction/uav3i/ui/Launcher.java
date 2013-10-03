@@ -33,7 +33,7 @@ public class Launcher
 			  {	
 				DIModernPlaf.initModernLookAndFeel();
 				
-				final MainFrame frame = new MainFrame(domain);
+				final MainFrame frame = new MainFrame();
 				frame.setVisible(true);	
 				frame.requestFocusInWindow();
 				if (FULLSCREEN)

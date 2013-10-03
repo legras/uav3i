@@ -30,7 +30,7 @@ public class MainFrame extends JFrame
 
 	public static OsmMapGround OSMMap;
 
-	public MainFrame(String domain)
+	public MainFrame()
 	{
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,7 +99,7 @@ public class MainFrame extends JFrame
 		mapInteractionPane.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(mapInteractionPane, new Integer(-4));
 
-		SymbolMap map = new SymbolMap(domain);
+		SymbolMap map = new SymbolMap();
 		map.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(map, new Integer(-10));
 		map.alignWith(grnd);

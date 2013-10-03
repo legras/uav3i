@@ -105,9 +105,9 @@ public class Painter {
 	{
 		Graphics2D media = (Graphics2D) g;
 		if (isSelected)
-			media.setColor(new Color(1.f, 0.4f, 0.f, 1.f));
+			media.setColor(new Color(1.f, 0.4f, 0.f, .5f));
 		else
-			media.setColor(Color.yellow);
+			media.setColor(new Color(1.f, 1.f, 0.f, .5f));
 		
 		
 		media.fillRect((int) start,(int) (yPosition - mediaHeight/2),(int) length,(int) mediaHeight);
