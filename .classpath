@@ -5,8 +5,12 @@
 	<classpathentry kind="lib" path="lib/JMapViewer.jar"/>
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
 	<classpathentry kind="lib" path="lib/gnu.getopt-1.0.9.jar"/>
-	<classpathentry kind="lib" path="lib/ivy-java-1.2.6.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-regexp-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/jcoord-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/ivy-java-1.2.13.jar" sourcepath="lib/Ivy-src-1.2.13.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/uav3i/lib/Ivy-javadoc-1.2.13.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
