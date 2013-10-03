@@ -122,7 +122,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 			g2.fillRect(rect2.x, rect2.y + rect2.height - 20, rect2.width, 20);
 */
 			g2.setPaint(new Color(0.f, 0.f, 0.f, .2f));
-			g2.setStroke(new BasicStroke(5.f));
+			g2.setStroke(new BasicStroke(1.f));
 			g2.draw(new Line2D.Float(rect2.x, rect2.y + rect2.height / 2, rect2.x + rect2.width, rect2.y + rect2.height / 2));
 
 			if (selectedMedia != null) 

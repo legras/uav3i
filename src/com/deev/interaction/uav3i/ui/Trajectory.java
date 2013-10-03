@@ -71,9 +71,13 @@ public class Trajectory
 			else
 				line.lineTo(p.x, p.y);
 		}
-		
+
+		g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
+		// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+		g2.draw(line);
 		g2.setPaint(Color.RED);
-		g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+		g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		g2.draw(line);
 	}
 }

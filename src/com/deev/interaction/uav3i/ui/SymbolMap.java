@@ -71,7 +71,7 @@ public class SymbolMap extends Map
 		g2.setRenderingHints(rh);
 		
 		// Update de trajectoire
-		if (currentTime - _lastTrajectoryUpdate > 1000)
+		if (currentTime - _lastTrajectoryUpdate > 2000)
 			_trajectory.update();
 		
 		// Tracé de trajectoire
