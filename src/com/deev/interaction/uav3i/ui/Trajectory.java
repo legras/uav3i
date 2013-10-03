@@ -19,6 +19,10 @@ import uk.me.jstott.jcoord.LatLng;
  * @author legras
  * Cette classe est destinée à stocker les points de la trajectoire du drone du côté de la vue. 
  * Avec donc une mise à jour régulière en interrogeant UAVDataStore.
+ * 
+ * Elle est capable de s'afficher sur une SymbolMap (à modifier pour être plus générique, ajouter 
+ * une Interface screen/latlng). On ajoutera différents services de dessin, notamment avec la 
+ * sortie de GeneralPath entre deux instants.
  */
 public class Trajectory
 {
@@ -49,7 +53,7 @@ public class Trajectory
 		_points.add(new TrajectoryPoint(ll, time));
 	}
 
-	public void paint(SymbolMap symbolMap, Graphics2D g2)
+	public GeneralPath getFullPath(SymbolMap symbolMap)
 	{
 		GeneralPath line;
 		line = new GeneralPath();
@@ -57,7 +61,7 @@ public class Trajectory
 		Point p;
 		
 		if (_points.size() < 2)
-			return;
+			return  null;
 		
 		for (TrajectoryPoint tp : _points)
 		{
@@ -71,13 +75,7 @@ public class Trajectory
 			else
 				line.lineTo(p.x, p.y);
 		}
-
-		g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
-		// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
-		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-		g2.draw(line);
-		g2.setPaint(Color.RED);
-		g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-		g2.draw(line);
+		
+		return line;
 	}
 }

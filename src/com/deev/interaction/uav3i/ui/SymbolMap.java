@@ -71,12 +71,27 @@ public class SymbolMap extends Map
 		g2.setRenderingHints(rh);
 		
 		// Update de trajectoire
-		if (currentTime - _lastTrajectoryUpdate > 2000)
+		if (currentTime - _lastTrajectoryUpdate > 500)
+		{
 			_trajectory.update();
+			_lastTrajectoryUpdate = currentTime;
+		}
 		
 		// Tracé de trajectoire
-		_trajectory.paint(this, g2);		
+		GeneralPath fullTrajectory = _trajectory.getFullPath(this);	
 		
+		if (fullTrajectory != null)
+		{
+			g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
+			// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
+			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_ROUND));
+			g2.draw(fullTrajectory);
+			g2.setPaint(Color.RED);
+			g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_ROUND));
+			g2.draw(fullTrajectory);
+		}
 		// --------- Manoeuvers --------------------------------------------------
 		synchronized(this)
 		{
