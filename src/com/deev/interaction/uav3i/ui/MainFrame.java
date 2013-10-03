@@ -26,9 +26,13 @@ import com.deev.interaction.uav3i.replay.TimeLine;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame
 {
-	protected TouchGlass _glass = null;
 
 	public static OsmMapGround OSMMap;
+	
+	public enum MainFrameState {COMMAND, MAP, REPLAY};
+	public static MainFrameState state = MainFrameState.MAP;
+	
+	protected TouchGlass _glass = null;
 
 	public MainFrame()
 	{
@@ -58,7 +62,8 @@ public class MainFrame extends JFrame
 			setBounds(0, 0, screenSize.width, screenSize.height);
 
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
-			// rb.mouseMove(screenSize.width, screenSize.height);
+			if (Launcher.FULLSCREEN)
+				rb.mouseMove(screenSize.width, screenSize.height);
 		}
 		catch (HeadlessException e)
 		{
@@ -72,20 +77,6 @@ public class MainFrame extends JFrame
 		}
 
 		JLayeredPane lpane = this.getLayeredPane();
-
-		//		MapGround grnd = null;
-		//		BufferedImage image;
-		//		try
-		//		{
-		//			image = ImageIO.read(this.getClass().getResource(Launcher.REGION+".png"));			
-		//grnd = new MapGround(image);
-		//			grnd.panPx(image.getWidth()/2., -image.getHeight()/2.);
-		//		}
-		//		catch (IOException e1)
-		//		{
-		//			// TODO Auto-generated catch block
-		//			e1.printStackTrace();
-		//		}
 
 		// ******* Carte OSM *******
 		OsmMapGround grnd = new OsmMapGround();
@@ -113,6 +104,12 @@ public class MainFrame extends JFrame
 		ComponentLayer clayer = new ComponentLayer();
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
+		
+		// ********** Mode switch **********
+		ModeSwitcher mswitch = new ModeSwitcher();
+		mswitch.setBounds(screenSize.width-100, screenSize.height/2, 90, 120);
+		clayer.add(mswitch);
+		
 
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
@@ -134,7 +131,7 @@ public class MainFrame extends JFrame
 			public void windowClosing(WindowEvent we)
 			{
 				//_glass.die();
-				// System.exit(0);
+				System.exit(0);
 			}
 
 			public void windowActivated(WindowEvent e)
