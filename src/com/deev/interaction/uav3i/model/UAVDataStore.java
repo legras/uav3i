@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.omg.CORBA._PolicyStub;
+
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
 
@@ -18,42 +20,6 @@ public class UAVDataStore
 	public static UAVDataStore store = null;
 	
 	private ArrayList<UAVDataPoint> _dataPoints;
-	
-	public class UAVDataPoint
-	{
-		public LatLng latlon;
-		public double altitude;
-		public double heading;
-		public long time;
-		
-		/**
-		 *  <message name="GPS" id="8">
-		 *  <ul>
-		 *	<li><field name="mode"       type="uint8"  unit="byte_mask"/></li>
-		 *	<li><field name="utm_east"   type="int32"  unit="cm" alt_unit="m"/></li>
-		 *	<li><field name="utm_north"  type="int32"  unit="cm" alt_unit="m"/></li>
-		 *	<li><field name="course"     type="int16"  unit="decideg" alt_unit="deg"/></li>
-		 *	<li><field name="alt"        type="int32"  unit="mm" alt_unit="m"/></li>
-		 *	<li><field name="speed"      type="uint16" unit="cm/s" alt_unit="m/s"/></li>
-		 *	<li><field name="climb"      type="int16"  unit="cm/s" alt_unit="m/s"/></li>
-		 *	<li><field name="week"       type="uint16" unit="weeks"/></li>
-		 *	<li><field name="itow"       type="uint32" unit="ms"/></li>
-		 *	<li><field name="utm_zone"   type="uint8"/></li>
-		 *	<li><field name="gps_nb_err" type="uint8"/></li>
-		 *	</ul>
-		 */
-		public UAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
-		{
-			UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
-			latlon = utm.toLatLng();
-			
-			System.out.println(latlon);
-			
-			altitude = (double) alt / 1000.;
-			heading = (double) course / 10.;
-			time = t;
-		}
-	}
 	
 	public static void initialize(InputStream stream)
 	{
@@ -73,7 +39,7 @@ public class UAVDataStore
 		String strLine;
 		long delta = 0;
 		
-		_dataPoints = new ArrayList<UAVDataStore.UAVDataPoint>();
+		_dataPoints = new ArrayList<UAVDataPoint>();
 		
 		//Read File Line By Line
 		try
@@ -111,6 +77,36 @@ public class UAVDataStore
 	{
 		
 	}
+
+	public static LatLng getLatLngAtTime(long time)
+	{
+		int index = store.getIndexBeforeTime(time);
+		
+		
+		return store._dataPoints.get(index).latlng;
+	}
 	
-	
+	private int getIndexBeforeTime(long time)
+	{
+		int index;
+		
+		long startT = _dataPoints.get(0).time;
+		if (time < startT)
+			return 0;
+		
+		int last = _dataPoints.size()-1;
+		long endT = _dataPoints.get(last).time;
+		if (time > endT)
+			return last;
+		
+		index = (int) (time-startT) / (int) (endT-startT) * last;
+		
+		if (index < 0) return 0;
+		if (index > last) return last;
+		
+		while (_dataPoints.get(index).time > time) index--;
+		while (_dataPoints.get(index+1).time < time) index ++;
+		
+		return index;
+	}
 }

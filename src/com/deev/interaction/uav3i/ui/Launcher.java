@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 
 import com.deev.interaction.common.ui.DIModernPlaf;
 import com.deev.interaction.uav3i.model.MediaStorefront;
+import com.deev.interaction.uav3i.model.UAVDataStore;
 
 /**
  * @author legras
@@ -14,8 +15,6 @@ import com.deev.interaction.uav3i.model.MediaStorefront;
  */
 public class Launcher
 {
-	public static String REGION;
-	public static double REF_HEIGHT = 1305.;
 	public static boolean TUIO = false;
 	public static boolean FULLSCREEN = false;
 	
@@ -26,7 +25,6 @@ public class Launcher
 	public static void main(String[] args)
 	{		
 		final String domain = "224.5.6.7:8910";
-		Launcher.REGION = "douarn";
 		Launcher.TUIO = true;
 		
 		SwingUtilities.invokeLater(new Runnable()
@@ -42,6 +40,8 @@ public class Launcher
 					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 			  }
 		});
+		
+		UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
 		
 		MediaStorefront.start();
 		MediaStorefront.testFill();
