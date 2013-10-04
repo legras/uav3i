@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -20,7 +21,14 @@ import com.deev.interaction.uav3i.model.MediaStorefront;
 
 public class TimeLine extends JComponent implements Touchable, Animation
 {
-	public static TimeLine tl = null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -923278315604054575L;
+	
+	private enum TimeLineState {HIDDEN, SHOWING, ACTIVE, HIDING};
+	private TimeLineState _state;
+	private float _vOffset;
 
 	Media selectedMedia;
 
@@ -42,7 +50,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	float firstTouch;
 	float centerXPosition;
 	float lineYPosition;
-	float timeLineHeight;
+	float timeLineHeight = 100;
 
 	long dureeMission;
 	long t0;
@@ -56,11 +64,12 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	{
 		super();
 
+		_state = TimeLineState.HIDDEN;
+		_vOffset = timeLineHeight;
+		
 		this.screenWidth = screenWidth;
 
 		centerXPosition = screenWidth/2;
-		timeLineHeight = 140;
-		//timeLineHeight = 0;
 		lineYPosition = screenHeight-timeLineHeight/2;
 
 		// TODO d�gager dureeMission
@@ -89,9 +98,12 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		this.setBounds(rect.x,(int) (rect.height-timeLineHeight), rect.x+rect.width, (int) timeLineHeight);
 		Rectangle rect2 = this.getBounds();
 
-		g2.fillRect(rect2.x, rect2.y, rect2.width, rect2.height);
-
 		this.setBounds(rect);
+		
+		AffineTransform old = g2.getTransform();
+		g2.translate(0, _vOffset);
+		
+		g2.fillRect(rect2.x, rect2.y, rect2.width, rect2.height);
 
 		ArrayList <Media> segmentsVideo = MediaStorefront.getMediaList();
 		synchronized (segmentsVideo)
@@ -114,13 +126,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 
 				default:
 				}
-/*
-			g2.setPaint(new Color(0.2f, 0.2f, 0.6f, 1.f));
-			g2.fillRect(rect2.x, rect2.y, rect2.width, 10);
-			g2.fillRect(rect2.x, rect2.y, 10, rect2.height);
-			g2.fillRect(rect2.x + rect2.width - 10, rect2.y, 20, rect2.height);
-			g2.fillRect(rect2.x, rect2.y + rect2.height - 20, rect2.width, 20);
-*/
+
 			g2.setPaint(new Color(0.f, 0.f, 0.f, .2f));
 			g2.setStroke(new BasicStroke(1.f));
 			g2.draw(new Line2D.Float(rect2.x, rect2.y + rect2.height / 2, rect2.x + rect2.width, rect2.y + rect2.height / 2));
@@ -145,16 +151,22 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		}
 
 		Painter.paintCurseurDrone(g, timeToScreen(curseurDrone.time), lineYPosition, curseurDroneIsTouched);
+		
+		g2.setTransform(old);
 	}
 
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
+		if (_state != TimeLineState.ACTIVE)
+			return -1.f;
+		
 		Rectangle rect = this.getBounds();
 		float interest = -1.f;
 
 		if (y > rect.height - timeLineHeight)
 			interest = 10.f;
+		
 		return interest;
 	}
 
@@ -302,14 +314,47 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	@Override
 	public int tick(int time)
 	{
+		switch (_state)
+		{
+			case HIDDEN : 
+				_vOffset = timeLineHeight;
+				break;
+			case SHOWING : 
+				_vOffset /= 2.;
+				if (_vOffset < 1.f)
+					_state = TimeLineState.ACTIVE;
+				break;
+			case ACTIVE : 
+				_vOffset = 0.f;
+				break;
+			case HIDING : 
+				_vOffset += (timeLineHeight-_vOffset)/2.f;
+				if (_vOffset > timeLineHeight-1.f)
+					_state = TimeLineState.HIDDEN;
+				break;
+			default:
+				System.out.println("Default while on switching on TimeLineState: " + _state);
+		}
+		
 		return 1;
-
 	}
 
 	@Override
 	public int life()
 	{
 		return 1;
+	}
+	
+
+	
+	public void hide()
+	{
+		_state = TimeLineState.HIDING;
+	}
+	
+	public void show()
+	{
+		_state = TimeLineState.SHOWING;
 	}
 
 	public void selection(Media m)

@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -24,7 +26,7 @@ import com.deev.interaction.uav3i.replay.TimeLine;
  * 
  */
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame
+public class MainFrame extends JFrame implements ActionListener
 {
 
 	public static OsmMapGround OSMMap;
@@ -33,6 +35,8 @@ public class MainFrame extends JFrame
 	public static MainFrameState state = MainFrameState.MAP;
 	
 	protected TouchGlass _glass = null;
+	protected TimeLine _timeline;
+	protected ModeSwitcher _switch;
 
 	public MainFrame()
 	{
@@ -106,23 +110,24 @@ public class MainFrame extends JFrame
 		lpane.add(clayer, new Integer(-1));
 		
 		// ********** Mode switch **********
-		ModeSwitcher mswitch = new ModeSwitcher();
+		ModeSwitcher mswitch = new ModeSwitcher(this);
+		_switch = mswitch;
 		mswitch.setBounds(screenSize.width-100, screenSize.height/2, 90, 120);
 		clayer.add(mswitch);
 		
 
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
-		TimeLine.tl = tm;
 		tm.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(tm, new Integer(-3));
+		_timeline = tm;
 
 		_glass = new TouchGlass();
 		_glass.setTopMap(map);
 		_glass.setComponentLayer(clayer);
 
 		Animator.addComponent(fingerpane);
-		Animator.addComponent(tm);
+		Animator.addAnimation(tm);
 		Animator.addComponent(mapInteractionPane);
 		Animator.go();
 
@@ -156,5 +161,24 @@ public class MainFrame extends JFrame
 	public TouchGlass getGlass()
 	{
 		return _glass;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		switch (_switch.getMode())
+		{
+			case COMMAND:
+				_timeline.hide();
+				break;
+			case MAP:
+				_timeline.hide();
+				break;
+			case REPLAY:
+				_timeline.show();
+				break;
+			default:
+				return;
+		}
 	}
 }

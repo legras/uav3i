@@ -25,7 +25,7 @@ public class Painter {
 	static float marqueurYSize = 165/2;
 	
 	//Dimensions des segments Media
-	static float mediaHeight = 120;
+	static float mediaHeight = 80;
 	
 	//Dimensions des boutons
 	static float buttonXSize = 220;

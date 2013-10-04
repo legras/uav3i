@@ -21,7 +21,7 @@ public class OsmMapGround extends Map
   public OsmMapGround()
   {
     mapViewer = new JMapViewer(false);
-    mapViewer.setDisplayPositionByLatLon(48.291556083849486, -4.391552669882558, 10);
+    mapViewer.setDisplayPositionByLatLon(48.291556083849486, -4.391552669882558, 1);
     
     // Test de configuation du JMapViewer
     
