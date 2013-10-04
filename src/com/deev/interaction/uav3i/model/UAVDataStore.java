@@ -12,14 +12,16 @@ import org.omg.CORBA._PolicyStub;
 
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
-
+import eu.telecom_bretagne.uav3i.IvyCommunication;
 import fr.dgac.ivy.Ivy;
 
 public class UAVDataStore
 {
 	public static UAVDataStore store = null;
-	
-	private ArrayList<UAVDataPoint> _dataPoints;
+		
+//  private ArrayList<UAVDataPoint> _dataPoints;
+  private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
+//	private long deltaIvy = 0;
 	
 	public static void initialize(InputStream stream)
 	{
@@ -27,10 +29,12 @@ public class UAVDataStore
 			store = new UAVDataStore(stream);
 	}
 	
-	public static void initialize(Ivy bus)
+//  public static void initialize(Ivy bus)
+  public static void initialize()
 	{
-		if (store == null)	
-			store = new UAVDataStore(bus);
+		if (store == null)
+//      store = new UAVDataStore(bus);
+		  store = new UAVDataStore();
 	}
 	
 	public UAVDataStore(InputStream stream)
@@ -39,7 +43,7 @@ public class UAVDataStore
 		String strLine;
 		long delta = 0;
 		
-		_dataPoints = new ArrayList<UAVDataPoint>();
+//		_dataPoints = new ArrayList<UAVDataPoint>();
 		
 		//Read File Line By Line
 		try
@@ -73,10 +77,28 @@ public class UAVDataStore
 		// System.out.println(_dataPoints.size() + " UAVDataPoint");
 	}
 	
-	public UAVDataStore(Ivy bus)
-	{
-		
-	}
+//	public UAVDataStore(Ivy bus)
+//	{
+//		
+//	}
+  /**
+   * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
+   * du bus Ivy.
+   */
+  public UAVDataStore()
+  {
+    new IvyCommunication();
+  }
+  
+  public static void addUAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
+  {
+    if(store != null)
+    {
+//      if (store.deltaIvy == 0)
+//        store.deltaIvy = System.currentTimeMillis() - t + 2000;
+      store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t));
+    }
+  }
 
 	public static LatLng getLatLngAtTime(long time)
 	{
