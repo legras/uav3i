@@ -51,6 +51,12 @@ public class Trajectory
 		LatLng ll = UAVDataStore.getLatLngAtTime(time);
 		
 		_points.add(new TrajectoryPoint(ll, time));
+
+		// Centrage de la carte lors de l'insertion du premier point de la trajectoire.
+		if(_points.size() == 1)
+		{
+		  MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(), ll.getLng(), 14);
+		}
 	}
 
 	public GeneralPath getFullPath(SymbolMap symbolMap)
@@ -78,4 +84,5 @@ public class Trajectory
 		
 		return line;
 	}
+	
 }
