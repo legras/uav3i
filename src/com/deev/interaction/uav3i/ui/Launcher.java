@@ -40,13 +40,18 @@ public class Launcher
 					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 			  }
 		});
-
-		// Lancement avec replay (infos dans le fichier).
-		UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
-
-		// Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
-		// TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
-		//UAVDataStore.initialize();
+		
+		switch (UAV3iSettings.getType())
+    {
+      case REPLAY: // Lancement avec replay (infos dans le fichier).
+        UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
+        break;
+      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
+        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
+        UAVDataStore.initialize();
+      default:
+        break;
+    }
 
 		MediaStorefront.start();
 		MediaStorefront.testFill();

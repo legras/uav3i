@@ -55,7 +55,9 @@ public class Trajectory
 		// Centrage de la carte lors de l'insertion du premier point de la trajectoire.
 		if(_points.size() == 1)
 		{
-		  MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(), ll.getLng(), 14);
+		  MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(),
+		                                                             ll.getLng(),
+		                                                             UAV3iSettings.getInitialZoom());
 		}
 	}
 
