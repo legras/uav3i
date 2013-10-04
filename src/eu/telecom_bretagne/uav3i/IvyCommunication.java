@@ -18,7 +18,7 @@ public class IvyCommunication
   private String applicationName = "uav3i";
   
   private Ivy                 bus;
-  private UAVPositionListener uavPositionListener;
+  //private UAVPositionListener uavPositionListener;
   //-----------------------------------------------------------------------------
   //public IvyCommunication(GoogleMapManager mapManager, MapZone mapZone)
   public IvyCommunication()
@@ -47,7 +47,7 @@ public class IvyCommunication
     bus.start(null);
 
     // Initialisation of the main Ivy listener.
-    uavPositionListener = new UAVPositionListener();
+    //uavPositionListener = new UAVPositionListener();
     
 		// Messages WORLD_ENV_REQ -> demande de la part de la simu à destination
 		// de Gaia pour connaître les conditions météo au point où se trouve le
@@ -56,7 +56,7 @@ public class IvyCommunication
     
     // Mise en écoute des messages GPS
     // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-    bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
+    bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
   }
   //-----------------------------------------------------------------------------
 //  public void moveWayPointS1(GoogleMapCoordinate coordinate)
@@ -87,18 +87,18 @@ public class IvyCommunication
 //    
 //  }
   //-----------------------------------------------------------------------------
-  public void jumpToSurveyS1S2()
-  {
-    try
-    {
-      // Attention, pour le moment le saut vers le bloc est codé en dur...
-      bus.sendMsg("gcs JUMP_TO_BLOCK 5 5");
-    }
-    catch (IvyException e)
-    {
-      e.printStackTrace();
-    }
-  }
+//  public void jumpToSurveyS1S2()
+//  {
+//    try
+//    {
+//      // Attention, pour le moment le saut vers le bloc est codé en dur...
+//      bus.sendMsg("gcs JUMP_TO_BLOCK 5 5");
+//    }
+//    catch (IvyException e)
+//    {
+//      e.printStackTrace();
+//    }
+//  }
   //-----------------------------------------------------------------------------
   
   
