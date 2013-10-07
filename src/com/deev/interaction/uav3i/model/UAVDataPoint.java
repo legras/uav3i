@@ -30,9 +30,7 @@ public class UAVDataPoint
 	{
 		UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
 		latlng = utm.toLatLng();
-		
-		System.out.println(latlng);
-		
+				
 		altitude = (double) alt / 1000.;
 		heading = (double) course / 10.;
 		time = t;

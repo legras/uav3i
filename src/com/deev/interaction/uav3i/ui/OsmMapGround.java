@@ -10,6 +10,8 @@ import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOpenAerialTileSource
 import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 public class OsmMapGround extends Map
 {
   //-----------------------------------------------------------------------------

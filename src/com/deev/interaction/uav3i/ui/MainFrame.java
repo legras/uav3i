@@ -21,6 +21,8 @@ import com.deev.interaction.common.ui.ComponentLayer;
 import com.deev.interaction.common.ui.FingerPane;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 /*
  * 
  * 
@@ -66,7 +68,7 @@ public class MainFrame extends JFrame implements ActionListener
 			setBounds(0, 0, screenSize.width, screenSize.height);
 
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
-			if (Launcher.FULLSCREEN)
+			if (UAV3iSettings.FULLSCREEN)
 				rb.mouseMove(screenSize.width, screenSize.height);
 		}
 		catch (HeadlessException e)
@@ -98,7 +100,6 @@ public class MainFrame extends JFrame implements ActionListener
 		map.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(map, new Integer(-10));
 		map.alignWith(grnd);
-		// map.setupToSize();
 
 		FingerPane fingerpane = new FingerPane();
 		fingerpane.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -118,13 +119,10 @@ public class MainFrame extends JFrame implements ActionListener
 
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
-		tm.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(tm, new Integer(-3));
 		_timeline = tm;
 
 		_glass = new TouchGlass();
-		_glass.setTopMap(map);
-		_glass.setComponentLayer(clayer);
 
 		Animator.addComponent(fingerpane);
 		Animator.addAnimation(tm);
@@ -151,11 +149,10 @@ public class MainFrame extends JFrame implements ActionListener
 		_glass.addTouchable(fingerpane);
 		_glass.addTouchable(tm);
 		_glass.addTouchable(mapInteractionPane);
+		_glass.addTouchable(clayer);
 
-		setGlassPane(_glass); // niveau affichage superieur
-
+		setGlassPane(_glass);		
 		_glass.setVisible(true);
-		//grnd.updateTransform();
 	}
 
 	public TouchGlass getGlass()

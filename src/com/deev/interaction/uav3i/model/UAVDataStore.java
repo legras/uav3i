@@ -73,8 +73,6 @@ public class UAVDataStore
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		// System.out.println(_dataPoints.size() + " UAVDataPoint");
 	}
 	
 //	public UAVDataStore(Ivy bus)
@@ -103,7 +101,7 @@ public class UAVDataStore
 	public static LatLng getLatLngAtTime(long time)
 	{
 		int index = store.getIndexBeforeTime(time);
-		
+		// TODO il faudra interpoler entre index et index+1
 		
 		return store._dataPoints.get(index).latlng;
 	}

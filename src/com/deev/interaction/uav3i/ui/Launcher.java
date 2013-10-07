@@ -9,49 +9,48 @@ import com.deev.interaction.common.ui.DIModernPlaf;
 import com.deev.interaction.uav3i.model.MediaStorefront;
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 /**
  * @author legras
  *
  */
 public class Launcher
 {
-	public static boolean TUIO = false;
-	public static boolean FULLSCREEN = false;
-	
+
 	/**
 	 * @param args
 	 * @throws IvyException
 	 */
 	public static void main(String[] args)
 	{		
-		final String domain = "224.5.6.7:8910";
-		Launcher.TUIO = true;
-		
+		// final String domain = "224.5.6.7:8910";
+
 		SwingUtilities.invokeLater(new Runnable()
 		{
-			  public void run()
-			  {	
+			public void run()
+			{	
 				DIModernPlaf.initModernLookAndFeel();
-				
+
 				final MainFrame frame = new MainFrame();
 				frame.setVisible(true);	
 				frame.requestFocusInWindow();
-				if (FULLSCREEN)
+				if (UAV3iSettings.FULLSCREEN)
 					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-			  }
+			}
 		});
-		
+
 		switch (UAV3iSettings.getType())
-    {
-      case REPLAY: // Lancement avec replay (infos dans le fichier).
-        UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
-        break;
-      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
-        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
-        UAVDataStore.initialize();
-      default:
-        break;
-    }
+		{
+			case REPLAY: // Lancement avec replay (infos dans le fichier).
+				UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
+				break;
+			case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
+				// TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
+				UAVDataStore.initialize();
+			default:
+				break;
+		}
 
 		MediaStorefront.start();
 		MediaStorefront.testFill();

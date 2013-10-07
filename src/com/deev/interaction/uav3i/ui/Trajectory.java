@@ -13,6 +13,8 @@ import javax.swing.JComponent;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 import uk.me.jstott.jcoord.LatLng;
 
 /**

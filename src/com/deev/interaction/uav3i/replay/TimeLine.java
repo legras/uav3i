@@ -71,6 +71,8 @@ public class TimeLine extends JComponent implements Touchable, Animation
 
 		centerXPosition = screenWidth/2;
 		lineYPosition = screenHeight-timeLineHeight/2;
+		
+		setBounds(0, 0, (int) screenWidth, (int) screenHeight);
 
 		// TODO d�gager dureeMission
 		dureeMission = 1000000;

@@ -46,6 +46,8 @@ import com.deev.interaction.common.ui.FingerDrawing;
 import com.deev.interaction.common.ui.Gesture;
 import com.deev.interaction.common.ui.Touchable;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
@@ -59,10 +61,7 @@ import TUIO.TuioTime;
  */
 @SuppressWarnings("serial")
 public class TouchGlass extends JComponent implements Touchable, TuioListener, MouseListener, MouseMotionListener
-{	
-	private SymbolMap _smap;
-	private ComponentLayer _componentLayer;
-	
+{		
 	private ArrayList<Touchable> _touchables;
 	private HashMap<Object, Touchable> _touches;
 			
@@ -76,18 +75,20 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 		
 		_touchables = new ArrayList<Touchable>();
 		_touches = new HashMap<Object, Touchable>();
-		
-		_smap = null;
-		
-		if (Launcher.TUIO)
+				
+		if (UAV3iSettings.TUIO)
 		{
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
 		}
 		
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		//setCursor(toolkit.createCustomCursor(new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "NO_CURSOR"));
+		if (UAV3iSettings.FULLSCREEN)
+		{
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			setCursor(toolkit.createCustomCursor(new BufferedImage(3, 3,
+					BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "NO_CURSOR"));
+		}
 	}
 	
 	public void addTouchable(Touchable t)
@@ -97,21 +98,11 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			_touchables.add(t);
 		}
 	}
-	
-	public void setTopMap(SymbolMap map)
-	{
-		_smap = map;
-	}
-	
-	public void setComponentLayer(ComponentLayer clayer)
-	{
-		_componentLayer = clayer;
-	}
 
 	@Override
 	public void addTuioCursor(TuioCursor arg0)
 	{
-		addTouch(arg0.getX(), arg0.getY(), arg0);
+		addTouch(arg0.getX()*getBounds().width, arg0.getY()*getBounds().height, arg0);
 	}
 
 	@Override
@@ -124,19 +115,20 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	@Override
 	public void removeTuioCursor(TuioCursor arg0)
 	{
-		removeTouch(arg0.getX(), arg0.getY(), arg0);
+		removeTouch(arg0.getX()*getBounds().width, arg0.getY()*getBounds().height, arg0);
 	}
 
 	@Override
 	public void updateTuioCursor(TuioCursor arg0)
 	{
-		updateTouch(arg0.getX(), arg0.getY(), arg0);
+		updateTouch(arg0.getX()*getBounds().width, arg0.getY()*getBounds().height, arg0);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		addTouch(e.getXOnScreen(), e.getYOnScreen(), this);
+		System.out.println("Mouse caught!");
 	}
 
 	@Override
