@@ -129,4 +129,10 @@ public class UAVDataStore
 		
 		return index;
 	}
+	
+	public static boolean isEmpty()
+	{
+	  return store._dataPoints.size() == 0;
+	}
+
 }

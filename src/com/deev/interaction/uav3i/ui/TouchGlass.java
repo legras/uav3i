@@ -76,14 +76,14 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 		_touchables = new ArrayList<Touchable>();
 		_touches = new HashMap<Object, Touchable>();
 				
-		if (UAV3iSettings.TUIO)
+		if (UAV3iSettings.getTUIO())
 		{
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
 		}
 		
-		if (UAV3iSettings.FULLSCREEN)
+		if (UAV3iSettings.getFullscreen())
 		{
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			setCursor(toolkit.createCustomCursor(new BufferedImage(3, 3,
