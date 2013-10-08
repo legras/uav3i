@@ -11,6 +11,8 @@ import javax.swing.JComponent;
 
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
+import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 import com.deev.interaction.uav3i.ui.SymbolMap;
 
 @SuppressWarnings("serial")
@@ -95,7 +97,10 @@ public class FingerPane extends JComponent implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		return 1.f;
+		if (MainFrame.getAppState() == MainFrameState.COMMAND)
+			return 20.f;
+		else
+			return -1.f;
 	}
 
 	@Override

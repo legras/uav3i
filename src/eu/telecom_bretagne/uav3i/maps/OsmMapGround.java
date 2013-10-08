@@ -12,6 +12,8 @@ import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import com.deev.interaction.uav3i.ui.Map;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+
 public class OsmMapGround extends Map
 {
   //-----------------------------------------------------------------------------
@@ -21,7 +23,22 @@ public class OsmMapGround extends Map
   public OsmMapGround()
   {
     mapViewer = new JMapViewer(false);
-    mapViewer.setDisplayPositionByLatLon(48.291556083849486, -4.391552669882558, 1);
+    //mapViewer.setDisplayPositionByLatLon(48.359407, -4.57013, 14);
+    mapViewer.setDisplayPositionByLatLon(UAV3iSettings.getInitialLatitude(),
+                                         UAV3iSettings.getInitialLongitude(),
+                                         UAV3iSettings.getInitialZoom());
+    
+    switch (UAV3iSettings.getMapType())
+    {
+      case MAPNIK:
+        mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
+        break;
+      case BING_AERIAL:
+        mapViewer.setTileSource(new BingAerialTileSource());
+        break;
+      case OSM_CYCLE_MAP:
+        mapViewer.setTileSource(new OsmTileSource.CycleMap());
+    }
     
     // Test de configuation du JMapViewer
     
@@ -32,9 +49,9 @@ public class OsmMapGround extends Map
      // Choix de la source cartographique : si aucun choix n'est précisé,
      // La source OsmTileSource.Mapnik() est prise par défaut.
 
-    //mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
-    //mapViewer.setTileSource(new BingAerialTileSource());
-    //mapViewer.setTileSource(new OsmTileSource.CycleMap());
+    //
+    //
+    //
     //mapViewer.setTileSource(new MapQuestOpenAerialTileSource());
     //mapViewer.setTileSource(new MapQuestOsmTileSource());
 

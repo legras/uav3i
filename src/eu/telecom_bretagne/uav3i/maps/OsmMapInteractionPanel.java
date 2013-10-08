@@ -43,7 +43,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   @Override
   public float getInterestForPoint(float x, float y)
   {
-    return 1.0f;
+    return 5.0f;
   }
   //-----------------------------------------------------------------------------
   @Override

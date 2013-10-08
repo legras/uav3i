@@ -22,6 +22,8 @@ import com.deev.interaction.common.ui.FingerPane;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.maps.OsmMapGround;
+import eu.telecom_bretagne.uav3i.maps.OsmMapInteractionPanel;
 
 /*
  * 
@@ -38,7 +40,8 @@ public class MainFrame extends JFrame implements ActionListener
 	
 	protected TouchGlass _glass = null;
 	protected TimeLine _timeline;
-	protected ModeSwitcher _switch;
+	
+	protected static ModeSwitcher SWITCH;
 
 	public MainFrame()
 	{
@@ -112,7 +115,7 @@ public class MainFrame extends JFrame implements ActionListener
 		
 		// ********** Mode switch **********
 		ModeSwitcher mswitch = new ModeSwitcher(this);
-		_switch = mswitch;
+		SWITCH = mswitch;
 		mswitch.setBounds(screenSize.width-100, screenSize.height/2, 90, 120);
 		clayer.add(mswitch);
 		
@@ -155,6 +158,19 @@ public class MainFrame extends JFrame implements ActionListener
 		_glass.setVisible(true);
 	}
 
+	public static MainFrameState getAppState()
+	{
+		switch (SWITCH.getMode())
+		{
+			case COMMAND:
+				return MainFrameState.COMMAND;
+			case REPLAY:
+				return MainFrameState.REPLAY;
+			case MAP:
+			default:
+				return MainFrameState.MAP;
+		}	}
+	
 	public TouchGlass getGlass()
 	{
 		return _glass;
@@ -163,7 +179,7 @@ public class MainFrame extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		switch (_switch.getMode())
+		switch (SWITCH.getMode())
 		{
 			case COMMAND:
 				_timeline.hide();
