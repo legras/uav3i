@@ -71,7 +71,7 @@ public class MainFrame extends JFrame implements ActionListener
 			setBounds(0, 0, screenSize.width, screenSize.height);
 
 			Robot rb = new Robot(); // move mouse cursor out of the way to lower right
-			if (UAV3iSettings.FULLSCREEN)
+			if (UAV3iSettings.getFullscreen())
 				rb.mouseMove(screenSize.width, screenSize.height);
 		}
 		catch (HeadlessException e)
