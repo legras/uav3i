@@ -9,6 +9,8 @@ import java.util.Iterator;
 
 import javax.swing.JComponent;
 
+import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame;
@@ -56,8 +58,8 @@ public class FingerPane extends JComponent implements Touchable
 		
 		if (rectangle.width < delta && rectangle.height < delta)
 		{
-			Point2D.Double pm = _smap.pixelsToMeters(rectangle.x, rectangle.y);
-			_smap.setManoeuver(new CircleMnvr(_smap, pm.x, pm.y));
+			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
+			_smap.setManoeuver(new CircleMnvr(_smap, p));
 			
 			return;
 		}

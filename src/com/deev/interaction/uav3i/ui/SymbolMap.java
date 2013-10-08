@@ -6,26 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -103,6 +85,12 @@ public class SymbolMap extends Map
 		
 	}
 	
+	@Override
+	public double getPPM()
+	{
+		return 1. / MainFrame.OSMMap.getMapViewer().getMeterPerPixel();
+	}
+	
 	public Point getScreenForLatLng(LatLng latlng)
 	{		
 		return MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
@@ -115,6 +103,7 @@ public class SymbolMap extends Map
 		return new LatLng(coord.getLat(), coord.getLon());
 	}
 	
+	/*
 	public double getPixelPerDegree()
 	{
 		LatLng a_ll = getLatLngForScreen(0, 0);
@@ -122,6 +111,7 @@ public class SymbolMap extends Map
 		
 		return 1000./(b_ll.getLng() - a_ll.getLng());
 	}
+	*/
 	
 	public boolean adjustAtPx(double x, double y)
 	{

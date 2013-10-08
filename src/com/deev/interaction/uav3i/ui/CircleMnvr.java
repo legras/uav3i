@@ -3,22 +3,25 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Ellipse2D;
 
+import uk.me.jstott.jcoord.LatLng;
+
 public class CircleMnvr extends Manoeuver
 {
-	private Point2D.Double _centerm;
+	private LatLng _center;
 	private SymbolMap _smap;
-	private double _currentRm = 80.;
+	private double _currentRm = 500.;
 	private double _lastRm;
 	
 	static double RPX = 10.;
 	
-	public CircleMnvr(SymbolMap map, double x, double y)
+	public CircleMnvr(SymbolMap map, LatLng c)
 	{
-		_centerm = new Point2D.Double(x, y);
+		_center = c;
 		_smap = map;
 	}
 	
@@ -27,7 +30,7 @@ public class CircleMnvr extends Manoeuver
 	{
 		AffineTransform old = g2.getTransform();
 		
-		Point2D.Double centerPx = _smap.metersToPixels(_centerm);
+		Point centerPx = _smap.getScreenForLatLng(_center);
 		g2.translate(centerPx.x, centerPx.y);
 		
 		g2.setStroke(new BasicStroke(4.f));
@@ -37,7 +40,7 @@ public class CircleMnvr extends Manoeuver
 		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
 		g2.fill(ell);
 				
-		double Rpx = _smap.getPixelPerDegree() * _currentRm;
+		double Rpx = _smap.getPPM() * _currentRm;
 		
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 		
@@ -55,21 +58,21 @@ public class CircleMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		Point2D.Double centerPx = _smap.metersToPixels(_centerm);
-		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPixelPerDegree();
+		Point centerPx = _smap.getScreenForLatLng(_center);
+		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 		
 		if (_adjusting)
 		{
 			_currentRm += Rm - _lastRm;
 			_lastRm = Rm;
 			
-			if (_currentRm < 2.*RPX/_smap.getPixelPerDegree())
-				_currentRm = 2.*RPX/_smap.getPixelPerDegree();
+			if (_currentRm < 2.*RPX/_smap.getPPM())
+				_currentRm = 2.*RPX/_smap.getPPM();
 			
 			return true;
 		}
 		
-		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPixelPerDegree())
+		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM())
 		{
 			_lastRm = Rm;
 			_adjusting = true;
