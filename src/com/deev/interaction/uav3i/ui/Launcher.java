@@ -35,12 +35,12 @@ public class Launcher
 				final MainFrame frame = new MainFrame();
 				frame.setVisible(true);	
 				frame.requestFocusInWindow();
-				if (UAV3iSettings.FULLSCREEN)
+				if (UAV3iSettings.getFullscreen())
 					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 			}
 		});
 
-		switch (UAV3iSettings.getType())
+		switch (UAV3iSettings.getMode())
 		{
 			case REPLAY: // Lancement avec replay (infos dans le fichier).
 				UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
