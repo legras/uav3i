@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
@@ -104,6 +106,21 @@ public class SymbolMap extends Map
 	public Point getScreenForLatLng(LatLng latlng)
 	{		
 		return MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+	}
+	
+	public LatLng getLatLngForScreen(float x, float y)
+	{		
+		Coordinate coord = MainFrame.OSMMap.getMapViewer().getPosition((int) x, (int) y);
+		
+		return new LatLng(coord.getLat(), coord.getLon());
+	}
+	
+	public double getPixelPerDegree()
+	{
+		LatLng a_ll = getLatLngForScreen(0, 0);
+		LatLng b_ll = getLatLngForScreen(1000, 0);
+		
+		return 1000./(b_ll.getLng() - a_ll.getLng());
 	}
 	
 	public boolean adjustAtPx(double x, double y)

@@ -37,7 +37,7 @@ public class CircleMnvr extends Manoeuver
 		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
 		g2.fill(ell);
 				
-		double Rpx = _smap.getPPM() * _currentRm;
+		double Rpx = _smap.getPixelPerDegree() * _currentRm;
 		
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 		
@@ -56,20 +56,20 @@ public class CircleMnvr extends Manoeuver
 	public boolean adjustAtPx(double x, double y)
 	{
 		Point2D.Double centerPx = _smap.metersToPixels(_centerm);
-		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
+		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPixelPerDegree();
 		
 		if (_adjusting)
 		{
 			_currentRm += Rm - _lastRm;
 			_lastRm = Rm;
 			
-			if (_currentRm < 2.*RPX/_smap.getPPM())
-				_currentRm = 2.*RPX/_smap.getPPM();
+			if (_currentRm < 2.*RPX/_smap.getPixelPerDegree())
+				_currentRm = 2.*RPX/_smap.getPixelPerDegree();
 			
 			return true;
 		}
 		
-		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM())
+		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPixelPerDegree())
 		{
 			_lastRm = Rm;
 			_adjusting = true;
