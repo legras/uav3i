@@ -63,7 +63,7 @@ public class Trajectory
 		{
 		  MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(),
 		                                                             ll.getLng(),
-		                                                             UAV3iSettings.getInitialZoom());
+		                                                             UAV3iSettings.getTrajectoryZoom());
 		}
 	}
 
