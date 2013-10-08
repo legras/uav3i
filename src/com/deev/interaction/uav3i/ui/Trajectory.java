@@ -49,6 +49,10 @@ public class Trajectory
 	
 	public void update()
 	{
+    if(UAVDataStore.isEmpty())
+      return;
+    
+
 		long time = System.currentTimeMillis();
 		LatLng ll = UAVDataStore.getLatLngAtTime(time);
 		
