@@ -38,11 +38,6 @@ public class ComponentLayer extends JComponent implements Touchable
 		
 		e = new MouseEvent(c, MouseEvent.MOUSE_PRESSED, time, InputEvent.BUTTON1_MASK, p.x, p.y, 1, false);
 		c.dispatchEvent(e);
-		
-		System.out.println("press " + x + " " + y);
-		System.out.println(c);
-		System.out.println("In component " + c.getX() + " " + c.getY());
-		System.out.println(e);
 				
 		return !c.equals(this);
 	}
