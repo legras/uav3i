@@ -72,12 +72,20 @@ public class CircleMnvr extends Manoeuver
 			return true;
 		}
 		
-		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM())
+		if (isInterestedAtPx(x, y))
 		{
 			_lastRm = Rm;
 			_adjusting = true;
 		}
 
 		return _adjusting;
+	}
+	
+	public boolean isInterestedAtPx(double x, double y)
+	{
+		Point centerPx = _smap.getScreenForLatLng(_center);
+		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
+		
+		return Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM();
 	}
 }

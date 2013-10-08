@@ -100,7 +100,7 @@ public class FingerPane extends JComponent implements Touchable
 	public float getInterestForPoint(float x, float y)
 	{
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
-			return 20.f;
+			return 10.f;
 		else
 			return -1.f;
 	}

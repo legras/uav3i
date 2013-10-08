@@ -11,10 +11,12 @@ import java.awt.geom.GeneralPath;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
+import com.deev.interaction.common.ui.Touchable;
+
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
-public class SymbolMap extends Map
+public class SymbolMap extends Map implements Touchable
 {		
 	private Manoeuver _manoeuver = null;
 	
@@ -144,6 +146,40 @@ public class SymbolMap extends Map
 		super.alignWith(map);
 //		if (_zoneSTracker != null)
 //			_zoneSTracker.align();
+	}
+
+	@Override
+	public float getInterestForPoint(float x, float y)
+	{
+		if (_manoeuver != null && _manoeuver.isInterestedAtPx(x, y))
+			return 20.f;
+		else
+			return -1.f;
+	}
+
+	@Override
+	public void addTouch(float x, float y, Object touchref)
+	{
+		adjustAtPx(x, y);
+	}
+
+	@Override
+	public void updateTouch(float x, float y, Object touchref)
+	{
+		adjustAtPx(x, y);
+	}
+
+	@Override
+	public void removeTouch(float x, float y, Object touchref)
+	{
+		stopAdjusting();
+	}
+
+	@Override
+	public void cancelTouch(Object touchref)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

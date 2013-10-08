@@ -128,7 +128,6 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	public void mousePressed(MouseEvent e)
 	{
 		addTouch(e.getXOnScreen(), e.getYOnScreen(), this);
-		System.out.println("Mouse caught!");
 	}
 
 	@Override
