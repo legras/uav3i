@@ -82,6 +82,13 @@ public class IvyCommunication
     sendMsg("dl DL_SETTING 5 6 " + radius);
   }
   //-----------------------------------------------------------------------------
+  public void jumpToCircle()
+  {
+    // Attention, pour le moment le saut vers le bloc est codé en dur...
+    sendMsg("gcs JUMP_TO_BLOCK 5 6");
+  }
+  //-----------------------------------------------------------------------------
+  
   /**
    * Déplacement du point <code>S1</code> (un des deux points du bloc <code>Survey S1-S2</code>)
    * dans le plan de vol.

@@ -18,8 +18,9 @@ import fr.dgac.ivy.Ivy;
 public class UAVDataStore
 {
 	public static UAVDataStore store = null;
-		
-//  private ArrayList<UAVDataPoint> _dataPoints;
+	private static IvyCommunication ivyCommunication;
+
+  //  private ArrayList<UAVDataPoint> _dataPoints;
   private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
 //	private long deltaIvy = 0;
 	
@@ -85,7 +86,7 @@ public class UAVDataStore
    */
   public UAVDataStore()
   {
-    new IvyCommunication();
+    ivyCommunication = new IvyCommunication();
   }
   
   public static void addUAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
@@ -135,4 +136,8 @@ public class UAVDataStore
 	  return store._dataPoints.size() == 0;
 	}
 
+  public static IvyCommunication getIvyCommunication()
+  {
+    return ivyCommunication;
+  }
 }

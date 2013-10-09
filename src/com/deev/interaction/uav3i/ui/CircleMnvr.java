@@ -8,6 +8,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Ellipse2D;
 
+import com.deev.interaction.uav3i.model.UAVDataStore;
+
 import uk.me.jstott.jcoord.LatLng;
 
 public class CircleMnvr extends Manoeuver
@@ -23,6 +25,13 @@ public class CircleMnvr extends Manoeuver
 	{
 		_center = c;
 		_smap = map;
+
+    // Déplacement du "CircleCenter" prédéterminé au point désiré. 
+    UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(c);
+    // Rayon du "CircleCenter"
+    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
+    // Demande de l'exécution après paramétrage
+    UAVDataStore.getIvyCommunication().jumpToCircle();
 	}
 	
 	@Override
@@ -68,6 +77,10 @@ public class CircleMnvr extends Manoeuver
 			
 			if (_currentRm < 2.*RPX/_smap.getPPM())
 				_currentRm = 2.*RPX/_smap.getPPM();
+
+			// Signalement à Paparazzi de la modification du rayon.
+			// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ? 
+	    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
 			
 			return true;
 		}
@@ -83,6 +96,7 @@ public class CircleMnvr extends Manoeuver
 	
 	public boolean isInterestedAtPx(double x, double y)
 	{
+    System.out.println("---> CircleMnvr isInterestedAtPx("+x+", "+y+")");
 		Point centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 		
