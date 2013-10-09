@@ -1,5 +1,7 @@
 package eu.telecom_bretagne.uav3i;
 
+import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
 import fr.dgac.ivy.Ivy;
@@ -59,52 +61,41 @@ public class IvyCommunication
     bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
   }
   //-----------------------------------------------------------------------------
-//  public void moveWayPointS1(GoogleMapCoordinate coordinate)
-//  {
-//    try
-//    {
-//      System.out.println("-------------> S1 = " + coordinate);
-//      bus.sendMsg("gcs MOVE_WAYPOINT 5 6 "+coordinate.latitude+" "+coordinate.longitude+" 100.000000");
-//    }
-//    catch (IvyException e)
-//    {
-//      e.printStackTrace();
-//    }
-//    
-//  }
+  public void setNavRadius(double radius)
+  {
+    // Exemple : dl DL_SETTING 5 6 1000.000000
+    sendMsg("dl DL_SETTING 5 6 " + radius);
+  }
   //-----------------------------------------------------------------------------
-//  public void moveWayPointS2(GoogleMapCoordinate coordinate)
-//  {
-//    try
-//    {
-//      System.out.println("-------------> S2 = " + coordinate);
-//      bus.sendMsg("gcs MOVE_WAYPOINT 5 7 "+coordinate.latitude+" "+coordinate.longitude+" 100.000000");
-//    }
-//    catch (IvyException e)
-//    {
-//      e.printStackTrace();
-//    }
-//    
-//  }
+  public void moveWayPointS1(LatLng coordinate)
+  {
+    System.out.println("-------------> S1 = " + coordinate);
+    sendMsg("gcs MOVE_WAYPOINT 5 6 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+  }
   //-----------------------------------------------------------------------------
-//  public void jumpToSurveyS1S2()
-//  {
-//    try
-//    {
-//      // Attention, pour le moment le saut vers le bloc est codé en dur...
-//      bus.sendMsg("gcs JUMP_TO_BLOCK 5 5");
-//    }
-//    catch (IvyException e)
-//    {
-//      e.printStackTrace();
-//    }
-//  }
+  public void moveWayPointS2(LatLng coordinate)
+  {
+    System.out.println("-------------> S2 = " + coordinate);
+    sendMsg("gcs MOVE_WAYPOINT 5 7 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+  }
+  //-----------------------------------------------------------------------------
+  public void jumpToSurveyS1S2()
+  {
+    // Attention, pour le moment le saut vers le bloc est codé en dur...
+    sendMsg("gcs JUMP_TO_BLOCK 5 5");
+  }
+  //-----------------------------------------------------------------------------
+  private void sendMsg(String message)
+  {
+    try { bus.sendMsg(message); }
+    catch (IvyException e) { e.printStackTrace(); }
+  }
   //-----------------------------------------------------------------------------
   
   
   
   
-  
+
   
   
   //-----------------------------------------------------------------------------
