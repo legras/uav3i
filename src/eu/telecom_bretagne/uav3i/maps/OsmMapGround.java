@@ -22,7 +22,7 @@ public class OsmMapGround extends Map
   //-----------------------------------------------------------------------------
   public OsmMapGround()
   {
-    mapViewer = new JMapViewer(false);
+    mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
     //mapViewer.setDisplayPositionByLatLon(48.359407, -4.57013, 14);
     mapViewer.setDisplayPositionByLatLon(UAV3iSettings.getInitialLatitude(),
                                          UAV3iSettings.getInitialLongitude(),
