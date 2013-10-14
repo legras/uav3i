@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -11,36 +12,60 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import uk.me.jstott.jcoord.LatLng;
+
 public class LineMnvr extends Manoeuver
 {
-	private Point2D.Double _Am, _Bm;
+	private LatLng _A, _B;
 	
 	private SymbolMap _smap;
+	
 	private double _currentRm = 500.;
 	private double _lastRm;
-	private Point2D.Double _um, _vm;
+	private Point2D.Double _u, _v;
 	
 	static double RPX = 10.;
 
+	/**
+	 * @param map
+	 * @param xA Point A x-coordinate (screen)
+	 * @param yA Point A y-coordinate (screen)
+	 * @param xB Point B x-coordinate (screen)
+	 * @param yB Point B y-coordinate (screen)
+	 */
 	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
 	{
-		_Am = new Point2D.Double(xA, yA);
-		_Bm = new Point2D.Double(xB, yB);
+		_A = map.getLatLngForScreen(xA, yA);
+		_B = map.getLatLngForScreen(xB, yB);
 		_smap = map;
 		
-		double d = _Am.distance(_Bm);
-		_um = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
-		_vm = new Point2D.Double(-_um.y, _um.x);
+		double d = Math.sqrt((xA-xB)*(xA-xB)+(yA-yB)*(yA-yB));
+		_u = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
+		_v = new Point2D.Double(-_u.y, _u.x);
 	}
+	
+	public LineMnvr(SymbolMap map, LatLng A, LatLng B)
+	{
+		Point a = map.getScreenForLatLng(A);
+		Point b = map.getScreenForLatLng(B);
+		
+		_A = A;
+		_B = B;
 
+		_smap = map;
+		
+		double d = Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+		_u = new Point2D.Double((b.x-a.x)/d, (b.y-a.y)/d);
+		_v = new Point2D.Double(-_u.y, _u.x);
+	}
 	
 	@Override
 	public void paint(Graphics2D g2)
 	{
 		AffineTransform old = g2.getTransform();
 		
-		Point2D.Double Apx = _smap.metersToPixels(_Am);
-		Point2D.Double Bpx = _smap.metersToPixels(_Bm);
+		Point Apx = _smap.getScreenForLatLng(_A);
+		Point Bpx = _smap.getScreenForLatLng(_B);
 		
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
@@ -62,11 +87,11 @@ public class LineMnvr extends Manoeuver
 		
 		double Rpx = _smap.getPPM() * _currentRm;
 		
-		Point2D.Double LApx = new Point2D.Double(Apx.x + _vm.x * Rpx,
-												 Apx.y - _vm.y * Rpx);
+		Point2D.Double LApx = new Point2D.Double(Apx.x + _v.x * Rpx,
+												 Apx.y + _v.y * Rpx);
 		
-		Point2D.Double LBpx = new Point2D.Double(Bpx.x + _vm.x * Rpx,
-												 Bpx.y - _vm.y * Rpx);
+		Point2D.Double LBpx = new Point2D.Double(Bpx.x + _v.x * Rpx,
+												 Bpx.y + _v.y * Rpx);
 		
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
 		
@@ -84,29 +109,57 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		// On projette pour se repérer par rapport au segment
-		Point2D.Double pm = _smap.pixelsToMeters(x, y);
-		pm.x -= _Am.x;
-		pm.y -= _Am.y;
+		// On projette tout en screen
+		Point Apx = _smap.getScreenForLatLng(_A);
+		Point Bpx = _smap.getScreenForLatLng(_B);
 		
-		double Um = pm.x*_um.x + pm.y*_um.y;
-		double Vm = pm.x*_vm.x + pm.y*_vm.y;
+		double X = x-Apx.x;
+		double Y = y-Apx.y;
+		
+		double u = X*_u.x + Y*_u.y;
+		double v = X*_v.x + Y*_v.y;
+		
+		double currentRpx = _currentRm * _smap.getPPM();
+		double lastRpx = _lastRm * _smap.getPPM();
 		
 		if (_adjusting)
 		{
-			_currentRm += Vm - _lastRm;
-			_lastRm = Vm;
+			currentRpx += v - lastRpx;
+			lastRpx = v;
+			
+			_currentRm = currentRpx / _smap.getPPM();
+			_lastRm = lastRpx / _smap.getPPM();
 			
 			return true;
 		}
 		
-		if (Vm > _currentRm-GRIP && Vm < _currentRm+GRIP)// && Um > 0 && Um < _Am.distance(_Bm))
+		if (isInterestedAtPx(x, y))
 		{
-			_lastRm = Vm;
+			lastRpx = v;
 			_adjusting = true;
 		}
 		
+		_currentRm = currentRpx / _smap.getPPM();
+		_lastRm = lastRpx / _smap.getPPM();
+		
 		return _adjusting;
+	}
+	
+	public boolean isInterestedAtPx(double x, double y)
+	{
+		// On projette tout en screen
+		Point Apx = _smap.getScreenForLatLng(_A);
+		Point Bpx = _smap.getScreenForLatLng(_B);
+		
+		double X = x-Apx.x;
+		double Y = y-Apx.y;
+		
+		double u = X*_u.x + Y*_u.y;
+		double v = X*_v.x + Y*_v.y;
+		
+		double currentRpx = _currentRm * _smap.getPPM();
+		
+		return v > currentRpx-GRIP && v < currentRpx+GRIP && u > -GRIP && u < Apx.distance(Bpx)+GRIP;
 	}
 
 }

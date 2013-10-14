@@ -13,6 +13,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
+import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 import com.deev.interaction.uav3i.ui.SymbolMap;
@@ -66,26 +67,26 @@ public class FingerPane extends JComponent implements Touchable
 		
 		if (rectangle.height < delta)
 		{
-			Point2D.Double Am = _smap.pixelsToMeters(rectangle.x + rectangle.width/2.*Math.sin(-rectangle.theta),
+			LatLng A = _smap.getLatLngForScreen(rectangle.x + rectangle.width/2.*Math.sin(-rectangle.theta),
 											         rectangle.y + rectangle.width/2.*Math.cos(-rectangle.theta));
 			
-			Point2D.Double Bm = _smap.pixelsToMeters(rectangle.x - rectangle.width/2.*Math.sin(-rectangle.theta),
+			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.width/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.width/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, Am.x, Am.y, Bm.x, Bm.y));
+			_smap.setManoeuver(new LineMnvr(_smap, A, B));
 			
 			return;
 		}
 		
 		if (rectangle.width < delta)
 		{
-			Point2D.Double Am = _smap.pixelsToMeters(rectangle.x + rectangle.height/2.*Math.sin(-rectangle.theta),
+			LatLng A = _smap.getLatLngForScreen(rectangle.x + rectangle.height/2.*Math.sin(-rectangle.theta),
 											         rectangle.y + rectangle.height/2.*Math.cos(-rectangle.theta));
 			
-			Point2D.Double Bm = _smap.pixelsToMeters(rectangle.x - rectangle.height/2.*Math.sin(-rectangle.theta),
+			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.height/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.height/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, Am.x, Am.y, Bm.x, Bm.y));
+			_smap.setManoeuver(new LineMnvr(_smap, A, B));
 			
 			return;
 		}

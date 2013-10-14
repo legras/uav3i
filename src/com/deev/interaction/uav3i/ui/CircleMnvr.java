@@ -96,7 +96,6 @@ public class CircleMnvr extends Manoeuver
 	
 	public boolean isInterestedAtPx(double x, double y)
 	{
-    System.out.println("---> CircleMnvr isInterestedAtPx("+x+", "+y+")");
 		Point centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 		

@@ -98,7 +98,7 @@ public class SymbolMap extends Map implements Touchable
 		return MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
 	}
 	
-	public LatLng getLatLngForScreen(float x, float y)
+	public LatLng getLatLngForScreen(double x, double y)
 	{		
 		Coordinate coord = MainFrame.OSMMap.getMapViewer().getPosition((int) x, (int) y);
 		
