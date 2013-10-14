@@ -26,12 +26,12 @@ public class CircleMnvr extends Manoeuver
 		_center = c;
 		_smap = map;
 
-    // Déplacement du "CircleCenter" prédéterminé au point désiré. 
-    UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(c);
-    // Rayon du "CircleCenter"
-    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
-    // Demande de l'exécution après paramétrage
-    UAVDataStore.getIvyCommunication().jumpToCircle();
+//    // Déplacement du "CircleCenter" prédéterminé au point désiré. 
+//    UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(c);
+//    // Rayon du "CircleCenter"
+//    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
+//    // Demande de l'exécution après paramétrage
+//    UAVDataStore.getIvyCommunication().jumpToCircle();
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public class CircleMnvr extends Manoeuver
 
 			// Signalement à Paparazzi de la modification du rayon.
 			// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ? 
-	    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
+	    //UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
 			
 			return true;
 		}

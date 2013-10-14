@@ -81,6 +81,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
+			System.out.println("Connecting TUIO");
 		}
 		
 		if (UAV3iSettings.getFullscreen())

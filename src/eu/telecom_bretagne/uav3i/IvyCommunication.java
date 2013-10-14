@@ -37,7 +37,7 @@ public class IvyCommunication
   }
   //-----------------------------------------------------------------------------
   /**
-   * Initailize the connection to the Ivy bus.
+   * Initialize the connection to the Ivy bus.
    * @throws IvyException 
    */
   private void initializeIvy() throws IvyException
@@ -46,7 +46,7 @@ public class IvyCommunication
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    bus.start(null);
+    bus.start("192.168.0.11:2010");
 
     // Initialisation of the main Ivy listener.
     //uavPositionListener = new UAVPositionListener();

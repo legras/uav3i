@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -11,36 +12,51 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class LineMnvr extends Manoeuver
+import uk.me.jstott.jcoord.LatLng;
+
+public class LineMnvrLL extends Manoeuver
 {
 	private Point2D.Double _Am, _Bm;
 	
 	private SymbolMap _smap;
+	private LatLng _origin;
+	private double _length;
+	private double _angle;
+	
 	private double _currentRm = 500.;
 	private double _lastRm;
 	private Point2D.Double _um, _vm;
 	
 	static double RPX = 10.;
 
-	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
-	{
-		_Am = new Point2D.Double(xA, yA);
-		_Bm = new Point2D.Double(xB, yB);
-		_smap = map;
-		
-		double d = _Am.distance(_Bm);
-		_um = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
-		_vm = new Point2D.Double(-_um.y, _um.x);
-	}
+//	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
+//	{
+//		_Am = new Point2D.Double(xA, yA);
+//		_Bm = new Point2D.Double(xB, yB);
+//		_smap = map;
+//		
+//		double d = _Am.distance(_Bm);
+//		_um = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
+//		_vm = new Point2D.Double(-_um.y, _um.x);
+//	}
 
+	public LineMnvrLL(SymbolMap map, LatLng origin, double length, double angle)
+	{
+		_smap = map;
+		_origin = origin;
+		_length = length;
+		_angle = angle;
+	}
 	
 	@Override
 	public void paint(Graphics2D g2)
 	{
 		AffineTransform old = g2.getTransform();
 		
-		Point2D.Double Apx = _smap.metersToPixels(_Am);
-		Point2D.Double Bpx = _smap.metersToPixels(_Bm);
+		Point Apx = _smap.getScreenForLatLng(_origin);
+		Point Bpx = new Point(Apx);
+		Bpx.x += Math.cos(_angle) * _length * _smap.getPPM();
+		Bpx.y += Math.sin(_angle) * _length * _smap.getPPM();
 		
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
