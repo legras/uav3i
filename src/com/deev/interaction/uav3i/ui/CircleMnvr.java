@@ -3,23 +3,35 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Ellipse2D;
 
+import com.deev.interaction.uav3i.model.UAVDataStore;
+
+import uk.me.jstott.jcoord.LatLng;
+
 public class CircleMnvr extends Manoeuver
 {
-	private Point2D.Double _centerm;
+	private LatLng _center;
 	private SymbolMap _smap;
-	private double _currentRm = 80.;
+	private double _currentRm = 500.;
 	private double _lastRm;
 	
 	static double RPX = 10.;
 	
-	public CircleMnvr(SymbolMap map, double x, double y)
+	public CircleMnvr(SymbolMap map, LatLng c)
 	{
-		_centerm = new Point2D.Double(x, y);
+		_center = c;
 		_smap = map;
+
+//    // Déplacement du "CircleCenter" prédéterminé au point désiré. 
+//    UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(c);
+//    // Rayon du "CircleCenter"
+//    UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
+//    // Demande de l'exécution après paramétrage
+//    UAVDataStore.getIvyCommunication().jumpToCircle();
 	}
 	
 	@Override
@@ -27,7 +39,7 @@ public class CircleMnvr extends Manoeuver
 	{
 		AffineTransform old = g2.getTransform();
 		
-		Point2D.Double centerPx = _smap.metersToPixels(_centerm);
+		Point centerPx = _smap.getScreenForLatLng(_center);
 		g2.translate(centerPx.x, centerPx.y);
 		
 		g2.setStroke(new BasicStroke(4.f));
@@ -55,7 +67,7 @@ public class CircleMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		Point2D.Double centerPx = _smap.metersToPixels(_centerm);
+		Point centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 		
 		if (_adjusting)
@@ -65,16 +77,28 @@ public class CircleMnvr extends Manoeuver
 			
 			if (_currentRm < 2.*RPX/_smap.getPPM())
 				_currentRm = 2.*RPX/_smap.getPPM();
+
+			// Signalement à Paparazzi de la modification du rayon.
+			// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ? 
+	    //UAVDataStore.getIvyCommunication().setNavRadius(_currentRm);
 			
 			return true;
 		}
 		
-		if (Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM())
+		if (isInterestedAtPx(x, y))
 		{
 			_lastRm = Rm;
 			_adjusting = true;
 		}
 
 		return _adjusting;
+	}
+	
+	public boolean isInterestedAtPx(double x, double y)
+	{
+		Point centerPx = _smap.getScreenForLatLng(_center);
+		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
+		
+		return Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM();
 	}
 }

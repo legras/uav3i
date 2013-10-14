@@ -9,8 +9,13 @@ import java.util.Iterator;
 
 import javax.swing.JComponent;
 
+import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
+import com.deev.interaction.uav3i.ui.LineMnvr;
+import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 import com.deev.interaction.uav3i.ui.SymbolMap;
 
 @SuppressWarnings("serial")
@@ -54,34 +59,34 @@ public class FingerPane extends JComponent implements Touchable
 		
 		if (rectangle.width < delta && rectangle.height < delta)
 		{
-			Point2D.Double pm = _smap.pixelsToMeters(rectangle.x, rectangle.y);
-			_smap.setManoeuver(new CircleMnvr(_smap, pm.x, pm.y));
+			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
+			_smap.setManoeuver(new CircleMnvr(_smap, p));
 			
 			return;
 		}
 		
 		if (rectangle.height < delta)
 		{
-			Point2D.Double Am = _smap.pixelsToMeters(rectangle.x + rectangle.width/2.*Math.sin(-rectangle.theta),
+			LatLng A = _smap.getLatLngForScreen(rectangle.x + rectangle.width/2.*Math.sin(-rectangle.theta),
 											         rectangle.y + rectangle.width/2.*Math.cos(-rectangle.theta));
 			
-			Point2D.Double Bm = _smap.pixelsToMeters(rectangle.x - rectangle.width/2.*Math.sin(-rectangle.theta),
+			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.width/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.width/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, Am.x, Am.y, Bm.x, Bm.y));
+			_smap.setManoeuver(new LineMnvr(_smap, A, B));
 			
 			return;
 		}
 		
 		if (rectangle.width < delta)
 		{
-			Point2D.Double Am = _smap.pixelsToMeters(rectangle.x + rectangle.height/2.*Math.sin(-rectangle.theta),
+			LatLng A = _smap.getLatLngForScreen(rectangle.x + rectangle.height/2.*Math.sin(-rectangle.theta),
 											         rectangle.y + rectangle.height/2.*Math.cos(-rectangle.theta));
 			
-			Point2D.Double Bm = _smap.pixelsToMeters(rectangle.x - rectangle.height/2.*Math.sin(-rectangle.theta),
+			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.height/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.height/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, Am.x, Am.y, Bm.x, Bm.y));
+			_smap.setManoeuver(new LineMnvr(_smap, A, B));
 			
 			return;
 		}
@@ -95,7 +100,10 @@ public class FingerPane extends JComponent implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		return 10.f;
+		if (MainFrame.getAppState() == MainFrameState.COMMAND)
+			return 10.f;
+		else
+			return -1.f;
 	}
 
 	@Override
@@ -129,7 +137,7 @@ public class FingerPane extends JComponent implements Touchable
 	}
 
 	@Override
-	public void canceltouch(Object touchref)
+	public void cancelTouch(Object touchref)
 	{
 		Animator.removeAnimation(_drawings.get(touchref));
 		_drawings.remove(touchref);

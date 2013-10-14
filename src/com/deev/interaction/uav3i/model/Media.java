@@ -20,9 +20,9 @@ import javax.swing.JComponent;
 import com.deev.interaction.common.ui.Animation;
 import com.deev.interaction.common.ui.Touchable;
 
-// TODO J'ai dû passer les attributs en public car j'ai passé Media dans un package dédié. C'est mal. Il faut prévoir des getters (voir des setters).
+// TODO J'ai d√ª passer les attributs en public car j'ai pass√© Media dans un package d√©di√©. C'est mal. Il faut pr√©voir des getters (voir des setters).
 
-// TODO begin et endFocus n'ont rien à faire là, on est dans le modèle.
+// TODO begin et endFocus n'ont rien √† faire l√†, on est dans le mod√®le.
 
 public class Media
 {

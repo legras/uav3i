@@ -26,4 +26,9 @@ public class Manoeuver
 	{
 		_adjusting = false;
 	}
+	
+	public boolean isInterestedAtPx(double x, double y)
+	{
+		return false;
+	}
 }
