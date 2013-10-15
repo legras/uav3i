@@ -9,7 +9,7 @@ public class UAV3iSettings
   //-----------------------------------------------------------------------------
   private static Properties props;
   public static enum Mode    { REPLAY, IVY }
-  public static enum MapType { MAPNIK, BING_AERIAL, OSM_CYCLE_MAP }
+  public static enum MapType { MAPNIK, BING_AERIAL, OSM_CYCLE_MAP, OFF_LINE }
   //-----------------------------------------------------------------------------
   static
   {
@@ -38,10 +38,15 @@ public class UAV3iSettings
       return MapType.BING_AERIAL;
     else if (type.equalsIgnoreCase("osm_cycle_map"))
       return MapType.OSM_CYCLE_MAP;
+    else if (type.equalsIgnoreCase("off_line"))
+      return MapType.OFF_LINE;
     else
       return null;
   }
   //-----------------------------------------------------------------------------
+  public static String  getOffLinePath()      { return props.getProperty("OFF_LINE_PATH");                          }
+  public static int     getOffLineMinZoom()   { return Integer.parseInt(props.getProperty("OFF_LINE_MIN_ZOOM"));    }
+  public static int     getOffLineMaxZoom()   { return Integer.parseInt(props.getProperty("OFF_LINE_MAX_ZOOM"));    }
   public static int     getInitialZoom()      { return Integer.parseInt(props.getProperty("INITIAL_ZOOM"));         }
   public static int     getTrajectoryZoom()   { return Integer.parseInt(props.getProperty("TRAJECTORY_ZOOM"));      }
   public static double  getInitialLatitude()  { return Double.parseDouble(props.getProperty("INITIAL_LATITUDE"));   }

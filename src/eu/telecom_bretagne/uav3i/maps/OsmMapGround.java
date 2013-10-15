@@ -8,6 +8,7 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOpenAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
+import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import com.deev.interaction.uav3i.ui.Map;
@@ -38,6 +39,11 @@ public class OsmMapGround extends Map
         break;
       case OSM_CYCLE_MAP:
         mapViewer.setTileSource(new OsmTileSource.CycleMap());
+        break;
+      case OFF_LINE:
+        mapViewer.setTileSource(new OfflineOsmTileSource(UAV3iSettings.getOffLinePath(),
+                                                         UAV3iSettings.getOffLineMinZoom(), 
+                                                         UAV3iSettings.getOffLineMaxZoom()));
     }
     
     // Test de configuation du JMapViewer
