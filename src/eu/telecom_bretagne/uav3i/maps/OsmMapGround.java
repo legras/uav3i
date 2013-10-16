@@ -46,7 +46,6 @@ public class OsmMapGround extends Map
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
     
-    // Test de configuration du Git pour Mat
     // Test de configuation du JMapViewer
     
     //mapViewer.setTileGridVisible(true);
