@@ -7,7 +7,7 @@ public class UAVDataPoint
 {
 	public LatLng latlng;
 	public double altitude;
-	public double heading;
+	public double course;
 	public long time;
 	
 	/**
@@ -26,13 +26,13 @@ public class UAVDataPoint
 	 *	<li><field name="gps_nb_err" type="uint8"/></li>
 	 *	</ul>
 	 */
-	public UAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
+	public UAVDataPoint(int utm_east, int utm_north, int c, int alt, long t)
 	{
 		UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
 		latlng = utm.toLatLng();
 				
 		altitude = (double) alt / 1000.;
-		heading = (double) course / 10.;
+		course = (double) c / 10.;
 		time = t;
 	}
 }

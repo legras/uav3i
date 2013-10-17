@@ -20,32 +20,32 @@ public class UAVDataStore
 	public static UAVDataStore store = null;
 	private static IvyCommunication ivyCommunication;
 
-  //  private ArrayList<UAVDataPoint> _dataPoints;
-  private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
-//	private long deltaIvy = 0;
-	
+	//  private ArrayList<UAVDataPoint> _dataPoints;
+	private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
+	//	private long deltaIvy = 0;
+
 	public static void initialize(InputStream stream)
 	{
 		if (store == null)	
 			store = new UAVDataStore(stream);
 	}
-	
-//  public static void initialize(Ivy bus)
-  public static void initialize()
+
+	//  public static void initialize(Ivy bus)
+	public static void initialize()
 	{
 		if (store == null)
-//      store = new UAVDataStore(bus);
-		  store = new UAVDataStore();
+			//      store = new UAVDataStore(bus);
+			store = new UAVDataStore();
 	}
-	
+
 	public UAVDataStore(InputStream stream)
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String strLine;
 		long delta = 0;
-		
-//		_dataPoints = new ArrayList<UAVDataPoint>();
-		
+
+		//		_dataPoints = new ArrayList<UAVDataPoint>();
+
 		//Read File Line By Line
 		try
 		{
@@ -53,19 +53,19 @@ public class UAVDataStore
 			while ((strLine = br.readLine()) != null)
 			{
 				String[] tokens = strLine.split(" ");
-				
+
 				if (!tokens[2].equalsIgnoreCase("GPS"))
 					continue;
-				
+
 				int utm_east = Integer.parseInt(tokens[4]);
 				int utm_north = Integer.parseInt(tokens[5]);
 				int course = Integer.parseInt(tokens[6]);
 				int alt = Integer.parseInt(tokens[7]);
 				long t = Long.parseLong(tokens[11]);
-				
+
 				if (delta == 0)
 					delta = System.currentTimeMillis() - t + 2000;
-				
+
 				_dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t+delta));
 			}
 		}
@@ -75,69 +75,127 @@ public class UAVDataStore
 			e.printStackTrace();
 		}
 	}
-	
-//	public UAVDataStore(Ivy bus)
-//	{
-//		
-//	}
-  /**
-   * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
-   * du bus Ivy.
-   */
-  public UAVDataStore()
-  {
-    ivyCommunication = new IvyCommunication();
-  }
-  
-  public static void addUAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
-  {
-    if(store != null)
-    {
-//      if (store.deltaIvy == 0)
-//        store.deltaIvy = System.currentTimeMillis() - t + 2000;
-      store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t));
-    }
-  }
 
-	public static LatLng getLatLngAtTime(long time)
+	//	public UAVDataStore(Ivy bus)
+	//	{
+	//		
+	//	}
+	/**
+	 * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
+	 * du bus Ivy.
+	 */
+	public UAVDataStore()
 	{
+		ivyCommunication = new IvyCommunication();
+	}
+
+	public static void addUAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
+	{
+		if(store != null)
+		{
+			//      if (store.deltaIvy == 0)
+			//        store.deltaIvy = System.currentTimeMillis() - t + 2000;
+			store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t));
+		}
+	}
+
+	public static UAVDataPoint getDataPointAtTime(long time)
+	{
+		if (store._dataPoints == null || store._dataPoints.size() < 1)
+			return null;
+
 		int index = store.getIndexBeforeTime(time);
 		// TODO il faudra interpoler entre index et index+1
-		
-		return store._dataPoints.get(index).latlng;
+
+		return store._dataPoints.get(index);
+	}
+
+	public static UAVDataPoint getDataPointNow()
+	{
+		if (store._dataPoints == null || store._dataPoints.size() < 1)
+			return null;
+		else
+			return store._dataPoints.get(store._dataPoints.size()-1);
 	}
 	
+	public static LatLng getLatLngAtTime(long time)
+	{
+		UAVDataPoint point = getDataPointAtTime(time);
+		
+		if (point == null)
+			return null;
+		else
+			return point.latlng;
+	}
+
+	public static LatLng getLatLngNow()
+	{
+		UAVDataPoint point = getDataPointNow();
+		
+		if (point == null)
+			return null;
+		else
+			return point.latlng;
+	}
+
+	/**
+	 * @param time
+	 * @return course in degrees
+	 */
+	public static double getCourseAtTime(long time)
+	{
+		UAVDataPoint point = getDataPointAtTime(time);
+		
+		if (point == null)
+			return 0.;
+		else
+			return point.course;
+	}
+
+	/**
+	 * @return course in degrees
+	 */
+	public static double getCourseNow()
+	{
+		UAVDataPoint point = getDataPointNow();
+		
+		if (point == null)
+			return 0.;
+		else
+			return point.course;
+	}
+
 	private int getIndexBeforeTime(long time)
 	{
 		int index;
-		
+
 		long startT = _dataPoints.get(0).time;
 		if (time < startT)
 			return 0;
-		
+
 		int last = _dataPoints.size()-1;
 		long endT = _dataPoints.get(last).time;
 		if (time > endT)
 			return last;
-		
+
 		index = (int) (time-startT) / (int) (endT-startT) * last;
-		
+
 		if (index < 0) return 0;
 		if (index > last) return last;
-		
+
 		while (_dataPoints.get(index).time > time) index--;
 		while (_dataPoints.get(index+1).time < time) index ++;
-		
+
 		return index;
 	}
-	
+
 	public static boolean isEmpty()
 	{
-	  return store._dataPoints.size() == 0;
+		return store._dataPoints.size() == 0;
 	}
 
-  public static IvyCommunication getIvyCommunication()
-  {
-    return ivyCommunication;
-  }
+	public static IvyCommunication getIvyCommunication()
+	{
+		return ivyCommunication;
+	}
 }

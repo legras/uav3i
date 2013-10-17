@@ -7,11 +7,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.uav3i.model.UAVDataPoint;
+import com.deev.interaction.uav3i.model.UAVDataStore;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -22,6 +26,11 @@ public class SymbolMap extends Map implements Touchable
 	
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
+	
+
+	// Dessin de UAV
+	protected Path2D.Double _tri;
+	protected static double D = 10.;
 		
 	public SymbolMap()
 	{
@@ -33,6 +42,14 @@ public class SymbolMap extends Map implements Touchable
 		setBackground(back);	
 		
 		_trajectory = new Trajectory();
+
+		// Dessin de UAV
+		_tri = new Path2D.Double();
+		_tri.moveTo(D/2., 0.);
+		_tri.lineTo(-D/2., D/2.);
+		_tri.lineTo(-D/3., 0.);
+		_tri.lineTo(-D/2., -D/2.);
+		_tri.closePath();
 	}
 
 	public void setManoeuver(Manoeuver m)
@@ -78,6 +95,30 @@ public class SymbolMap extends Map implements Touchable
 					BasicStroke.JOIN_ROUND));
 			g2.draw(fullTrajectory);
 		}
+
+		// Dessin UAV
+		AffineTransform old = g2.getTransform();	
+		
+		UAVDataPoint uavpoint = UAVDataStore.getDataPointAtTime(System.currentTimeMillis());
+		if (uavpoint != null)
+		{
+			Point uav = getScreenForLatLng(uavpoint.latlng);
+			double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
+			g2.translate(uav.x, uav.y);
+			g2.rotate(-course);
+			g2.setPaint(new Color(0.f, 0.f, 0.f, .35f));
+			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND,
+					BasicStroke.JOIN_ROUND));
+			g2.draw(_tri);
+			g2.setPaint(new Color(.3f, .6f, 1.f, 1.f));
+			g2.fill(_tri);
+			g2.setPaint(Color.WHITE);
+			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE,
+					BasicStroke.JOIN_MITER));
+			g2.draw(_tri);
+		}
+		g2.setTransform(old);
+		
 		// --------- Manoeuvers --------------------------------------------------
 		synchronized(this)
 		{

@@ -32,38 +32,37 @@ public class Trajectory
 	{
 		public LatLng latlng;
 		public long time;
-		
+
 		public TrajectoryPoint(LatLng ll, long t)
 		{
 			latlng = ll;
 			time = t;
 		}
 	}
-	
+
 	private ArrayList<TrajectoryPoint> _points;
-	
+
 	public Trajectory()
 	{
 		_points = new ArrayList<Trajectory.TrajectoryPoint>();
 	}
-	
+
 	public void update()
 	{
-    if(UAVDataStore.isEmpty())
-      return;
-    
+		if(UAVDataStore.isEmpty())
+			return;
 
 		long time = System.currentTimeMillis();
 		LatLng ll = UAVDataStore.getLatLngAtTime(time);
-		
+
 		_points.add(new TrajectoryPoint(ll, time));
 
 		// Centrage de la carte lors de l'insertion du premier point de la trajectoire.
 		if(_points.size() == 1)
 		{
-		  MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(),
-		                                                             ll.getLng(),
-		                                                             UAV3iSettings.getTrajectoryZoom());
+			MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(),
+					ll.getLng(),
+					UAV3iSettings.getTrajectoryZoom());
 		}
 	}
 
@@ -73,14 +72,14 @@ public class Trajectory
 		line = new GeneralPath();
 		boolean start = true;
 		Point p;
-		
+
 		if (_points.size() < 2)
 			return  null;
-		
+
 		for (TrajectoryPoint tp : _points)
 		{
 			p = symbolMap.getScreenForLatLng(tp.latlng);
-			
+
 			if (start)
 			{
 				line.moveTo(p.x, p.y);
@@ -89,8 +88,8 @@ public class Trajectory
 			else
 				line.lineTo(p.x, p.y);
 		}
-		
+
 		return line;
 	}
-	
+
 }
