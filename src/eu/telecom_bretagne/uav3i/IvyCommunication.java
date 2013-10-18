@@ -66,7 +66,11 @@ public class IvyCommunication
    */
   public void moveWayPointCircleCenter(LatLng coordinate)
   {
-    sendMsg("gcs MOVE_WAYPOINT 5 3 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+    //sendMsg("gcs MOVE_WAYPOINT 5 3 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex("CIRCLE_CENTER") + " " 
+                                   + coordinate.getLat() + " " 
+                                   + coordinate.getLng() + 
+                                   " 100.000000");
   }
   //-----------------------------------------------------------------------------
   /**
@@ -76,13 +80,14 @@ public class IvyCommunication
   public void setNavRadius(double radius)
   {
     // Exemple : dl DL_SETTING 5 6 1000.000000
+    // Que veux dire le 6 ?
     sendMsg("dl DL_SETTING 5 6 " + radius);
   }
   //-----------------------------------------------------------------------------
   public void jumpToCircle()
   {
     //sendMsg("gcs JUMP_TO_BLOCK 5 6");
-    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex("circle 1"));
+    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex("Circle"));
   }
   //-----------------------------------------------------------------------------
   

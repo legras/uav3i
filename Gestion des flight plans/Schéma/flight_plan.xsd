@@ -2,7 +2,7 @@
 
 <!--
   Generated from Paparazzi flight plan DTD for JAXB classes generation.
-  Note: flight plan DTD from 4.2 version.
+  Note: DTD file comes from 5.0.2 version.
 -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
@@ -366,6 +366,7 @@
     <xs:attribute name="approaching_time"/>
     <xs:attribute name="throttle"/>
     <xs:attribute name="climb"/>
+    <xs:attribute name="until"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="attlist.path">
     <xs:attribute name="wpts" use="required"/>
