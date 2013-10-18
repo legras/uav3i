@@ -42,15 +42,13 @@ public class IvyCommunication
    */
   private void initializeIvy() throws IvyException
   {
+    System.out.println("Ivy initialization!");
     // initialization, name and ready message
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    bus.start("192.168.0.11:2010");
+    bus.start(UAV3iSettings.getIvyDomainBus());
 
-    // Initialisation of the main Ivy listener.
-    //uavPositionListener = new UAVPositionListener();
-    
 		// Messages WORLD_ENV_REQ -> demande de la part de la simu à destination
 		// de Gaia pour connaître les conditions météo au point où se trouve le
 		// drone.
@@ -155,13 +153,11 @@ public class IvyCommunication
 			// Les messages "GPS_SOL" passe par le pattern, on les filtre ici. 
 			if(message[0].equals("_SOL")) return;
 
-      int utmEast  = Integer.parseInt(message[2]);
-      int utmNorth = Integer.parseInt(message[3]);
-      int course   = Integer.parseInt(message[4]);
-      int alt      = Integer.parseInt(message[5]);
-      long t       = Long.parseLong(message[9]);
-      
-      UAVDataStore.addUAVDataPoint(utmEast, utmNorth, course, alt, t);
+      UAVDataStore.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+                                   Integer.parseInt(message[3]),  // utmNorth
+                                   Integer.parseInt(message[4]),  // course
+                                   Integer.parseInt(message[5]),  // alt
+                                   Long.parseLong(message[9]));   // t                
 
   		//System.out.println();
     }

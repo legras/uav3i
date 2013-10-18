@@ -44,6 +44,15 @@ public class UAV3iSettings
       return null;
   }
   //-----------------------------------------------------------------------------
+  public static String  getIvyDomainBus()
+  {
+    String domainBus = props.getProperty("IVY_DOMAIN_BUS");
+    if(domainBus.length() == 0 || domainBus.equalsIgnoreCase("null"))
+      return null;
+    else
+      return domainBus;
+  }
+  //-----------------------------------------------------------------------------
   public static String  getOffLinePath()      { return props.getProperty("OFF_LINE_PATH");                          }
   public static int     getOffLineMinZoom()   { return Integer.parseInt(props.getProperty("OFF_LINE_MIN_ZOOM"));    }
   public static int     getOffLineMaxZoom()   { return Integer.parseInt(props.getProperty("OFF_LINE_MAX_ZOOM"));    }
@@ -54,5 +63,5 @@ public class UAV3iSettings
   public static boolean getTUIO()             { return Boolean.parseBoolean(props.getProperty("TUIO"));             }
   public static boolean getFullscreen()       { return Boolean.parseBoolean(props.getProperty("FULLSCREEN"));       }
   public static boolean getInteractionMode()  { return Boolean.parseBoolean(props.getProperty("INTERACTION_MODE")); }
-  //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
 }
