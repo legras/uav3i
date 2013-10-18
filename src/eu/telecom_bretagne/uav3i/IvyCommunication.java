@@ -42,7 +42,6 @@ public class IvyCommunication
    */
   private void initializeIvy() throws IvyException
   {
-    System.out.println("Ivy initialization!");
     // initialization, name and ready message
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
@@ -66,7 +65,6 @@ public class IvyCommunication
    */
   public void moveWayPointCircleCenter(LatLng coordinate)
   {
-    System.out.println("-------------> Center = " + coordinate);
     sendMsg("gcs MOVE_WAYPOINT 5 3 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
   }
   //-----------------------------------------------------------------------------

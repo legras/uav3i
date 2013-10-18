@@ -17,6 +17,8 @@ import com.deev.interaction.common.ui.Touchable;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
@@ -161,7 +163,27 @@ public class SymbolMap extends Map implements Touchable
 		if (_manoeuver == null)
 			return false;
 		
-		return _manoeuver.adjustAtPx(x, y);
+		// On demande au manoeuver de s'ajuster et on récupère la valeur booléenne
+		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
+		boolean result = _manoeuver.adjustAtPx(x, y);
+		
+    // Si on est connecté à Paparazzi...
+		if(UAV3iSettings.getMode() == Mode.IVY)
+		{
+		  switch (_manoeuver.getClass().getSimpleName())
+      {
+        case "CircleMnvr":
+          // Signalement à Paparazzi de la modification du rayon.
+          // TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
+          UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_manoeuver).getCurrentRadius());
+          break;
+        default:
+          break;
+      }
+		}
+    
+		
+		return result;
 	}
 	
 	public boolean isAdjusting()

@@ -11,12 +11,16 @@ import javax.swing.JComponent;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.model.UAVDataStore;
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 import com.deev.interaction.uav3i.ui.SymbolMap;
+
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
 
 @SuppressWarnings("serial")
 public class FingerPane extends JComponent implements Touchable
@@ -60,7 +64,20 @@ public class FingerPane extends JComponent implements Touchable
 		if (rectangle.width < delta && rectangle.height < delta)
 		{
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
-			_smap.setManoeuver(new CircleMnvr(_smap, p));
+			//_smap.setManoeuver(new CircleMnvr(_smap, p));
+			CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
+			_smap.setManoeuver(circleMnvr);
+			
+			// Si on est connecté à Paparazzi...
+			if(UAV3iSettings.getMode() == Mode.IVY)
+			{
+	      // Déplacement du "CircleCenter" prédéterminé au point désiré. 
+	      UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(p);
+	      // Rayon du "CircleCenter"
+	      UAVDataStore.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
+	      // Demande de l'exécution après paramétrage
+	      UAVDataStore.getIvyCommunication().jumpToCircle();
+			}
 			
 			return;
 		}
