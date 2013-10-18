@@ -4,6 +4,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
+import eu.telecom_bretagne.uav3i.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
@@ -80,8 +81,8 @@ public class IvyCommunication
   //-----------------------------------------------------------------------------
   public void jumpToCircle()
   {
-    // Attention, pour le moment le saut vers le bloc est codé en dur...
-    sendMsg("gcs JUMP_TO_BLOCK 5 6");
+    //sendMsg("gcs JUMP_TO_BLOCK 5 6");
+    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex("circle 1"));
   }
   //-----------------------------------------------------------------------------
   
