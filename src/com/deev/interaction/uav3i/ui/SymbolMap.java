@@ -109,14 +109,12 @@ public class SymbolMap extends Map implements Touchable
 			g2.translate(uav.x, uav.y);
 			g2.rotate(-course);
 			g2.setPaint(new Color(0.f, 0.f, 0.f, .35f));
-			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND,
-					BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			g2.draw(_tri);
 			g2.setPaint(new Color(.3f, .6f, 1.f, 1.f));
 			g2.fill(_tri);
 			g2.setPaint(Color.WHITE);
-			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE,
-					BasicStroke.JOIN_MITER));
+			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 			g2.draw(_tri);
 		}
 		g2.setTransform(old);

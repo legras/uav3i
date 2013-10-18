@@ -2,15 +2,12 @@ package com.deev.interaction.uav3i.ui;
 
 import java.awt.Graphics2D;
 
-public class Manoeuver
+public abstract class Manoeuver
 {
 	protected boolean _adjusting = false;
 	protected static double GRIP = 20.;
 	
-	public void paint(Graphics2D g2)
-	{
-		
-	}
+	public abstract void paint(Graphics2D g2);
 	
 	public boolean adjustAtPx(double x, double y)
 	{

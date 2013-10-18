@@ -96,7 +96,10 @@ public class LineMnvr extends Manoeuver
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
 		
 		g2.setStroke(new BasicStroke(2.f*(float)GRIP));
-		g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+		if (!_adjusting)
+			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.3f));
+		else
+			g2.setPaint(new Color(1.0f, 1.0f, 0.7f, 0.3f));
 		g2.draw(l);
 		
 		g2.setStroke(new BasicStroke(4.f));
