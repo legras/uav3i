@@ -4,7 +4,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
-import eu.telecom_bretagne.uav3i.flight_plan.FlightPlanFacade;
+import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
@@ -60,20 +60,6 @@ public class IvyCommunication
   }
   //-----------------------------------------------------------------------------
   /**
-   * Déplacement du point représentant le centre du vol circulaire (bloc 
-   * <code>circle 1</code>) dans le plan de vol.
-   * @param coordinate nouvelles coordonnées en {@link LatLng} du point.
-   */
-  public void moveWayPointCircleCenter(LatLng coordinate)
-  {
-    //sendMsg("gcs MOVE_WAYPOINT 5 3 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
-    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex("CIRCLE_CENTER") + " " 
-                                   + coordinate.getLat() + " " 
-                                   + coordinate.getLng() + 
-                                   " 100.000000");
-  }
-  //-----------------------------------------------------------------------------
-  /**
    * Mise à jour du rayon (en mètres ?) pour le vol circulaire.
    * @param radius rayon en mètres.
    */
@@ -84,42 +70,22 @@ public class IvyCommunication
     sendMsg("dl DL_SETTING 5 6 " + radius);
   }
   //-----------------------------------------------------------------------------
-  public void jumpToCircle()
-  {
-    //sendMsg("gcs JUMP_TO_BLOCK 5 6");
-    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex("Circle"));
-  }
-  //-----------------------------------------------------------------------------
-  
   /**
-   * Déplacement du point <code>S1</code> (un des deux points du bloc <code>Survey S1-S2</code>)
-   * dans le plan de vol.
+   * Déplacement d'un waypoint défini dans le plan de vol.
+   * 
+   * @param waypointName nom du waypoint (attribut <code>name</code> de l'élément <code>&lt;waypoint&gt:</code>).
    * @param coordinate nouvelles coordonnées en {@link LatLng} du point.
    */
-  public void moveWayPointS1(LatLng coordinate)
+  public void moveWayPoint(String waypointName, LatLng coordinate)
   {
-    System.out.println("-------------> S1 = " + coordinate);
-    sendMsg("gcs MOVE_WAYPOINT 5 6 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+    //System.out.println("---------------------> moveWayPoint(" + waypointName + ", " + coordinate + ")");
+    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Déplacement du point <code>S2</code> (un des deux points du bloc <code>Survey S1-S2</code>)
-   * dans le plan de vol.
-   * @param coordinate nouvelles coordonnées en {@link LatLng} du point.
-   */
-  public void moveWayPointS2(LatLng coordinate)
+  public void jumpToBlock(String blockName)
   {
-    System.out.println("-------------> S2 = " + coordinate);
-    sendMsg("gcs MOVE_WAYPOINT 5 7 " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Exécution du bloc <code>Survey S1-S2</code> dans le plan de vol.
-   */
-  public void jumpToSurveyS1S2()
-  {
-    // Attention, pour le moment le saut vers le bloc est codé en dur...
-    sendMsg("gcs JUMP_TO_BLOCK 5 5");
+    //System.out.println("---------------------> jumpToBlock(" + blockName + ")");
+    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
   }
   //-----------------------------------------------------------------------------
   /**

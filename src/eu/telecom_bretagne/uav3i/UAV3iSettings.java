@@ -64,5 +64,6 @@ public class UAV3iSettings
   public static boolean getFullscreen()          { return Boolean.parseBoolean(props.getProperty("FULLSCREEN"));       }
   public static boolean getInteractionMode()     { return Boolean.parseBoolean(props.getProperty("INTERACTION_MODE")); }
   public static String  getPaparazziFlightPlan() { return props.getProperty("PAPARAZZI_FLIGHT_PLAN");                  }
+  public static String  getPaparazziAirframe()   { return props.getProperty("PAPARAZZI_AIRFRAME");                     }
     //-----------------------------------------------------------------------------
 }

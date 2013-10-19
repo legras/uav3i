@@ -175,6 +175,13 @@ public class SymbolMap extends Map implements Touchable
           // TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
           UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_manoeuver).getCurrentRadius());
           break;
+        case "LineMnvr":
+          LineMnvr lineMnvr = (LineMnvr)_manoeuver;
+          LatLng A = lineMnvr.getTrajA();
+          LatLng B = lineMnvr.getTrajB();
+          UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+          UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+          break;
         default:
           break;
       }
