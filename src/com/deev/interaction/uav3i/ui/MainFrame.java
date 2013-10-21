@@ -41,7 +41,7 @@ public class MainFrame extends JFrame implements ActionListener
 	protected TouchGlass _glass = null;
 	protected TimeLine _timeline;
 	
-	protected static ModeSwitcher SWITCH;
+	protected static Switcher3Buttons SWITCH;
 
 	public MainFrame()
 	{
@@ -114,9 +114,11 @@ public class MainFrame extends JFrame implements ActionListener
 		lpane.add(clayer, new Integer(-1));
 		
 		// ********** Mode switch **********
-		ModeSwitcher mswitch = new ModeSwitcher(this);
+		Switcher3Buttons mswitch = new Switcher3Buttons(this);
 		SWITCH = mswitch;
-		mswitch.setBounds(screenSize.width-100, screenSize.height/2, 90, 120);
+		Dimension swd = mswitch.getSize();
+		System.out.println(swd);
+		mswitch.setBounds(screenSize.width/2-swd.width/2, 2, swd.width, swd.height);
 		clayer.add(mswitch);
 		
 

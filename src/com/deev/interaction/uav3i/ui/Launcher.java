@@ -30,7 +30,7 @@ public class Launcher
 		{
 			public void run()
 			{	
-				DIModernPlaf.initModernLookAndFeel();
+				// DIModernPlaf.initModernLookAndFeel();
 
 				final MainFrame frame = new MainFrame();
 				frame.setVisible(true);	
