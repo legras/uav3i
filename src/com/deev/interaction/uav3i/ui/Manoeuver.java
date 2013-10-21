@@ -9,10 +9,7 @@ public abstract class Manoeuver
 	
 	public abstract void paint(Graphics2D g2);
 	
-	public boolean adjustAtPx(double x, double y)
-	{
-		return false;
-	}
+	public abstract boolean adjustAtPx(double x, double y);
 	
 	public boolean isAdjusting()
 	{
