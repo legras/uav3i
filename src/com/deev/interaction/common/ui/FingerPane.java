@@ -21,6 +21,7 @@ import com.deev.interaction.uav3i.ui.SymbolMap;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
+import eu.telecom_bretagne.uav3i.paparazzi_settings.airframe.AirframeFacade;
 
 @SuppressWarnings("serial")
 public class FingerPane extends JComponent implements Touchable
@@ -71,12 +72,12 @@ public class FingerPane extends JComponent implements Touchable
 			// Si on est connecté à Paparazzi...
 			if(UAV3iSettings.getMode() == Mode.IVY)
 			{
-	      // Déplacement du "CircleCenter" prédéterminé au point désiré. 
-	      UAVDataStore.getIvyCommunication().moveWayPointCircleCenter(p);
-	      // Rayon du "CircleCenter"
+	      // Déplacement du "CircleCenter" prédéterminé au point désiré.
+        UAVDataStore.getIvyCommunication().moveWayPoint("CIRCLE_CENTER", p);
+	      // Mise à jour du rayon du "CircleCenter".
 	      UAVDataStore.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
-	      // Demande de l'exécution après paramétrage
-	      UAVDataStore.getIvyCommunication().jumpToCircle();
+	      // Demande de l'exécution après paramétrage.
+        UAVDataStore.getIvyCommunication().jumpToBlock("Circle");
 			}
 			
 			return;
@@ -84,6 +85,7 @@ public class FingerPane extends JComponent implements Touchable
 		
 		if (rectangle.height < delta)
 		{
+		  System.out.println("---------------------> Ligne détectée : rectangle.height < delta");
 			LatLng A = _smap.getLatLngForScreen(rectangle.x + rectangle.width/2.*Math.sin(-rectangle.theta),
 											         rectangle.y + rectangle.width/2.*Math.cos(-rectangle.theta));
 			
@@ -92,6 +94,18 @@ public class FingerPane extends JComponent implements Touchable
 			
 			_smap.setManoeuver(new LineMnvr(_smap, A, B));
 			
+      // Si on est connecté à Paparazzi...
+      if(UAV3iSettings.getMode() == Mode.IVY)
+      {
+        // Déplacement des deux points de la ligne.
+        UAVDataStore.getIvyCommunication().moveWayPoint("1", A);
+        UAVDataStore.getIvyCommunication().moveWayPoint("2", B);
+        // Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
+        UAVDataStore.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+        // Demande de l'exécution après paramétrage
+        UAVDataStore.getIvyCommunication().jumpToBlock("Line 1-2");
+      }
+      
 			return;
 		}
 		
@@ -103,8 +117,21 @@ public class FingerPane extends JComponent implements Touchable
 			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.height/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.height/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, A, B));
+			LineMnvr lineMnvr = new LineMnvr(_smap, A, B);
+			_smap.setManoeuver(lineMnvr);
 			
+      // Si on est connecté à Paparazzi...
+      if(UAV3iSettings.getMode() == Mode.IVY)
+      {
+        // Déplacement des deux points de la ligne.
+        UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+        UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+        // Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
+        UAVDataStore.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+        // Demande de l'exécution après paramétrage
+        UAVDataStore.getIvyCommunication().jumpToBlock("Line 1-2");
+      }
+      
 			return;
 		}
 	}
