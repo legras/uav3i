@@ -29,6 +29,9 @@ public abstract class Manoeuver implements Touchable
 	
 	public abstract boolean isAdjustmentInterestedAtPx(double x, double y);
 	
+	/**
+	 * @return common value for manoeuvers concerning moves 
+	 */
 	private float getGeneralInterest()
 	{
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)

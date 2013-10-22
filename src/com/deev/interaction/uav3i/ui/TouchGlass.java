@@ -63,7 +63,7 @@ import TUIO.TuioTime;
 public class TouchGlass extends JComponent implements Touchable, TuioListener, MouseListener, MouseMotionListener
 {		
 	private ArrayList<Touchable> _touchables;
-	private HashMap<Object, Touchable> _touches;
+	private HashMap<Object, Touchable> _touched;
 			
 	ArrayList<Point2D.Double> _hull = null;
 	
@@ -74,14 +74,13 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 		setOpaque(false);	
 		
 		_touchables = new ArrayList<Touchable>();
-		_touches = new HashMap<Object, Touchable>();
+		_touched = new HashMap<Object, Touchable>();
 				
 		if (UAV3iSettings.getTUIO())
 		{
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
-			System.out.println("Connecting TUIO");
 		}
 		
 		if (UAV3iSettings.getFullscreen())
@@ -191,16 +190,16 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			}
 			
 			T.addTouch(x, y, touchref);
-			_touches.put(touchref, T);
+			_touched.put(touchref, T);
 		}
 	}
 
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-		synchronized (_touches)
+		synchronized (_touched)
 		{
-			Touchable T = _touches.get(touchref);
+			Touchable T = _touched.get(touchref);
 			
 			T.updateTouch(x, y, touchref);
 		}
@@ -209,9 +208,9 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		synchronized (_touches)
+		synchronized (_touched)
 		{
-			Touchable T = _touches.get(touchref);
+			Touchable T = _touched.get(touchref);
 			
 			T.removeTouch(x, y, touchref);
 		}
@@ -220,9 +219,9 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		synchronized (_touches)
+		synchronized (_touched)
 		{
-			Touchable T = _touches.get(touchref);
+			Touchable T = _touched.get(touchref);
 			
 			T.cancelTouch(touchref);
 		}

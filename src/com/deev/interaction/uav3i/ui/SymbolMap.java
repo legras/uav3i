@@ -11,6 +11,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -27,8 +30,10 @@ public class SymbolMap extends Map implements Touchable
 {		
 	private ArrayList<Manoeuver> _manoeuvers = null;
 	private Manoeuver _adjustingMnvr = null;
+	private Object _adjustingTouch = null;
 	
 	private ArrayList<Touchable> _touchsymbols;
+	private HashMap<Object, Touchable> _touchedsymbols;
 
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
@@ -49,6 +54,7 @@ public class SymbolMap extends Map implements Touchable
 
 		_manoeuvers = new ArrayList<Manoeuver>();
 		_touchsymbols = new ArrayList<Touchable>();
+		_touchedsymbols = new HashMap<Object, Touchable>();
 		
 		_trajectory = new Trajectory();
 
@@ -59,6 +65,25 @@ public class SymbolMap extends Map implements Touchable
 		_tri.lineTo(-D/3., 0.);
 		_tri.lineTo(-D/2., -D/2.);
 		_tri.closePath();
+	}
+	
+	public void addTouchSymbol(Touchable t)
+	{
+		synchronized (_touchsymbols)
+		{
+			_touchsymbols.add(t);
+		}
+	}
+	
+	public void removeTouchSymbol(Touchable t)
+	{
+		synchronized (_touchsymbols)
+		{
+			_touchsymbols.remove(t);
+			for (Entry<Object,Touchable> e : _touchedsymbols.entrySet())
+				if (e.getValue() == t)
+					_touchedsymbols.entrySet().remove(e);
+		}
 	}
 
 	public void paintComponent(Graphics g)
@@ -228,42 +253,115 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		float interest = -1.f;
-		
 		synchronized(this)
 		{
 			for (Manoeuver m : _manoeuvers)
 				if (m.isAdjustmentInterestedAtPx(x, y))
-					return Manoeuver.ADJUST_INTEREST;
-					
+					return Manoeuver.ADJUST_INTEREST;			
 		}
 
-		return -1.f;
+		synchronized (_touchsymbols)
+		{
+			float interest = -1.f;;
+			
+			Iterator<Touchable> itr = _touchsymbols.iterator();
+			while(itr.hasNext())
+			{
+				Touchable t = itr.next();
+				float i = t.getInterestForPoint(x, y);
+				if (i > interest)
+				{
+					interest = i;
+				}
+			}
+			
+			return interest;
+		}
 	}
 
 	@Override
 	public void addTouch(float x, float y, Object touchref)
 	{
-		adjustAtPx(x, y);
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				if (m.isAdjustmentInterestedAtPx(x, y))
+				{
+					_adjustingMnvr = m;
+					_adjustingTouch = touchref;
+					adjustAtPx(x, y);
+					return;
+				}
+		}
+
+		synchronized (_touchsymbols)
+		{
+			float interest = Float.NEGATIVE_INFINITY;
+			Touchable T = null;
+			
+			Iterator<Touchable> itr = _touchsymbols.iterator();
+			while(itr.hasNext())
+			{
+				Touchable t = itr.next();
+				float i = t.getInterestForPoint(x, y);
+				if (i > interest)
+				{
+					T = t;
+					interest = i;
+				}
+			}
+			
+			T.addTouch(x, y, touchref);
+			_touchedsymbols.put(touchref, T);
+		}
 	}
 
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-		adjustAtPx(x, y);
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		{
+			adjustAtPx(x, y);
+			return;
+		}
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.updateTouch(x, y, touchref);
+		}
 	}
 
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		stopAdjusting();
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		{
+			stopAdjusting();
+			return;
+		}
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.removeTouch(x, y, touchref);
+		}
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		// TODO Auto-generated method stub
-
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+			stopAdjusting();
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.cancelTouch(touchref);
+		}
 	}
 
 	public void addManoeuver(Manoeuver mnvr)
@@ -271,6 +369,7 @@ public class SymbolMap extends Map implements Touchable
 		synchronized (this)
 		{
 			_manoeuvers.add(mnvr);
+			addTouchSymbol(mnvr);
 		}
 	}
 
