@@ -158,7 +158,7 @@ public class LineMnvr extends Manoeuver
             return true;
     }
     
-    if (isInterestedAtPx(x, y))
+    if (isAdjustmentInterestedAtPx(x, y))
     {
             lastRpx = v;
             _adjusting = true;
@@ -173,7 +173,7 @@ public class LineMnvr extends Manoeuver
 		return _adjusting;
 	}
 	
-	public boolean isInterestedAtPx(double x, double y)
+	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
 		// On projette tout en screen
 		Point Apx = _smap.getScreenForLatLng(_A);

@@ -74,7 +74,7 @@ public class CircleMnvr extends Manoeuver
 			return true;
 		}
 		
-		if (isInterestedAtPx(x, y))
+		if (isAdjustmentInterestedAtPx(x, y))
 		{
 			_lastRm = Rm;
 			_adjusting = true;
@@ -83,7 +83,7 @@ public class CircleMnvr extends Manoeuver
 		return _adjusting;
 	}
 	
-	public boolean isInterestedAtPx(double x, double y)
+	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
 		Point centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
@@ -95,4 +95,34 @@ public class CircleMnvr extends Manoeuver
   {
     return _currentRm;
   }
+
+@Override
+public float getInterestForPoint(float x, float y) {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+@Override
+public void addTouch(float x, float y, Object touchref) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void updateTouch(float x, float y, Object touchref) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void removeTouch(float x, float y, Object touchref) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public void cancelTouch(Object touchref) {
+	// TODO Auto-generated method stub
+	
+}
 }

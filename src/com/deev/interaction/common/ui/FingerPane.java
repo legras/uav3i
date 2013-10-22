@@ -67,7 +67,7 @@ public class FingerPane extends JComponent implements Touchable
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
 			//_smap.setManoeuver(new CircleMnvr(_smap, p));
 			CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
-			_smap.setManoeuver(circleMnvr);
+			_smap.addManoeuver(circleMnvr);
 			
 			// Si on est connecté à Paparazzi...
 			if(UAV3iSettings.getMode() == Mode.IVY)
@@ -92,7 +92,7 @@ public class FingerPane extends JComponent implements Touchable
 			LatLng B = _smap.getLatLngForScreen(rectangle.x - rectangle.width/2.*Math.sin(-rectangle.theta),
 					 								 rectangle.y - rectangle.width/2.*Math.cos(-rectangle.theta));
 			
-			_smap.setManoeuver(new LineMnvr(_smap, A, B));
+			_smap.addManoeuver(new LineMnvr(_smap, A, B));
 			
       // Si on est connecté à Paparazzi...
       if(UAV3iSettings.getMode() == Mode.IVY)
@@ -118,7 +118,7 @@ public class FingerPane extends JComponent implements Touchable
 					 								 rectangle.y - rectangle.height/2.*Math.cos(-rectangle.theta));
 			
 			LineMnvr lineMnvr = new LineMnvr(_smap, A, B);
-			_smap.setManoeuver(lineMnvr);
+			_smap.addManoeuver(lineMnvr);
 			
       // Si on est connecté à Paparazzi...
       if(UAV3iSettings.getMode() == Mode.IVY)

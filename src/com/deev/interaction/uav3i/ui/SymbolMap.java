@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -24,7 +25,10 @@ import uk.me.jstott.jcoord.LatLng;
 @SuppressWarnings("serial")
 public class SymbolMap extends Map implements Touchable
 {		
-	private Manoeuver _manoeuver = null;
+	private ArrayList<Manoeuver> _manoeuvers = null;
+	private Manoeuver _adjustingMnvr = null;
+	
+	private ArrayList<Touchable> _touchsymbols;
 
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
@@ -43,20 +47,18 @@ public class SymbolMap extends Map implements Touchable
 		Color back = new Color(0.f, 0.f, 0.f, .0f);
 		setBackground(back);	
 
+		_manoeuvers = new ArrayList<Manoeuver>();
+		_touchsymbols = new ArrayList<Touchable>();
+		
 		_trajectory = new Trajectory();
 
-		// Dessin de UAV
+		// Dessin UAV
 		_tri = new Path2D.Double();
 		_tri.moveTo(D/2., 0.);
 		_tri.lineTo(-D/2., D/2.);
 		_tri.lineTo(-D/3., 0.);
 		_tri.lineTo(-D/2., -D/2.);
 		_tri.closePath();
-	}
-
-	public void setManoeuver(Manoeuver m)
-	{
-		_manoeuver = m;
 	}
 
 	public void paintComponent(Graphics g)
@@ -122,8 +124,8 @@ public class SymbolMap extends Map implements Touchable
 		// --------- Manoeuvers --------------------------------------------------
 		synchronized(this)
 		{
-			if (_manoeuver != null)
-				_manoeuver.paint(g2);
+			for (Manoeuver m : _manoeuvers)
+				m.paint(g2);
 		}
 
 	}
@@ -158,25 +160,31 @@ public class SymbolMap extends Map implements Touchable
 
 	public boolean adjustAtPx(double x, double y)
 	{
-		if (_manoeuver == null)
-			return false;
-
+		if (_adjustingMnvr == null)
+			synchronized(this)
+			{
+				for (Manoeuver m : _manoeuvers)
+					if (m.isAdjustmentInterestedAtPx(x, y))
+						_adjustingMnvr = m;
+						
+			}
+		
 		// On demande au manoeuver de s'ajuster et on récupère la valeur booléenne
 		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
-		boolean result = _manoeuver.adjustAtPx(x, y);
+		boolean result = _adjustingMnvr.adjustAtPx(x, y);
 
 		// Si on est connecté à Paparazzi...
 		if(UAV3iSettings.getMode() == Mode.IVY)
 		{
-			switch (_manoeuver.getClass().getSimpleName())
+			switch (_adjustingMnvr.getClass().getSimpleName())
 			{
 				case "CircleMnvr":
 					// Signalement à Paparazzi de la modification du rayon.
 					// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
-					UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_manoeuver).getCurrentRadius());
+					UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
 					break;
 				case "LineMnvr":
-					LineMnvr lineMnvr = (LineMnvr)_manoeuver;
+					LineMnvr lineMnvr = (LineMnvr)_adjustingMnvr;
 					LatLng A = lineMnvr.getTrajA();
 					LatLng B = lineMnvr.getTrajB();
 					UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
@@ -193,18 +201,19 @@ public class SymbolMap extends Map implements Touchable
 
 	public boolean isAdjusting()
 	{
-		if (_manoeuver == null)
+		if (_adjustingMnvr == null)
 			return false;
 
-		return _manoeuver.isAdjusting();
+		return _adjustingMnvr.isAdjusting();
 	}
 
 	public void stopAdjusting()
 	{
-		if (_manoeuver == null)
+		if (_adjustingMnvr == null)
 			return;
 
-		_manoeuver.stopAdjusting();
+		_adjustingMnvr.stopAdjusting();
+		_adjustingMnvr = null;
 	}
 
 
@@ -219,10 +228,17 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		if (_manoeuver != null && _manoeuver.isInterestedAtPx(x, y))
-			return 20.f;
-		else
-			return -1.f;
+		float interest = -1.f;
+		
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				if (m.isAdjustmentInterestedAtPx(x, y))
+					return Manoeuver.ADJUST_INTEREST;
+					
+		}
+
+		return -1.f;
 	}
 
 	@Override
@@ -248,6 +264,14 @@ public class SymbolMap extends Map implements Touchable
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	public void addManoeuver(Manoeuver mnvr)
+	{
+		synchronized (this)
+		{
+			_manoeuvers.add(mnvr);
+		}
 	}
 
 }
