@@ -68,8 +68,8 @@ public class LineMnvr extends Manoeuver
 
 	public LineMnvr(SymbolMap map, LatLng A, LatLng B)
 	{
-		Point a = map.getScreenForLatLng(A);
-		Point b = map.getScreenForLatLng(B);
+		Point2D.Double a = map.getScreenForLatLng(A);
+		Point2D.Double b = map.getScreenForLatLng(B);
 
 		_A = A;
 		_B = B;
@@ -86,8 +86,8 @@ public class LineMnvr extends Manoeuver
 	{
 		AffineTransform old = g2.getTransform();
 
-		Point Apx = _smap.getScreenForLatLng(_A);
-		Point Bpx = _smap.getScreenForLatLng(_B);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
@@ -136,7 +136,7 @@ public class LineMnvr extends Manoeuver
 
 	private Point2D.Double getUVforPx(double x, double y)
 	{
-		Point Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
 
 		double X = x-Apx.x;
 		double Y = y-Apx.y;
@@ -150,8 +150,8 @@ public class LineMnvr extends Manoeuver
 		// x,y : coordonnée du toucher écran
 		// On projette tout en screen
 		// Coordonnées écran des deux points (zone rouge)
-		Point Apx = _smap.getScreenForLatLng(_A);
-		Point Bpx = _smap.getScreenForLatLng(_B);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		// Parallélisme avec la zone à regarder
 		Point2D.Double p = getUVforPx(x, y);
@@ -187,8 +187,8 @@ public class LineMnvr extends Manoeuver
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
 		// On projette tout en screen
-		Point Apx = _smap.getScreenForLatLng(_A);
-		Point Bpx = _smap.getScreenForLatLng(_B);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		double X = x-Apx.x;
 		double Y = y-Apx.y;
@@ -209,7 +209,7 @@ public class LineMnvr extends Manoeuver
 	public LatLng getTrajA()
 	{
 		double Rpx = _smap.getPPM() * _currentRm;
-		Point Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
 
 		Point2D.Double LApx = new Point2D.Double(Apx.x + _v.x * Rpx, Apx.y + _v.y * Rpx);
 		
@@ -224,7 +224,7 @@ public class LineMnvr extends Manoeuver
 	public LatLng getTrajB()
 	{
 		double Rpx = _smap.getPPM() * _currentRm;
-		Point Bpx = _smap.getScreenForLatLng(_B);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		Point2D.Double LBpx = new Point2D.Double(Bpx.x + _v.x * Rpx, Bpx.y + _v.y * Rpx);
 		
@@ -238,8 +238,8 @@ public class LineMnvr extends Manoeuver
 			return -1.f;
 
 		// On projette tout en screen
-		Point Apx = _smap.getScreenForLatLng(_A);
-		Point Bpx = _smap.getScreenForLatLng(_B);
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		double X = x-Apx.x;
 		double Y = y-Apx.y;
@@ -267,9 +267,9 @@ public class LineMnvr extends Manoeuver
 				return;
 			case NONE:
 				_touchOne = touchref;
-				Point pA = _smap.getScreenForLatLng(_A);
+				Point2D.Double pA = _smap.getScreenForLatLng(_A);
 				_offsetA = new Point2D.Double(x-pA.x, y-pA.y);
-				Point pB = _smap.getScreenForLatLng(_B);
+				Point2D.Double pB = _smap.getScreenForLatLng(_B);
 				_offsetB = new Point2D.Double(x-pB.x, y-pB.y);
 				_moveState = LineMnvrMoveStates.TRANSLATE;
 				return;

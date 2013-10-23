@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -71,7 +72,7 @@ public class Trajectory
 		GeneralPath line;
 		line = new GeneralPath();
 		boolean start = true;
-		Point p;
+		Point2D.Double p;
 
 		if (_points.size() < 2)
 			return  null;

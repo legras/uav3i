@@ -35,7 +35,7 @@ public class CircleMnvr extends Manoeuver
 	{
 		AffineTransform old = g2.getTransform();
 
-		Point centerPx = _smap.getScreenForLatLng(_center);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		g2.translate(centerPx.x, centerPx.y);
 
 		g2.setStroke(new BasicStroke(4.f));
@@ -63,7 +63,7 @@ public class CircleMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		Point centerPx = _smap.getScreenForLatLng(_center);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 
 		if (_adjusting)
@@ -88,7 +88,7 @@ public class CircleMnvr extends Manoeuver
 
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		Point centerPx = _smap.getScreenForLatLng(_center);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 
 		return Math.abs(_currentRm-Rm) < GRIP/_smap.getPPM();
@@ -102,7 +102,7 @@ public class CircleMnvr extends Manoeuver
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		Point centerPx = _smap.getScreenForLatLng(_center);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		if (!_isMoving && centerPx.distance(x, y) < 2*RPX)
 			return Manoeuver.MOVE_INTEREST;
 		else
@@ -117,14 +117,14 @@ public class CircleMnvr extends Manoeuver
 
 		_isMoving = true;
 
-		Point centerPx = _smap.getScreenForLatLng(_center);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		_offCenter = new Point2D.Double(x-centerPx.x, y-centerPx.y);
 	}
 
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-		Point centerPx = new Point((int) (x-_offCenter.x), (int) (y-_offCenter.y));
+		Point2D.Double centerPx = new Point2D.Double(x-_offCenter.x, y-_offCenter.y);
 		
 		_center = _smap.getLatLngForScreen(centerPx.x, centerPx.y);
 	}

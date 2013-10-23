@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -131,7 +132,7 @@ public class SymbolMap extends Map implements Touchable
 		UAVDataPoint uavpoint = UAVDataStore.getDataPointAtTime(System.currentTimeMillis());
 		if (uavpoint != null)
 		{
-			Point uav = getScreenForLatLng(uavpoint.latlng);
+			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
 			double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
 			g2.translate(uav.x, uav.y);
 			g2.rotate(-course);
@@ -161,16 +162,32 @@ public class SymbolMap extends Map implements Touchable
 		return 1. / MainFrame.OSMMap.getMapViewer().getMeterPerPixel();
 	}
 
-	public Point getScreenForLatLng(LatLng latlng)
-	{		
-		return MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+	public Point2D.Double getScreenForLatLng(LatLng latlng)
+	{	
+		Point a = MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+		Point b = new Point(a.x+1, a.y+1);
+		
+		LatLng A = getLatLngForScreen(a.x, a.y);
+		LatLng B = getLatLngForScreen(b.x, b.y);
+		
+		double X = (double) a.x + (latlng.getLng()-A.getLng()) / (B.getLng()-A.getLng());
+		double Y = (double) a.y + (latlng.getLat()-A.getLat()) / (B.getLat()-A.getLat());
+		
+		return new Point2D.Double(X, Y);
 	}
 
 	public LatLng getLatLngForScreen(double x, double y)
 	{		
-		Coordinate coord = MainFrame.OSMMap.getMapViewer().getPosition((int) x, (int) y);
+		int X = (int) x;
+		int Y = (int) y;
 
-		return new LatLng(coord.getLat(), coord.getLon());
+		Coordinate A = MainFrame.OSMMap.getMapViewer().getPosition(X, Y);
+		Coordinate B = MainFrame.OSMMap.getMapViewer().getPosition(X+1, Y+1);
+
+		double lat = A.getLat() + (y-(double)Y) * (B.getLat()-A.getLat());
+		double lon = A.getLon() + (x-(double)X) * (B.getLon()-A.getLon());
+		
+		return new LatLng(lat, lon);
 	}
 
 	/*
