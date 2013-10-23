@@ -291,10 +291,8 @@ public class LineMnvr extends Manoeuver
 			case TRANSLATE:
 				if (touchref == _touchOne)
 				{
-					Point2D.Double sA = new Point2D.Double(x-_offsetA.x, y-_offsetA.x);
-					_A = _smap.getLatLngForScreen(sA.x, sA.y);
-					Point2D.Double sB = new Point2D.Double(x-_offsetB.x, y-_offsetB.x);
-					_B = _smap.getLatLngForScreen(sB.x, sB.y);
+					_A = _smap.getLatLngForScreen(x-_offsetA.x, y-_offsetA.y);
+					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
 				}
 				return;
 			case NONE:
