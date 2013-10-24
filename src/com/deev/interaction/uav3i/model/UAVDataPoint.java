@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.model;
 
+import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
 
@@ -28,7 +29,11 @@ public class UAVDataPoint
 	 */
 	public UAVDataPoint(int utm_east, int utm_north, int c, int alt, long t)
 	{
-		UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
+    //UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
+    UTMRef utm = new UTMRef((double) utm_east/100f,
+                            (double) utm_north/100.,
+                            FlightPlanFacade.getInstance().getUTMLatitudeZoneLetterFlightPlan(), 
+                            FlightPlanFacade.getInstance().getUTMLongitudeZoneNumber());
 		latlng = utm.toLatLng();
 				
 		altitude = (double) alt / 1000.;

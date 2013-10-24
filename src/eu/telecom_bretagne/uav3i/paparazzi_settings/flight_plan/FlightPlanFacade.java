@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.xml.bind.JAXB;
 
+import uk.me.jstott.jcoord.LatLng;
+import uk.me.jstott.jcoord.UTMRef;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.Block;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.FlightPlan;
@@ -39,6 +41,9 @@ public class FlightPlanFacade
   private List<Waypoint>       waypoints;
   private Map<String, Integer> blocksIndex;
   private List<Block>          blocks;
+  private LatLng               startPoint;
+  private char                 utmLatitudeZoneLetter;
+  private int                  utmLongitudeZoneNumber;
   //-----------------------------------------------------------------------------
   /**
    * Constructeur : désérialisation JAXB.
@@ -156,6 +161,53 @@ public class FlightPlanFacade
     blocks = flightPlan.getBlocks().getBlock();
     for(int i=0; i<blocks.size(); i++)
       blocksIndex.put(blocks.get(i).getName(), i);
+  }
+  //-----------------------------------------------------------------------------
+  public LatLng getStartPoint()
+  {
+    if(startPoint == null)
+    {
+      startPoint = new LatLng(Double.parseDouble(flightPlan.getLat0()),
+                              Double.parseDouble(flightPlan.getLon0()));
+      //utmLatitudeZoneLetter = UTMRef.getUTMLatitudeZoneLetter(startPoint.getLat());
+      UTMRef utmRef = startPoint.toUTMRef();
+      utmLatitudeZoneLetter  = utmRef.getLatZone();
+      utmLongitudeZoneNumber = utmRef.getLngZone();
+      System.out.println("Start point = " + startPoint + " (UTMLatitudeZoneLetter = " + utmLatitudeZoneLetter + ")"  + " (utmLongitudeZoneNumber = " + utmLongitudeZoneNumber + ")");
+    }
+    return startPoint;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Renvoie la bande UTM (Latitude Zone) du point initial du plan de vol. Ex : 
+   * Brest, Rotterdam et le Kent sont dans le fuseau 'U'<br/>
+   * Les bandes sont codées par une lettre allant de C à X (à l'exception des
+   * lettres I et O qui pourraient être confondues avec les chiffres 1 et 0).<br/>
+   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
+   * 
+   * @return la lettre représentant le fuseau.
+   */
+  public char getUTMLatitudeZoneLetterFlightPlan()
+  {
+    if(startPoint == null)
+      getStartPoint();
+    return utmLatitudeZoneLetter;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Renvoie le fuseau UTM (Longitude Zone) du point initial du plan de vol. Ex : 
+   * Brest est dans le fuseau 30, Rotterdam et le Kent sont dans le fuseau 31<br/>
+   * Les fuseaux sont numérotés d'ouest en est de 1 à 60 avec une amplitude de 6°
+   * en longitude (360 = 60 x 6) en partant du méridien 180°.<br/> 
+   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
+   * 
+   * @return le nombre représentant la bande UTM.
+   */
+  public int getUTMLongitudeZoneNumber()
+  {
+    if(startPoint == null)
+      getStartPoint();
+    return utmLongitudeZoneNumber;
   }
   //-----------------------------------------------------------------------------
   /**
