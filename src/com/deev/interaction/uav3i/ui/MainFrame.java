@@ -18,7 +18,6 @@ import javax.swing.JLayeredPane;
 
 import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.ComponentLayer;
-import com.deev.interaction.common.ui.FingerPane;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;

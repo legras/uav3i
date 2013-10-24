@@ -1,4 +1,4 @@
-package com.deev.interaction.common.ui;
+package com.deev.interaction.uav3i.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,8 +10,15 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Path2D.Double;
+import java.awt.geom.Rectangle2D;
 
 import javax.sound.sampled.Line;
+
+import com.deev.interaction.common.ui.Animation;
+import com.deev.interaction.common.ui.Animator;
+import com.deev.interaction.common.ui.FingerStroke;
+import com.deev.interaction.common.ui.Gesture;
+import com.deev.interaction.common.ui.TouchPoint;
 
 
 
@@ -25,6 +32,7 @@ public class FingerDrawing implements Animation
 	private GestureDrawState _state;
 	private int _life;
 	private Gesture _gesture;
+	private Rectangle2D _box;
 
 	private float[] _color = {1.f, 1.f, 1.f, .5f};
 	
@@ -32,6 +40,7 @@ public class FingerDrawing implements Animation
 	{
 		_state = GestureDrawState.DRAWING;
 		_gesture = new Gesture();
+		_box = new Rectangle2D.Double(x, y, 0, 0);
 		addPoint(x, y);
 		Animator.addAnimation(this);
 	}
@@ -45,7 +54,12 @@ public class FingerDrawing implements Animation
 	
 	public void addPoint(double x, double y)
 	{
+		int previous = _gesture.size()-1;
+		if (previous > 0 && _gesture.get(previous).distance(x, y) < 3)
+			return;
+		
 		_gesture.addPoint(x, y);
+		_box.add(x, y);
 	}
 	
 	public List<TouchPoint> getPoints()
@@ -118,10 +132,12 @@ public class FingerDrawing implements Animation
 //			g2.fill(new Ellipse2D.Double(p.x-Gesture.GAP, p.y-Gesture.GAP, 2.*Gesture.GAP, 2.*Gesture.GAP));
 			
 			g2.setPaint(new Color(1.f, 1.f, 1.f, .4f));
-			g2.setStroke(new BasicStroke(20.f, BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND, 1.f,
-                null, 0.f));
-			g2.draw(new Line2D.Double(s.x, s.y, p.x, p.y));
+//			g2.setStroke(new BasicStroke(20.f, BasicStroke.CAP_ROUND,
+//                BasicStroke.JOIN_ROUND, 1.f,
+//                null, 0.f));
+//			g2.draw(new Line2D.Double(s.x, s.y, p.x, p.y));
+			
+			g2.fill(_box);
 		}
 		
 		g2.setStroke(new FingerStroke(20.f));

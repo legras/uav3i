@@ -16,13 +16,16 @@ public abstract class Manoeuver implements Touchable, Animation
 	public static float ADJUST_INTEREST = 20.f;
 	public static float MOVE_INTEREST = 15.f;
 	
+	private static long LONGPRESS = 1500;
+	
 	protected boolean _adjusting = false;
 	protected static double GRIP = 20.;
 	
 	private Object _touchref;
 	private Rectangle2D _shakeArea;
 	private double _shakeLength;
-	private Point2D.Double _shakedLast;
+	private Point2D.Double _touchedLast;
+	private long _startTime;
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -58,10 +61,11 @@ public abstract class Manoeuver implements Touchable, Animation
 	}
 
 	public void addTouch(float x, float y, Object touchref)
-	{
+	{		
 		_touchref = touchref;
+		_startTime = System.currentTimeMillis();
 		_shakeLength = 0;
-		_shakedLast = new Point2D.Double(x, y);
+		_touchedLast = new Point2D.Double(x, y);
 		_shakeArea = new Rectangle2D.Double(x, y, 0, 0);
 	}
 
@@ -70,23 +74,46 @@ public abstract class Manoeuver implements Touchable, Animation
 		if (touchref != _touchref)
 			return;
 		
-		_shakeLength += _shakedLast.distance(x, y);
-		_shakedLast = new Point2D.Double(x, y);
-		_shakeArea.add(_shakedLast);
+		_shakeLength += _touchedLast.distance(x, y);
+		_touchedLast = new Point2D.Double(x, y);
+		_shakeArea.add(_touchedLast);
 		
-		if (_shakeLength > 2 * (_shakeArea.getWidth()+_shakeArea.getHeight()))
+		long time = System.currentTimeMillis();
+		
+		if (_mnvrState == ManoeuverStates.READY && time-_startTime > LONGPRESS)
+		{
+			_mnvrState = ManoeuverStates.SUBMITTED;
+			System.out.println("sub");
+		}
+		
+		// Si le geste est replié sur lui-même
+		double L = _shakeArea.getWidth()+_shakeArea.getHeight();
+		if (_shakeLength > GRIP && _shakeLength > 2*L)
+		{
 			didShake();
+			return;
+		}
 	}
 
 	@Override
-	public int tick(int time) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int tick(int time)
+	{
+		switch (_mnvrState)
+		{
+			case SUBMITTED:
+				break;
+				
+			case READY:
+			default:
+				break;
+		}
+
+		return 1;
 	}
 
 	@Override
-	public int life() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int life()
+	{
+		return 1;
 	}
 }

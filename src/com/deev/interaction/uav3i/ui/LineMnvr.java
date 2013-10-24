@@ -10,6 +10,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 
 import uk.me.jstott.jcoord.LatLng;
@@ -50,26 +51,26 @@ public class LineMnvr extends Manoeuver
 	private Point2D.Double _currentPosTwo;
 	
 	
-
-	/**
-	 * @param map
-	 * @param xA Point A x-coordinate (screen)
-	 * @param yA Point A y-coordinate (screen)
-	 * @param xB Point B x-coordinate (screen)
-	 * @param yB Point B y-coordinate (screen)
-	 */
-	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
-	{
-		_A = map.getLatLngForScreen(xA, yA);
-		_B = map.getLatLngForScreen(xB, yB);
-
-		_smap = map;
-
-		double d = Point2D.Double.distance(xA, yA, xB, yB);
-		_u = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
-		_v = new Point2D.Double(-_u.y, _u.x);
-
-	}
+// Inutile ??
+//	/**
+//	 * @param map
+//	 * @param xA Point A x-coordinate (screen)
+//	 * @param yA Point A y-coordinate (screen)
+//	 * @param xB Point B x-coordinate (screen)
+//	 * @param yB Point B y-coordinate (screen)
+//	 */
+//	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
+//	{
+//		_A = map.getLatLngForScreen(xA, yA);
+//		_B = map.getLatLngForScreen(xB, yB);
+//
+//		_smap = map;
+//
+//		double d = Point2D.Double.distance(xA, yA, xB, yB);
+//		_u = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
+//		_v = new Point2D.Double(-_u.y, _u.x);
+//
+//	}
 
 	public LineMnvr(SymbolMap map, LatLng A, LatLng B)
 	{
@@ -257,7 +258,7 @@ public class LineMnvr extends Manoeuver
 		double v = X*_v.x + Y*_v.y;
 
 		if (v > -2*RPX && v < 2*RPX && u > -2*RPX && u < Apx.distance(Bpx)+2*RPX)
-			return Manoeuver.MOVE_INTEREST;
+			return getGeneralInterest();
 		else
 			return -1.f;
 	}
@@ -355,8 +356,11 @@ public class LineMnvr extends Manoeuver
 					{ 0, 0, 0 }
 				});
 		
-		double[][] data = y.multiply(new LUDecomposition(x).getSolver().getInverse()).getData();
-
+		DecompositionSolver solver = new LUDecomposition(x).getSolver();
+		if (!solver.isNonSingular())
+			return;
+		double[][] data = y.multiply(solver.getInverse()).getData();
+		
 		AffineTransform t = new AffineTransform(new double[] { data[0][0], data[1][0], data[0][1], data[1][1], data[0][2], data[1][2] });
 	
 		Point2D.Double Apx = _smap.getScreenForLatLng(_startA);

@@ -42,7 +42,6 @@ import com.deev.interaction.common.ui.Animation;
 import com.deev.interaction.common.ui.BoundingRectangle;
 import com.deev.interaction.common.ui.CircleAnim;
 import com.deev.interaction.common.ui.ComponentLayer;
-import com.deev.interaction.common.ui.FingerDrawing;
 import com.deev.interaction.common.ui.Gesture;
 import com.deev.interaction.common.ui.Touchable;
 
