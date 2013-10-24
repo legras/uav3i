@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attGroup ref="{}attlist.axis"/>
+ *       &lt;attGroup ref="{}attlist.autopilot"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,15 +35,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "axis")
-public class Axis {
+@XmlRootElement(name = "autopilot")
+public class Autopilot {
 
     @XmlAttribute(name = "name", required = true)
     @XmlSchemaType(name = "anySimpleType")
     protected String name;
-    @XmlAttribute(name = "failsafe_value", required = true)
+    @XmlAttribute(name = "freq")
     @XmlSchemaType(name = "anySimpleType")
-    protected String failsafeValue;
+    protected String freq;
 
     /**
      * Gets the value of the name property.
@@ -70,27 +70,27 @@ public class Axis {
     }
 
     /**
-     * Gets the value of the failsafeValue property.
+     * Gets the value of the freq property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getFailsafeValue() {
-        return failsafeValue;
+    public String getFreq() {
+        return freq;
     }
 
     /**
-     * Sets the value of the failsafeValue property.
+     * Sets the value of the freq property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setFailsafeValue(String value) {
-        this.failsafeValue = value;
+    public void setFreq(String value) {
+        this.freq = value;
     }
 
 }
