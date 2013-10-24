@@ -12,7 +12,9 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import sun.security.action.GetLongAction;
 import uk.me.jstott.jcoord.LatLng;
+import uk.me.jstott.jcoord.UTMRef;
 
 public class LineMnvr extends Manoeuver
 {
@@ -35,9 +37,6 @@ public class LineMnvr extends Manoeuver
 
 	private Object _touchOne;
 	private Object _touchTwo;
-
-	private Point2D.Double _uvOne;
-	private Point2D.Double _uvTwo;
 
 	private Point2D.Double _offsetA;
 	private Point2D.Double _offsetB;
@@ -201,6 +200,20 @@ public class LineMnvr extends Manoeuver
 		return v > currentRpx-GRIP && v < currentRpx+GRIP && u > -GRIP && u < Apx.distance(Bpx)+GRIP;
 	}
 
+	private LatLng getOffsetPoint(LatLng point)
+	{
+		UTMRef utm = _A.toUTMRef();
+		char letter = utm.getLatZone();
+		int number = utm.getLngZone();
+		
+		double north = utm.getEasting() + _currentRm * _v.y;
+		double east = utm.getNorthing() + _currentRm * _v.x;
+		
+		UTMRef utmOff = new UTMRef(north, east, letter, number);
+		
+		return utmOff.toLatLng();
+	}
+	
 	/**
 	 * Getter pour le point A de la trajectoire du drone (et non de la zone à regarder).
 	 * 
@@ -208,12 +221,7 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajA()
 	{
-		double Rpx = _smap.getPPM() * _currentRm;
-		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
-
-		Point2D.Double LApx = new Point2D.Double(Apx.x + _v.x * Rpx, Apx.y + _v.y * Rpx);
-		
-		return _smap.getLatLngForScreen(LApx.x, LApx.y);
+		return getOffsetPoint(_A);
 	}
 
 	/**
@@ -223,12 +231,7 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajB()
 	{
-		double Rpx = _smap.getPPM() * _currentRm;
-		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
-
-		Point2D.Double LBpx = new Point2D.Double(Bpx.x + _v.x * Rpx, Bpx.y + _v.y * Rpx);
-		
-		return _smap.getLatLngForScreen(LBpx.x, LBpx.y);
+		return getOffsetPoint(_B);
 	}
 
 	@Override
@@ -263,10 +266,13 @@ public class LineMnvr extends Manoeuver
 			case TRANSLATE:
 				_touchTwo = touchref;
 				_lastPosTwo = new Point2D.Double(x, y);
+				Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+				_lastPosOne = new Point2D.Double(Apx.x+_offsetA.x, Apx.y+_offsetA.y);
 				_moveState = LineMnvrMoveStates.FULL;
 				return;
 			case NONE:
 				_touchOne = touchref;
+				_lastPosOne = new Point2D.Double(x, y);
 				Point2D.Double pA = _smap.getScreenForLatLng(_A);
 				_offsetA = new Point2D.Double(x-pA.x, y-pA.y);
 				Point2D.Double pB = _smap.getScreenForLatLng(_B);
@@ -287,12 +293,35 @@ public class LineMnvr extends Manoeuver
 		switch (_moveState)
 		{
 			case FULL:
+				AffineTransform transform;
+				Point2D.Double P = new Point2D.Double(x, y);
+				
+				if (touchref == _touchOne)
+				{
+					transform = getTransform(_lastPosTwo, _lastPosOne, P);
+					//_lastPosOne = new Point2D.Double(x, y);
+				}
+				else
+				{
+					transform = getTransform(_lastPosOne, _lastPosTwo, P);
+					//_lastPosTwo = new Point2D.Double(x, y);
+				}
+				
+				P = _smap.getScreenForLatLng(_A);
+				transform.transform(P, P);
+				_A = _smap.getLatLngForScreen(P.x, P.y);
+				
+				P = _smap.getScreenForLatLng(_B);
+				transform.transform(P, P);
+				_B = _smap.getLatLngForScreen(P.x, P.y);
+				
 				return;
 			case TRANSLATE:
 				if (touchref == _touchOne)
 				{
 					_A = _smap.getLatLngForScreen(x-_offsetA.x, y-_offsetA.y);
 					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
+					//_lastPosOne = new Point2D.Double(x, y);
 				}
 				return;
 			case NONE:
@@ -314,4 +343,20 @@ public class LineMnvr extends Manoeuver
 
 	}
 
+	private AffineTransform getTransform(Point2D.Double anchor, Point2D.Double oldP, Point2D.Double newP)
+	{
+		AffineTransform transform = new AffineTransform();
+		
+		double scale = anchor.distance(newP) / anchor.distance(oldP);
+		double theta = Math.atan2(newP.y-anchor.y, newP.x-anchor.x) - Math.atan2(oldP.y-anchor.y, oldP.x-anchor.x);
+		
+		transform.translate(-anchor.x, -anchor.y);
+		transform.scale(scale, scale);
+		transform.translate(anchor.x/scale, anchor.y/scale);
+		
+		transform.rotate(theta, anchor.x, anchor.y);
+		
+		return transform;
+	}
+	
 }
