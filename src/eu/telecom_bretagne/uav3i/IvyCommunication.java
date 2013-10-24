@@ -116,6 +116,21 @@ public class IvyCommunication
     	//	System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") ["+i+"]= " + args[i]);
 			
 			String tokens = args[1];
+
+			//    <message name="GPS" ID="8">
+      //      <field name="mode" type="uint8" unit="byte_mask"/>
+      //      <field name="utm_east" type="int32" unit="cm"/>       2
+      //      <field name="utm_north" type="int32" unit="cm"/>      3
+      //      <field name="course" type="int16" unit="decideg"/>    4
+      //      <field name="alt" type="int32" unit="cm"/>            5
+      //      <field name="speed" type="uint16" unit="cm/s"/>
+      //      <field name="climb" type="int16" unit="cm/s"/>
+      //      <field name="itow" type="uint32" unit="ms"/>          8 Time ?
+      //      <field name="utm_zone" type="uint8"/>                 9 Erreur ?
+      //      <field name="gps_nb_err" type="uint8"/>
+      //    </message>
+      // Il doit y avoir une erreur dans la doc !!! A l'évidence le 8ème n'est pas le temps/
+
 			String[] message = tokens.split(" ");
 			//for(int i=0; i<message.length; i++)
 			//	System.out.println("---------------> " + i + " = " + message[i]);

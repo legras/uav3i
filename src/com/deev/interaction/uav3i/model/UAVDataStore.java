@@ -50,6 +50,20 @@ public class UAVDataStore
 		try
 		{
 			// 4.822 5 GPS 3 39485814 534857683 899 0 0 1 0 204086959 30 3
+      //      <message name="GPS" ID="8">
+      //      <field name="mode" type="uint8" unit="byte_mask"/>
+      //      <field name="utm_east" type="int32" unit="cm"/>       4
+      //      <field name="utm_north" type="int32" unit="cm"/>      5
+      //      <field name="course" type="int16" unit="decideg"/>    6
+      //      <field name="alt" type="int32" unit="cm"/>            7
+      //      <field name="speed" type="uint16" unit="cm/s"/>
+      //      <field name="climb" type="int16" unit="cm/s"/>
+      //      <field name="itow" type="uint32" unit="ms"/>          10 Time ?
+      //      <field name="utm_zone" type="uint8"/>                 11 Erreur !
+      //      <field name="gps_nb_err" type="uint8"/>
+      //    </message>
+      // Il doit y avoir une erreur dans la doc !!! A l'évidence le 10ème n'est pas le temps/
+		  
 			while ((strLine = br.readLine()) != null)
 			{
 				String[] tokens = strLine.split(" ");
