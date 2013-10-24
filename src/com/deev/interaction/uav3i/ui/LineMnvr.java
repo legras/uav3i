@@ -265,6 +265,8 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public void addTouch(float x, float y, Object touchref)
 	{
+		super.addTouch(x, y, touchref);
+		
 		switch (_moveState)
 		{
 			case FULL:
@@ -297,6 +299,8 @@ public class LineMnvr extends Manoeuver
 	{
 		if (touchref != _touchOne && touchref != _touchTwo)
 			return;
+		
+		super.updateTouch(x, y, touchref);
 		
 		switch (_moveState)
 		{
