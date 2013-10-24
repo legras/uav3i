@@ -3,16 +3,15 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
-import sun.security.action.GetLongAction;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.LUDecomposition;
+
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
 
@@ -38,10 +37,17 @@ public class LineMnvr extends Manoeuver
 	private Object _touchOne;
 	private Object _touchTwo;
 
+	// TRANSLATE
 	private Point2D.Double _offsetA;
 	private Point2D.Double _offsetB;
-	private Point2D.Double _lastPosOne;
-	private Point2D.Double _lastPosTwo;
+	
+	// FULL
+	private LatLng _startA;
+	private LatLng _startB;
+	private Point2D.Double _startPosOne;
+	private Point2D.Double _startPosTwo;
+	private Point2D.Double _currentPosOne;
+	private Point2D.Double _currentPosTwo;
 	
 	
 
@@ -265,14 +271,16 @@ public class LineMnvr extends Manoeuver
 				return;
 			case TRANSLATE:
 				_touchTwo = touchref;
-				_lastPosTwo = new Point2D.Double(x, y);
-				Point2D.Double Apx = _smap.getScreenForLatLng(_A);
-				_lastPosOne = new Point2D.Double(Apx.x+_offsetA.x, Apx.y+_offsetA.y);
+				_startA = _A;
+				_startB = _B;
+				_startPosTwo = new Point2D.Double(x, y);
+				_currentPosOne = _startPosOne;
+				_currentPosTwo = _startPosTwo;
 				_moveState = LineMnvrMoveStates.FULL;
 				return;
 			case NONE:
 				_touchOne = touchref;
-				_lastPosOne = new Point2D.Double(x, y);
+				_startPosOne = new Point2D.Double(x, y);
 				Point2D.Double pA = _smap.getScreenForLatLng(_A);
 				_offsetA = new Point2D.Double(x-pA.x, y-pA.y);
 				Point2D.Double pB = _smap.getScreenForLatLng(_B);
@@ -292,38 +300,23 @@ public class LineMnvr extends Manoeuver
 		
 		switch (_moveState)
 		{
-			case FULL:
-				AffineTransform transform;
-				Point2D.Double P = new Point2D.Double(x, y);
-				
+			case FULL:				
 				if (touchref == _touchOne)
-				{
-					transform = getTransform(_lastPosTwo, _lastPosOne, P);
-					//_lastPosOne = new Point2D.Double(x, y);
-				}
+					_currentPosOne = new Point2D.Double(x, y);
 				else
-				{
-					transform = getTransform(_lastPosOne, _lastPosTwo, P);
-					//_lastPosTwo = new Point2D.Double(x, y);
-				}
-				
-				P = _smap.getScreenForLatLng(_A);
-				transform.transform(P, P);
-				_A = _smap.getLatLngForScreen(P.x, P.y);
-				
-				P = _smap.getScreenForLatLng(_B);
-				transform.transform(P, P);
-				_B = _smap.getLatLngForScreen(P.x, P.y);
-				
+					_currentPosTwo = new Point2D.Double(x, y);
+				updateGeometry();
 				return;
+				
 			case TRANSLATE:
 				if (touchref == _touchOne)
 				{
 					_A = _smap.getLatLngForScreen(x-_offsetA.x, y-_offsetA.y);
 					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
-					//_lastPosOne = new Point2D.Double(x, y);
+					_startPosOne = new Point2D.Double(x, y);
 				}
 				return;
+				
 			case NONE:
 			default:
 				return;
@@ -339,24 +332,45 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		// TODO Auto-generated method stub
-
+		_moveState = LineMnvrMoveStates.NONE;
 	}
 
-	private AffineTransform getTransform(Point2D.Double anchor, Point2D.Double oldP, Point2D.Double newP)
+	private void updateGeometry()
 	{
-		AffineTransform transform = new AffineTransform();
+		Array2DRowRealMatrix x = new Array2DRowRealMatrix(new double[][]
+				{
+					{ 0, _startPosOne.getX(), _startPosTwo.getX() },
+					{ 0, _startPosOne.getY(), _startPosTwo.getY() },
+					{ 1, 1, 1 }
+				});
+
+		Array2DRowRealMatrix y = new Array2DRowRealMatrix(new double[][]
+				{
+					{ 0, _currentPosOne.getX(), _currentPosTwo.getX() },
+					{ 0, _currentPosOne.getY(), _currentPosTwo.getY() },
+					{ 0, 0, 0 }
+				});
 		
-		double scale = anchor.distance(newP) / anchor.distance(oldP);
-		double theta = Math.atan2(newP.y-anchor.y, newP.x-anchor.x) - Math.atan2(oldP.y-anchor.y, oldP.x-anchor.x);
-		
-		transform.translate(-anchor.x, -anchor.y);
-		transform.scale(scale, scale);
-		transform.translate(anchor.x/scale, anchor.y/scale);
-		
-		transform.rotate(theta, anchor.x, anchor.y);
-		
-		return transform;
-	}
+		double[][] data = y.multiply(new LUDecomposition(x).getSolver().getInverse()).getData();
+
+		AffineTransform t = new AffineTransform(new double[] { data[0][0], data[1][0], data[0][1], data[1][1], data[0][2], data[1][2] });
 	
+		Point2D.Double Apx = _smap.getScreenForLatLng(_startA);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_startB);
+		
+		t.transform(Apx, Apx);
+		t.transform(Bpx, Bpx);
+
+		_A = _smap.getLatLngForScreen(Apx.x, Apx.y);
+		_B = _smap.getLatLngForScreen(Bpx.x, Bpx.y);
+		
+		double d = Apx.distance(Bpx);
+		_u = new Point2D.Double((Bpx.x-Apx.x)/d, (Bpx.y-Apx.y)/d);
+		_v = new Point2D.Double(-_u.y, _u.x);
+	}
+
 }
+
+
+
+
