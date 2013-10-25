@@ -10,6 +10,11 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -24,7 +29,12 @@ import uk.me.jstott.jcoord.LatLng;
 @SuppressWarnings("serial")
 public class SymbolMap extends Map implements Touchable
 {		
-	private Manoeuver _manoeuver = null;
+	private ArrayList<Manoeuver> _manoeuvers = null;
+	private Manoeuver _adjustingMnvr = null;
+	private Object _adjustingTouch = null;
+	
+	private ArrayList<Touchable> _touchsymbols;
+	private HashMap<Object, Touchable> _touchedsymbols;
 
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
@@ -43,9 +53,13 @@ public class SymbolMap extends Map implements Touchable
 		Color back = new Color(0.f, 0.f, 0.f, .0f);
 		setBackground(back);	
 
+		_manoeuvers = new ArrayList<Manoeuver>();
+		_touchsymbols = new ArrayList<Touchable>();
+		_touchedsymbols = new HashMap<Object, Touchable>();
+		
 		_trajectory = new Trajectory();
 
-		// Dessin de UAV
+		// Dessin UAV
 		_tri = new Path2D.Double();
 		_tri.moveTo(D/2., 0.);
 		_tri.lineTo(-D/2., D/2.);
@@ -53,10 +67,24 @@ public class SymbolMap extends Map implements Touchable
 		_tri.lineTo(-D/2., -D/2.);
 		_tri.closePath();
 	}
-
-	public void setManoeuver(Manoeuver m)
+	
+	public void addTouchSymbol(Touchable t)
 	{
-		_manoeuver = m;
+		synchronized (_touchsymbols)
+		{
+			_touchsymbols.add(t);
+		}
+	}
+	
+	public void removeTouchSymbol(Touchable t)
+	{
+		synchronized (_touchsymbols)
+		{
+			_touchsymbols.remove(t);
+			for (Entry<Object,Touchable> e : _touchedsymbols.entrySet())
+				if (e.getValue() == t)
+					_touchedsymbols.entrySet().remove(e);
+		}
 	}
 
 	public void paintComponent(Graphics g)
@@ -104,7 +132,7 @@ public class SymbolMap extends Map implements Touchable
 		UAVDataPoint uavpoint = UAVDataStore.getDataPointAtTime(System.currentTimeMillis());
 		if (uavpoint != null)
 		{
-			Point uav = getScreenForLatLng(uavpoint.latlng);
+			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
 			double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
 			g2.translate(uav.x, uav.y);
 			g2.rotate(-course);
@@ -122,8 +150,8 @@ public class SymbolMap extends Map implements Touchable
 		// --------- Manoeuvers --------------------------------------------------
 		synchronized(this)
 		{
-			if (_manoeuver != null)
-				_manoeuver.paint(g2);
+			for (Manoeuver m : _manoeuvers)
+				m.paint(g2);
 		}
 
 	}
@@ -134,57 +162,70 @@ public class SymbolMap extends Map implements Touchable
 		return 1. / MainFrame.OSMMap.getMapViewer().getMeterPerPixel();
 	}
 
-	public Point getScreenForLatLng(LatLng latlng)
-	{		
-		return MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+	public Point2D.Double getScreenForLatLng(LatLng latlng)
+	{	
+		Point a = MainFrame.OSMMap.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+		Point b = new Point(a.x+1, a.y+1);
+		
+		LatLng A = getLatLngForScreen(a.x, a.y);
+		LatLng B = getLatLngForScreen(b.x, b.y);
+		
+		double X = (double) a.x + (latlng.getLng()-A.getLng()) / (B.getLng()-A.getLng());
+		double Y = (double) a.y + (latlng.getLat()-A.getLat()) / (B.getLat()-A.getLat());
+		
+		return new Point2D.Double(X, Y);
 	}
 
 	public LatLng getLatLngForScreen(double x, double y)
 	{		
-		Coordinate coord = MainFrame.OSMMap.getMapViewer().getPosition((int) x, (int) y);
+		int X = (int) x;
+		int Y = (int) y;
 
-		return new LatLng(coord.getLat(), coord.getLon());
+		Coordinate A = MainFrame.OSMMap.getMapViewer().getPosition(X, Y);
+		Coordinate B = MainFrame.OSMMap.getMapViewer().getPosition(X+1, Y+1);
+
+		double lat = A.getLat() + (y-(double)Y) * (B.getLat()-A.getLat());
+		double lon = A.getLon() + (x-(double)X) * (B.getLon()-A.getLon());
+		
+		return new LatLng(lat, lon);
 	}
 
-	/*
-	public double getPixelPerDegree()
-	{
-		LatLng a_ll = getLatLngForScreen(0, 0);
-		LatLng b_ll = getLatLngForScreen(1000, 0);
-
-		return 1000./(b_ll.getLng() - a_ll.getLng());
-	}
-	 */
 
 	public boolean adjustAtPx(double x, double y)
 	{
-		if (_manoeuver == null)
-			return false;
-
+		if (_adjustingMnvr == null)
+			synchronized(this)
+			{
+				for (Manoeuver m : _manoeuvers)
+					if (m.isAdjustmentInterestedAtPx(x, y))
+						_adjustingMnvr = m;
+						
+			}
+		
 		// On demande au manoeuver de s'ajuster et on récupère la valeur booléenne
 		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
-		boolean result = _manoeuver.adjustAtPx(x, y);
+		boolean result = _adjustingMnvr.adjustAtPx(x, y);
 
 		// Si on est connecté à Paparazzi...
 		if(UAV3iSettings.getMode() == Mode.IVY)
 		{
-		  switch (_manoeuver.getClass().getSimpleName())
-      {
-        case "CircleMnvr":
-          // Signalement à Paparazzi de la modification du rayon.
-          // TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
-          UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_manoeuver).getCurrentRadius());
-          break;
-        case "LineMnvr":
-          LineMnvr lineMnvr = (LineMnvr)_manoeuver;
-          LatLng A = lineMnvr.getTrajA();
-          LatLng B = lineMnvr.getTrajB();
-          UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-          UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
-          break;
-        default:
-          break;
-      }
+			switch (_adjustingMnvr.getClass().getSimpleName())
+			{
+				case "CircleMnvr":
+					// Signalement à Paparazzi de la modification du rayon.
+					// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
+					UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
+					break;
+				case "LineMnvr":
+					LineMnvr lineMnvr = (LineMnvr)_adjustingMnvr;
+					LatLng A = lineMnvr.getTrajA();
+					LatLng B = lineMnvr.getTrajB();
+					UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+					UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+					break;
+				default:
+					break;
+			}
 		}
 
 
@@ -193,18 +234,19 @@ public class SymbolMap extends Map implements Touchable
 
 	public boolean isAdjusting()
 	{
-		if (_manoeuver == null)
+		if (_adjustingMnvr == null)
 			return false;
 
-		return _manoeuver.isAdjusting();
+		return _adjustingMnvr.isAdjusting();
 	}
 
 	public void stopAdjusting()
 	{
-		if (_manoeuver == null)
+		if (_adjustingMnvr == null)
 			return;
 
-		_manoeuver.stopAdjusting();
+		_adjustingMnvr.stopAdjusting();
+		_adjustingMnvr = null;
 	}
 
 
@@ -219,35 +261,124 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		if (_manoeuver != null && _manoeuver.isInterestedAtPx(x, y))
-			return 20.f;
-		else
-			return -1.f;
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				if (m.isAdjustmentInterestedAtPx(x, y))
+					return Manoeuver.ADJUST_INTEREST;			
+		}
+
+		synchronized (_touchsymbols)
+		{
+			float interest = -1.f;;
+			
+			Iterator<Touchable> itr = _touchsymbols.iterator();
+			while(itr.hasNext())
+			{
+				Touchable t = itr.next();
+				float i = t.getInterestForPoint(x, y);
+				if (i > interest)
+				{
+					interest = i;
+				}
+			}
+			
+			return interest;
+		}
 	}
 
 	@Override
 	public void addTouch(float x, float y, Object touchref)
 	{
-		adjustAtPx(x, y);
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				if (m.isAdjustmentInterestedAtPx(x, y))
+				{
+					_adjustingMnvr = m;
+					_adjustingTouch = touchref;
+					adjustAtPx(x, y);
+					return;
+				}
+		}
+
+		synchronized (_touchsymbols)
+		{
+			float interest = Float.NEGATIVE_INFINITY;
+			Touchable T = null;
+			
+			Iterator<Touchable> itr = _touchsymbols.iterator();
+			while(itr.hasNext())
+			{
+				Touchable t = itr.next();
+				float i = t.getInterestForPoint(x, y);
+				if (i > interest)
+				{
+					T = t;
+					interest = i;
+				}
+			}
+			
+			T.addTouch(x, y, touchref);
+			_touchedsymbols.put(touchref, T);
+		}
 	}
 
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-		adjustAtPx(x, y);
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		{
+			adjustAtPx(x, y);
+			return;
+		}
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.updateTouch(x, y, touchref);
+		}
 	}
 
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		stopAdjusting();
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		{
+			stopAdjusting();
+			return;
+		}
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.removeTouch(x, y, touchref);
+		}
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		// TODO Auto-generated method stub
+		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+			stopAdjusting();
+		
+		synchronized (_touchedsymbols)
+		{
+			Touchable T = _touchedsymbols.get(touchref);
+			
+			T.cancelTouch(touchref);
+		}
+	}
 
+	public void addManoeuver(Manoeuver mnvr)
+	{
+		synchronized (this)
+		{
+			_manoeuvers.add(mnvr);
+			addTouchSymbol(mnvr);
+		}
 	}
 
 }

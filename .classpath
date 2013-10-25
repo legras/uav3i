@@ -12,5 +12,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/uav3i/lib/Ivy-javadoc-1.2.13.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/commons-math3-3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

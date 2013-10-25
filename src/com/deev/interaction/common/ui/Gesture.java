@@ -3,6 +3,7 @@ package com.deev.interaction.common.ui;
 import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Gesture extends ArrayList<TouchPoint>
 {	
 	public static double GAP = 100.;
 	protected boolean _large = false;
+	protected Rectangle2D.Double _box = null;
 	
 	public Gesture()
 	{
@@ -34,6 +36,10 @@ public class Gesture extends ArrayList<TouchPoint>
 	public void addPoint(double x, double y)
 	{
 		addPoint(x, y, System.currentTimeMillis());
+		if (_box == null)
+			_box = new Rectangle2D.Double(x, y, 0, 0);
+		else
+			_box.add(x, y);
 	}
 	
 	public void addPoint(double x, double y, long time)
@@ -41,6 +47,11 @@ public class Gesture extends ArrayList<TouchPoint>
 		add(new TouchPoint(x, y, time));
 		if (size() > 1 && get(0).distance(x, y) > GAP)
 			_large = true;
+		
+		if (_box == null)
+			_box = new Rectangle2D.Double(x, y, 0, 0);
+		else
+			_box.add(x, y);
 	}
 	
 	public long getDuration()
@@ -64,6 +75,11 @@ public class Gesture extends ArrayList<TouchPoint>
 		double d2 = TouchPoint.dist2(this.get(size-1), this.get(0));
 		
 		return d2 > opening*opening;
+	}
+	
+	public Rectangle2D.Double getBox()
+	{
+		return _box;
 	}
 	
 	public Polygon getPolygon()

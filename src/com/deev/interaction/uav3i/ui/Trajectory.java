@@ -1,21 +1,14 @@
 package com.deev.interaction.uav3i.ui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
+import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-
-import uk.me.jstott.jcoord.LatLng;
 
 /**
  * @author legras
@@ -71,7 +64,7 @@ public class Trajectory
 		GeneralPath line;
 		line = new GeneralPath();
 		boolean start = true;
-		Point p;
+		Point2D.Double p;
 
 		if (_points.size() < 2)
 			return  null;

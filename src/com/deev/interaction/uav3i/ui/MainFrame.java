@@ -18,7 +18,6 @@ import javax.swing.JLayeredPane;
 
 import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.ComponentLayer;
-import com.deev.interaction.common.ui.FingerPane;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
@@ -117,7 +116,6 @@ public class MainFrame extends JFrame implements ActionListener
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
 		SWITCH = mswitch;
 		Dimension swd = mswitch.getSize();
-		System.out.println(swd);
 		mswitch.setBounds(screenSize.width/2-swd.width/2, 2, swd.width, swd.height);
 		clayer.add(mswitch);
 		
