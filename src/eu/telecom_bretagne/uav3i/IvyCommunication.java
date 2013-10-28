@@ -138,11 +138,19 @@ public class IvyCommunication
 			// Les messages "GPS_SOL" passe par le pattern, on les filtre ici. 
 			if(message[0].equals("_SOL")) return;
 
-      UAVDataStore.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-                                   Integer.parseInt(message[3]),  // utmNorth
-                                   Integer.parseInt(message[4]),  // course
-                                   Integer.parseInt(message[5]),  // alt
-                                   Long.parseLong(message[9]));   // t                
+//    System.out.print("---------------> ");
+//    for(int i=0; i<message.length; i++)
+//      System.out.print("["+i+" = " + message[i] + "] ");
+//    System.out.println();
+
+    // ---------------> [0 = ] [1 = 3] [2 = 72344664] [3 = 532066912] [4 = 932] [5 = 75826] [6 = 1443] [7 = 447] [8 = 0] [9 = 127047240] [10 = 30] [11 = 8]
+    
+    UAVDataStore.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+                                 Integer.parseInt(message[3]),  // utmNorth
+                                 Integer.parseInt(message[10]), // utm_zone
+                                 Integer.parseInt(message[4]),  // course
+                                 Integer.parseInt(message[5]),  // alt
+                                 Long.parseLong(message[9]));   // t                
 
   		//System.out.println();
     }
