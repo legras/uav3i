@@ -27,24 +27,15 @@ public class UAVDataPoint
 	 *	<li><field name="gps_nb_err" type="uint8"/></li>
 	 *	</ul>
 	 */
-	public UAVDataPoint(int utm_east, int utm_north, int utm_zone, int c, int alt, long t)
+	public UAVDataPoint(int utm_east, int utm_north, int c, int alt, long t)
 	{
     //UTMRef utm = new UTMRef((double) utm_east/100f, (double) utm_north/100., 'U', 30);
     UTMRef utm = new UTMRef((double) utm_east/100f,
                             (double) utm_north/100.,
                             FlightPlanFacade.getInstance().getUTMLatitudeZoneLetterFlightPlan(), 
-                            utm_zone);
+                            FlightPlanFacade.getInstance().getUTMLongitudeZoneNumber());
 		latlng = utm.toLatLng();
 				
-    // Sens inverse : on reconstruit un UTM à partir du latlong
-    UTMRef utm2 = latlng.toUTMRef(); 
-    int fuseau = utm2.getLngZone();
-    char bande = utm2.getLatZone();
-    // L'UTM reconstruit a bien changé la référence de la bande (quand c'est nécessaire...)
-    //System.out.println("["+fuseau+","+bande+"] " + (utm2.getLngZone()==utm.getLngZone()?"même fuseau":"FUSEAU DIFFERENT ! : " + utm.getLngZone()) + " / " + (utm2.getLatZone()==utm.getLatZone()?"même bande":"BANDE DIFFERENTE ! : " + utm.getLatZone()) + " latlong = " + latlng);
-    System.out.println("utm = " + utm + " / utm2 = " + utm2);
-    //System.out.println("utm_east : " + utm_east + " / utm_north : " + utm_north + " / utm_zone : " + utm_zone);
-        
 		altitude = (double) alt / 1000.;
 		course = (double) c / 10.;
 		time = t;

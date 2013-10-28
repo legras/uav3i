@@ -73,7 +73,6 @@ public class UAVDataStore
 
 				int utm_east = Integer.parseInt(tokens[4]);
 				int utm_north = Integer.parseInt(tokens[5]);
-				int utm_zone = Integer.parseInt(tokens[12]);
 				int course = Integer.parseInt(tokens[6]);
 				int alt = Integer.parseInt(tokens[7]);
 				long t = Long.parseLong(tokens[11]);
@@ -81,7 +80,7 @@ public class UAVDataStore
 				if (delta == 0)
 					delta = System.currentTimeMillis() - t + 2000;
 
-				_dataPoints.add(new UAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t+delta));
+				_dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t+delta));
 			}
 		}
 		catch (IOException e)
@@ -104,13 +103,13 @@ public class UAVDataStore
 		ivyCommunication = new IvyCommunication();
 	}
 
-	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
+	public static void addUAVDataPoint(int utm_east, int utm_north, int course, int alt, long t)
 	{
 		if(store != null)
 		{
 			//      if (store.deltaIvy == 0)
 			//        store.deltaIvy = System.currentTimeMillis() - t + 2000;
-			store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t));
+			store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, course, alt, t));
 		}
 	}
 
