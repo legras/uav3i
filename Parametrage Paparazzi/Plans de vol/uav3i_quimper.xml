@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<flight_plan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="flight_plan.xsd"
+             alt="100"
+             ground_alt="0"
+             lat0=" 48.001315"
+             lon0="-4.101097"
+             max_dist_from_home="5000"
+             name="Test changement de bande UTM - Quimper"
+             security_height="25">
+
+  <header>
+    #include "subsystems/navigation/nav_line.h"
+    #include "subsystems/datalink/datalink.h"
+  </header>
+  
+  <waypoints>
+    <!--
+      Waypoint [1] : STDBY
+      Waypoint [2] : 1
+      Waypoint [3] : 2
+      Waypoint [4] : MOB
+      Waypoint [5] : S1
+      Waypoint [6] : S2
+      Waypoint [7] : CIRCLE_CENTER
+      Waypoint [8] : AF
+      Waypoint [9] : TD
+      Waypoint [10] : CLIMB
+	-->
+    <waypoint name="HOME"          x="0" y="0"/>
+    <waypoint name="STDBY"         x="627.6"  y="222.8"/>
+    <waypoint name="1"             x="2765.9" y="1292.5"/>
+    <waypoint name="2"             x="3688.5" y="686.2"/>
+    <waypoint name="MOB"           x="400.9"  y="-1062.0"/>
+    <waypoint name="S1"            x="3078.4" y="2251.9"/>
+    <waypoint name="S2"            x="4101.5" y="1276.9"/>
+    <waypoint name="CIRCLE_CENTER" x="3000.0" y="2000.0"/>
+    <waypoint alt="215.0" name="AF" x="-94.6" y="202.1"/>
+    <waypoint alt="185.0" name="TD" x="-13.0" y="33.8"/>
+    <waypoint name="CLIMB" x="-114.5" y="162.3"/>
+  </waypoints>
+  
+  <exceptions/>
+  
+  <blocks>
+    <!--
+      Block [0] : Wait GPS
+      Block [1] : Takeoff
+      Block [2] : Standby
+      Block [3] : MOB
+      Block [4] : Line 1-2
+      Block [5] : Survey S1-S2
+      Block [6] : Circle
+      Block [7] : final
+    -->
+    <block name="Wait GPS">
+      <set value="1" var="kill_throttle"/>
+      <while cond="!GpsFixValid()"/>
+    </block>
+    <block group="home" key="t" name="Takeoff" strip_button="Takeoff (wp CLIMB)" strip_icon="takeoff.png">
+      <set value="0" var="kill_throttle"/>
+      <go from="HOME" pitch="15" throttle="1.0" vmode="throttle" wp="STDBY"/>
+    </block>
+    <block group="home" key="[Control]a" name="Standby" strip_button="Standby" strip_icon="home.png">
+      <circle radius="nav_radius" wp="STDBY"/>
+    </block>
+    <block group="base_pattern" name="MOB" strip_button="Turn around here" strip_icon="mob.png">
+      <call fun="NavSetWaypointHere(WP_MOB)"/>
+      <set value="DEFAULT_CIRCLE_RADIUS" var="nav_radius"/>
+      <circle radius="nav_radius" wp="MOB"/>
+    </block>
+    <block group="extra_pattern" name="Line 1-2" strip_button="Line (wp 1-2)" strip_icon="line.png">
+      <call fun="nav_line_init()"/>
+      <call fun="nav_line(WP_1, WP_2, nav_radius)"/>
+    </block>
+    <block group="extra_pattern" name="Survey S1-S2" strip_button="Survey (wp S1-S2)" strip_icon="survey.png">
+      <survey_rectangle grid="150" wp1="S1" wp2="S2"/>
+    </block>
+    <block name="Circle">
+      <circle radius="nav_radius" wp="CIRCLE_CENTER"/>
+    </block>
+    <block name="final">
+      <go from="AF" hmode="route" vmode="glide" wp="TD"/>
+    </block>
+  </blocks>
+  
+</flight_plan>
+             
