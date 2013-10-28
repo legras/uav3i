@@ -44,6 +44,7 @@ public class FlightPlanFacade
   private LatLng               startPoint;
   private char                 utmLatitudeZoneLetter;
   private int                  utmLongitudeZoneNumber;
+  private int                  maxDistanceFromHome;
   //-----------------------------------------------------------------------------
   /**
    * Constructeur : désérialisation JAXB.
@@ -62,6 +63,7 @@ public class FlightPlanFacade
      processWaypoints();
      blocksIndex = new HashMap<>();
      processBlocks();
+     processStartPoint();
      
 //     // 'name' est un attribut de l'élément racine <flight_plan>
 //     System.out.println("FLIGHT PLAN : " + flightPlan.getName());
@@ -79,6 +81,23 @@ public class FlightPlanFacade
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Pattern Singleton : la méthode renvoie l'unique instance de {@link FlightPlanFacade}.
+   * @return l'instance de <code>FlightPlanFacade</code>.
+   */
+  public final static FlightPlanFacade getInstance()
+  {
+    if (instance == null)
+    {
+      synchronized(FlightPlanFacade.class)
+      {
+        if (instance == null)
+          instance = new FlightPlanFacade();
+      }
+    }
+    return instance;
   }
   //-----------------------------------------------------------------------------
   /**
@@ -141,6 +160,58 @@ public class FlightPlanFacade
     return blocks.get(index);
   }
   //-----------------------------------------------------------------------------
+  public LatLng getStartPoint()
+  {
+    return startPoint;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Renvoie la bande UTM (Latitude Zone) du point initial du plan de vol. Ex : 
+   * Brest, Rotterdam et le Kent sont dans le fuseau 'U'<br/>
+   * Les bandes sont codées par une lettre allant de C à X (à l'exception des
+   * lettres I et O qui pourraient être confondues avec les chiffres 1 et 0).<br/>
+   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
+   * 
+   * @return la lettre représentant le fuseau.
+   */
+  public char getUTMLatitudeZoneLetterFlightPlan()
+  {
+    return utmLatitudeZoneLetter;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Renvoie le fuseau UTM (Longitude Zone) du point initial du plan de vol. Ex : 
+   * Brest est dans le fuseau 30, Rotterdam et le Kent sont dans le fuseau 31<br/>
+   * Les fuseaux sont numérotés d'ouest en est de 1 à 60 avec une amplitude de 6°
+   * en longitude (360 = 60 x 6) en partant du méridien 180°.<br/> 
+   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
+   * 
+   * @return le nombre représentant la bande UTM.
+   */
+  public int getUTMLongitudeZoneNumber()
+  {
+    return utmLongitudeZoneNumber;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Renvoie la distance maximale autorisée en mètres à partir du point de départ. Cette
+   * distance définit le rayon d'un cercle au-delà duquel le drone n'a pas le droit d'évoluer.
+   * 
+   * @return distance en mètres 
+   */
+  public int getMaxDistanceFromHome()
+  {
+    return maxDistanceFromHome;
+  }
+  //-----------------------------------------------------------------------------
+
+  
+  
+  
+
+  
+  
+  //-----------------------------------------------------------------------------
   /**
    * Renseigne la {@link Map} qui contient l'équivalence nom du <code>Waypoint</code>
    * <-> index.
@@ -163,68 +234,20 @@ public class FlightPlanFacade
       blocksIndex.put(blocks.get(i).getName(), i);
   }
   //-----------------------------------------------------------------------------
-  public LatLng getStartPoint()
+  private void processStartPoint()
   {
-    if(startPoint == null)
-    {
-      startPoint = new LatLng(Double.parseDouble(flightPlan.getLat0()),
-                              Double.parseDouble(flightPlan.getLon0()));
-      //utmLatitudeZoneLetter = UTMRef.getUTMLatitudeZoneLetter(startPoint.getLat());
-      UTMRef utmRef = startPoint.toUTMRef();
-      utmLatitudeZoneLetter  = utmRef.getLatZone();
-      utmLongitudeZoneNumber = utmRef.getLngZone();
-      System.out.println("Start point = " + startPoint + " (UTMLatitudeZoneLetter = " + utmLatitudeZoneLetter + ")"  + " (utmLongitudeZoneNumber = " + utmLongitudeZoneNumber + ")");
-    }
-    return startPoint;
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Renvoie la bande UTM (Latitude Zone) du point initial du plan de vol. Ex : 
-   * Brest, Rotterdam et le Kent sont dans le fuseau 'U'<br/>
-   * Les bandes sont codées par une lettre allant de C à X (à l'exception des
-   * lettres I et O qui pourraient être confondues avec les chiffres 1 et 0).<br/>
-   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
-   * 
-   * @return la lettre représentant le fuseau.
-   */
-  public char getUTMLatitudeZoneLetterFlightPlan()
-  {
-    if(startPoint == null)
-      getStartPoint();
-    return utmLatitudeZoneLetter;
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Renvoie le fuseau UTM (Longitude Zone) du point initial du plan de vol. Ex : 
-   * Brest est dans le fuseau 30, Rotterdam et le Kent sont dans le fuseau 31<br/>
-   * Les fuseaux sont numérotés d'ouest en est de 1 à 60 avec une amplitude de 6°
-   * en longitude (360 = 60 x 6) en partant du méridien 180°.<br/> 
-   * Voir <a ref="http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm">http://gerssat.chez-alice.fr/liens/tutdroitref/UTM.htm</a>
-   * 
-   * @return le nombre représentant la bande UTM.
-   */
-  public int getUTMLongitudeZoneNumber()
-  {
-    if(startPoint == null)
-      getStartPoint();
-    return utmLongitudeZoneNumber;
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Pattern Singleton : la méthode renvoie l'unique instance de {@link FlightPlanFacade}.
-   * @return l'instance de <code>FlightPlanFacade</code>.
-   */
-  public final static FlightPlanFacade getInstance()
-  {
-    if (instance == null)
-    {
-      synchronized(FlightPlanFacade.class)
-      {
-        if (instance == null)
-          instance = new FlightPlanFacade();
-      }
-    }
-    return instance;
+    startPoint = new LatLng(Double.parseDouble(flightPlan.getLat0()),
+                            Double.parseDouble(flightPlan.getLon0()));
+    //utmLatitudeZoneLetter = UTMRef.getUTMLatitudeZoneLetter(startPoint.getLat());
+    UTMRef utm = startPoint.toUTMRef();
+    utmLatitudeZoneLetter  = utm.getLatZone();
+    utmLongitudeZoneNumber = utm.getLngZone();
+    maxDistanceFromHome = Integer.parseInt(flightPlan.getMaxDistFromHome());
+    System.out.println("Start point = " + startPoint +  " (utmLongitudeZoneNumber = " + utmLongitudeZoneNumber + ") (UTMLatitudeZoneLetter = " + utmLatitudeZoneLetter + ") " + utm);
+    System.out.println("maxDistanceFromHome = " + maxDistanceFromHome);
+    //UTMRef maxNorthPoint = 
+    
+    
   }
   //-----------------------------------------------------------------------------
 }
