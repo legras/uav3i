@@ -109,7 +109,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
     Graphics2D g2 = (Graphics2D) g;
 
     // logo 3i
-    g2.drawImage(icon3i, 10, 10, null);
+    g2.drawImage(icon3i, 40, 10, null);
 
     Animation animToBeRemoved = null;
     for(Animation anim : anims)
