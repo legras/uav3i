@@ -11,10 +11,9 @@ import fr.dgac.ivy.IvyException;
 import fr.dgac.ivy.IvyMessageListener;
 
 /**
- * Classe assurant la communication avec la plateforme Paparazzi via le bus Ivy. Pour le
- * moment, cette classe communique avec les données stockées dans le fichier de plan de vol
- * <code>[install_Paparazzi]/conf/flight_plans/douarnenez.xml</code>. Le codage des points,
- * des blocs, etc. est réalisé en dur... à faire évoluer.
+ * Classe assurant la communication avec la plateforme Paparazzi via le bus Ivy. Cette classe
+ * communique avec les données stockées dans le fichier de plan de vol (qui définit
+ * essentiellement des waypoints et des blocks [templates de vol]).
  * 
  * @author Philippe TANGUY
  */
@@ -82,6 +81,11 @@ public class IvyCommunication
     sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
   }
   //-----------------------------------------------------------------------------
+  /**
+   * Demande d'exécution d'un template défini dans le plan de vol.
+   * 
+   * @param blockName nom du template de vol à exécuter.
+   */
   public void jumpToBlock(String blockName)
   {
     //System.out.println("---------------------> jumpToBlock(" + blockName + ")");
