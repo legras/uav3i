@@ -6,19 +6,26 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import org.omg.CORBA._PolicyStub;
 
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
-import eu.telecom_bretagne.uav3i.communication.IvyCommunication;
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.PaparazziDirectCommunication;
+import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
+import eu.telecom_bretagne.uav3i.communication.PaparazziRemoteCommunication;
 import fr.dgac.ivy.Ivy;
 
 public class UAVDataStore
 {
 	public static UAVDataStore store = null;
-	private static IvyCommunication ivyCommunication;
+	//private static IvyCommunication ivyCommunication;
+	private static PaparazziCommunication paparazziCommunication;
+	
 
 	//  private ArrayList<UAVDataPoint> _dataPoints;
 	private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
@@ -98,10 +105,30 @@ public class UAVDataStore
 	/**
 	 * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
 	 * du bus Ivy.
+	 * @throws NotBoundException 
+	 * @throws RemoteException 
 	 */
 	public UAVDataStore()
 	{
-		ivyCommunication = new IvyCommunication();
+		switch (UAV3iSettings.getMode())
+    {
+      case PAPARAZZI_DIRECT:
+        paparazziCommunication = new PaparazziDirectCommunication();
+        break;
+      case PAPARAZZI_REMOTE:
+        try
+        {
+          paparazziCommunication = new PaparazziRemoteCommunication("30001");
+        }
+        catch (RemoteException | NotBoundException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        break;
+      default:
+        break;
+    }
 	}
 
 	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
@@ -209,8 +236,8 @@ public class UAVDataStore
 		return store._dataPoints.size() == 0;
 	}
 
-	public static IvyCommunication getIvyCommunication()
+	public static PaparazziCommunication getPaparazziCommunication()
 	{
-		return ivyCommunication;
+		return paparazziCommunication;
 	}
 }

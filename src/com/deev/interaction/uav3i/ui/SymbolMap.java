@@ -207,21 +207,21 @@ public class SymbolMap extends Map implements Touchable
 		boolean result = _adjustingMnvr.adjustAtPx(x, y);
 
 		// Si on est connecté à Paparazzi...
-		if(UAV3iSettings.getMode() == Mode.IVY)
+		if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 		{
 			switch (_adjustingMnvr.getClass().getSimpleName())
 			{
 				case "CircleMnvr":
 					// Signalement à Paparazzi de la modification du rayon.
 					// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
-					UAVDataStore.getIvyCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
+					UAVDataStore.getPaparazziCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
 					break;
 				case "LineMnvr":
 					LineMnvr lineMnvr = (LineMnvr)_adjustingMnvr;
 					LatLng A = lineMnvr.getTrajA();
 					LatLng B = lineMnvr.getTrajB();
-					UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-					UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+					UAVDataStore.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+					UAVDataStore.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
 					break;
 				default:
 					break;

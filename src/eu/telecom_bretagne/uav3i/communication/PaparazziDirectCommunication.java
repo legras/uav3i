@@ -18,13 +18,13 @@ import fr.dgac.ivy.IvyMessageListener;
  * 
  * @author Philippe TANGUY
  */
-public class IvyCommunication
+public class PaparazziDirectCommunication extends PaparazziCommunication
 {
   //-----------------------------------------------------------------------------
   private String applicationName = "uav3i";
   private Ivy    bus;
   //-----------------------------------------------------------------------------
-  public IvyCommunication()
+  public PaparazziDirectCommunication()
   {
     try
     {
@@ -59,10 +59,7 @@ public class IvyCommunication
     bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Mise à jour du rayon (en mètres ?) pour le vol circulaire.
-   * @param radius rayon en mètres.
-   */
+  @Override
   public void setNavRadius(double radius)
   {
     // Exemple : dl DL_SETTING 5 6 1000.000000
@@ -70,23 +67,14 @@ public class IvyCommunication
     sendMsg("dl DL_SETTING 5 6 " + radius);
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Déplacement d'un waypoint défini dans le plan de vol.
-   * 
-   * @param waypointName nom du waypoint (attribut <code>name</code> de l'élément <code>&lt;waypoint&gt:</code>).
-   * @param coordinate nouvelles coordonnées en {@link LatLng} du point.
-   */
+  @Override
   public void moveWayPoint(String waypointName, LatLng coordinate)
   {
     //System.out.println("---------------------> moveWayPoint(" + waypointName + ", " + coordinate + ")");
     sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Demande d'exécution d'un template défini dans le plan de vol.
-   * 
-   * @param blockName nom du template de vol à exécuter.
-   */
+  @Override
   public void jumpToBlock(String blockName)
   {
     //System.out.println("---------------------> jumpToBlock(" + blockName + ")");

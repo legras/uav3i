@@ -8,7 +8,8 @@ public class UAV3iSettings
 {
   //-----------------------------------------------------------------------------
   private static Properties props;
-  public static enum Mode    { REPLAY, IVY }
+  //public static enum Mode    { REPLAY, IVY }
+  public static enum Mode    { REPLAY, PAPARAZZI_DIRECT, PAPARAZZI_REMOTE }
   public static enum MapType { MAPNIK, BING_AERIAL, OSM_CYCLE_MAP, OFF_LINE }
   //-----------------------------------------------------------------------------
   static
@@ -23,8 +24,12 @@ public class UAV3iSettings
     String type = props.getProperty("MODE");
     if (type.equalsIgnoreCase("replay"))
       return Mode.REPLAY;
-    else if (type.equalsIgnoreCase("ivy"))
-      return Mode.IVY;
+//  else if (type.equalsIgnoreCase("ivy"))
+//  return Mode.IVY;
+    else if (type.equalsIgnoreCase("paparazzi_direct"))
+      return Mode.PAPARAZZI_DIRECT;
+    else if (type.equalsIgnoreCase("paparazzi_remote"))
+      return Mode.PAPARAZZI_REMOTE;
     else
       return null;
   }
