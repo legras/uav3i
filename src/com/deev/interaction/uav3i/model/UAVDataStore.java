@@ -12,7 +12,7 @@ import org.omg.CORBA._PolicyStub;
 
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
-import eu.telecom_bretagne.uav3i.IvyCommunication;
+import eu.telecom_bretagne.uav3i.communication.IvyCommunication;
 import fr.dgac.ivy.Ivy;
 
 public class UAVDataStore

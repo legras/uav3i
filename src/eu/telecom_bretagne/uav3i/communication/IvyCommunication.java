@@ -1,9 +1,10 @@
-package eu.telecom_bretagne.uav3i;
+package eu.telecom_bretagne.uav3i.communication;
 
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyClient;
