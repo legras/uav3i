@@ -32,4 +32,6 @@ public interface IPaparazziTransmitter extends Remote
    */
   public void jumpToBlock(String blockName) throws RemoteException;
   //-----------------------------------------------------------------------------
+  public void connect(String hostname, int port) throws RemoteException;
+  //-----------------------------------------------------------------------------
 }

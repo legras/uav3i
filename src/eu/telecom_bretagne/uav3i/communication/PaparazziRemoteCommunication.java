@@ -53,6 +53,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
     Registry remoteRegistry = LocateRegistry.getRegistry("192.168.1.77", 30000);
     IPaparazziTransmitter paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup("PaparazziTransmitter");
+    paparazziTransmitter.connect("192.168.1.7", 30001);
 
     // Instanciation de l'implémentation du serveur.
     int portNumber = Integer.parseInt(port); 
