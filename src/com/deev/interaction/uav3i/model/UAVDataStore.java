@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class UAVDataStore
         {
           paparazziCommunication = new PaparazziRemoteCommunication("30001");
         }
-        catch (RemoteException | NotBoundException e)
+        catch (RemoteException | NotBoundException | UnknownHostException e)
         {
           // TODO Auto-generated catch block
           e.printStackTrace();

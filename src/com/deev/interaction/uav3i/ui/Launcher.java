@@ -26,6 +26,24 @@ public class Launcher
 	{		
 		// final String domain = "224.5.6.7:8910";
 
+	   switch (UAV3iSettings.getMode())
+	    {
+	      case REPLAY: // Lancement avec replay (infos dans le fichier).
+	        UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
+	        break;
+//	      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
+//	        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
+//	        UAVDataStore.initialize();
+	      case PAPARAZZI_DIRECT:
+	        UAVDataStore.initialize();
+	        break;
+	      case PAPARAZZI_REMOTE:
+	        UAVDataStore.initialize();
+	        break;
+	      default:
+	        break;
+	    }
+
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -40,23 +58,23 @@ public class Launcher
 			}
 		});
 
-		switch (UAV3iSettings.getMode())
-		{
-			case REPLAY: // Lancement avec replay (infos dans le fichier).
-				UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
-				break;
-//			case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
-//				// TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
-//				UAVDataStore.initialize();
-			case PAPARAZZI_DIRECT:
-        UAVDataStore.initialize();
-			  break;
-			case PAPARAZZI_REMOTE:
-        UAVDataStore.initialize();
-        break;
-			default:
-				break;
-		}
+//		switch (UAV3iSettings.getMode())
+//		{
+//			case REPLAY: // Lancement avec replay (infos dans le fichier).
+//				UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
+//				break;
+////			case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
+////				// TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
+////				UAVDataStore.initialize();
+//			case PAPARAZZI_DIRECT:
+//        UAVDataStore.initialize();
+//			  break;
+//			case PAPARAZZI_REMOTE:
+//        UAVDataStore.initialize();
+//        break;
+//			default:
+//				break;
+//		}
 
 		MediaStorefront.start();
 		MediaStorefront.testFill();
