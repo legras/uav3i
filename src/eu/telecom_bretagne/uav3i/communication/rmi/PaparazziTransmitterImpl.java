@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.uav3i.communication;
+package eu.telecom_bretagne.uav3i.communication.rmi;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -6,6 +6,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import uk.me.jstott.jcoord.LatLng;
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyClient;
@@ -97,80 +99,15 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     Registry remoteRegistry = LocateRegistry.getRegistry(hostname, port);
     try
     {
-      uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup("Uav3iTransmitter");
+      uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
 
       // Mise en écoute des messages GPS
       // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-      bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
+      bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener(uav3iTransmitter));
     }
     catch (NotBoundException | IvyException e)
     {
       e.printStackTrace();
-    }
-  }
-  //-----------------------------------------------------------------------------
-  
-  
-  
-  
-
-  
-  
-  //-----------------------------------------------------------------------------
-  private class UAVPositionListener implements IvyMessageListener
-  {
-    @Override
-    public void receive(IvyClient client, String[] args)
-    {
-      //System.out.println("Longueur du tableau args = " + args.length);
-      //for(int i=0; i<args.length; i++)
-      //  System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") ["+i+"]= " + args[i]);
-      
-      String tokens = args[1];
-
-      //    <message name="GPS" ID="8">
-      //      <field name="mode" type="uint8" unit="byte_mask"/>
-      //      <field name="utm_east" type="int32" unit="cm"/>       2
-      //      <field name="utm_north" type="int32" unit="cm"/>      3
-      //      <field name="course" type="int16" unit="decideg"/>    4
-      //      <field name="alt" type="int32" unit="cm"/>            5
-      //      <field name="speed" type="uint16" unit="cm/s"/>
-      //      <field name="climb" type="int16" unit="cm/s"/>
-      //      <field name="itow" type="uint32" unit="ms"/>          8 Time ?
-      //      <field name="utm_zone" type="uint8"/>                 9 Erreur ?
-      //      <field name="gps_nb_err" type="uint8"/>
-      //    </message>
-      // Il doit y avoir une erreur dans la doc !!! A l'évidence le 8ème n'est pas le temps/
-
-      String[] message = tokens.split(" ");
-      //for(int i=0; i<message.length; i++)
-      //  System.out.println("---------------> " + i + " = " + message[i]);
-
-      // Les messages "GPS_SOL" passe par le pattern, on les filtre ici. 
-      if(message[0].equals("_SOL")) return;
-
-//    System.out.print("---------------> ");
-//    for(int i=0; i<message.length; i++)
-//      System.out.print("["+i+" = " + message[i] + "] ");
-//    System.out.println();
-
-      // ---------------> [0 = ] [1 = 3] [2 = 72344664] [3 = 532066912] [4 = 932] [5 = 75826] [6 = 1443] [7 = 447] [8 = 0] [9 = 127047240] [10 = 30] [11 = 8]
-    
-      try
-      {
-        uav3iTransmitter.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-                                         Integer.parseInt(message[3]),  // utmNorth
-                                         Integer.parseInt(message[10]), // utm_zone
-                                         Integer.parseInt(message[4]),  // course
-                                         Integer.parseInt(message[5]),  // alt
-                                         Long.parseLong(message[9]));   // t
-      }
-      catch (RemoteException e)
-      {
-        e.printStackTrace();
-      }
-
-      //System.out.println();
     }
   }
   //-----------------------------------------------------------------------------

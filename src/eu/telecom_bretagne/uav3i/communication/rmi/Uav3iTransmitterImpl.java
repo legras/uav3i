@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.uav3i.communication;
+package eu.telecom_bretagne.uav3i.communication.rmi;
 
 import java.rmi.RemoteException;
 

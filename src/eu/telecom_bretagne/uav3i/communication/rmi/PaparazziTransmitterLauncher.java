@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.uav3i.communication;
+package eu.telecom_bretagne.uav3i.communication.rmi;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import fr.dgac.ivy.IvyException;
 
 /**
@@ -48,7 +49,7 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterLauncher
 {
   //-----------------------------------------------------------------------------
-  public PaparazziTransmitterLauncher(String port) throws IvyException, RemoteException, NotBoundException, UnknownHostException
+  public PaparazziTransmitterLauncher() throws IvyException, RemoteException, NotBoundException
   {
     // Pour une utilisation avec VMware...
     // Le fonctionnement de RMI est problématique sur des machines avec plusieurs
@@ -59,42 +60,30 @@ public class PaparazziTransmitterLauncher
     // "java.rmi.server.hostname" et "java.rmi.server.useLocalHostName".
     // Deux options sont possibles :
     //   - Définir les propriétés de manière programmatique : System.setProperty(...).
-    //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=... et
-    //     -Djava.rmi.server.useLocalHostName=true.
-    
-    System.setProperty("java.rmi.server.hostname",         "192.168.1.77");
-    System.setProperty("java.rmi.server.useLocalHostName", "true");
+    //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
+    //     et -Djava.rmi.server.useLocalHostName=true.
+    if(UAV3iSettings.getVMwareDev())
+    {
+      System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getVetoServerIP());
+      System.setProperty("java.rmi.server.useLocalHostName", "true");
+    }
 
-    String ipAddress = InetAddress.getLocalHost().getHostAddress();
-    System.out.println("Adresse IP : " + ipAddress);    
-
-//    // Connexion en tant que client : PaparazziTransmitter se connecte à uav3i.
-//    Registry remoteRegistry = LocateRegistry.getRegistry("192.168.1.7", 30001);
-//    IUav3iTransmitter uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup("Uav3iTransmitter");
-
-    // Instanciation de l'implémentation du serveur.
-    int portNumber = Integer.parseInt(port); 
-    //PaparazziTransmitterImpl paparazziTransmitterImpl = new PaparazziTransmitterImpl(uav3iTransmitter);
-    PaparazziTransmitterImpl paparazziTransmitterImpl = new PaparazziTransmitterImpl();
-    
-    // Enregistrement de la partie serveur : uav3i pourra se connecter à PaparazziTransmitter.
+    // Enregistrement de la partie serveur : uav3i pourra se connecter à PaparazziTransmitter
+    int portNumber = UAV3iSettings.getVetoServerPort();
     Registry localRegistry = LocateRegistry.createRegistry(portNumber);
-    IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(paparazziTransmitterImpl,portNumber);
-    localRegistry.rebind("PaparazziTransmitter", skeleton);
-
-    System.out.println("####### PaparazziTransmitter started on port " + portNumber + ".");
+    IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(new PaparazziTransmitterImpl(),
+                                                                                              portNumber);
+    localRegistry.rebind(UAV3iSettings.getVetoServerServiceName(), skeleton);
+    System.out.println("####### " + UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");
   }
   //-----------------------------------------------------------------------------
   public static void main(String[] args)
   {
     try
     {
-      if(args.length == 1)
-        new PaparazziTransmitterLauncher(args[0]);
-      else
-        new PaparazziTransmitterLauncher("30000");
+      new PaparazziTransmitterLauncher();
     }
-    catch (RemoteException | IvyException | NotBoundException | UnknownHostException e)
+    catch (RemoteException | IvyException | NotBoundException e)
     {
       e.printStackTrace();
     }

@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.uav3i.communication;
+package eu.telecom_bretagne.uav3i.communication.rmi;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -9,6 +9,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import uk.me.jstott.jcoord.LatLng;
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 
 /**
  * Organe de transmission, <i><b>côté uav3i</b></i>, des communications entre <b>uav3i</b> et <b>Paparazzi</b>.
@@ -50,7 +52,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
   //Uav3iTransmitterImpl uav3iTransmitterImpl;
   IPaparazziTransmitter paparazziTransmitter;
   //-----------------------------------------------------------------------------
-  public PaparazziRemoteCommunication(String port) throws RemoteException, NotBoundException, UnknownHostException
+  public PaparazziRemoteCommunication() throws RemoteException, NotBoundException
   {
     // Pour une utilisation avec VMware...
     // Le fonctionnement de RMI est problématique sur des machines avec plusieurs
@@ -61,32 +63,31 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // "java.rmi.server.hostname" et "java.rmi.server.useLocalHostName".
     // Deux options sont possibles :
     //   - Définir les propriétés de manière programmatique : System.setProperty(...).
-    //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=... et
-    //     -Djava.rmi.server.useLocalHostName=true.
-    
-    System.setProperty("java.rmi.server.hostname",         "192.168.1.7");
-    System.setProperty("java.rmi.server.useLocalHostName", "true");
+    //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
+    //     et -Djava.rmi.server.useLocalHostName=true.
+    if(UAV3iSettings.getVMwareDev())
+    {
+      System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getUav3iServerIP());
+      System.setProperty("java.rmi.server.useLocalHostName", "true");
+    }
 
-    String ipAddress = InetAddress.getLocalHost().getHostAddress();
-    System.out.println("Adresse IP : " + ipAddress);    
-
-    // Instanciation de l'implémentation du serveur.
-    int portNumber = Integer.parseInt(port); 
-    Uav3iTransmitterImpl uav3iTransmitterImpl = new Uav3iTransmitterImpl();
-    
     // Enregistrement de la partie serveur : PaparazziTransmitter pourra se connecter à uav3i.
+    int portNumber = UAV3iSettings.getUav3iServerPort(); 
     Registry localRegistry = LocateRegistry.createRegistry(portNumber);
-    IUav3iTransmitter skeleton = (IUav3iTransmitter) UnicastRemoteObject.exportObject(uav3iTransmitterImpl, portNumber);
-    localRegistry.rebind("Uav3iTransmitter", skeleton);
-
-    System.out.println("####### Uav3iTransmitter started on port " + portNumber + ".");
+    IUav3iTransmitter skeleton = (IUav3iTransmitter) UnicastRemoteObject.exportObject(new Uav3iTransmitterImpl(),
+                                                                                      portNumber);
+    localRegistry.rebind(UAV3iSettings.getUav3iServerServiceName(), skeleton);
+    System.out.println("####### " + UAV3iSettings.getUav3iServerServiceName() + " started on port " + portNumber + ".");
 
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
-    Registry remoteRegistry = LocateRegistry.getRegistry("192.168.1.77", 30000);
+    Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
+                                                         UAV3iSettings.getVetoServerPort());
     paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup("PaparazziTransmitter");
-    paparazziTransmitter.connect("192.168.1.7", 30001);
-
-    
+    paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
+    // On signale à PaparazziTansmitter qu'il peut maintenant se connecter à uav3i :
+    // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.
+    paparazziTransmitter.connect(UAV3iSettings.getUav3iServerIP(),
+                                 UAV3iSettings.getUav3iServerPort());
   }
   //-----------------------------------------------------------------------------
   @Override

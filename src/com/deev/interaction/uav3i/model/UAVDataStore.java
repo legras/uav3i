@@ -1,8 +1,6 @@
 package com.deev.interaction.uav3i.model;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,15 +9,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import org.omg.CORBA._PolicyStub;
-
 import uk.me.jstott.jcoord.LatLng;
-import uk.me.jstott.jcoord.UTMRef;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.communication.PaparazziDirectCommunication;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
-import eu.telecom_bretagne.uav3i.communication.PaparazziRemoteCommunication;
-import fr.dgac.ivy.Ivy;
+import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
+import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
 
 public class UAVDataStore
 {
@@ -119,9 +113,9 @@ public class UAVDataStore
       case PAPARAZZI_REMOTE:
         try
         {
-          paparazziCommunication = new PaparazziRemoteCommunication("30001");
+          paparazziCommunication = new PaparazziRemoteCommunication();
         }
-        catch (RemoteException | NotBoundException | UnknownHostException e)
+        catch (RemoteException | NotBoundException e)
         {
           // TODO Auto-generated catch block
           e.printStackTrace();
