@@ -100,6 +100,8 @@ public class UAVPositionListener implements IvyMessageListener
           e.printStackTrace();
         }
         break;
+      default:
+        break;
     }
     //System.out.println();
   }
