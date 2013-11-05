@@ -10,9 +10,7 @@ import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
-import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
-import fr.dgac.ivy.IvyMessageListener;
 
 public class PaparazziTransmitterImpl implements IPaparazziTransmitter
 {
@@ -21,12 +19,11 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   private Ivy               bus;
   private IUav3iTransmitter uav3iTransmitter;
   //-----------------------------------------------------------------------------
-  //public PaparazziTransmitterImpl(IUav3iTransmitter uav3iTransmitter) throws IvyException, RemoteException
   public PaparazziTransmitterImpl() throws IvyException, RemoteException
   {
     super();
-    //this.uav3iTransmitter = uav3iTransmitter;
     initializeIvy();
+    new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------
   /**
@@ -41,11 +38,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
                   null);
     //bus.start(UAV3iSettings.getIvyDomainBus());
     bus.start(null);
-
-    
-//    // Mise en écoute des messages GPS
-//    // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-//    bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
@@ -92,13 +84,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void connect(String hostname, int port)  throws RemoteException
+  public void register(String hostname, int port)  throws RemoteException
   {
-    System.out.println("####### Demande de connexion de " + hostname + ":" + port);
-    // Connexion en tant que client : PaparazziTransmitter se connecte à uav3i.
-    Registry remoteRegistry = LocateRegistry.getRegistry(hostname, port);
+    System.out.println("####### Demande d'enregistrement de " + hostname + ":" + port);
     try
     {
+      // Connexion en tant que client : PaparazziTransmitter se connecte à uav3i.
+      Registry remoteRegistry = LocateRegistry.getRegistry(hostname, port);
       uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
 
       // Mise en écoute des messages GPS
@@ -108,6 +100,51 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     catch (NotBoundException | IvyException e)
     {
       e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  public void unRegisterUav3iTransmitter()
+  {
+    uav3iTransmitter = null;
+  }
+  //-----------------------------------------------------------------------------
+
+
+  
+  
+  
+  
+  
+  //-----------------------------------------------------------------------------
+  /**
+   * The Supervisor class (a Runnable class) monitors the remote client reference
+   * in order to know if it is alive (by the remote call of the "ping" method on
+   * the client side). If not, the client is unregistered (value of remoteClient
+   * becomes null).
+   * 
+   * @author Philippe TANGUY
+   */
+  private class Uav3iSupervizor implements Runnable
+  {
+    private long delay = 1000;
+    @Override
+    public void run()
+    {
+      while (true)
+      {
+        if(uav3iTransmitter != null)
+        {
+          try
+          {
+            uav3iTransmitter.ping();
+          }
+          catch (RemoteException e)
+          {
+            unRegisterUav3iTransmitter();
+          }
+        }
+        try { Thread.sleep(delay); } catch (InterruptedException e) { e.printStackTrace(); }
+      }
     }
   }
   //-----------------------------------------------------------------------------

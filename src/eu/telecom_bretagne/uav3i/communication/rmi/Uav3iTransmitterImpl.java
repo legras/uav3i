@@ -18,4 +18,10 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
     UAVDataStore.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
   }
   //-----------------------------------------------------------------------------
+  @Override
+  public void ping() throws RemoteException
+  {
+    // Rien à faire, le boulot idéal...
+  }
+  //-----------------------------------------------------------------------------
 }

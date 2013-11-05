@@ -82,12 +82,17 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
     Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
                                                          UAV3iSettings.getVetoServerPort());
-    paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup("PaparazziTransmitter");
+    //paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup("PaparazziTransmitter");
     paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
     // On signale à PaparazziTansmitter qu'il peut maintenant se connecter à uav3i :
     // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.
-    paparazziTransmitter.connect(UAV3iSettings.getUav3iServerIP(),
-                                 UAV3iSettings.getUav3iServerPort());
+    paparazziTransmitter.register(UAV3iSettings.getUav3iServerIP(),
+                                  UAV3iSettings.getUav3iServerPort());
+//    while (true)
+//    {
+//      try { Thread.sleep(Long.MAX_VALUE); }
+//      catch (InterruptedException e) {}
+//    }
   }
   //-----------------------------------------------------------------------------
   @Override
