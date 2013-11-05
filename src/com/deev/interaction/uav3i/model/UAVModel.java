@@ -15,9 +15,9 @@ import uk.me.jstott.jcoord.UTMRef;
 import eu.telecom_bretagne.uav3i.IvyCommunication;
 import fr.dgac.ivy.Ivy;
 
-public class UAVDataStore
+public class UAVModel
 {
-	public static UAVDataStore store = null;
+	public static UAVModel store = null;
 	private static IvyCommunication ivyCommunication;
 
 	//  private ArrayList<UAVDataPoint> _dataPoints;
@@ -27,7 +27,7 @@ public class UAVDataStore
 	public static void initialize(InputStream stream)
 	{
 		if (store == null)	
-			store = new UAVDataStore(stream);
+			store = new UAVModel(stream);
 	}
 
 	//  public static void initialize(Ivy bus)
@@ -35,10 +35,10 @@ public class UAVDataStore
 	{
 		if (store == null)
 			//      store = new UAVDataStore(bus);
-			store = new UAVDataStore();
+			store = new UAVModel();
 	}
 
-	public UAVDataStore(InputStream stream)
+	public UAVModel(InputStream stream)
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String strLine;
@@ -99,7 +99,7 @@ public class UAVDataStore
 	 * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
 	 * du bus Ivy.
 	 */
-	public UAVDataStore()
+	public UAVModel()
 	{
 		ivyCommunication = new IvyCommunication();
 	}

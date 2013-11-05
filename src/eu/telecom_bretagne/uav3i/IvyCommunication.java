@@ -2,7 +2,7 @@ package eu.telecom_bretagne.uav3i;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import fr.dgac.ivy.Ivy;
@@ -149,7 +149,7 @@ public class IvyCommunication
 
     // ---------------> [0 = ] [1 = 3] [2 = 72344664] [3 = 532066912] [4 = 932] [5 = 75826] [6 = 1443] [7 = 447] [8 = 0] [9 = 127047240] [10 = 30] [11 = 8]
     
-    UAVDataStore.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+    UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
                                  Integer.parseInt(message[3]),  // utmNorth
                                  Integer.parseInt(message[10]), // utm_zone
                                  Integer.parseInt(message[4]),  // course

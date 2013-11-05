@@ -16,7 +16,7 @@ import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.BoundingRectangle;
 import com.deev.interaction.common.ui.Gesture;
 import com.deev.interaction.common.ui.Touchable;
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
@@ -75,11 +75,11 @@ public class FingerPane extends JComponent implements Touchable
 			if(UAV3iSettings.getMode() == Mode.IVY)
 			{
 				// Déplacement du "CircleCenter" prédéterminé au point désiré.
-				UAVDataStore.getIvyCommunication().moveWayPoint("CIRCLE_CENTER", p);
+				UAVModel.getIvyCommunication().moveWayPoint("CIRCLE_CENTER", p);
 				// Mise à jour du rayon du "CircleCenter".
-				UAVDataStore.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
+				UAVModel.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
 				// Demande de l'exécution après paramétrage.
-				UAVDataStore.getIvyCommunication().jumpToBlock("Circle");
+				UAVModel.getIvyCommunication().jumpToBlock("Circle");
 			}
 
 			return;
@@ -115,12 +115,12 @@ public class FingerPane extends JComponent implements Touchable
 			if(UAV3iSettings.getMode() == Mode.IVY)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVDataStore.getIvyCommunication().moveWayPoint("1", A);
-				UAVDataStore.getIvyCommunication().moveWayPoint("2", B);
+				UAVModel.getIvyCommunication().moveWayPoint("1", A);
+				UAVModel.getIvyCommunication().moveWayPoint("2", B);
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVDataStore.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVDataStore.getIvyCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;
@@ -142,12 +142,12 @@ public class FingerPane extends JComponent implements Touchable
 			if(UAV3iSettings.getMode() == Mode.IVY)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVDataStore.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-				UAVDataStore.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+				UAVModel.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+				UAVModel.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVDataStore.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVDataStore.getIvyCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;

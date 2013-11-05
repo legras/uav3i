@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 
@@ -42,11 +42,11 @@ public class Trajectory
 
 	public void update()
 	{
-		if(UAVDataStore.isEmpty())
+		if(UAVModel.isEmpty())
 			return;
 
 		long time = System.currentTimeMillis();
-		LatLng ll = UAVDataStore.getLatLngAtTime(time);
+		LatLng ll = UAVModel.getLatLngAtTime(time);
 
 		_points.add(new TrajectoryPoint(ll, time));
 
