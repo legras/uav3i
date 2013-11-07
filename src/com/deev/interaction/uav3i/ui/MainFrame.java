@@ -40,7 +40,8 @@ public class MainFrame extends JFrame implements ActionListener
 	protected TouchGlass _glass = null;
 	protected TimeLine _timeline;
 	
-	protected static Switcher3Buttons SWITCH;
+	protected static Switcher3Buttons _SWITCHER;
+	protected static ManoeuverButtons _MNVR_BUTTONS;
 
 	public MainFrame()
 	{
@@ -114,11 +115,26 @@ public class MainFrame extends JFrame implements ActionListener
 		
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
-		SWITCH = mswitch;
+		_SWITCHER = mswitch;
 		Dimension swd = mswitch.getSize();
 		mswitch.setBounds(screenSize.width/2-swd.width/2, 2, swd.width, swd.height);
 		clayer.add(mswitch);
 		
+		// ********** ManoeuverButtons **********
+		try
+		{
+			_MNVR_BUTTONS = new ManoeuverButtons(this);
+			Dimension mbd = _MNVR_BUTTONS.getSize();
+			_MNVR_BUTTONS.setBounds(400, 400, mbd.width, mbd.height);
+			clayer.add(_MNVR_BUTTONS);
+			System.out.println("MainFrame: ManoeuverButtons OK");
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			_MNVR_BUTTONS = null;
+		}
 
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
@@ -161,7 +177,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 	public static MainFrameState getAppState()
 	{
-		switch (SWITCH.getMode())
+		switch (_SWITCHER.getMode())
 		{
 			case COMMAND:
 				return MainFrameState.COMMAND;
@@ -180,7 +196,7 @@ public class MainFrame extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		switch (SWITCH.getMode())
+		switch (_SWITCHER.getMode())
 		{
 			case COMMAND:
 				_timeline.hide();
