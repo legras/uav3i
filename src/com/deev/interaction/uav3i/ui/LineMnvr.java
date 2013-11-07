@@ -106,14 +106,7 @@ public class LineMnvr extends Manoeuver
 
 		area.add(new Area(stroke.createStrokedShape(line)));
 
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(1.0f, 0.f, 0.f, 1.0f));
-		g2.draw(area);
-		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
-		g2.fill(area);
-
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(0.0f, 0.f, 1.0f, 1.0f));
+		paintFootprint(g2, area);
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
@@ -125,17 +118,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone : ligne bleue
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-
-		g2.setStroke(new BasicStroke(2.f*(float)GRIP));
-		if (!_adjusting)
-			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.3f));
-		else
-			g2.setPaint(new Color(1.0f, 1.0f, 0.7f, 0.3f));
-		g2.draw(l);
-
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(0.0f, 0.f, 1.0f, 1.0f));
-		g2.draw(l);
+		paintAdjustLine(g2, l);
 
 		g2.setTransform(old);
 	}

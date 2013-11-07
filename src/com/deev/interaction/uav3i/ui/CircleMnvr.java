@@ -37,25 +37,15 @@ public class CircleMnvr extends Manoeuver
 
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		g2.translate(centerPx.x, centerPx.y);
-
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(1.0f, 0.f, 0.f, 1.0f));
 		Ellipse2D.Double ell = new Ellipse2D.Double(-RPX, -RPX, 2*RPX, 2*RPX);
-		g2.draw(ell);
-		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
-		g2.fill(ell);
+
+		paintFootprint(g2, ell);
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-		g2.setStroke(new BasicStroke(2.f*(float)GRIP));
-		g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-		g2.draw(ell);
-
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(0.0f, 0.f, 1.0f, 1.0f));
-		g2.draw(ell);
+		paintAdjustLine(g2, ell);
 
 		g2.setTransform(old);
 	}

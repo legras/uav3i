@@ -1,6 +1,9 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -28,6 +31,29 @@ public abstract class Manoeuver implements Touchable, Animation
 	private long _startTime;
 	
 	public abstract void paint(Graphics2D g2);
+	
+	public void paintFootprint(Graphics2D g2, Shape footprint)
+	{
+		g2.setStroke(new BasicStroke(4.f));
+		g2.setPaint(new Color(1.0f, 0.f, 0.f, 1.0f));
+		g2.draw(footprint);
+		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
+		g2.fill(footprint);
+	}
+	
+	public void paintAdjustLine(Graphics2D g2, Shape line)
+	{
+		g2.setStroke(new BasicStroke(2.f*(float)GRIP));
+		if (!_adjusting)
+			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.3f));
+		else
+			g2.setPaint(new Color(1.0f, 1.0f, 0.7f, 0.3f));
+		g2.draw(line);
+
+		g2.setStroke(new BasicStroke(4.f));
+		g2.setPaint(new Color(0.0f, 0.f, 1.0f, 1.0f));
+		g2.draw(line);
+	}
 	
 	public abstract boolean adjustAtPx(double x, double y);
 	
