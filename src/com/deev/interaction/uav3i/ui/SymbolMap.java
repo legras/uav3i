@@ -11,10 +11,14 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
+import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -43,6 +47,7 @@ public class SymbolMap extends Map implements Touchable
 	// Dessin de UAV
 	protected Path2D.Double _tri;
 	protected static double D = 10.;
+	protected static BufferedImage _uavImage = null;
 
 	public SymbolMap()
 	{
@@ -60,6 +65,16 @@ public class SymbolMap extends Map implements Touchable
 		_trajectory = new Trajectory();
 
 		// Dessin UAV
+		try
+		{
+			_uavImage = ImageIO.read(this.getClass().getResource("uav.png"));
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		_tri = new Path2D.Double();
 		_tri.moveTo(D/2., 0.);
 		_tri.lineTo(-D/2., D/2.);
@@ -97,11 +112,10 @@ public class SymbolMap extends Map implements Touchable
 	{	
 		long currentTime = System.currentTimeMillis();
 
-		RenderingHints rh;
-		rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-		g2.setRenderingHints(rh);
 
 		// Update de trajectoire
 		if (currentTime - _lastTrajectoryUpdate > 500)
@@ -135,15 +149,26 @@ public class SymbolMap extends Map implements Touchable
 			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
 			double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
 			g2.translate(uav.x, uav.y);
-			g2.rotate(-course);
-			g2.setPaint(new Color(0.f, 0.f, 0.f, .35f));
-			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			g2.draw(_tri);
-			g2.setPaint(new Color(.3f, .6f, 1.f, 1.f));
-			g2.fill(_tri);
-			g2.setPaint(Color.WHITE);
-			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-			g2.draw(_tri);
+			
+			if (_uavImage == null)
+			{
+				g2.rotate(-course);
+				g2.setPaint(new Color(0.f, 0.f, 0.f, .35f));
+				g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND,
+						BasicStroke.JOIN_ROUND));
+				g2.draw(_tri);
+				g2.setPaint(new Color(.3f, .6f, 1.f, 1.f));
+				g2.fill(_tri);
+				g2.setPaint(Color.WHITE);
+				g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE,
+						BasicStroke.JOIN_MITER));
+				g2.draw(_tri);
+			}
+			else
+			{
+				g2.rotate(Math.PI/2.-course);
+				g2.drawImage(_uavImage, -_uavImage.getWidth()/2, -_uavImage.getHeight()/2, null);
+			}
 		}
 		g2.setTransform(old);
 
