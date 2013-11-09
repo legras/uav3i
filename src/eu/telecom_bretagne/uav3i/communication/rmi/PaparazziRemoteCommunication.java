@@ -1,11 +1,16 @@
 package eu.telecom_bretagne.uav3i.communication.rmi;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 import uk.me.jstott.jcoord.LatLng;
@@ -49,8 +54,43 @@ import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 public class PaparazziRemoteCommunication extends PaparazziCommunication
 {
   //-----------------------------------------------------------------------------
-  //Uav3iTransmitterImpl uav3iTransmitterImpl;
   IPaparazziTransmitter paparazziTransmitter;
+  //-----------------------------------------------------------------------------
+  static
+  {
+    /*
+     * Permet de fixer facilement le timeout lors de la connexion sur la partie
+     * serveur. Le timeout doit être positif ou nul. La valeur 0 indique un
+     * timeout infini.
+     * À explorer : la valeur maxi semble être de 20 secondes. Toute valeur
+     * supérieure (comme la valeur 0 = infini) ne génère pas de timout supérieur.
+     * Dépendant de la plateforme ?
+     */
+    try
+    {
+      RMISocketFactory.setSocketFactory(new RMISocketFactory()
+      {
+        private int timeout = 1000;
+        public Socket createSocket(String host, int port) throws IOException
+        {
+          Socket socket = new Socket();
+          socket.setSoTimeout(timeout);
+          socket.setSoLinger(false, 0);
+          socket.connect(new InetSocketAddress(host, port), timeout);
+          return socket;
+        }
+
+        public ServerSocket createServerSocket(int port) throws IOException
+        {
+          return new ServerSocket(port);
+        }
+      });
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
   //-----------------------------------------------------------------------------
   public PaparazziRemoteCommunication() throws RemoteException, NotBoundException
   {
