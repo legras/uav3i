@@ -128,11 +128,6 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.
     paparazziTransmitter.register(UAV3iSettings.getUav3iServerIP(),
                                   UAV3iSettings.getUav3iServerPort());
-//    while (true)
-//    {
-//      try { Thread.sleep(Long.MAX_VALUE); }
-//      catch (InterruptedException e) {}
-//    }
   }
   //-----------------------------------------------------------------------------
   @Override

@@ -15,9 +15,12 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterImpl implements IPaparazziTransmitter
 {
   //-----------------------------------------------------------------------------
-  private String            applicationName = "uav3i (PT)";
-  private Ivy               bus;
-  private IUav3iTransmitter uav3iTransmitter;
+  private String              applicationName = "uav3i (PT)";
+  private Ivy                 bus;
+  private IUav3iTransmitter   uav3iTransmitter;
+//  private String              uav3iHostname;
+//  private int                 uav3iPort;
+  private UAVPositionListener uavPositionListener = null;
   //-----------------------------------------------------------------------------
   public PaparazziTransmitterImpl() throws IvyException, RemoteException
   {
@@ -36,8 +39,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    //bus.start(UAV3iSettings.getIvyDomainBus());
-    bus.start(null);
+    uavPositionListener = new UAVPositionListener();
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
@@ -84,18 +86,30 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void register(String hostname, int port)  throws RemoteException
+  public void register(String uav3iHostname, int uav3iPort)  throws RemoteException
   {
-    System.out.println("####### Demande d'enregistrement de " + hostname + ":" + port);
+    try
+    {
+      bus.start(null);
+    }
+    catch (IvyException e1)
+    {
+      e1.printStackTrace();
+    }
+
+    System.out.println("####### Demande d'enregistrement de " + uav3iHostname + ":" + uav3iPort);
     try
     {
       // Connexion en tant que client : PaparazziTransmitter se connecte à uav3i.
-      Registry remoteRegistry = LocateRegistry.getRegistry(hostname, port);
+      Registry remoteRegistry = LocateRegistry.getRegistry(uav3iHostname, uav3iPort);
       uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
 
+      // Mise à jour du proxy dans le listener. En cas de déconnexion/reconnexion d'uav3i,
+      // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
+      uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
       // Mise en écoute des messages GPS
       // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-      bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener(uav3iTransmitter));
+      bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
     }
     catch (NotBoundException | IvyException e)
     {
@@ -106,6 +120,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void unRegisterUav3iTransmitter()
   {
     uav3iTransmitter = null;
+    bus.stop();
+    System.out.println("####### unRegisterUav3iTransmitter()");
   }
   //-----------------------------------------------------------------------------
 
@@ -132,17 +148,20 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     {
       while (true)
       {
-        if(uav3iTransmitter != null)
+        try
         {
-          try
+          if(uav3iTransmitter != null)
           {
             uav3iTransmitter.ping();
           }
-          catch (RemoteException e)
-          {
-            unRegisterUav3iTransmitter();
-          }
         }
+        catch (RemoteException e)
+        {
+          //System.out.println("####### Ping a échoué sur uav3iTransmitter");
+          unRegisterUav3iTransmitter();
+        }
+        //System.out.println("####### Uav3iSupervizor is alive!");
+
         try { Thread.sleep(delay); } catch (InterruptedException e) { e.printStackTrace(); }
       }
     }

@@ -20,22 +20,14 @@ public class UAVPositionListener implements IvyMessageListener
   private IUav3iTransmitter uav3iTransmitter = null;
   //-----------------------------------------------------------------------------
   /**
-   * Constructeur utilisé dans le cas d'une communication RMI :<br/>
-   * <code>uav3i</code> &lt---&gt; <code>Paparazzi Tranmitter</code> &lt---&gt; <code>Paparazzi</code>.
+   * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
+   * <code>uav3i</code> &lt;---&gt; <code>Paparazzi Tranmitter</code> &lt;---&gt; <code>Paparazzi</code>.
    * 
    * @param uav3iTransmitter stub RMI utilisé pour la transmission.
    */
-  public UAVPositionListener(IUav3iTransmitter uav3iTransmitter)
+  public void setUav3iTransmitter(IUav3iTransmitter uav3iTransmitter)
   {
     this.uav3iTransmitter = uav3iTransmitter;
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Constructeur utilisé dans le cas d'une communication directe :<br/>
-   * <code>uav3i</code> &lt---&gt; <code>Paparazzi</code>.
-   */
-  public UAVPositionListener()
-  {
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -86,19 +78,24 @@ public class UAVPositionListener implements IvyMessageListener
                                      Long.parseLong(message[9]));   // t
         break;
       case PAPARAZZI_REMOTE:
-        try
+        if(uav3iTransmitter != null)
         {
-          uav3iTransmitter.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-                                           Integer.parseInt(message[3]),  // utmNorth
-                                           Integer.parseInt(message[10]), // utm_zone
-                                           Integer.parseInt(message[4]),  // course
-                                           Integer.parseInt(message[5]),  // alt
-                                           Long.parseLong(message[9]));   // t
+          try
+          {
+            uav3iTransmitter.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+                                             Integer.parseInt(message[3]),  // utmNorth
+                                             Integer.parseInt(message[10]), // utm_zone
+                                             Integer.parseInt(message[4]),  // course
+                                             Integer.parseInt(message[5]),  // alt
+                                             Long.parseLong(message[9]));   // t
+          }
+          catch (RemoteException e)
+          {
+            System.err.println(e.getMessage());
+          }
         }
-        catch (RemoteException e)
-        {
-          e.printStackTrace();
-        }
+        else
+          System.out.println("####### Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre...");
         break;
       default:
         break;

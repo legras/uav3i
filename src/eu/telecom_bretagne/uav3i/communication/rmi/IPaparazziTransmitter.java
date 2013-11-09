@@ -32,6 +32,14 @@ public interface IPaparazziTransmitter extends Remote
    */
   public void jumpToBlock(String blockName) throws RemoteException;
   //-----------------------------------------------------------------------------
-  public void register(String hostname, int port) throws RemoteException;
+  /**
+   * uav3i signale qu'il est prêt : la partie cliente de PaparazziTransmitter va
+   * pouvoir se connecter à la partie serveur de uav3i.
+   * 
+   * @param uav3iHostname nom ou adresse IP de la machine uav3i.
+   * @param uav3iPort numéro de port où uav3i se met en écoute.
+   * @throws RemoteException
+   */
+  public void register(String uav3iHostname, int uav3iPort) throws RemoteException;
   //-----------------------------------------------------------------------------
 }
