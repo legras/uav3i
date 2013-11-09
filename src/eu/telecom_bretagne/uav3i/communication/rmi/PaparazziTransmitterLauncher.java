@@ -51,19 +51,19 @@ public class PaparazziTransmitterLauncher
   //-----------------------------------------------------------------------------
   public PaparazziTransmitterLauncher() throws IvyException, RemoteException, NotBoundException
   {
-    // Pour une utilisation avec VMware...
-    // Le fonctionnement de RMI est problématique sur des machines avec plusieurs
-    // adresses IP (cas d'un ordinateur hébergeant une machine virtuelle) :
-    // l'adresse IP utilisée pour les stubs RMI n'est alors pas la bonne.
-    // Voir : http://www.chipkillmar.net/2011/06/22/multihomed-hosts-and-java-rmi/
-    // Il faut alors, côté serveur, renseigner les propiétés système
-    // "java.rmi.server.hostname" et "java.rmi.server.useLocalHostName".
-    // Deux options sont possibles :
-    //   - Définir les propriétés de manière programmatique : System.setProperty(...).
-    //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
-    //     et -Djava.rmi.server.useLocalHostName=true.
     if(UAV3iSettings.getMultihomedHost())
     {
+      // Pour une utilisation avec VMware...
+      // Le fonctionnement de RMI est problématique sur des machines avec plusieurs
+      // adresses IP (cas d'un ordinateur hébergeant une machine virtuelle) :
+      // l'adresse IP utilisée pour les stubs RMI n'est alors pas la bonne.
+      // Voir : http://www.chipkillmar.net/2011/06/22/multihomed-hosts-and-java-rmi/
+      // Il faut alors, côté serveur, renseigner les propiétés système
+      // "java.rmi.server.hostname" et "java.rmi.server.useLocalHostName".
+      // Deux options sont possibles :
+      //   - Définir les propriétés de manière programmatique : System.setProperty(...).
+      //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
+      //     et -Djava.rmi.server.useLocalHostName=true.
       System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getVetoServerIP());
       System.setProperty("java.rmi.server.useLocalHostName", "true");
     }
