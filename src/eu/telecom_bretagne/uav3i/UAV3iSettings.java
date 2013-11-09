@@ -85,14 +85,14 @@ public class UAV3iSettings
   public static boolean getTUIO()                   { return Boolean.parseBoolean(props.getProperty("TUIO"));             }
   public static boolean getFullscreen()             { return Boolean.parseBoolean(props.getProperty("FULLSCREEN"));       }
   public static boolean getInteractionMode()        { return Boolean.parseBoolean(props.getProperty("INTERACTION_MODE")); }
-  public static String  getPaparazziFlightPlan()    { return props.getProperty("PAPARAZZI_FLIGHT_PLAN");                  }
-  public static String  getPaparazziAirframe()      { return props.getProperty("PAPARAZZI_AIRFRAME");                     }
-  public static String  getVetoServerIP()           { return props.getProperty("VETO_SERVER_IP");                         }
-  public static int     getVetoServerPort()         { return Integer.parseInt(props.getProperty("VETO_SERVER_PORT"));     }
-  public static String  getVetoServerServiceName()  { return props.getProperty("VETO_SERVER_SERVICE_NAME");               }
-  public static String  getUav3iServerIP()          { return props.getProperty("UAV3I_SERVER_IP");                        }
-  public static int     getUav3iServerPort()        { return Integer.parseInt(props.getProperty("UAV3I_SERVER_PORT"));    }
-  public static String  getUav3iServerServiceName() { return props.getProperty("UAV3I_SERVER_SERVICE_NAME");              }
-  public static boolean getVMwareDev()              { return Boolean.parseBoolean(props.getProperty("VMWARE_DEV"));       }
+  public static String  getPaparazziFlightPlan()    { return props.getProperty("PAPARAZZI_FLIGHT_PLAN");                   }
+  public static String  getPaparazziAirframe()      { return props.getProperty("PAPARAZZI_AIRFRAME");                      }
+  public static String  getVetoServerIP()           { return props.getProperty("VETO_SERVER_IP");                          }
+  public static int     getVetoServerPort()         { return Integer.parseInt(props.getProperty("VETO_SERVER_PORT"));      }
+  public static String  getVetoServerServiceName()  { return props.getProperty("VETO_SERVER_SERVICE_NAME");                }
+  public static String  getUav3iServerIP()          { return props.getProperty("UAV3I_SERVER_IP");                         }
+  public static int     getUav3iServerPort()        { return Integer.parseInt(props.getProperty("UAV3I_SERVER_PORT"));     }
+  public static String  getUav3iServerServiceName() { return props.getProperty("UAV3I_SERVER_SERVICE_NAME");               }
+  public static boolean getMultihomedHost()         { return Boolean.parseBoolean(props.getProperty("MULTIHOMED_HOSTS")); }
   //-----------------------------------------------------------------------------
 }

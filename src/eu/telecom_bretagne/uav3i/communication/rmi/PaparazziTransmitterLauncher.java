@@ -62,7 +62,7 @@ public class PaparazziTransmitterLauncher
     //   - Définir les propriétés de manière programmatique : System.setProperty(...).
     //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
     //     et -Djava.rmi.server.useLocalHostName=true.
-    if(UAV3iSettings.getVMwareDev())
+    if(UAV3iSettings.getMultihomedHost())
     {
       System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getVetoServerIP());
       System.setProperty("java.rmi.server.useLocalHostName", "true");
