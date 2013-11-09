@@ -15,7 +15,7 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterImpl implements IPaparazziTransmitter
 {
   //-----------------------------------------------------------------------------
-  private String            applicationName = "uav3i - PaparazziTransmitter";
+  private String            applicationName = "uav3i (PT)";
   private Ivy               bus;
   private IUav3iTransmitter uav3iTransmitter;
   //-----------------------------------------------------------------------------
