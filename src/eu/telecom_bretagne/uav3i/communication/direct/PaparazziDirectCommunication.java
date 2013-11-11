@@ -8,6 +8,7 @@ import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
@@ -67,20 +68,21 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     // Exemple : dl DL_SETTING 5 6 1000.000000
     // Que veux dire le 6 ?
     sendMsg("dl DL_SETTING 5 6 " + radius);
+    LoggerUtil.LOG.info("setNavRadius(" + radius + ") - Message sent to Ivy bus");
   }
   //-----------------------------------------------------------------------------
   @Override
   public void moveWayPoint(String waypointName, LatLng coordinate)
   {
-    //System.out.println("---------------------> moveWayPoint(" + waypointName + ", " + coordinate + ")");
     sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+    LoggerUtil.LOG.info("moveWayPoint(" + waypointName + ", " + coordinate + ") - Message sent to Ivy bus");
   }
   //-----------------------------------------------------------------------------
   @Override
   public void jumpToBlock(String blockName)
   {
-    //System.out.println("---------------------> jumpToBlock(" + blockName + ")");
     sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    LoggerUtil.LOG.info("jumpToBlock(" + blockName + ") - Message sent to Ivy bus");
   }
   //-----------------------------------------------------------------------------
   /**

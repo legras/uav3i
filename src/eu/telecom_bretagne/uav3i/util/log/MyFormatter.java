@@ -6,19 +6,25 @@ import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * Classe assurant le formatage des lines de log.
+ * 
+ * @author Philippe TANGUY (Télécom Bretagne)
+ */
 public class MyFormatter extends Formatter
 {
   //-----------------------------------------------------------------------------
   private static DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM y HH:mm:ss");
-  private static String     logLineFormat       = "%1$-30s | %2$-8s | %3$-100s | %4$s\n";
+  private static String     logLineFormat       = "%1$-30s | %2$-8s | %3$-70s | %4$s\n";
 
   //-----------------------------------------------------------------------------
   @Override
   public String format(LogRecord record)
   {
+    String simpleClassName = record.getSourceClassName().substring(record.getSourceClassName().lastIndexOf('.') + 1);
     return String.format(logLineFormat, dateToString(record.getMillis()),
                                         record.getLevel(),
-                                        record.getLoggerName() + ", " + record.getSourceClassName() + " " + record.getSourceMethodName(),
+                                        "(" + record.getLoggerName() + ") " + simpleClassName + " -> " + record.getSourceMethodName(),
                                         record.getMessage());
   }
   //-----------------------------------------------------------------------------

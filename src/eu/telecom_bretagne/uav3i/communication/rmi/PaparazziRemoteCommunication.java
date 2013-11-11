@@ -16,6 +16,7 @@ import java.rmi.server.UnicastRemoteObject;
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 /**
  * Organe de transmission, <i><b>côté uav3i</b></i>, des communications entre <b>uav3i</b> et <b>Paparazzi</b>.
@@ -109,6 +110,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
       //     et -Djava.rmi.server.useLocalHostName=true.
       System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getUav3iServerIP());
       System.setProperty("java.rmi.server.useLocalHostName", "true");
+      LoggerUtil.LOG.config("PaparazziRemoteCommunication -> configuration multihomed host");
     }
 
     // Enregistrement de la partie serveur : PaparazziTransmitter pourra se connecter à uav3i.
@@ -117,7 +119,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     IUav3iTransmitter skeleton = (IUav3iTransmitter) UnicastRemoteObject.exportObject(new Uav3iTransmitterImpl(),
                                                                                       portNumber);
     localRegistry.rebind(UAV3iSettings.getUav3iServerServiceName(), skeleton);
-    System.out.println("####### " + UAV3iSettings.getUav3iServerServiceName() + " started on port " + portNumber + ".");
+    LoggerUtil.LOG.info(UAV3iSettings.getUav3iServerServiceName() + " started on port " + portNumber + ".");
 
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
     Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
@@ -136,6 +138,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.setNavRadius(radius);
+      LoggerUtil.LOG.config("setNavRadius("+radius+") - Message sent to PaparazziTransmitter");
     }
     catch (RemoteException e)
     {
@@ -149,6 +152,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.moveWayPoint(waypointName, coordinate);
+      LoggerUtil.LOG.info("moveWayPoint(" + waypointName + ", " + coordinate + ") - Message sent to PaparazziTransmitter");
     }
     catch (RemoteException e)
     {
@@ -162,6 +166,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.jumpToBlock(blockName);
+      LoggerUtil.LOG.info("jumpToBlock(" + blockName + ") - Message sent to PaparazziTransmitter");
     }
     catch (RemoteException e)
     {

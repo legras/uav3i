@@ -6,6 +6,7 @@ import com.deev.interaction.uav3i.model.UAVDataStore;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.rmi.IUav3iTransmitter;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyMessageListener;
 
@@ -91,11 +92,11 @@ public class UAVPositionListener implements IvyMessageListener
           }
           catch (RemoteException e)
           {
-            System.err.println(e.getMessage());
+            LoggerUtil.LOG.severe(e.getMessage());
           }
         }
         else
-          System.out.println("####### Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre...");
+          LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre...");
         break;
       default:
         break;

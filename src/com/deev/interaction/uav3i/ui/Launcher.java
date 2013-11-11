@@ -10,6 +10,7 @@ import com.deev.interaction.uav3i.model.MediaStorefront;
 import com.deev.interaction.uav3i.model.UAVDataStore;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 
 /**
  * @author legras
@@ -25,6 +26,9 @@ public class Launcher
 	public static void main(String[] args)
 	{		
 		// final String domain = "224.5.6.7:8910";
+	  
+    System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
+	  FlightPlanFacade.getInstance();
 
 	   switch (UAV3iSettings.getMode())
 	    {
