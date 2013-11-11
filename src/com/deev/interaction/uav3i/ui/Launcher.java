@@ -27,8 +27,8 @@ public class Launcher
 	{		
 		// final String domain = "224.5.6.7:8910";
 	  
+    // Lecture du fichier de configuration pour le système de logs.
     System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
-	  FlightPlanFacade.getInstance();
 
 	   switch (UAV3iSettings.getMode())
 	    {

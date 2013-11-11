@@ -93,6 +93,9 @@ public class PaparazziTransmitterLauncher
   //-----------------------------------------------------------------------------
   public PaparazziTransmitterLauncher() throws IvyException, RemoteException, NotBoundException
   {
+    // Lecture du fichier de configuration pour le système de logs.
+    System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
+    
     if(UAV3iSettings.getMultihomedHost())
     {
       // Pour une utilisation avec VMware...
