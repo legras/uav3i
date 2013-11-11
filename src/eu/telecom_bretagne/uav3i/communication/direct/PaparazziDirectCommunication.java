@@ -18,7 +18,7 @@ import fr.dgac.ivy.IvyMessageListener;
  * communique avec les données stockées dans le fichier de plan de vol (qui définit
  * essentiellement des waypoints et des blocks [templates de vol]).
  * 
- * @author Philippe TANGUY
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class PaparazziDirectCommunication extends PaparazziCommunication
 {

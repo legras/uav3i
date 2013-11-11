@@ -12,7 +12,7 @@ import fr.dgac.ivy.IvyMessageListener;
 /**
  * Listener utilisé pour l'écoute de la position du drone.
  * 
- * @author Philippe TANGUY
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class UAVPositionListener implements IvyMessageListener
 {

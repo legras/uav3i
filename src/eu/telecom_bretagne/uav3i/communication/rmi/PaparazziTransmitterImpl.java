@@ -143,7 +143,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
    * the client side). If not, the client is unregistered (value of remoteClient
    * becomes null).
    * 
-   * @author Philippe TANGUY
+   * @author Philippe TANGUY (Télécom Bretagne)
    */
   private class Uav3iSupervizor implements Runnable
   {

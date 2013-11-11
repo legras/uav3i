@@ -49,7 +49,7 @@ import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
  * d : À la réception, la mise à jour est relayée sur le bus Ivy à destination de Paparazzi.
  * </pre>
  * 
- * @author Philippe TANGUY
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class PaparazziRemoteCommunication extends PaparazziCommunication
 {

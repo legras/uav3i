@@ -25,11 +25,7 @@ import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.Waypoint;
  * généré à partir de la DTD (<code>flight_plan.dtd</code>) de la version 5.02 de
  * Paparazzi. Voir les fichiers dans le répertoire : <code>Gestion des flight plans/Schéma</code>.
  * 
- * @author Philippe TANGUY
- */
-/**
- * @author ptanguy
- *
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class FlightPlanFacade
 {
