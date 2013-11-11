@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import fr.dgac.ivy.IvyException;
 
 /**
@@ -107,6 +108,7 @@ public class PaparazziTransmitterLauncher
       //     et -Djava.rmi.server.useLocalHostName=true.
       System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getVetoServerIP());
       System.setProperty("java.rmi.server.useLocalHostName", "true");
+      LoggerUtil.LOG.config("PaparazziTransmitterLauncher -> configuration multihomed host");
     }
 
     // Enregistrement de la partie serveur : uav3i pourra se connecter à PaparazziTransmitter
@@ -115,7 +117,7 @@ public class PaparazziTransmitterLauncher
     IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(new PaparazziTransmitterImpl(),
                                                                                               portNumber);
     localRegistry.rebind(UAV3iSettings.getVetoServerServiceName(), skeleton);
-    System.out.println("####### " + UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");
+    LoggerUtil.LOG.info(UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");
   }
   //-----------------------------------------------------------------------------
   public static void main(String[] args)
