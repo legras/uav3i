@@ -138,7 +138,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.setNavRadius(radius);
-      LoggerUtil.LOG.config("setNavRadius("+radius+") - Message sent to PaparazziTransmitter");
+      LoggerUtil.LOG.info("setNavRadius("+radius+") - Message sent to PaparazziTransmitter");
     }
     catch (RemoteException e)
     {
