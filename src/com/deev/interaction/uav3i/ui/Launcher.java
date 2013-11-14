@@ -1,16 +1,12 @@
 package com.deev.interaction.uav3i.ui;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-
 import javax.swing.SwingUtilities;
 
-import com.deev.interaction.common.ui.DIModernPlaf;
 import com.deev.interaction.uav3i.model.MediaStorefront;
 import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
+import fr.dgac.ivy.IvyException;
 
 /**
  * @author legras

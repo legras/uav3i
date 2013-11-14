@@ -3,9 +3,7 @@ package eu.telecom_bretagne.uav3i.paparazzi_settings.airframe;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXB;
 

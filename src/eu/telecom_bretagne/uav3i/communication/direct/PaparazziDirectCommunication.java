@@ -1,18 +1,13 @@
 package eu.telecom_bretagne.uav3i.communication.direct;
 
 import uk.me.jstott.jcoord.LatLng;
-
-import com.deev.interaction.uav3i.model.UAVModel;
-
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import fr.dgac.ivy.Ivy;
-import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyException;
-import fr.dgac.ivy.IvyMessageListener;
 
 /**
  * Classe assurant la communication avec la plateforme Paparazzi via le bus Ivy. Cette classe
