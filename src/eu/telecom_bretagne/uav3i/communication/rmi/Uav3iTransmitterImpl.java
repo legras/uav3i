@@ -2,7 +2,7 @@ package eu.telecom_bretagne.uav3i.communication.rmi;
 
 import java.rmi.RemoteException;
 
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {
@@ -15,7 +15,7 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
                               int  alt, 
                               long t) throws RemoteException
   {
-    UAVDataStore.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
+    UAVModel.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
   }
   //-----------------------------------------------------------------------------
   @Override

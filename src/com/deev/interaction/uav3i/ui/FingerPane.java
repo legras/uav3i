@@ -16,7 +16,7 @@ import com.deev.interaction.common.ui.Animator;
 import com.deev.interaction.common.ui.BoundingRectangle;
 import com.deev.interaction.common.ui.Gesture;
 import com.deev.interaction.common.ui.Touchable;
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
@@ -75,11 +75,11 @@ public class FingerPane extends JComponent implements Touchable
 			if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement du "CircleCenter" prédéterminé au point désiré.
-				UAVDataStore.getPaparazziCommunication().moveWayPoint("CIRCLE_CENTER", p);
+				UAVModel.getPaparazziCommunication().moveWayPoint("CIRCLE_CENTER", p);
 				// Mise à jour du rayon du "CircleCenter".
-				UAVDataStore.getPaparazziCommunication().setNavRadius(circleMnvr.getCurrentRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(circleMnvr.getCurrentRadius());
 				// Demande de l'exécution après paramétrage.
-				UAVDataStore.getPaparazziCommunication().jumpToBlock("Circle");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Circle");
 			}
 
 			return;
@@ -115,12 +115,12 @@ public class FingerPane extends JComponent implements Touchable
       if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVDataStore.getPaparazziCommunication().moveWayPoint("1", A);
-				UAVDataStore.getPaparazziCommunication().moveWayPoint("2", B);
+				UAVModel.getPaparazziCommunication().moveWayPoint("1", A);
+				UAVModel.getPaparazziCommunication().moveWayPoint("2", B);
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVDataStore.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVDataStore.getPaparazziCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;
@@ -142,12 +142,12 @@ public class FingerPane extends JComponent implements Touchable
       if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVDataStore.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-				UAVDataStore.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+				UAVModel.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+				UAVModel.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVDataStore.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVDataStore.getPaparazziCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;

@@ -20,7 +20,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import com.deev.interaction.common.ui.Touchable;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
@@ -129,7 +129,7 @@ public class SymbolMap extends Map implements Touchable
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
 
-		UAVDataPoint uavpoint = UAVDataStore.getDataPointAtTime(System.currentTimeMillis());
+		UAVDataPoint uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
 		if (uavpoint != null)
 		{
 			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
@@ -214,14 +214,14 @@ public class SymbolMap extends Map implements Touchable
 				case "CircleMnvr":
 					// Signalement à Paparazzi de la modification du rayon.
 					// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
-					UAVDataStore.getPaparazziCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
+					UAVModel.getPaparazziCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
 					break;
 				case "LineMnvr":
 					LineMnvr lineMnvr = (LineMnvr)_adjustingMnvr;
 					LatLng A = lineMnvr.getTrajA();
 					LatLng B = lineMnvr.getTrajB();
-					UAVDataStore.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-					UAVDataStore.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+					UAVModel.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+					UAVModel.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
 					break;
 				default:
 					break;

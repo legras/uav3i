@@ -15,9 +15,9 @@ import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
 import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
 
-public class UAVDataStore
+public class UAVModel
 {
-	public static UAVDataStore store = null;
+	public static UAVModel store = null;
 	//private static IvyCommunication ivyCommunication;
 	private static PaparazziCommunication paparazziCommunication;
 	
@@ -29,7 +29,7 @@ public class UAVDataStore
 	public static void initialize(InputStream stream)
 	{
 		if (store == null)	
-			store = new UAVDataStore(stream);
+			store = new UAVModel(stream);
 	}
 
 	//  public static void initialize(Ivy bus)
@@ -37,10 +37,10 @@ public class UAVDataStore
 	{
 		if (store == null)
 			//      store = new UAVDataStore(bus);
-			store = new UAVDataStore();
+			store = new UAVModel();
 	}
 
-	public UAVDataStore(InputStream stream)
+	public UAVModel(InputStream stream)
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String strLine;
@@ -103,7 +103,7 @@ public class UAVDataStore
 	 * @throws NotBoundException 
 	 * @throws RemoteException 
 	 */
-	public UAVDataStore()
+	public UAVModel()
 	{
 		switch (UAV3iSettings.getMode())
     {

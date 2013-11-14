@@ -2,7 +2,7 @@ package eu.telecom_bretagne.uav3i.communication.direct;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;

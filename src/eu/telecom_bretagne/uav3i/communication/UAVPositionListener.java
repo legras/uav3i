@@ -2,7 +2,7 @@ package eu.telecom_bretagne.uav3i.communication;
 
 import java.rmi.RemoteException;
 
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.rmi.IUav3iTransmitter;
@@ -71,7 +71,7 @@ public class UAVPositionListener implements IvyMessageListener
     switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
-        UAVDataStore.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+        UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
                                      Integer.parseInt(message[3]),  // utmNorth
                                      Integer.parseInt(message[10]), // utm_zone
                                      Integer.parseInt(message[4]),  // course

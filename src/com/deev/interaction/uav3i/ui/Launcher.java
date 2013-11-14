@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 
 import com.deev.interaction.common.ui.DIModernPlaf;
 import com.deev.interaction.uav3i.model.MediaStorefront;
-import com.deev.interaction.uav3i.model.UAVDataStore;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -33,16 +33,16 @@ public class Launcher
 	   switch (UAV3iSettings.getMode())
 	    {
 	      case REPLAY: // Lancement avec replay (infos dans le fichier).
-	        UAVDataStore.initialize(UAVDataStore.class.getResourceAsStream("13_10_01__10_41_07.data"));
+	        UAVModel.initialize(UAVModel.class.getResourceAsStream("13_10_01__10_41_07.data"));
 	        break;
 //	      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
 //	        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
 //	        UAVDataStore.initialize();
 	      case PAPARAZZI_DIRECT:
-	        UAVDataStore.initialize();
+	        UAVModel.initialize();
 	        break;
 	      case PAPARAZZI_REMOTE:
-	        UAVDataStore.initialize();
+	        UAVModel.initialize();
 	        break;
 	      default:
 	        break;
