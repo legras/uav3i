@@ -42,7 +42,7 @@ public class UAVDataPoint
     char bande = utm2.getLatZone();
     // L'UTM reconstruit a bien changé la référence de la bande (quand c'est nécessaire...)
     //System.out.println("["+fuseau+","+bande+"] " + (utm2.getLngZone()==utm.getLngZone()?"même fuseau":"FUSEAU DIFFERENT ! : " + utm.getLngZone()) + " / " + (utm2.getLatZone()==utm.getLatZone()?"même bande":"BANDE DIFFERENTE ! : " + utm.getLatZone()) + " latlong = " + latlng);
-    // System.out.println("utm = " + utm + " / utm2 = " + utm2);
+    //System.out.println("utm = " + utm + " / utm2 = " + utm2);
     //System.out.println("utm_east : " + utm_east + " / utm_north : " + utm_north + " / utm_zone : " + utm_zone);
         
 		altitude = (double) alt / 1000.;

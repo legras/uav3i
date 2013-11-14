@@ -1,24 +1,25 @@
 package com.deev.interaction.uav3i.model;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import org.omg.CORBA._PolicyStub;
-
 import uk.me.jstott.jcoord.LatLng;
-import uk.me.jstott.jcoord.UTMRef;
-import eu.telecom_bretagne.uav3i.IvyCommunication;
-import fr.dgac.ivy.Ivy;
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
+import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
+import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
 
 public class UAVModel
 {
 	public static UAVModel store = null;
-	private static IvyCommunication ivyCommunication;
+	//private static IvyCommunication ivyCommunication;
+	private static PaparazziCommunication paparazziCommunication;
 
 	//  private ArrayList<UAVDataPoint> _dataPoints;
 	private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
@@ -98,10 +99,30 @@ public class UAVModel
 	/**
 	 * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
 	 * du bus Ivy.
+	 * @throws NotBoundException 
+	 * @throws RemoteException 
 	 */
 	public UAVModel()
 	{
-		ivyCommunication = new IvyCommunication();
+		switch (UAV3iSettings.getMode())
+    {
+      case PAPARAZZI_DIRECT:
+        paparazziCommunication = new PaparazziDirectCommunication();
+        break;
+      case PAPARAZZI_REMOTE:
+        try
+        {
+          paparazziCommunication = new PaparazziRemoteCommunication();
+        }
+        catch (RemoteException | NotBoundException e)
+        {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        break;
+      default:
+        break;
+    }
 	}
 
 	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
@@ -209,8 +230,8 @@ public class UAVModel
 		return store._dataPoints.size() == 0;
 	}
 
-	public static IvyCommunication getIvyCommunication()
+	public static PaparazziCommunication getPaparazziCommunication()
 	{
-		return ivyCommunication;
+		return paparazziCommunication;
 	}
 }

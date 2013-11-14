@@ -15,6 +15,7 @@ import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.Block;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.FlightPlan;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.Waypoint;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 /**
  * Classe "facade" pour un accès plus aisé aux informations du plan de vol XML. Le
@@ -25,11 +26,7 @@ import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.jaxb.Waypoint;
  * généré à partir de la DTD (<code>flight_plan.dtd</code>) de la version 5.02 de
  * Paparazzi. Voir les fichiers dans le répertoire : <code>Gestion des flight plans/Schéma</code>.
  * 
- * @author Philippe TANGUY
- */
-/**
- * @author ptanguy
- *
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class FlightPlanFacade
 {
@@ -59,15 +56,15 @@ public class FlightPlanFacade
      // Désérialisation dans l'arborescence de classes JAXB
      flightPlan = JAXB.unmarshal(xmlStream, FlightPlan.class);
      
+     LoggerUtil.LOG.config("Flight plan: " + flightPlan.getName());
      wayPointsIndex = new HashMap<>();
      processWaypoints();
+     LoggerUtil.LOG.config("Flight plan: waypoints recovered");
      blocksIndex = new HashMap<>();
      processBlocks();
+     LoggerUtil.LOG.config("Flight plan: blocks recovered");
      processStartPoint();
      
-//     // 'name' est un attribut de l'élément racine <flight_plan>
-//     System.out.println("FLIGHT PLAN : " + flightPlan.getName());
-//     
 //     // Affichage des waypoints
 //     for(int i=0;i<waypoints.size(); i++)
 //       System.out.println("Waypoint [" + i + "] : " + waypoints.get(i).getName());
@@ -243,11 +240,8 @@ public class FlightPlanFacade
     utmLatitudeZoneLetter  = utm.getLatZone();
     utmLongitudeZoneNumber = utm.getLngZone();
     maxDistanceFromHome = Integer.parseInt(flightPlan.getMaxDistFromHome());
-    System.out.println("Start point = " + startPoint +  " (utmLongitudeZoneNumber = " + utmLongitudeZoneNumber + ") (UTMLatitudeZoneLetter = " + utmLatitudeZoneLetter + ") " + utm);
-    System.out.println("maxDistanceFromHome = " + maxDistanceFromHome);
-    //UTMRef maxNorthPoint = 
-    
-    
+    LoggerUtil.LOG.config("Flight plan: start point = " + startPoint +  " (utmLongitudeZoneNumber = " + utmLongitudeZoneNumber + ") (UTMLatitudeZoneLetter = " + utmLatitudeZoneLetter + ") " + utm);
+    LoggerUtil.LOG.config("Flight plan: maxDistanceFromHome = " + maxDistanceFromHome);
   }
   //-----------------------------------------------------------------------------
 }

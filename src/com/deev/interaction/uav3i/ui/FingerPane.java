@@ -72,14 +72,14 @@ public class FingerPane extends JComponent implements Touchable
 			Animator.addAnimation(circleMnvr);
 
 			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
+			if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement du "CircleCenter" prédéterminé au point désiré.
-				UAVModel.getIvyCommunication().moveWayPoint("CIRCLE_CENTER", p);
+				UAVModel.getPaparazziCommunication().moveWayPoint("CIRCLE_CENTER", p);
 				// Mise à jour du rayon du "CircleCenter".
-				UAVModel.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(circleMnvr.getCurrentRadius());
 				// Demande de l'exécution après paramétrage.
-				UAVModel.getIvyCommunication().jumpToBlock("Circle");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Circle");
 			}
 
 			return;
@@ -112,15 +112,15 @@ public class FingerPane extends JComponent implements Touchable
 			Animator.addAnimation(line);
 
 			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
+      if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVModel.getIvyCommunication().moveWayPoint("1", A);
-				UAVModel.getIvyCommunication().moveWayPoint("2", B);
+				UAVModel.getPaparazziCommunication().moveWayPoint("1", A);
+				UAVModel.getPaparazziCommunication().moveWayPoint("2", B);
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;
@@ -139,15 +139,15 @@ public class FingerPane extends JComponent implements Touchable
 			Animator.addAnimation(lineMnvr);
 
 			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
+      if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 			{
 				// Déplacement des deux points de la ligne.
-				UAVModel.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-				UAVModel.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
+				UAVModel.getPaparazziCommunication().moveWayPoint("1", lineMnvr.getTrajA());
+				UAVModel.getPaparazziCommunication().moveWayPoint("2", lineMnvr.getTrajB());
 				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				UAVModel.getPaparazziCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
 				// Demande de l'exécution après paramétrage
-				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
+				UAVModel.getPaparazziCommunication().jumpToBlock("Line 1-2");
 			}
 
 			return;
