@@ -2,7 +2,7 @@ package eu.telecom_bretagne.uav3i;
 
 /**
  * Quelques petits tests sur l'opérateur '>>'. À garder pour le moment...
- * @author Philippe TANGUY
+ * @author Philippe TANGUY (Télécom Bretagne)
  */
 public class Test
 {
