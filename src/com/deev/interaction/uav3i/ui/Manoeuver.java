@@ -137,6 +137,8 @@ public abstract class Manoeuver implements Touchable, Animation, ActionListener
 		_shakeLength = 0;
 		_touchedLast = new Point2D.Double(x, y);
 		_shakeArea = new Rectangle2D.Double(x, y, 0, 0);
+		
+		_buttons.show();
 	}
 
 	public void updateTouch(float x, float y, Object touchref)

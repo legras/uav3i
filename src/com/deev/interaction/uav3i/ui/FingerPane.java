@@ -70,20 +70,6 @@ public class FingerPane extends JComponent implements Touchable
 			_smap.addManoeuver(circleMnvr);
 			Animator.addAnimation(circleMnvr);
 
-<<<<<<< HEAD
-=======
-			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT || UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
-			{
-				// Déplacement du "CircleCenter" prédéterminé au point désiré.
-				UAVModel.getPaparazziCommunication().moveWayPoint("CIRCLE_CENTER", p);
-				// Mise à jour du rayon du "CircleCenter".
-				UAVModel.getPaparazziCommunication().setNavRadius(circleMnvr.getCurrentRadius());
-				// Demande de l'exécution après paramétrage.
-				UAVModel.getPaparazziCommunication().jumpToBlock("Circle");
-			}
-
->>>>>>> b77e9bb22961c47d4e35c03cb9110c986ffc2940
 			return;
 		}
 

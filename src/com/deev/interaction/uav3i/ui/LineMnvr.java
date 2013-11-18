@@ -147,6 +147,8 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
+		_buttons.show();
+		
 		// Parallélisme avec la zone à regarder
 		Point2D.Double p = getUVforPx(x, y);
 		double v = p.y;

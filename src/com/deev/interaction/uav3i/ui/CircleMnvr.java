@@ -82,6 +82,8 @@ public class CircleMnvr extends Manoeuver
 	{
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
+		
+		_buttons.show();
 
 		if (_adjusting)
 		{
