@@ -111,7 +111,7 @@ public class BoxMnvr extends Manoeuver
 		Rectangle2D.Double box = getBoxOnScreen();
 		
 		if (box.contains(x, y))
-			return getGeneralInterest();
+			return getMoveInterest();
 		else
 			return -1.f;
 	}

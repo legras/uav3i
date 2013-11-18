@@ -79,8 +79,9 @@ public class ManoeuverButtons implements Animation
 	
 	public void hide()
 	{
+		if (_offset < 1000)
+			_offset = 1;
 		_state = ManoeuverButtonsStates.HIDING;
-		_offset = 1;
 	}
 
 	public void addTo(JComponent component)

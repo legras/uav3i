@@ -247,7 +247,7 @@ public class LineMnvr extends Manoeuver
 		double v = X*_v.x + Y*_v.y;
 
 		if (v > -2*RPX && v < 2*RPX && u > -2*RPX && u < Apx.distance(Bpx)+2*RPX)
-			return getGeneralInterest();
+			return getMoveInterest();
 		else
 			return -1.f;
 	}

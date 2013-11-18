@@ -42,7 +42,7 @@ public class MainFrame extends JFrame implements ActionListener
 	protected TimeLine _timeline;
 	
 	protected static Switcher3Buttons _SWITCHER;
-	protected static ManoeuverButtons _MNVR_BUTTONS;
+	protected static SymbolMap _smap;;
 
 	public MainFrame()
 	{
@@ -103,7 +103,8 @@ public class MainFrame extends JFrame implements ActionListener
 		SymbolMap map = new SymbolMap();
 		map.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(map, new Integer(-10));
-		map.alignWith(grnd);
+		//map.alignWith(grnd);
+		_smap = map;
 
 		FingerPane fingerpane = new FingerPane();
 		fingerpane.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -188,9 +189,11 @@ public class MainFrame extends JFrame implements ActionListener
 				break;
 			case MAP:
 				_timeline.hide();
+				_smap.hideManoeuverButtons();
 				break;
 			case REPLAY:
 				_timeline.show();
+				_smap.hideManoeuverButtons();
 				break;
 			default:
 				return;

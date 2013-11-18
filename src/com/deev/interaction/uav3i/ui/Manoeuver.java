@@ -99,6 +99,12 @@ public abstract class Manoeuver implements Touchable, Animation, ActionListener
 	
 	public abstract void positionButtons();
 	
+	public void hidebuttons()
+	{
+		if (_buttons != null)
+			_buttons.hide();
+	}
+	
 	public abstract boolean adjustAtPx(double x, double y);
 	
 	public boolean isAdjusting()
@@ -116,10 +122,21 @@ public abstract class Manoeuver implements Touchable, Animation, ActionListener
 	/**
 	 * @return common value for manoeuvers concerning moves 
 	 */
-	protected float getGeneralInterest()
+	protected static float getMoveInterest()
 	{
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
 			return MOVE_INTEREST;
+		else
+			return -1.f;
+	}
+	
+	/**
+	 * @return common value for manoeuvers concerning adjustment 
+	 */
+	protected static float getAdjustInterest()
+	{
+		if (MainFrame.getAppState() == MainFrameState.COMMAND)
+			return ADJUST_INTEREST;
 		else
 			return -1.f;
 	}

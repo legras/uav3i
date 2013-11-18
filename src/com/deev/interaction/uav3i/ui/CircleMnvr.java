@@ -123,7 +123,7 @@ public class CircleMnvr extends Manoeuver
 	{
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		if (!_isMoving && centerPx.distance(x, y) < 2*RPX)
-			return getGeneralInterest();
+			return getMoveInterest();
 		else
 			return -1.f;
 	}

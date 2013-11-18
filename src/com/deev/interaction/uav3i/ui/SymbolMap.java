@@ -153,7 +153,16 @@ public class SymbolMap extends Map implements Touchable
 		g2.setTransform(old);
 
 	}
-
+	
+	public void hideManoeuverButtons()
+	{
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				m.hidebuttons();
+		}
+	}
+	
 	@Override
 	public double getPPM()
 	{
@@ -243,7 +252,7 @@ public class SymbolMap extends Map implements Touchable
 		{
 			for (Manoeuver m : _manoeuvers)
 				if (m.isAdjustmentInterestedAtPx(x, y))
-					return Manoeuver.ADJUST_INTEREST;			
+					return Manoeuver.getAdjustInterest();			
 		}
 
 		synchronized (_touchSymbols)
