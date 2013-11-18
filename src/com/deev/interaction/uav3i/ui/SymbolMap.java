@@ -37,16 +37,12 @@ public class SymbolMap extends Map implements Touchable
 	private Manoeuver _adjustingMnvr = null;
 	private Object _adjustingTouch = null;
 	
-	private ArrayList<Touchable> _touchsymbols;
-	private HashMap<Object, Touchable> _touchedsymbols;
+	private ArrayList<Touchable> _touchSymbols;
+	private HashMap<Object, Touchable> _touchedSymbols;
 
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
 
-
-	// Dessin de UAV
-	protected Path2D.Double _tri;
-	protected static double D = 10.;
 	protected static BufferedImage _uavImage = null;
 
 	public SymbolMap()
@@ -59,46 +55,39 @@ public class SymbolMap extends Map implements Touchable
 		setBackground(back);	
 
 		_manoeuvers = new ArrayList<Manoeuver>();
-		_touchsymbols = new ArrayList<Touchable>();
-		_touchedsymbols = new HashMap<Object, Touchable>();
+		_touchSymbols = new ArrayList<Touchable>();
+		_touchedSymbols = new HashMap<Object, Touchable>();
 		
 		_trajectory = new Trajectory();
 
 		// Dessin UAV
 		try
 		{
-			_uavImage = ImageIO.read(this.getClass().getResource("uav.png"));
+			_uavImage = ImageIO.read(this.getClass().getResource("img/uav.png"));
 		}
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		_tri = new Path2D.Double();
-		_tri.moveTo(D/2., 0.);
-		_tri.lineTo(-D/2., D/2.);
-		_tri.lineTo(-D/3., 0.);
-		_tri.lineTo(-D/2., -D/2.);
-		_tri.closePath();
 	}
 	
 	public void addTouchSymbol(Touchable t)
 	{
-		synchronized (_touchsymbols)
+		synchronized (_touchSymbols)
 		{
-			_touchsymbols.add(t);
+			_touchSymbols.add(t);
 		}
 	}
 	
 	public void removeTouchSymbol(Touchable t)
 	{
-		synchronized (_touchsymbols)
+		synchronized (_touchSymbols)
 		{
-			_touchsymbols.remove(t);
-			for (Entry<Object,Touchable> e : _touchedsymbols.entrySet())
+			_touchSymbols.remove(t);
+			for (Entry<Object,Touchable> e : _touchedSymbols.entrySet())
 				if (e.getValue() == t)
-					_touchedsymbols.entrySet().remove(e);
+					_touchedSymbols.entrySet().remove(e);
 		}
 	}
 
@@ -149,26 +138,10 @@ public class SymbolMap extends Map implements Touchable
 			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
 			double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
 			g2.translate(uav.x, uav.y);
-			
-			if (_uavImage == null)
-			{
-				g2.rotate(-course);
-				g2.setPaint(new Color(0.f, 0.f, 0.f, .35f));
-				g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_ROUND,
-						BasicStroke.JOIN_ROUND));
-				g2.draw(_tri);
-				g2.setPaint(new Color(.3f, .6f, 1.f, 1.f));
-				g2.fill(_tri);
-				g2.setPaint(Color.WHITE);
-				g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_SQUARE,
-						BasicStroke.JOIN_MITER));
-				g2.draw(_tri);
-			}
-			else
-			{
-				g2.rotate(Math.PI/2.-course);
-				g2.drawImage(_uavImage, -_uavImage.getWidth()/2, -_uavImage.getHeight()/2, null);
-			}
+
+			g2.rotate(Math.PI/2.-course);
+			g2.drawImage(_uavImage, -_uavImage.getWidth()/2, -_uavImage.getHeight()/2, null);
+
 		}
 		g2.setTransform(old);
 
@@ -231,29 +204,8 @@ public class SymbolMap extends Map implements Touchable
 		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
 		boolean result = _adjustingMnvr.adjustAtPx(x, y);
 
-		// Si on est connecté à Paparazzi...
-		if(UAV3iSettings.getMode() == Mode.IVY)
-		{
-			switch (_adjustingMnvr.getClass().getSimpleName())
-			{
-				case "CircleMnvr":
-					// Signalement à Paparazzi de la modification du rayon.
-					// TODO utilité de la transmission à chaque modification ? Attendre une à 2 secondes que le rayon soit stabilisé ?
-					UAVModel.getIvyCommunication().setNavRadius(((CircleMnvr)_adjustingMnvr).getCurrentRadius());
-					break;
-				case "LineMnvr":
-					LineMnvr lineMnvr = (LineMnvr)_adjustingMnvr;
-					LatLng A = lineMnvr.getTrajA();
-					LatLng B = lineMnvr.getTrajB();
-					UAVModel.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-					UAVModel.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
-					break;
-				default:
-					break;
-			}
-		}
-
-
+		_adjustingMnvr.positionButtons();
+		
 		return result;
 	}
 
@@ -269,7 +221,8 @@ public class SymbolMap extends Map implements Touchable
 	{
 		if (_adjustingMnvr == null)
 			return;
-
+		
+		_adjustingMnvr.positionButtons();
 		_adjustingMnvr.stopAdjusting();
 		_adjustingMnvr = null;
 	}
@@ -293,11 +246,11 @@ public class SymbolMap extends Map implements Touchable
 					return Manoeuver.ADJUST_INTEREST;			
 		}
 
-		synchronized (_touchsymbols)
+		synchronized (_touchSymbols)
 		{
 			float interest = -1.f;;
 			
-			Iterator<Touchable> itr = _touchsymbols.iterator();
+			Iterator<Touchable> itr = _touchSymbols.iterator();
 			while(itr.hasNext())
 			{
 				Touchable t = itr.next();
@@ -327,12 +280,12 @@ public class SymbolMap extends Map implements Touchable
 				}
 		}
 
-		synchronized (_touchsymbols)
+		synchronized (_touchSymbols)
 		{
 			float interest = Float.NEGATIVE_INFINITY;
 			Touchable T = null;
 			
-			Iterator<Touchable> itr = _touchsymbols.iterator();
+			Iterator<Touchable> itr = _touchSymbols.iterator();
 			while(itr.hasNext())
 			{
 				Touchable t = itr.next();
@@ -345,7 +298,7 @@ public class SymbolMap extends Map implements Touchable
 			}
 			
 			T.addTouch(x, y, touchref);
-			_touchedsymbols.put(touchref, T);
+			_touchedSymbols.put(touchref, T);
 		}
 	}
 
@@ -358,9 +311,9 @@ public class SymbolMap extends Map implements Touchable
 			return;
 		}
 		
-		synchronized (_touchedsymbols)
+		synchronized (_touchedSymbols)
 		{
-			Touchable T = _touchedsymbols.get(touchref);
+			Touchable T = _touchedSymbols.get(touchref);
 			
 			T.updateTouch(x, y, touchref);
 		}
@@ -375,9 +328,9 @@ public class SymbolMap extends Map implements Touchable
 			return;
 		}
 		
-		synchronized (_touchedsymbols)
+		synchronized (_touchedSymbols)
 		{
-			Touchable T = _touchedsymbols.get(touchref);
+			Touchable T = _touchedSymbols.get(touchref);
 			
 			T.removeTouch(x, y, touchref);
 		}
@@ -389,9 +342,9 @@ public class SymbolMap extends Map implements Touchable
 		if (_adjustingMnvr != null && _adjustingTouch == touchref)
 			stopAdjusting();
 		
-		synchronized (_touchedsymbols)
+		synchronized (_touchedSymbols)
 		{
-			Touchable T = _touchedsymbols.get(touchref);
+			Touchable T = _touchedSymbols.get(touchref);
 			
 			T.cancelTouch(touchref);
 		}

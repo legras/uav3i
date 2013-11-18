@@ -36,6 +36,7 @@ public class MainFrame extends JFrame implements ActionListener
 	
 	public enum MainFrameState {COMMAND, MAP, REPLAY};
 	public static MainFrameState state = MainFrameState.MAP;
+	public static ComponentLayer clayer;
 	
 	protected TouchGlass _glass = null;
 	protected TimeLine _timeline;
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame implements ActionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try
 		{
-			setIconImage(ImageIO.read(this.getClass().getResource("3i_icon_small.png")));
+			setIconImage(ImageIO.read(this.getClass().getResource("img/3i_icon_small.png")));
 		}
 		catch (IOException e1)
 		{
@@ -109,7 +110,7 @@ public class MainFrame extends JFrame implements ActionListener
 		fingerpane.setTopMap(map);
 		lpane.add(fingerpane, new Integer(-2));
 
-		ComponentLayer clayer = new ComponentLayer();
+		clayer = new ComponentLayer();
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
 		
@@ -119,22 +120,6 @@ public class MainFrame extends JFrame implements ActionListener
 		Dimension swd = mswitch.getSize();
 		mswitch.setBounds(screenSize.width/2-swd.width/2, 2, swd.width, swd.height);
 		clayer.add(mswitch);
-		
-		// ********** ManoeuverButtons **********
-		try
-		{
-			_MNVR_BUTTONS = new ManoeuverButtons(this);
-			Dimension mbd = _MNVR_BUTTONS.getSize();
-			_MNVR_BUTTONS.setBounds(400, 400, mbd.width, mbd.height);
-			clayer.add(_MNVR_BUTTONS);
-			System.out.println("MainFrame: ManoeuverButtons OK");
-		}
-		catch (IOException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			_MNVR_BUTTONS = null;
-		}
 
 		// ********** La TimeLine **********
 		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);

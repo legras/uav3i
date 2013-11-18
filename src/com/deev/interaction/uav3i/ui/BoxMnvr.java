@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
@@ -44,6 +46,30 @@ public class BoxMnvr extends Manoeuver
 		_B = B;
 
 		_smap = map;
+		
+		// ********** ManoeuverButtons **********
+		try
+		{
+			_buttons = new ManoeuverButtons(this);
+			_buttons.addTo(MainFrame.clayer);
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			_buttons = null;
+		}
+		
+		positionButtons();
+	}
+
+	@Override
+	public void positionButtons()
+	{
+		Rectangle2D.Double box = getBoxOnScreen();
+
+		if (_buttons != null)
+			_buttons.setPositions(new Point2D.Double(box.getCenterX(), box.getMaxY()), 40, Math.PI/2, false);
 	}
 
 	@Override
@@ -53,11 +79,7 @@ public class BoxMnvr extends Manoeuver
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
-		g2.setStroke(new BasicStroke(4.f));
-		g2.setPaint(new Color(1.0f, 0.f, 0.f, 1.0f));
-		g2.draw(box);
-		g2.setPaint(new Color(1.0f, 0.1f, 0.1f, 0.2f));
-		g2.fill(box);
+		paintFootprint(g2, box, false);
 		
 		g2.setTransform(old);
 	}
@@ -144,7 +166,7 @@ public class BoxMnvr extends Manoeuver
 				else
 					_currentPosTwo = new Point2D.Double(x, y);
 				updateGeometry();
-				return;
+				break;
 				
 			case TRANSLATE:
 				if (touchref == _touchOne)
@@ -153,12 +175,14 @@ public class BoxMnvr extends Manoeuver
 					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
 					_startPosOne = new Point2D.Double(x, y);
 				}
-				return;
+				break;
 				
 			case NONE:
 			default:
-				return;
+				break;
 		}
+		
+		positionButtons();
 	}
 	
 	private void updateGeometry()
@@ -201,12 +225,16 @@ public class BoxMnvr extends Manoeuver
 	public void removeTouch(float x, float y, Object touchref)
 	{
 		_moveState = BoxMnvrMoveStates.NONE;
+		
+		positionButtons();
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
 		_moveState = BoxMnvrMoveStates.NONE;
+		
+		positionButtons();
 	}
 
 	@Override

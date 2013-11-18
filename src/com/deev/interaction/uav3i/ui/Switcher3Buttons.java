@@ -45,13 +45,13 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 		
 		try
 		{
-			command_on = ImageIO.read(this.getClass().getResource("command_on.png"));
-			command_off = ImageIO.read(this.getClass().getResource("command_off.png"));
-			map_on = ImageIO.read(this.getClass().getResource("map_on.png"));
-			map_off = ImageIO.read(this.getClass().getResource("map_off.png"));
-			replay_on = ImageIO.read(this.getClass().getResource("replay_on.png"));
-			replay_off = ImageIO.read(this.getClass().getResource("replay_off.png"));
-			replay_alt = ImageIO.read(this.getClass().getResource("replay_pause.png"));
+			command_on = ImageIO.read(this.getClass().getResource("img/command_on.png"));
+			command_off = ImageIO.read(this.getClass().getResource("img/command_off.png"));
+			map_on = ImageIO.read(this.getClass().getResource("img/map_on.png"));
+			map_off = ImageIO.read(this.getClass().getResource("img/map_off.png"));
+			replay_on = ImageIO.read(this.getClass().getResource("img/replay_on.png"));
+			replay_off = ImageIO.read(this.getClass().getResource("img/replay_off.png"));
+			replay_alt = ImageIO.read(this.getClass().getResource("img/replay_pause.png"));
 		}
 		catch (IOException e)
 		{

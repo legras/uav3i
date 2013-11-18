@@ -8,6 +8,7 @@ import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
@@ -51,26 +52,6 @@ public class LineMnvr extends Manoeuver
 	private Point2D.Double _currentPosTwo;
 	
 	
-// Inutile ??
-//	/**
-//	 * @param map
-//	 * @param xA Point A x-coordinate (screen)
-//	 * @param yA Point A y-coordinate (screen)
-//	 * @param xB Point B x-coordinate (screen)
-//	 * @param yB Point B y-coordinate (screen)
-//	 */
-//	public LineMnvr(SymbolMap map, double xA, double yA, double xB, double yB)
-//	{
-//		_A = map.getLatLngForScreen(xA, yA);
-//		_B = map.getLatLngForScreen(xB, yB);
-//
-//		_smap = map;
-//
-//		double d = Point2D.Double.distance(xA, yA, xB, yB);
-//		_u = new Point2D.Double((xB-xA)/d, (yB-yA)/d);
-//		_v = new Point2D.Double(-_u.y, _u.x);
-//
-//	}
 
 	public LineMnvr(SymbolMap map, LatLng A, LatLng B)
 	{
@@ -85,8 +66,38 @@ public class LineMnvr extends Manoeuver
 		double d = a.distance(b);
 		_u = new Point2D.Double((b.x-a.x)/d, (b.y-a.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
+		
+		// ********** ManoeuverButtons **********
+		try
+		{
+			_buttons = new ManoeuverButtons(this);
+			_buttons.addTo(MainFrame.clayer);
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			_buttons = null;
+		}
+		
+		positionButtons();
 	}
 
+	@Override
+	public void positionButtons()
+	{
+		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
+		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
+		double side = _currentRm > 0 ? 1 : 0;
+		
+		if (_buttons != null)
+			_buttons.setPositions(
+					new Point2D.Double((Apx.x+Bpx.x)/2, (Apx.y+Bpx.y)/2),
+					40+RPX,
+					Math.atan2(_v.y, _v.x) + side*Math.PI,
+					false);
+	}
+	
 	@Override
 	public void paint(Graphics2D g2)
 	{
@@ -106,7 +117,7 @@ public class LineMnvr extends Manoeuver
 
 		area.add(new Area(stroke.createStrokedShape(line)));
 
-		paintFootprint(g2, area);
+		paintFootprint(g2, area, false);
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
@@ -118,7 +129,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone : ligne bleue
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-		paintAdjustLine(g2, l);
+		paintAdjustLine(g2, l, false);
 
 		g2.setTransform(old);
 	}
@@ -136,15 +147,8 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		// x,y : coordonnée du toucher écran
-		// On projette tout en screen
-		// Coordonnées écran des deux points (zone rouge)
-		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
-		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
-
 		// Parallélisme avec la zone à regarder
 		Point2D.Double p = getUVforPx(x, y);
-		double u = p.x;
 		double v = p.y;
 
 		double currentRpx = _currentRm * _smap.getPPM();
@@ -294,7 +298,7 @@ public class LineMnvr extends Manoeuver
 				else
 					_currentPosTwo = new Point2D.Double(x, y);
 				updateGeometry();
-				return;
+				break;
 				
 			case TRANSLATE:
 				if (touchref == _touchOne)
@@ -303,24 +307,30 @@ public class LineMnvr extends Manoeuver
 					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
 					_startPosOne = new Point2D.Double(x, y);
 				}
-				return;
+				break;
 				
 			case NONE:
 			default:
-				return;
+				break;
 		}
+		
+		positionButtons();
 	}
 
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
 		_moveState = LineMnvrMoveStates.NONE;
+		
+		positionButtons();
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
 		_moveState = LineMnvrMoveStates.NONE;
+		
+		positionButtons();
 	}
 
 	private void updateGeometry()

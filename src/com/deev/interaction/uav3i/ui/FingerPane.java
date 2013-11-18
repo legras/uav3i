@@ -66,21 +66,9 @@ public class FingerPane extends JComponent implements Touchable
 		if (rectangle.width < delta && rectangle.height < delta)
 		{
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
-			//_smap.setManoeuver(new CircleMnvr(_smap, p));
 			CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
 			_smap.addManoeuver(circleMnvr);
 			Animator.addAnimation(circleMnvr);
-
-			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
-			{
-				// Déplacement du "CircleCenter" prédéterminé au point désiré.
-				UAVModel.getIvyCommunication().moveWayPoint("CIRCLE_CENTER", p);
-				// Mise à jour du rayon du "CircleCenter".
-				UAVModel.getIvyCommunication().setNavRadius(circleMnvr.getCurrentRadius());
-				// Demande de l'exécution après paramétrage.
-				UAVModel.getIvyCommunication().jumpToBlock("Circle");
-			}
 
 			return;
 		}
@@ -111,18 +99,6 @@ public class FingerPane extends JComponent implements Touchable
 			_smap.addManoeuver(line);
 			Animator.addAnimation(line);
 
-			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
-			{
-				// Déplacement des deux points de la ligne.
-				UAVModel.getIvyCommunication().moveWayPoint("1", A);
-				UAVModel.getIvyCommunication().moveWayPoint("2", B);
-				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-				// Demande de l'exécution après paramétrage
-				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
-			}
-
 			return;
 		}
 
@@ -137,18 +113,6 @@ public class FingerPane extends JComponent implements Touchable
 			LineMnvr lineMnvr = new LineMnvr(_smap, A, B);
 			_smap.addManoeuver(lineMnvr);
 			Animator.addAnimation(lineMnvr);
-
-			// Si on est connecté à Paparazzi...
-			if(UAV3iSettings.getMode() == Mode.IVY)
-			{
-				// Déplacement des deux points de la ligne.
-				UAVModel.getIvyCommunication().moveWayPoint("1", lineMnvr.getTrajA());
-				UAVModel.getIvyCommunication().moveWayPoint("2", lineMnvr.getTrajB());
-				// Remise à la valeur par défaut du rayon (DEFAULT_CIRCLE_RADIUS)
-				UAVModel.getIvyCommunication().setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-				// Demande de l'exécution après paramétrage
-				UAVModel.getIvyCommunication().jumpToBlock("Line 1-2");
-			}
 
 			return;
 		}
