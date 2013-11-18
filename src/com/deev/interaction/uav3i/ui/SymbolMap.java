@@ -129,6 +129,13 @@ public class SymbolMap extends Map implements Touchable
 			g2.draw(fullTrajectory);
 		}
 
+		// --------- Manoeuvers --------------------------------------------------
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				m.paint(g2);
+		}
+
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
 
@@ -144,13 +151,6 @@ public class SymbolMap extends Map implements Touchable
 
 		}
 		g2.setTransform(old);
-
-		// --------- Manoeuvers --------------------------------------------------
-		synchronized(this)
-		{
-			for (Manoeuver m : _manoeuvers)
-				m.paint(g2);
-		}
 
 	}
 
