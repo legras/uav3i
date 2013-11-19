@@ -38,6 +38,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private Manoeuver _manoeuver = null;
 	private JComponent _home;
 	private boolean _isDead = false;
+	private long _deleteEnabledTime = -1;
 	
 	private Point2D.Double _positions[] = {null, null, null, null};
 	private Point2D.Double _posVect[] = {null, null, null, null};
@@ -103,6 +104,10 @@ public class ManoeuverButtons implements Animation, ActionListener
 				_isDead = true;
 				_manoeuver.delete();
 				hide();
+			}
+			else
+			{
+				_deleteEnabledTime = System.currentTimeMillis();
 			}
 		}
 	}
@@ -268,6 +273,13 @@ public class ManoeuverButtons implements Animation, ActionListener
 			case IDLE:
 				if (_isDead)
 					remove();
+				
+				if (_deleteEnabledTime > 0 && System.currentTimeMillis() - _deleteEnabledTime > 2000)
+				{
+					_deleteButton.setSelected(false);
+					_deleteEnabledTime = -1;
+				}
+				
 			default:
 				break;
 		}

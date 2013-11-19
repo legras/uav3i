@@ -26,8 +26,8 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	protected SymbolMap _smap;
 	
-	public static float ADJUST_INTEREST = 20.f;
-	public static float MOVE_INTEREST = 15.f;
+	private static float _ADJUST_INTEREST = 20.f;
+	private static float _MOVE_INTEREST = 15.f;
 	
 	private static long LONGPRESS = 1500;
 	
@@ -79,7 +79,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-		System.out.println(phase);
+
 		final float dash1[] = {10.0f};
 	    final BasicStroke dashed =
 	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
@@ -131,10 +131,13 @@ public abstract class Manoeuver implements Touchable, Animation
 	/**
 	 * @return common value for manoeuvers concerning moves 
 	 */
-	protected static float getMoveInterest()
+	protected float getMoveInterest()
 	{
+		if (isSubmitted())
+			return -1.f;
+		
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
-			return MOVE_INTEREST;
+			return _MOVE_INTEREST;
 		else
 			return -1.f;
 	}
@@ -142,10 +145,13 @@ public abstract class Manoeuver implements Touchable, Animation
 	/**
 	 * @return common value for manoeuvers concerning adjustment 
 	 */
-	protected static float getAdjustInterest()
+	protected float getAdjustInterest()
 	{
+		if (isSubmitted())
+			return -1.f;
+		
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
-			return ADJUST_INTEREST;
+			return _ADJUST_INTEREST;
 		else
 			return -1.f;
 	}
