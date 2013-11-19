@@ -22,8 +22,6 @@ public class LineMnvr extends Manoeuver
 	// Points de la zone à regarder
 	private LatLng _A, _B;
 
-	private SymbolMap _smap;
-
 	// Distance entre la zone à regarder et la trajectoire
 	private double _currentRm = 500.;
 	private double _lastRm;

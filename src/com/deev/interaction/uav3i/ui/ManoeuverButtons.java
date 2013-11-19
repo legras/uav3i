@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
 import com.deev.interaction.touch.ZeroRoundWToggle;
@@ -34,6 +35,8 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private static int _PAD = 13;
 	
 	private Manoeuver _manoeuver = null;
+	private JComponent _home;
+	private boolean _isDead = false;
 	
 	private Point2D.Double _positions[] = {null, null, null, null};
 	private Point2D.Double _posVect[] = {null, null, null, null};
@@ -65,6 +68,8 @@ public class ManoeuverButtons implements Animation, ActionListener
 				getImage("img/deleteIcon.png", Color.BLACK));
 		_deleteButton.addActionListener(this);
 		
+		Animator.addAnimation(this);
+		
 		show();
 	}
 
@@ -86,8 +91,18 @@ public class ManoeuverButtons implements Animation, ActionListener
 		}
 		else if (e.getSource() == _deleteButton)
 		{
-			
+			if (!_deleteButton.isSelected())
+			{
+				_isDead = true;
+				_manoeuver.delete();
+				hide();
+			}
 		}
+	}
+	
+	public boolean isSubmitted()
+	{
+		return _submitButton.isSelected();
 	}
 	
 	public void setSubmitted(boolean sub)
@@ -115,7 +130,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	
 	public void hide()
 	{
-		if (_offset < 1000)
+		if (_offset < 1)
 			_offset = 1;
 		_state = ManoeuverButtonsStates.HIDING;
 	}
@@ -131,6 +146,21 @@ public class ManoeuverButtons implements Animation, ActionListener
 		_submitButton.setBounds(0, 0, _size, _size);
 		_pinButton.setBounds(0, 0, _size, _size);
 		_deleteButton.setBounds(0, 0, _size, _size);
+		
+		_home = component;
+	}
+	
+	public void remove()
+	{
+		if (_home == null)
+			return;
+		
+		_home.remove(_jumpButton);
+		_home.remove(_submitButton);
+		_home.remove(_pinButton);
+		_home.remove(_deleteButton);
+		
+		_home = null;
 	}
 
 	public void setPositions(Point2D.Double ref, double distance, double theta, boolean isArc)
@@ -229,6 +259,8 @@ public class ManoeuverButtons implements Animation, ActionListener
 				setBounds();
 				break;
 			case IDLE:
+				if (_isDead)
+					remove();
 			default:
 				break;
 		}
@@ -239,6 +271,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 	@Override
 	public int life()
 	{
-		return 1;
+		return _isDead ? 0 : 1;
 	}
 }

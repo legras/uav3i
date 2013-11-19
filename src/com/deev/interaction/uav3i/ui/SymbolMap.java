@@ -154,15 +154,6 @@ public class SymbolMap extends Map implements Touchable
 
 	}
 	
-	public void hideManoeuverButtons()
-	{
-		synchronized(this)
-		{
-			for (Manoeuver m : _manoeuvers)
-				m.hidebuttons();
-		}
-	}
-	
 	@Override
 	public double getPPM()
 	{
@@ -365,6 +356,24 @@ public class SymbolMap extends Map implements Touchable
 		{
 			_manoeuvers.add(mnvr);
 			addTouchSymbol(mnvr);
+		}
+	}
+	
+	public void hideManoeuverButtons()
+	{
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+				m.hidebuttons();
+		}
+	}
+	
+	public void deleteManoeuver(Manoeuver mnvr)
+	{
+		synchronized (this)
+		{
+			_manoeuvers.remove(mnvr);
+			removeTouchSymbol(mnvr);
 		}
 	}
 

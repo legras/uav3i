@@ -44,7 +44,7 @@ public class Animator
 		timer.schedule(task, 0, _DELAY_);
 		
 		// On regarde de temps en temps s'il y a une vieille Animation (life < 0) 
-		// Si oui, on la d�gage
+		// Si oui, on la dégage
 		TimerTask cleanTask = new TimerTask()
 		{
 			public void run()
@@ -101,6 +101,15 @@ public class Animator
 		{
 			if (!_components.contains(comp))
 				_components.add(comp);
+		}
+	}
+	
+	public static void removeComponent(JComponent comp)
+	{
+		synchronized(_components)
+		{
+			if (!_components.contains(comp))
+				_components.remove(comp);
 		}
 	}
 }

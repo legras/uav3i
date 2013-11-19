@@ -17,7 +17,6 @@ import uk.me.jstott.jcoord.LatLng;
 public class CircleMnvr extends Manoeuver
 {
 	private LatLng _center;
-	private SymbolMap _smap;
 	private double _currentRm = 500.;
 	private double _lastRm;
 	private boolean _isMoving = false;

@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.TexturePaint;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -61,7 +63,8 @@ public class ZeroRoundWToggle extends JToggleButton
 			g2.setColor(_ALPHA_WHITE);
 		else
 			g2.setPaint(_DISABLED_BG);
-		g.fillOval(0, 0, getWidth(), getHeight());
+		
+		g2.fill(new Ellipse2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1));
 		
 		if (isSelected())
 		{

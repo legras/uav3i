@@ -23,6 +23,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	protected enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
 	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
 	protected ManoeuverButtons _buttons;
+
+	protected SymbolMap _smap;
 	
 	public static float ADJUST_INTEREST = 20.f;
 	public static float MOVE_INTEREST = 15.f;
@@ -67,6 +69,11 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.setStroke(new BasicStroke(3.f));
 		g2.setPaint(_GREEN);
 		g2.draw(footprint);
+	}
+	
+	public void delete()
+	{
+		_smap.deleteManoeuver(this);
 	}
 	
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
@@ -187,9 +194,7 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	@Override
 	public int tick(int time)
-	{
-		_buttons.tick(time);
-		
+	{		
 		return 1;
 	}
 	

@@ -20,8 +20,6 @@ public class BoxMnvr extends Manoeuver
 	// Points de la zone à regarder
 	private LatLng _A, _B;
 
-	private SymbolMap _smap;
-
 	private enum BoxMnvrMoveStates {NONE, TRANSLATE, FULL};
 	private BoxMnvrMoveStates _moveState = BoxMnvrMoveStates.NONE;
 
