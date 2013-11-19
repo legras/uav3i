@@ -65,9 +65,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 				getImage("img/deleteIcon.png", Color.BLACK));
 		_deleteButton.addActionListener(this);
 		
-		_deleteButton.setSelected(true);
-		_deleteButton.setEnabled(false);
-		
 		show();
 	}
 
