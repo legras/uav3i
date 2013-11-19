@@ -77,7 +77,7 @@ public class BoxMnvr extends Manoeuver
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
-		paintFootprint(g2, box, false);
+		paintFootprint(g2, box, isSubmitted());
 		
 		g2.setTransform(old);
 	}

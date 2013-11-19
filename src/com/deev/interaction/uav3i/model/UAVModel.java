@@ -8,12 +8,16 @@ import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
+import com.deev.interaction.uav3i.ui.Manoeuver;
 
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
 import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
 {
@@ -230,6 +234,16 @@ public class UAVModel
 		return store._dataPoints.size() == 0;
 	}
 
+	public static void submitManoeuver(Manoeuver mnvr)
+	{
+		LoggerUtil.LOG.log(Level.INFO, "Manoeuver submitted");
+	}
+
+	public static void jumpToManoeuver(Manoeuver mnvr)
+	{
+		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
+	}
+	
 	public static PaparazziCommunication getPaparazziCommunication()
 	{
 		return paparazziCommunication;

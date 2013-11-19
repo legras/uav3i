@@ -78,9 +78,11 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
 	{
+		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
+		System.out.println(phase);
 		final float dash1[] = {10.0f};
 	    final BasicStroke dashed =
-	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
+	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
 	    
 	    final BasicStroke plain =
 	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
@@ -192,6 +194,11 @@ public abstract class Manoeuver implements Touchable, Animation
 		positionButtons();
 	}
 
+	public boolean isSubmitted()
+	{
+		return _buttons.isSubmitted();
+	}
+	
 	@Override
 	public int tick(int time)
 	{		

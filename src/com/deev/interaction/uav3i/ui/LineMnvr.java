@@ -115,7 +115,7 @@ public class LineMnvr extends Manoeuver
 
 		area.add(new Area(stroke.createStrokedShape(line)));
 
-		paintFootprint(g2, area, false);
+		paintFootprint(g2, area, isSubmitted());
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
@@ -127,7 +127,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone : ligne bleue
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-		paintAdjustLine(g2, l, false);
+		paintAdjustLine(g2, l, isSubmitted());
 
 		g2.setTransform(old);
 	}
@@ -179,6 +179,9 @@ public class LineMnvr extends Manoeuver
 
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
+		if (isSubmitted())
+			return false;
+		
 		// On projette tout en screen
 		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
 		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);

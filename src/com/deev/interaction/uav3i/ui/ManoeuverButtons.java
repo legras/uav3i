@@ -16,6 +16,7 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
 import com.deev.interaction.touch.ZeroRoundWToggle;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 public class ManoeuverButtons implements Animation, ActionListener
 {
@@ -80,10 +81,16 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (e.getSource() == _jumpButton)
 		{
 			setJump(_jumpButton.isSelected());
+			
+			if (_jumpButton.isSelected())
+				UAVModel.jumpToManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == _submitButton)
 		{
 			setSubmitted(_submitButton.isSelected());
+			
+			if (_submitButton.isSelected())
+				UAVModel.submitManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == _pinButton)
 		{
