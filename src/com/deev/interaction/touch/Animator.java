@@ -1,4 +1,4 @@
-package com.deev.interaction.common.ui;
+package com.deev.interaction.touch;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,7 +44,7 @@ public class Animator
 		timer.schedule(task, 0, _DELAY_);
 		
 		// On regarde de temps en temps s'il y a une vieille Animation (life < 0) 
-		// Si oui, on la dŽgage
+		// Si oui, on la dï¿½gage
 		TimerTask cleanTask = new TimerTask()
 		{
 			public void run()

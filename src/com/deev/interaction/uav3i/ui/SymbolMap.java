@@ -22,7 +22,7 @@ import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 

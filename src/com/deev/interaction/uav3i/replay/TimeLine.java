@@ -14,8 +14,8 @@ import java.lang.Math;
 
 import javax.swing.JComponent;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.Media;
 import com.deev.interaction.uav3i.model.MediaStorefront;
 

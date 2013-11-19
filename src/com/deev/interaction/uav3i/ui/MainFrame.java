@@ -16,8 +16,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
-import com.deev.interaction.common.ui.Animator;
-import com.deev.interaction.common.ui.ComponentLayer;
+import com.deev.interaction.touch.Animator;
+import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;

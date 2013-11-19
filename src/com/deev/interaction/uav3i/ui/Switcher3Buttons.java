@@ -8,8 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
-import com.deev.interaction.common.ui.Zero80ToggleButton;
-import com.deev.interaction.common.ui.ZeroPanel;
+
+import com.deev.interaction.touch.Zero80ToggleButton;
+import com.deev.interaction.touch.ZeroPanel;
 
 
 public class Switcher3Buttons extends ZeroPanel implements ActionListener

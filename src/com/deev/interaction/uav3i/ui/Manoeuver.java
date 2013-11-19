@@ -14,11 +14,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
-public abstract class Manoeuver implements Touchable, Animation, ActionListener
+public abstract class Manoeuver implements Touchable, Animation
 {
 	protected enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
 	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
@@ -183,13 +183,6 @@ public abstract class Manoeuver implements Touchable, Animation, ActionListener
 		}
 		
 		positionButtons();
-	}
-
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-
 	}
 
 	@Override

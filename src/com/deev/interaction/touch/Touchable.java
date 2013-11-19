@@ -1,4 +1,4 @@
-package com.deev.interaction.common.ui;
+package com.deev.interaction.touch;
 
 public interface Touchable
 {

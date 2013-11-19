@@ -37,16 +37,14 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.BoundingRectangle;
-import com.deev.interaction.common.ui.CircleAnim;
-import com.deev.interaction.common.ui.ComponentLayer;
-import com.deev.interaction.common.ui.Gesture;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.BoundingRectangle;
+import com.deev.interaction.touch.CircleAnim;
+import com.deev.interaction.touch.ComponentLayer;
+import com.deev.interaction.touch.Gesture;
+import com.deev.interaction.touch.Touchable;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;

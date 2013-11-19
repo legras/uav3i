@@ -17,8 +17,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Touchable;
 
 // TODO J'ai dû passer les attributs en public car j'ai passé Media dans un package dédié. C'est mal. Il faut prévoir des getters (voir des setters).
 

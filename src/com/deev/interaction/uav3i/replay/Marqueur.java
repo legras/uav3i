@@ -17,8 +17,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Touchable;
 
 @SuppressWarnings("serial")
 public class Marqueur

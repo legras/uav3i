@@ -12,10 +12,10 @@ import javax.swing.JComponent;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.common.ui.Animator;
-import com.deev.interaction.common.ui.BoundingRectangle;
-import com.deev.interaction.common.ui.Gesture;
-import com.deev.interaction.common.ui.Touchable;
+import com.deev.interaction.touch.Animator;
+import com.deev.interaction.touch.BoundingRectangle;
+import com.deev.interaction.touch.Gesture;
+import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;

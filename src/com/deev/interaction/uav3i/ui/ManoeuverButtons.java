@@ -2,6 +2,7 @@ package com.deev.interaction.uav3i.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -10,12 +11,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.TintedBufferedImage;
-import com.deev.interaction.common.ui.ZeroPanel;
-import com.deev.interaction.common.ui.ZeroRoundWToggle;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.TintedBufferedImage;
+import com.deev.interaction.touch.ZeroPanel;
+import com.deev.interaction.touch.ZeroRoundWToggle;
 
-public class ManoeuverButtons implements Animation
+public class ManoeuverButtons implements Animation, ActionListener
 {
 	private enum ManoeuverButtonsStates {SHOWING, HIDING, IDLE};
 	private static double _RATE = .3;
@@ -47,24 +48,62 @@ public class ManoeuverButtons implements Animation
 		_jumpButton = new ZeroRoundWToggle(
 				getImage("img/uavIconOn.png", blue), 
 				getImage("img/uavIconOff.png", Color.BLACK));
-		_jumpButton.addActionListener(_manoeuver);
+		_jumpButton.addActionListener(this);
 
 		_submitButton = new ZeroRoundWToggle(
 				getImage("img/submitIconOn.png", blue), 
 				getImage("img/submitIconOff.png", Color.BLACK));
-		_submitButton.addActionListener(_manoeuver);
+		_submitButton.addActionListener(this);
 
 		_pinButton = new ZeroRoundWToggle(
 				getImage("img/pinIconOn.png", blue), 
 				getImage("img/pinIconOff.png", Color.BLACK));
-		_pinButton.addActionListener(_manoeuver);
+		_pinButton.addActionListener(this);
 
 		_deleteButton = new ZeroRoundWToggle(
 				getImage("img/deleteIcon.png", Color.RED), 
 				getImage("img/deleteIcon.png", Color.BLACK));
-		_deleteButton.addActionListener(_manoeuver);
+		_deleteButton.addActionListener(this);
+		
+		_deleteButton.setSelected(true);
+		_deleteButton.setEnabled(false);
 		
 		show();
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == _jumpButton)
+		{
+			setJump(_jumpButton.isSelected());
+		}
+		else if (e.getSource() == _submitButton)
+		{
+			setSubmitted(_submitButton.isSelected());
+		}
+		else if (e.getSource() == _pinButton)
+		{
+			
+		}
+		else if (e.getSource() == _deleteButton)
+		{
+			
+		}
+	}
+	
+	public void setSubmitted(boolean sub)
+	{
+		_submitButton.setSelected(sub);
+		_submitButton.setEnabled(!sub);
+	}
+	
+	public void setJump(boolean jump)
+	{
+		setSubmitted(jump);
+		_jumpButton.setSelected(jump);
+		_jumpButton.setEnabled(!jump);
 	}
 	
 	public void show()

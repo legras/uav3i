@@ -14,11 +14,11 @@ import java.awt.geom.Rectangle2D;
 
 import javax.sound.sampled.Line;
 
-import com.deev.interaction.common.ui.Animation;
-import com.deev.interaction.common.ui.Animator;
-import com.deev.interaction.common.ui.FingerStroke;
-import com.deev.interaction.common.ui.Gesture;
-import com.deev.interaction.common.ui.TouchPoint;
+import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Animator;
+import com.deev.interaction.touch.FingerStroke;
+import com.deev.interaction.touch.Gesture;
+import com.deev.interaction.touch.TouchPoint;
 
 
 
