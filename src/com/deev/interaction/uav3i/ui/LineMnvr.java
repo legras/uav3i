@@ -258,6 +258,12 @@ public class LineMnvr extends Manoeuver
 	{
 		super.addTouch(x, y, touchref);
 		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
 		switch (_moveState)
 		{
 			case FULL:

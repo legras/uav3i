@@ -135,6 +135,18 @@ public class CircleMnvr extends Manoeuver
 
 		super.addTouch(x, y, touchref);
 		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
 		_isMoving = true;
 		
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
@@ -145,6 +157,12 @@ public class CircleMnvr extends Manoeuver
 	public void updateTouch(float x, float y, Object touchref)
 	{
 		super.updateTouch(x, y, touchref);
+		
+		if (_offCenter == null)
+		{
+			cancelTouch(touchref);
+			return;
+		}
 		
 		Point2D.Double centerPx = new Point2D.Double(x-_offCenter.x, y-_offCenter.y);
 		

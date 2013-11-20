@@ -29,20 +29,12 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static float _ADJUST_INTEREST = 20.f;
 	private static float _MOVE_INTEREST = 15.f;
 	
-	private static long LONGPRESS = 1500;
-	
 	protected boolean _adjusting = false;
 	protected static double GRIP = 30.;
 	private static TexturePaint _hashGW = null;
 
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
-	
-	private Object _touchref;
-	private Rectangle2D _shakeArea;
-	private double _shakeLength;
-	private Point2D.Double _touchedLast;
-	private long _startTime;
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -164,45 +156,22 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public void addTouch(float x, float y, Object touchref)
 	{		
-		_touchref = touchref;
-		_startTime = System.currentTimeMillis();
-		_shakeLength = 0;
-		_touchedLast = new Point2D.Double(x, y);
-		_shakeArea = new Rectangle2D.Double(x, y, 0, 0);
-		
 		_buttons.show();
 	}
 
 	public void updateTouch(float x, float y, Object touchref)
-	{
-		if (touchref != _touchref)
-			return;
-		
-		_shakeLength += _touchedLast.distance(x, y);
-		_touchedLast = new Point2D.Double(x, y);
-		_shakeArea.add(_touchedLast);
-		
-		long time = System.currentTimeMillis();
-		
-		if (_mnvrState == ManoeuverStates.READY && time-_startTime > LONGPRESS)
-		{
-			_mnvrState = ManoeuverStates.SUBMITTED;
-		}
-		
-		// Si le geste est replié sur lui-même
-		double L = _shakeArea.getWidth()+_shakeArea.getHeight();
-		if (_shakeLength > GRIP && _shakeLength > 2*L)
-		{
-			didShake();
-			return;
-		}
-		
+	{	
 		positionButtons();
 	}
 
 	public boolean isSubmitted()
 	{
 		return _buttons.isSubmitted();
+	}
+
+	public boolean isModifiable()
+	{
+		return _buttons.isModifiable();
 	}
 	
 	@Override

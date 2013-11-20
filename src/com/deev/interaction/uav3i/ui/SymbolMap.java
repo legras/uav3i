@@ -307,8 +307,16 @@ public class SymbolMap extends Map implements Touchable
 	{
 		if (_adjustingMnvr != null && _adjustingTouch == touchref)
 		{
-			adjustAtPx(x, y);
-			return;
+			if (_adjustingMnvr.isModifiable())
+			{
+				adjustAtPx(x, y);
+				return;
+			}
+			else
+			{
+				cancelTouch(touchref);
+				return;
+			}
 		}
 		
 		synchronized (_touchedSymbols)

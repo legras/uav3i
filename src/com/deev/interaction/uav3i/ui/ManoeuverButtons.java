@@ -113,6 +113,11 @@ public class ManoeuverButtons implements Animation, ActionListener
 		}
 	}
 	
+	public boolean isModifiable()
+	{
+		return !_submitButton.isSelected() && !_pinButton.isSelected();
+	}
+	
 	public boolean isSubmitted()
 	{
 		return _submitButton.isSelected();
