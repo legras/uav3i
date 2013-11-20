@@ -2,6 +2,7 @@ package com.deev.interaction.uav3i.ui;
 
 
 import java.awt.AWTException;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Robot;
@@ -10,7 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -18,11 +21,14 @@ import javax.swing.JLayeredPane;
 
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
+import com.deev.interaction.touch.RoundToggleButton;
+import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.maps.OsmMapGround;
 import eu.telecom_bretagne.uav3i.maps.OsmMapInteractionPanel;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 /*
  * 
@@ -115,11 +121,27 @@ public class MainFrame extends JFrame implements ActionListener
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
 		
+		// ********** 3i button ************
+		try
+		{
+			BufferedImage icon3i = ImageIO.read(this.getClass().getResource("img/3iButton.png"));
+			RoundToggleButton button3i = new RoundToggleButton(
+					new TintedBufferedImage(icon3i, new Color(.0f, .7f, .2f, 1.f)),
+					new TintedBufferedImage(icon3i, new Color(.3f, .3f, .3f, 1.f)));
+			clayer.add(button3i);
+			button3i.setBounds(screenSize.width-12-icon3i.getWidth(), 12, icon3i.getWidth(), icon3i.getHeight());
+		}
+		catch (IOException e1)
+		{
+			LoggerUtil.LOG.log(Level.WARNING, "Could not load 3i icon for button");
+		}
+		
+		
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
 		_SWITCHER = mswitch;
 		Dimension swd = mswitch.getSize();
-		mswitch.setBounds(screenSize.width/2-swd.width/2, 2, swd.width, swd.height);
+		mswitch.setBounds(screenSize.width/2-swd.width/2, 12, swd.width, swd.height);
 		clayer.add(mswitch);
 
 		// ********** La TimeLine **********

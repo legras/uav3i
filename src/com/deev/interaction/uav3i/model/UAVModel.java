@@ -237,6 +237,7 @@ public class UAVModel
 	public static void submitManoeuver(Manoeuver mnvr)
 	{
 		LoggerUtil.LOG.log(Level.INFO, "Manoeuver submitted");
+		mnvr.kill();
 	}
 
 	public static void jumpToManoeuver(Manoeuver mnvr)

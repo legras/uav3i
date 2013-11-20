@@ -32,9 +32,13 @@ public abstract class Manoeuver implements Touchable, Animation
 	protected boolean _adjusting = false;
 	protected static double GRIP = 30.;
 	private static TexturePaint _hashGW = null;
+	private long _killTime = -1;
+	
+	private static long _DEATH_LENGTH = 2000;
 
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
+	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -63,9 +67,20 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(footprint);
 	}
 	
+	public void kill()
+	{
+		_killTime = System.currentTimeMillis();
+	}
+	
+	public boolean isDying()
+	{
+		return _killTime > 0;
+	}
+	
 	public void delete()
 	{
 		_smap.deleteManoeuver(this);
+		hidebuttons();
 	}
 	
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
@@ -93,7 +108,10 @@ public abstract class Manoeuver implements Touchable, Animation
 	    g2.setStroke(plain);
 		g2.draw(line);
 		
-		g2.setPaint(_GREEN);
+		if (isDying())
+			g2.setPaint(_RED);
+		else
+			g2.setPaint(_GREEN);
 	    g2.setStroke(dashed);
 		g2.draw(line);
 	}
@@ -147,12 +165,6 @@ public abstract class Manoeuver implements Touchable, Animation
 		else
 			return -1.f;
 	}
-	
-	
-	protected void didShake()
-	{
-		System.out.println("THIS WAS SHAKEN!!!!");
-	}
 
 	public void addTouch(float x, float y, Object touchref)
 	{		
@@ -177,6 +189,12 @@ public abstract class Manoeuver implements Touchable, Animation
 	@Override
 	public int tick(int time)
 	{		
+		if (isDying() && System.currentTimeMillis() - _killTime > _DEATH_LENGTH)
+		{
+			delete();
+			return 0;
+		}
+		
 		return 1;
 	}
 	

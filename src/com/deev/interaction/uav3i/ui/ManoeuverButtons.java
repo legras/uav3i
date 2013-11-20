@@ -15,7 +15,7 @@ import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
-import com.deev.interaction.touch.ZeroRoundWToggle;
+import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
 
 public class ManoeuverButtons implements Animation, ActionListener
@@ -24,10 +24,10 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private static double _RATE = .3;
 	private static ManoeuverButtons _BUTTONS_SHOWN = null;
 	
-	private ZeroRoundWToggle _jumpButton;	
-	private ZeroRoundWToggle _submitButton;
-	private ZeroRoundWToggle _pinButton;
-	private ZeroRoundWToggle _deleteButton;
+	private RoundToggleButton _jumpButton;	
+	private RoundToggleButton _submitButton;
+	private RoundToggleButton _pinButton;
+	private RoundToggleButton _deleteButton;
 
 	private int _size;
 	
@@ -51,22 +51,22 @@ public class ManoeuverButtons implements Animation, ActionListener
 		
 		_manoeuver = mnvr;
 		
-		_jumpButton = new ZeroRoundWToggle(
+		_jumpButton = new RoundToggleButton(
 				getImage("img/uavIconOn.png", blue), 
 				getImage("img/uavIconOff.png", gray));
 		_jumpButton.addActionListener(this);
 
-		_submitButton = new ZeroRoundWToggle(
+		_submitButton = new RoundToggleButton(
 				getImage("img/submitIconOn.png", blue), 
 				getImage("img/submitIconOff.png", gray));
 		_submitButton.addActionListener(this);
 
-		_pinButton = new ZeroRoundWToggle(
+		_pinButton = new RoundToggleButton(
 				getImage("img/pinIconOn.png", blue), 
 				getImage("img/pinIconOff.png", gray));
 		_pinButton.addActionListener(this);
 
-		_deleteButton = new ZeroRoundWToggle(
+		_deleteButton = new RoundToggleButton(
 				getImage("img/deleteIcon.png", Color.RED), 
 				getImage("img/deleteIcon.png", gray));
 		_deleteButton.addActionListener(this);
@@ -104,7 +104,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 			{
 				_isDead = true;
 				_manoeuver.delete();
-				hide();
 			}
 			else
 			{
@@ -245,7 +244,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 				_size, _size);	
 	}
 	
-	private  BufferedImage getImage(String name, Color tint) throws IOException
+	private BufferedImage getImage(String name, Color tint) throws IOException
 	{
 		BufferedImage image = ImageIO.read(this.getClass().getResource(name));
 		_size = image.getWidth();

@@ -14,7 +14,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JToggleButton;
 
-public class ZeroRoundWToggle extends JToggleButton
+public class RoundToggleButton extends JToggleButton
 {
 	/**
 	 * 
@@ -26,9 +26,11 @@ public class ZeroRoundWToggle extends JToggleButton
 	
 	private BufferedImage _onIcon = null;
 	private BufferedImage _offIcon = null;
+	private BufferedImage _altIcon = null;
+	private boolean _isAlt = true;
 
 	
-	public ZeroRoundWToggle(BufferedImage on, BufferedImage off)
+	public RoundToggleButton(BufferedImage on, BufferedImage off)
 	{
 		super();
 		setPreferredSize(new Dimension(on.getWidth(), on.getHeight()));
@@ -54,6 +56,13 @@ public class ZeroRoundWToggle extends JToggleButton
 			}
 		}
 	}
+
+	
+	public RoundToggleButton(BufferedImage on, BufferedImage off, BufferedImage alt_on)
+	{
+		this(on, off);
+		_altIcon = alt_on;
+	}
 	
 	@Override
 	public void paintComponent(Graphics g)
@@ -68,11 +77,24 @@ public class ZeroRoundWToggle extends JToggleButton
 		
 		if (isSelected())
 		{
-			g2.drawImage(_onIcon, 0, 0, null);
+			if (_altIcon != null && _isAlt)
+				g2.drawImage(_altIcon, 0, 0, null);
+			else
+				g2.drawImage(_onIcon, 0, 0, null);
 		}
 		else
 		{
 			g2.drawImage(_offIcon, 0, 0, null);
 		}
+	}
+	
+	public void setAlt(boolean alt)
+	{
+		_isAlt = alt;
+	}
+	
+	public boolean getAlt()
+	{
+		return _isAlt;
 	}
 }
