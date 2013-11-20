@@ -77,7 +77,7 @@ public class BoxMnvr extends Manoeuver
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
-		paintFootprint(g2, box, false);
+		paintFootprint(g2, box, isSubmitted());
 		
 		g2.setTransform(old);
 	}
@@ -120,6 +120,12 @@ public class BoxMnvr extends Manoeuver
 	public void addTouch(float x, float y, Object touchref)
 	{
 		super.addTouch(x, y, touchref);
+		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
 		
 		switch (_moveState)
 		{

@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,8 +10,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 
-import com.deev.interaction.touch.Zero80ToggleButton;
+import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
+import com.deev.interaction.touch.RoundToggleButton;
 
 
 public class Switcher3Buttons extends ZeroPanel implements ActionListener
@@ -22,19 +24,22 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 	
 	public enum Mode {COMMAND, MAP, REPLAY};
 	
-	private Zero80ToggleButton _commandButton;
-	private Zero80ToggleButton _mapButton;
-	private Zero80ToggleButton _replayButton;
+	private RoundToggleButton _commandButton;
+	private RoundToggleButton _mapButton;
+	private RoundToggleButton _replayButton;
 	private ButtonGroup _group;
 	
 	
-	private static int _d = 2;
+	private static int _d = 12;
 	
 	public Switcher3Buttons(ActionListener listener)
 	{
 		super();
 		
 		setSize(new Dimension(3*80+2*_d, 80));
+		
+		Color blue = new Color(0.f, .5f, 1.f, 1.f);
+		Color gray = new Color(.3f, .3f, .3f, 1.f);
 
 		BufferedImage command_on = null;
 		BufferedImage command_off = null;
@@ -46,22 +51,22 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 		
 		try
 		{
-			command_on = ImageIO.read(this.getClass().getResource("img/command_on.png"));
-			command_off = ImageIO.read(this.getClass().getResource("img/command_off.png"));
-			map_on = ImageIO.read(this.getClass().getResource("img/map_on.png"));
-			map_off = ImageIO.read(this.getClass().getResource("img/map_off.png"));
-			replay_on = ImageIO.read(this.getClass().getResource("img/replay_on.png"));
-			replay_off = ImageIO.read(this.getClass().getResource("img/replay_off.png"));
-			replay_alt = ImageIO.read(this.getClass().getResource("img/replay_pause.png"));
+			command_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/command_on.png")), blue);
+			command_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/command_off.png")), gray);
+			map_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/map_on.png")), blue);
+			map_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/map_off.png")), gray);
+			replay_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_on.png")), blue);
+			replay_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_off.png")), gray);
+			replay_alt = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_pause.png")), blue);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		
-		_commandButton = new Zero80ToggleButton(command_on, command_off);
-		_mapButton = new Zero80ToggleButton(map_on, map_off);
-		_replayButton = new Zero80ToggleButton(replay_on, replay_off, replay_alt);
+		_commandButton = new RoundToggleButton(command_on, command_off);
+		_mapButton = new RoundToggleButton(map_on, map_off);
+		_replayButton = new RoundToggleButton(replay_on, replay_off, replay_alt);
 				
 		_commandButton.addActionListener(this);
 		_mapButton.addActionListener(this);

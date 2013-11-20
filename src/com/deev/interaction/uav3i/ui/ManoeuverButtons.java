@@ -15,7 +15,8 @@ import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
-import com.deev.interaction.touch.ZeroRoundWToggle;
+import com.deev.interaction.touch.RoundToggleButton;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 public class ManoeuverButtons implements Animation, ActionListener
 {
@@ -23,10 +24,10 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private static double _RATE = .3;
 	private static ManoeuverButtons _BUTTONS_SHOWN = null;
 	
-	private ZeroRoundWToggle _jumpButton;	
-	private ZeroRoundWToggle _submitButton;
-	private ZeroRoundWToggle _pinButton;
-	private ZeroRoundWToggle _deleteButton;
+	private RoundToggleButton _jumpButton;	
+	private RoundToggleButton _submitButton;
+	private RoundToggleButton _pinButton;
+	private RoundToggleButton _deleteButton;
 
 	private int _size;
 	
@@ -37,6 +38,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private Manoeuver _manoeuver = null;
 	private JComponent _home;
 	private boolean _isDead = false;
+	private long _deleteEnabledTime = -1;
 	
 	private Point2D.Double _positions[] = {null, null, null, null};
 	private Point2D.Double _posVect[] = {null, null, null, null};
@@ -45,27 +47,28 @@ public class ManoeuverButtons implements Animation, ActionListener
 	public ManoeuverButtons(Manoeuver mnvr) throws IOException
 	{		
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
+		Color gray = new Color(.3f, .3f, .3f, 1.f);
 		
 		_manoeuver = mnvr;
 		
-		_jumpButton = new ZeroRoundWToggle(
+		_jumpButton = new RoundToggleButton(
 				getImage("img/uavIconOn.png", blue), 
-				getImage("img/uavIconOff.png", Color.BLACK));
+				getImage("img/uavIconOff.png", gray));
 		_jumpButton.addActionListener(this);
 
-		_submitButton = new ZeroRoundWToggle(
+		_submitButton = new RoundToggleButton(
 				getImage("img/submitIconOn.png", blue), 
-				getImage("img/submitIconOff.png", Color.BLACK));
+				getImage("img/submitIconOff.png", gray));
 		_submitButton.addActionListener(this);
 
-		_pinButton = new ZeroRoundWToggle(
+		_pinButton = new RoundToggleButton(
 				getImage("img/pinIconOn.png", blue), 
-				getImage("img/pinIconOff.png", Color.BLACK));
+				getImage("img/pinIconOff.png", gray));
 		_pinButton.addActionListener(this);
 
-		_deleteButton = new ZeroRoundWToggle(
+		_deleteButton = new RoundToggleButton(
 				getImage("img/deleteIcon.png", Color.RED), 
-				getImage("img/deleteIcon.png", Color.BLACK));
+				getImage("img/deleteIcon.png", gray));
 		_deleteButton.addActionListener(this);
 		
 		Animator.addAnimation(this);
@@ -80,10 +83,16 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (e.getSource() == _jumpButton)
 		{
 			setJump(_jumpButton.isSelected());
+			
+			if (_jumpButton.isSelected())
+				UAVModel.jumpToManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == _submitButton)
 		{
 			setSubmitted(_submitButton.isSelected());
+			
+			if (_submitButton.isSelected())
+				UAVModel.submitManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == _pinButton)
 		{
@@ -95,9 +104,17 @@ public class ManoeuverButtons implements Animation, ActionListener
 			{
 				_isDead = true;
 				_manoeuver.delete();
-				hide();
+			}
+			else
+			{
+				_deleteEnabledTime = System.currentTimeMillis();
 			}
 		}
+	}
+	
+	public boolean isModifiable()
+	{
+		return !_submitButton.isSelected() && !_pinButton.isSelected();
 	}
 	
 	public boolean isSubmitted()
@@ -206,6 +223,9 @@ public class ManoeuverButtons implements Animation, ActionListener
 
 	private void setBounds()
 	{
+		if (_positions[0] == null || _posVect[0] == null)
+			return;
+		
 		_jumpButton.setBounds(
 				(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
 				(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),
@@ -227,7 +247,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 				_size, _size);	
 	}
 	
-	private  BufferedImage getImage(String name, Color tint) throws IOException
+	private BufferedImage getImage(String name, Color tint) throws IOException
 	{
 		BufferedImage image = ImageIO.read(this.getClass().getResource(name));
 		_size = image.getWidth();
@@ -261,6 +281,13 @@ public class ManoeuverButtons implements Animation, ActionListener
 			case IDLE:
 				if (_isDead)
 					remove();
+				
+				if (_deleteEnabledTime > 0 && System.currentTimeMillis() - _deleteEnabledTime > 2000)
+				{
+					_deleteButton.setSelected(false);
+					_deleteEnabledTime = -1;
+				}
+				
 			default:
 				break;
 		}

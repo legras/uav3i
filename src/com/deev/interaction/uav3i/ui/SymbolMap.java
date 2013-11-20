@@ -243,7 +243,7 @@ public class SymbolMap extends Map implements Touchable
 		{
 			for (Manoeuver m : _manoeuvers)
 				if (m.isAdjustmentInterestedAtPx(x, y))
-					return Manoeuver.getAdjustInterest();			
+					return m.getAdjustInterest();			
 		}
 
 		synchronized (_touchSymbols)
@@ -307,8 +307,16 @@ public class SymbolMap extends Map implements Touchable
 	{
 		if (_adjustingMnvr != null && _adjustingTouch == touchref)
 		{
-			adjustAtPx(x, y);
-			return;
+			if (_adjustingMnvr.isModifiable())
+			{
+				adjustAtPx(x, y);
+				return;
+			}
+			else
+			{
+				cancelTouch(touchref);
+				return;
+			}
 		}
 		
 		synchronized (_touchedSymbols)

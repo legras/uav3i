@@ -26,23 +26,19 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	protected SymbolMap _smap;
 	
-	public static float ADJUST_INTEREST = 20.f;
-	public static float MOVE_INTEREST = 15.f;
-	
-	private static long LONGPRESS = 1500;
+	private static float _ADJUST_INTEREST = 20.f;
+	private static float _MOVE_INTEREST = 15.f;
 	
 	protected boolean _adjusting = false;
 	protected static double GRIP = 30.;
 	private static TexturePaint _hashGW = null;
+	private long _killTime = -1;
+	
+	private static long _DEATH_LENGTH = 1000;
 
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
-	
-	private Object _touchref;
-	private Rectangle2D _shakeArea;
-	private double _shakeLength;
-	private Point2D.Double _touchedLast;
-	private long _startTime;
+	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -71,16 +67,30 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(footprint);
 	}
 	
+	public void kill()
+	{
+		_killTime = System.currentTimeMillis();
+		hidebuttons();
+	}
+	
+	public boolean isDying()
+	{
+		return _killTime > 0;
+	}
+	
 	public void delete()
 	{
 		_smap.deleteManoeuver(this);
+		hidebuttons();
 	}
 	
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
 	{
+		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
+
 		final float dash1[] = {10.0f};
 	    final BasicStroke dashed =
-	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
+	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
 	    
 	    final BasicStroke plain =
 	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
@@ -99,7 +109,10 @@ public abstract class Manoeuver implements Touchable, Animation
 	    g2.setStroke(plain);
 		g2.draw(line);
 		
-		g2.setPaint(_GREEN);
+		if (isDying())
+			g2.setPaint(_RED);
+		else
+			g2.setPaint(_GREEN);
 	    g2.setStroke(dashed);
 		g2.draw(line);
 	}
@@ -129,10 +142,13 @@ public abstract class Manoeuver implements Touchable, Animation
 	/**
 	 * @return common value for manoeuvers concerning moves 
 	 */
-	protected static float getMoveInterest()
+	protected float getMoveInterest()
 	{
+		if (isSubmitted())
+			return -1.f;
+		
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
-			return MOVE_INTEREST;
+			return _MOVE_INTEREST;
 		else
 			return -1.f;
 	}
@@ -140,61 +156,46 @@ public abstract class Manoeuver implements Touchable, Animation
 	/**
 	 * @return common value for manoeuvers concerning adjustment 
 	 */
-	protected static float getAdjustInterest()
+	protected float getAdjustInterest()
 	{
+		if (isSubmitted())
+			return -1.f;
+		
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
-			return ADJUST_INTEREST;
+			return _ADJUST_INTEREST;
 		else
 			return -1.f;
-	}
-	
-	
-	protected void didShake()
-	{
-		System.out.println("THIS WAS SHAKEN!!!!");
 	}
 
 	public void addTouch(float x, float y, Object touchref)
 	{		
-		_touchref = touchref;
-		_startTime = System.currentTimeMillis();
-		_shakeLength = 0;
-		_touchedLast = new Point2D.Double(x, y);
-		_shakeArea = new Rectangle2D.Double(x, y, 0, 0);
-		
 		_buttons.show();
 	}
 
 	public void updateTouch(float x, float y, Object touchref)
-	{
-		if (touchref != _touchref)
-			return;
-		
-		_shakeLength += _touchedLast.distance(x, y);
-		_touchedLast = new Point2D.Double(x, y);
-		_shakeArea.add(_touchedLast);
-		
-		long time = System.currentTimeMillis();
-		
-		if (_mnvrState == ManoeuverStates.READY && time-_startTime > LONGPRESS)
-		{
-			_mnvrState = ManoeuverStates.SUBMITTED;
-		}
-		
-		// Si le geste est replié sur lui-même
-		double L = _shakeArea.getWidth()+_shakeArea.getHeight();
-		if (_shakeLength > GRIP && _shakeLength > 2*L)
-		{
-			didShake();
-			return;
-		}
-		
+	{	
 		positionButtons();
 	}
 
+	public boolean isSubmitted()
+	{
+		return _buttons.isSubmitted();
+	}
+
+	public boolean isModifiable()
+	{
+		return _buttons.isModifiable();
+	}
+	
 	@Override
 	public int tick(int time)
 	{		
+		if (isDying() && System.currentTimeMillis() - _killTime > _DEATH_LENGTH)
+		{
+			delete();
+			return 0;
+		}
+		
 		return 1;
 	}
 	
