@@ -47,27 +47,28 @@ public class ManoeuverButtons implements Animation, ActionListener
 	public ManoeuverButtons(Manoeuver mnvr) throws IOException
 	{		
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
+		Color gray = new Color(.3f, .3f, .3f, 1.f);
 		
 		_manoeuver = mnvr;
 		
 		_jumpButton = new ZeroRoundWToggle(
 				getImage("img/uavIconOn.png", blue), 
-				getImage("img/uavIconOff.png", Color.BLACK));
+				getImage("img/uavIconOff.png", gray));
 		_jumpButton.addActionListener(this);
 
 		_submitButton = new ZeroRoundWToggle(
 				getImage("img/submitIconOn.png", blue), 
-				getImage("img/submitIconOff.png", Color.BLACK));
+				getImage("img/submitIconOff.png", gray));
 		_submitButton.addActionListener(this);
 
 		_pinButton = new ZeroRoundWToggle(
 				getImage("img/pinIconOn.png", blue), 
-				getImage("img/pinIconOff.png", Color.BLACK));
+				getImage("img/pinIconOff.png", gray));
 		_pinButton.addActionListener(this);
 
 		_deleteButton = new ZeroRoundWToggle(
 				getImage("img/deleteIcon.png", Color.RED), 
-				getImage("img/deleteIcon.png", Color.BLACK));
+				getImage("img/deleteIcon.png", gray));
 		_deleteButton.addActionListener(this);
 		
 		Animator.addAnimation(this);
