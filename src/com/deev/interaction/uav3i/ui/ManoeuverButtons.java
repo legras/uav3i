@@ -223,6 +223,9 @@ public class ManoeuverButtons implements Animation, ActionListener
 
 	private void setBounds()
 	{
+		if (_positions[0] == null || _posVect[0] == null)
+			return;
+		
 		_jumpButton.setBounds(
 				(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
 				(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),

@@ -34,7 +34,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static TexturePaint _hashGW = null;
 	private long _killTime = -1;
 	
-	private static long _DEATH_LENGTH = 2000;
+	private static long _DEATH_LENGTH = 1000;
 
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
