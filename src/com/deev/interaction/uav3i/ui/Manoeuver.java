@@ -70,6 +70,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void kill()
 	{
 		_killTime = System.currentTimeMillis();
+		hidebuttons();
 	}
 	
 	public boolean isDying()

@@ -126,7 +126,7 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			BufferedImage icon3i = ImageIO.read(this.getClass().getResource("img/3iButton.png"));
 			RoundToggleButton button3i = new RoundToggleButton(
-					new TintedBufferedImage(icon3i, new Color(.0f, .7f, .2f, 1.f)),
+					new TintedBufferedImage(icon3i, new Color(.74f, .80f, .03f, 1.f)),
 					new TintedBufferedImage(icon3i, new Color(.3f, .3f, .3f, 1.f)));
 			clayer.add(button3i);
 			button3i.setBounds(screenSize.width-12-icon3i.getWidth(), 12, icon3i.getWidth(), icon3i.getHeight());
