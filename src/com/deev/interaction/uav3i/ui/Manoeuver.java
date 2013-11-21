@@ -15,6 +15,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.deev.interaction.touch.Animation;
+import com.deev.interaction.touch.Palette;
 import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
@@ -33,6 +34,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	protected static double GRIP = 30.;
 	private static TexturePaint _hashGW = null;
 	private long _killTime = -1;
+	private boolean _killed = false;
 	
 	private static long _DEATH_LENGTH = 1000;
 
@@ -69,13 +71,14 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public void kill()
 	{
-		_killTime = System.currentTimeMillis();
+		_killTime = _DEATH_LENGTH;
+		_killed = true;
 		hidebuttons();
 	}
 	
 	public boolean isDying()
 	{
-		return _killTime > 0;
+		return _killed;
 	}
 	
 	public void delete()
@@ -84,7 +87,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		hidebuttons();
 	}
 	
-	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
+	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
 
@@ -98,7 +101,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	    final BasicStroke fat =
 	        new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 				
-		if (_adjusting)
+		if (adjust)
 		{
 			g2.setStroke(fat);
 			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
@@ -110,7 +113,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(line);
 		
 		if (isDying())
-			g2.setPaint(_RED);
+			g2.setPaint(Palette.blendColors(_YELLOW, (int) _killTime, (int) _DEATH_LENGTH, _RED));
 		else
 			g2.setPaint(_GREEN);
 	    g2.setStroke(dashed);
@@ -189,8 +192,10 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	@Override
 	public int tick(int time)
-	{		
-		if (isDying() && System.currentTimeMillis() - _killTime > _DEATH_LENGTH)
+	{	
+		_killTime -= time;
+		
+		if (isDying() && _killTime < 0)
 		{
 			delete();
 			return 0;

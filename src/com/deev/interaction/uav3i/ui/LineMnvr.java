@@ -127,7 +127,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone : ligne bleue
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-		paintAdjustLine(g2, l, isSubmitted());
+		paintAdjustLine(g2, l, isSubmitted(), _adjusting);
 
 		g2.setTransform(old);
 	}
