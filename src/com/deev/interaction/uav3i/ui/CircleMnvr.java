@@ -71,7 +71,7 @@ public class CircleMnvr extends Manoeuver
 
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-		paintAdjustLine(g2, ell, isSubmitted());
+		paintAdjustLine(g2, ell, isSubmitted(), _adjusting);
 
 		g2.setTransform(old);
 	}
