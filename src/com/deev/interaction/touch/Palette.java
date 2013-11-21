@@ -1,6 +1,13 @@
 package com.deev.interaction.touch;
 
 import java.awt.Color;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 public class Palette
 {
@@ -20,5 +27,10 @@ public class Palette
 		return new Color(c[0], c[1], c[2], c[3]);
 	}
 	
-	
+	public static TexturePaint makeTexture(URL url, int size) throws IOException
+	{
+		BufferedImage img = ImageIO.read(url);
+
+		return new TexturePaint(img, new Rectangle2D.Double(0, 0, 16, 16)); 
+	}
 }

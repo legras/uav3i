@@ -14,7 +14,6 @@ import javax.swing.JComponent;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
-import com.deev.interaction.touch.ZeroPanel;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
 
