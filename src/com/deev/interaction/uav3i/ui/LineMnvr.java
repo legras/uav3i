@@ -105,7 +105,7 @@ public class LineMnvr extends Manoeuver
 		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 
 		Area area = new Area();
-		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
 		// Zone à regarder : ligne rouge
 		GeneralPath line;
