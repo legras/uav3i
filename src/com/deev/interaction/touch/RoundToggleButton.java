@@ -14,16 +14,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JToggleButton;
 
+import com.deev.interaction.uav3i.ui.Palette3i;
+
 public class RoundToggleButton extends JToggleButton
 {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6827723936968056808L;
-	
-	private static Color _ALPHA_WHITE = new Color(1.f, 1.f, 1.f, .5f);
-	private static TexturePaint _DISABLED_BG = null;
-	
+		
 	private BufferedImage _onIcon = null;
 	private BufferedImage _offIcon = null;
 	private BufferedImage _altIcon = null;
@@ -39,22 +38,6 @@ public class RoundToggleButton extends JToggleButton
 		
 		_onIcon = on;
 		_offIcon = off;
-		
-		if (_DISABLED_BG == null)
-		{
-			BufferedImage stripes;
-			try
-			{
-				stripes = ImageIO.read(this.getClass().getResource("stripesGray32.png"));
-
-				_DISABLED_BG = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 16, 16));
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 	
@@ -69,9 +52,9 @@ public class RoundToggleButton extends JToggleButton
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		if (isEnabled())
-			g2.setColor(_ALPHA_WHITE);
+			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_WHITE_BG));
 		else
-			g2.setPaint(_DISABLED_BG);
+			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DISABLED_BG));
 		
 		g2.fill(new Ellipse2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1));
 		
