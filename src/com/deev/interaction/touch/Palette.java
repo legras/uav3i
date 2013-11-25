@@ -31,6 +31,8 @@ public class Palette
 	{
 		BufferedImage img = ImageIO.read(url);
 
-		return new TexturePaint(img, new Rectangle2D.Double(0, 0, 16, 16)); 
+		return new TexturePaint(img, new Rectangle2D.Double(0, 0, size, size)); 
 	}
+	
+	
 }
