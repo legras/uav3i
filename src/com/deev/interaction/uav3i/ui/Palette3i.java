@@ -14,10 +14,12 @@ public enum Palette3i
 {	
 	BUTTON_WHITE_BG(1.f, 1.f, 1.f, .5f),
 	BUTTON_DISABLED_BG("img/stripesGray32.png", 16),
-	TIME_LIGHT(.9f, .9f, .9f, .5f),
-	TIME_LIGHTER(1.f, 1.f, 1.f, .5f),
-	TIME_DARK(.9f, .9f, .9f, .5f),
-	TIME_DARKER(.9f, .9f, .9f, .5f);
+	TIME_LIGHT(.75f, .75f, .75f, .7f),
+	TIME_LIGHTER(.80f, .80f, .80f, .7f),
+	TIME_LIGHT_TEXT(.2f, .2f, .2f, .7f),
+	TIME_DARK(.4f, .4f, .4f, .7f),
+	TIME_DARKER(.3f, .3f, .3f, .7f),
+	TIME_DARK_TEXT(.9f, .9f, .9f, .7f);
 	
 	private Paint _paint;
 	

@@ -23,7 +23,6 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.touch.TintedBufferedImage;
-import com.deev.interaction.uav3i.replay.TimeLine;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.maps.OsmMapGround;
@@ -44,11 +43,11 @@ public class MainFrame extends JFrame implements ActionListener
 	public static MainFrameState state = MainFrameState.MAP;
 	public static ComponentLayer clayer;
 	
-	protected TouchGlass _glass = null;
-	protected TimeLine _timeline;
+	protected static TouchGlass _GLASS = null;
+	protected static TimeLine _TIMELINE;
 	
 	protected static Switcher3Buttons _SWITCHER;
-	protected static SymbolMap _smap;;
+	protected static SymbolMap _SMAP;;
 
 	public MainFrame()
 	{
@@ -65,11 +64,6 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 
 		Dimension screenSize = new Dimension(1366, 768);
-		//    Dimension screenSize = new Dimension(25, 212);
-		//    Dimension screenSize = new Dimension(1280, 600);
-		//    Dimension screenSize = new Dimension(1400, 400);
-		//    Dimension screenSize = new Dimension(200, 1500);
-		//    Dimension screenSize = new Dimension(500, 400);
 
 		try
 		{
@@ -109,8 +103,7 @@ public class MainFrame extends JFrame implements ActionListener
 		SymbolMap map = new SymbolMap();
 		map.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(map, new Integer(-10));
-		//map.alignWith(grnd);
-		_smap = map;
+		_SMAP = map;
 
 		FingerPane fingerpane = new FingerPane();
 		fingerpane.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -145,14 +138,13 @@ public class MainFrame extends JFrame implements ActionListener
 		clayer.add(mswitch);
 
 		// ********** La TimeLine **********
-		TimeLine tm = new TimeLine(screenSize.width, screenSize.height);
-		lpane.add(tm, new Integer(-3));
-		_timeline = tm;
+		_TIMELINE = new TimeLine(screenSize.width, screenSize.height);
+		lpane.add(_TIMELINE, new Integer(-3));
 
-		_glass = new TouchGlass();
+		_GLASS = new TouchGlass();
 
 		Animator.addComponent(fingerpane);
-		Animator.addAnimation(tm);
+		Animator.addAnimation(_TIMELINE);
 		Animator.addComponent(mapInteractionPane);
 		Animator.go();
 
@@ -170,17 +162,17 @@ public class MainFrame extends JFrame implements ActionListener
 			}
 		});
 
-		this.addMouseListener(_glass);
-		this.addMouseMotionListener(_glass);
+		this.addMouseListener(_GLASS);
+		this.addMouseMotionListener(_GLASS);
 
-		_glass.addTouchable(fingerpane);
-		_glass.addTouchable(map);
-		_glass.addTouchable(tm);
-		_glass.addTouchable(mapInteractionPane);
-		_glass.addTouchable(clayer);
+		_GLASS.addTouchable(fingerpane);
+		_GLASS.addTouchable(map);
+		//_glass.addTouchable(_timeline);
+		_GLASS.addTouchable(mapInteractionPane);
+		_GLASS.addTouchable(clayer);
 
-		setGlassPane(_glass);		
-		_glass.setVisible(true);
+		setGlassPane(_GLASS);		
+		_GLASS.setVisible(true);
 	}
 
 	public static MainFrameState getAppState()
@@ -198,7 +190,7 @@ public class MainFrame extends JFrame implements ActionListener
 	
 	public TouchGlass getGlass()
 	{
-		return _glass;
+		return _GLASS;
 	}
 
 	@Override
@@ -207,15 +199,15 @@ public class MainFrame extends JFrame implements ActionListener
 		switch (_SWITCHER.getMode())
 		{
 			case COMMAND:
-				_timeline.hide();
+				_TIMELINE.hide();
 				break;
 			case MAP:
-				_timeline.hide();
-				_smap.hideManoeuverButtons();
+				_TIMELINE.hide();
+				_SMAP.hideManoeuverButtons();
 				break;
 			case REPLAY:
-				_timeline.show();
-				_smap.hideManoeuverButtons();
+				_TIMELINE.show();
+				_SMAP.hideManoeuverButtons();
 				break;
 			default:
 				return;
