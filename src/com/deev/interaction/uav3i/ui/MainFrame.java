@@ -167,7 +167,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 		_GLASS.addTouchable(fingerpane);
 		_GLASS.addTouchable(map);
-		//_glass.addTouchable(_timeline);
+		_GLASS.addTouchable(_TIMELINE);
 		_GLASS.addTouchable(mapInteractionPane);
 		_GLASS.addTouchable(clayer);
 

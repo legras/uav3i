@@ -46,11 +46,11 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	private enum TimeLineScrubStates {NONE, TRANSLATE, FULL};
 	private TimeLineScrubStates _scrubState;
 	private Object _touchOne;
-	private double _touchtimeOne;
+	private double _touchTimeOne;
 	private Object _touchTwo;
-	private double _touchtimeTwo;
-	private double _startPosOne;
-	private double _startPosTwo;
+	private double _touchTimeTwo;
+	private double _lastPosOne;
+	private double _lastPosTwo;
 	private double _currentPosOne;
 	private double _currentPosTwo;
 	
@@ -155,7 +155,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		float interest = -1.f;
 
 		if (y > this.getBounds().height - _Y)
-			interest = 10.f;
+			interest = 30.f;
 		
 		return interest;
 	}
@@ -169,14 +169,15 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				return;
 			case TRANSLATE:
 				_touchTwo = touchref;
-				_startPosTwo = x;
-				_currentPosOne = _startPosOne;
-				_currentPosTwo = _startPosTwo;
+				_lastPosOne = _currentPosOne;
+				_currentPosTwo = _lastPosTwo = x;
+				_touchTimeTwo = timeForPixel(x);
 				_scrubState = TimeLineScrubStates.FULL;
 				return;
 			case NONE:
 				_touchOne = touchref;
-				_startPosOne = x;
+				_currentPosOne = _lastPosOne = x;
+				_touchTimeOne = timeForPixel(x);
 				_scrubState = TimeLineScrubStates.TRANSLATE;
 				return;
 			default:
@@ -187,19 +188,56 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-
+		if (touchref != _touchOne && touchref != _touchTwo)
+			return;
+		
+		switch (_scrubState)
+		{
+			case FULL:
+				break;
+			
+			case TRANSLATE:
+				if (touchref == _touchOne)
+				{
+					_lastPosOne = _currentPosOne;
+					_currentPosOne = x;
+					updateScrub();
+				}
+				break;
+			
+			case NONE:
+			default:
+				break;
+		}
 	}
 
+	private void updateScrub()
+	{
+		switch (_scrubState)
+		{
+			case FULL:
+				break;
+			
+			case TRANSLATE:
+				_timeOrigin -= timeForPixel(_currentPosOne)-timeForPixel(_lastPosOne);
+				break;
+			
+			case NONE:
+			default:
+				break;
+		}
+	}
+	
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-
+		_scrubState = TimeLineScrubStates.NONE;
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		// TODO Auto-generated method stub
+		_scrubState = TimeLineScrubStates.NONE;
 	}
 
 	@Override
