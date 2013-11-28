@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,15 +9,20 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JComponent;
 
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Touchable;
+import com.deev.interaction.uav3i.model.VideoModel;
+import com.deev.interaction.uav3i.model.VideoSegment;
 
 public class TimeLine extends JComponent implements Touchable, Animation
 {
@@ -24,13 +30,23 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	 * 
 	 */
 	private static final long serialVersionUID = -923278315604054575L;
-	
+		
 	private enum TimeLineState {HIDDEN, SHOWING, ACTIVE, HIDING};
 	private TimeLineState _state;
 	private double _vOffset;
 	
 	protected static final double _Y = 102;
 	protected static final double _HEIGHT = 80;
+	protected static final double _MEDIA_HEIGHT = 16;
+	protected static final double _DOT_SIZE = 28;
+	
+	protected static final int _TEXT_BGD_SIZE = 18;
+	protected static final double _TEXT_BGD_X_OFFSET = 4;
+	protected static final double _TEXT_BGD_Y_OFFSET = 10;
+	
+	protected static final int _TEXT_VID_SIZE = 12;
+	protected static final double _TEXT_VID_X_OFFSET = 2;
+	protected static final double _TEXT_VID_Y_OFFSET = 0;
 	
 	private double _timeOrigin; // Screen Left in milliseconds
 	private double _timeScale;  // milliseconds / pixel
@@ -40,7 +56,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	private SimpleDateFormat _HHmm = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat _HHmmss = new SimpleDateFormat("HH:mm:ss");
 	
-	private double _MIN_TIME_SEG_WIDTH = 150;
+	private static double _MIN_TIME_SEG_WIDTH = 150;
 	
 	// Interaction
 	private enum TimeLineScrubStates {NONE, TRANSLATE, FULL};
@@ -53,6 +69,11 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	private double _lastPosTwo;
 	private double _currentPosOne;
 	private double _currentPosTwo;
+	
+	private double _speed; // pixels/second
+	private long _lastTimeOne;
+	private long _deltaTime;
+	private static double _SPEED_RATE = .9;
 	
 
 	public TimeLine(int screenWidth, int screenHeight)
@@ -69,7 +90,6 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		_timeScaleTgt = _timeScale = 10*60*1000 / 360.;
 	}
 
-
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -81,18 +101,35 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		
-		float width = this.getBounds().width;	
-		
-		AffineTransform old = g2.getTransform();
+				
+		/** OLD **/
+		AffineTransform old = g2.getTransform(); 
 		
 		g2.translate(0, this.getBounds().height-_Y+_vOffset);
 
-		/**************** Segments background ******************
-		 * Ils vont par deux : un clair puis un foncé.
-		 * Taille minimumn de segment à l'écran: _MIN_TIME_SEG_WIDTH
-		 */
+		// -1-
+		paintBackgroundSegments(g2);
 		
+		// -2-
+		paintVideoSgments(g2);
+		
+		// -3-
+		if (VideoModel.video.isPlaying())
+			paintCursor(g2, VideoModel.video.getCursorPosition(), true);
+		else
+			paintCursor(g2, _timeOrigin, false);
+		
+		// -4-
+		paintDot(g2);
+		
+		/** OLD **/
+		g2.setTransform(old); 
+	}
+
+	private void paintBackgroundSegments(Graphics2D g2)
+	{
+		float width = this.getBounds().width;	
+
 		final double timeSegmentsDurations[] = {2*10*1000, 2*60*1000, 2*10*60*1000, 2*60*60*1000};
 		int timeSegmentIndex = 0;
 		
@@ -106,7 +143,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		double segWidth = timeSegmentsDurations[timeSegmentIndex] / _timeScale;
 
 		FontRenderContext frc = g2.getFontRenderContext();
-	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 18);
+	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_BGD_SIZE);
 	    TextLayout textTl;
 	    Shape outline;
 						
@@ -120,7 +157,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				AffineTransform o = g2.getTransform();
 				
 				g2.setPaint(Palette3i.getPaint(Palette3i.TIME_LIGHT_TEXT));
-				g2.translate(x + 2, _HEIGHT - 4);
+				g2.translate(x + _TEXT_BGD_X_OFFSET, _HEIGHT - _TEXT_BGD_Y_OFFSET);
 				textTl = new TextLayout(_HHmm.format(new Date((long) timeForPixel(x))), f, frc);
 				outline = textTl.getOutline(null);
 				g2.fill(outline);
@@ -132,10 +169,97 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				
 				g2.setTransform(o);
 		}
-		
-		g2.setTransform(old);
-	}
 
+	}
+	
+	private void paintVideoSgments(Graphics2D g2)
+	{
+		ArrayList<VideoSegment> list = VideoModel.video.getVideoSegments();
+		
+		VideoSegment segment;
+		double start, end;
+		
+		for (int i=0; i<list.size(); i++)
+		{
+			segment = list.get(i);
+			start = pixelForTime(segment.getStart());
+			end = pixelForTime(segment.getEnd());
+			
+			if (i%2 == 0)
+				g2.setPaint(Palette3i.getPaint(Palette3i.TIME_DARK));
+			else
+				g2.setPaint(Palette3i.getPaint(Palette3i.TIME_DARKER));
+			
+			AffineTransform o = g2.getTransform();
+			
+			g2.translate(start, _HEIGHT/2.-_MEDIA_HEIGHT/2.);
+			
+			g2.fill(new Rectangle2D.Double(0, 0, end-start, _MEDIA_HEIGHT));
+			
+			g2.translate(_TEXT_VID_X_OFFSET, _TEXT_VID_SIZE+_TEXT_VID_Y_OFFSET);
+			
+			g2.setPaint(Palette3i.getPaint(Palette3i.TIME_DARK_TEXT));
+			FontRenderContext frc = g2.getFontRenderContext();
+		    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_VID_SIZE);
+		    TextLayout textTl;
+		    Shape outline;
+			
+			textTl = new TextLayout(segment.getName(), f, frc);
+			outline = textTl.getOutline(null);
+			g2.fill(outline);
+			
+			g2.setTransform(o);
+		}
+	}
+	
+	private void paintCursor(Graphics2D g2, double time, boolean full)
+	{
+		final BasicStroke plain =
+		        new BasicStroke(4.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		
+		g2.setStroke(plain);
+		
+		AffineTransform o = g2.getTransform();
+		Path2D.Double line = new Path2D.Double();
+		g2.translate(pixelForTime(time), 0.);
+		line.moveTo(0., 0.);
+		line.lineTo(0., _HEIGHT/2.-_DOT_SIZE/2.);
+		line.lineTo(_DOT_SIZE/2., _HEIGHT/2.);
+		line.lineTo(0., _HEIGHT/2.+_DOT_SIZE/2.);
+		line.lineTo(0., _HEIGHT);
+		
+		g2.setPaint(Palette3i.getPaint(Palette3i.TIME_CURSOR_FILL));
+		if (full)
+			g2.fill(line);
+		
+		g2.setPaint(Palette3i.getPaint(Palette3i.TIME_CURSOR));
+		g2.fill(plain.createStrokedShape(line));
+		
+		// Time
+		FontRenderContext frc = g2.getFontRenderContext();
+	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_BGD_SIZE);
+	    TextLayout textTl;
+	    Shape outline;
+		
+		g2.setPaint(Palette3i.getPaint(Palette3i.TIME_CURSOR));
+		g2.translate(_TEXT_BGD_X_OFFSET, _HEIGHT/2.-_MEDIA_HEIGHT/2.-_TEXT_BGD_Y_OFFSET);
+		textTl = new TextLayout(_HHmmss.format(new Date((long) time)), f, frc);
+		outline = textTl.getOutline(null);
+		g2.fill(outline);
+		
+		g2.setTransform(o);
+	}
+	
+	private void paintDot(Graphics2D g2)
+	{
+		g2.setPaint(Palette3i.getPaint(Palette3i.TIME_DOT));
+		AffineTransform o = g2.getTransform();
+		g2.translate(pixelForTime(System.currentTimeMillis()), _HEIGHT/2.);
+		g2.rotate(Math.PI/4);
+		g2.fill(new Rectangle2D.Double(-_DOT_SIZE/2, -_DOT_SIZE/2, _DOT_SIZE, _DOT_SIZE));
+		g2.setTransform(o);
+	}
+	
 	private double timeForPixel(double x)
 	{
 		return _timeOrigin + x * _timeScale;
@@ -178,6 +302,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				_touchOne = touchref;
 				_currentPosOne = _lastPosOne = x;
 				_touchTimeOne = timeForPixel(x);
+				_lastTimeOne = System.currentTimeMillis();
 				_scrubState = TimeLineScrubStates.TRANSLATE;
 				return;
 			default:
@@ -201,6 +326,10 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				{
 					_lastPosOne = _currentPosOne;
 					_currentPosOne = x;
+					long time = System.currentTimeMillis();
+					_deltaTime = time - _lastTimeOne;
+					_lastTimeOne = time;
+					
 					updateScrub();
 				}
 				break;
@@ -226,11 +355,28 @@ public class TimeLine extends JComponent implements Touchable, Animation
 			default:
 				break;
 		}
+		
+		VideoModel.video.setPlaySequence((long) _timeOrigin, (long) (_timeOrigin + this.getBounds().width * _timeScale));
 	}
 	
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
+		switch (_scrubState)
+		{
+			case FULL:
+				break;
+			
+			case TRANSLATE:
+				if (_deltaTime != 0)
+					_speed = (_currentPosOne - _lastPosOne) / _deltaTime;
+				break;
+			
+			case NONE:
+			default:
+				break;
+		}
+		
 		_scrubState = TimeLineScrubStates.NONE;
 	}
 
@@ -243,6 +389,15 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	@Override
 	public int tick(int time)
 	{
+		if (_scrubState == TimeLineScrubStates.NONE)
+		{
+			_speed *= _SPEED_RATE;
+			if (_speed < .05)
+				_speed = 0.;
+			double d = (double) time * _speed * _timeScale;
+			_timeOrigin -= d;
+		}
+		
 		switch (_state)
 		{
 			case HIDDEN : 

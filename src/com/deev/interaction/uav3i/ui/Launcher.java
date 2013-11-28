@@ -2,8 +2,8 @@ package com.deev.interaction.uav3i.ui;
 
 import javax.swing.SwingUtilities;
 
-import com.deev.interaction.uav3i.model.MediaStorefront;
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.model.VideoModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import fr.dgac.ivy.IvyException;
@@ -30,15 +30,18 @@ public class Launcher
 	    {
 	      case REPLAY: // Lancement avec replay (infos dans le fichier).
 	        UAVModel.initialize(UAVModel.class.getResourceAsStream("13_10_01__10_41_07.data"));
+	        VideoModel.initialize();
 	        break;
 //	      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
 //	        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
 //	        UAVDataStore.initialize();
 	      case PAPARAZZI_DIRECT:
 	        UAVModel.initialize();
+	        VideoModel.initialize();
 	        break;
 	      case PAPARAZZI_REMOTE:
 	        UAVModel.initialize();
+	        VideoModel.initialize();
 	        break;
 	      default:
 	        break;
@@ -75,8 +78,5 @@ public class Launcher
 //			default:
 //				break;
 //		}
-
-		MediaStorefront.start();
-		MediaStorefront.testFill();
 	}
 }
