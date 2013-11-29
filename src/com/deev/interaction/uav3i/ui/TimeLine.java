@@ -56,7 +56,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	private SimpleDateFormat _HHmm = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat _HHmmss = new SimpleDateFormat("HH:mm:ss");
 	
-	private static double _MIN_TIME_SEG_WIDTH = 150;
+	private static double _MIN_TIME_SEG_WIDTH = 300;
 	
 	// Interaction
 	private enum TimeLineScrubStates {NONE, TRANSLATE, FULL};
@@ -66,7 +66,6 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	private Object _touchTwo;
 	private double _touchTimeTwo;
 	private double _lastPosOne;
-	private double _lastPosTwo;
 	private double _currentPosOne;
 	private double _currentPosTwo;
 	
@@ -130,14 +129,14 @@ public class TimeLine extends JComponent implements Touchable, Animation
 	{
 		float width = this.getBounds().width;	
 
-		final double timeSegmentsDurations[] = {2*10*1000, 2*60*1000, 2*10*60*1000, 2*60*60*1000};
+		final double timeSegmentsDurations[] = {2*10*1000, 2*30*1000, 2*60*1000, 2*5*60*1000, 2*10*60*1000, 2*60*60*1000};
 		int timeSegmentIndex = 0;
 		
-		while (timeSegmentsDurations[timeSegmentIndex] / _timeScale < _MIN_TIME_SEG_WIDTH)
+		while (timeSegmentsDurations[timeSegmentIndex] / _timeScale < _MIN_TIME_SEG_WIDTH &&
+				timeSegmentIndex < timeSegmentsDurations.length-1)
+		{
 			timeSegmentIndex++;
-		
-		if (timeSegmentIndex >= timeSegmentsDurations.length)
-			timeSegmentIndex = timeSegmentsDurations.length-1;
+		}
 
 		double xSegstart = pixelForTime(_timeOrigin - (_timeOrigin  % timeSegmentsDurations[timeSegmentIndex]));
 		double segWidth = timeSegmentsDurations[timeSegmentIndex] / _timeScale;
@@ -158,12 +157,18 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				
 				g2.setPaint(Palette3i.getPaint(Palette3i.TIME_LIGHT_TEXT));
 				g2.translate(x + _TEXT_BGD_X_OFFSET, _HEIGHT - _TEXT_BGD_Y_OFFSET);
-				textTl = new TextLayout(_HHmm.format(new Date((long) timeForPixel(x))), f, frc);
+				if (timeSegmentsDurations[timeSegmentIndex]/2. < 60*1000+1)
+					textTl = new TextLayout(_HHmmss.format(new Date((long) timeForPixel(x))), f, frc);
+				else
+					textTl = new TextLayout(_HHmm.format(new Date((long) timeForPixel(x))), f, frc);
 				outline = textTl.getOutline(null);
 				g2.fill(outline);
 				
 				g2.translate(segWidth / 2., 0);
-				textTl = new TextLayout(_HHmm.format(new Date((long) timeForPixel(x+segWidth/2.))), f, frc);
+				if (timeSegmentsDurations[timeSegmentIndex]/2. < 60*1000+1)
+					textTl = new TextLayout(_HHmmss.format(new Date((long) timeForPixel(x+segWidth/2.))), f, frc);
+				else
+					textTl = new TextLayout(_HHmm.format(new Date((long) timeForPixel(x+segWidth/2.))), f, frc);
 				outline = textTl.getOutline(null);
 				g2.fill(outline);
 				
@@ -293,9 +298,9 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				return;
 			case TRANSLATE:
 				_touchTwo = touchref;
-				_lastPosOne = _currentPosOne;
-				_currentPosTwo = _lastPosTwo = x;
+				_touchTimeOne = timeForPixel(_currentPosOne);
 				_touchTimeTwo = timeForPixel(x);
+				_currentPosTwo = x;
 				_scrubState = TimeLineScrubStates.FULL;
 				return;
 			case NONE:
@@ -319,6 +324,11 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		switch (_scrubState)
 		{
 			case FULL:
+				if (touchref == _touchOne)
+					_currentPosOne = x;
+				else
+					_currentPosTwo = x;
+				updateScrub();
 				break;
 			
 			case TRANSLATE:
@@ -345,6 +355,11 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		switch (_scrubState)
 		{
 			case FULL:
+				if (_currentPosOne-_currentPosTwo != 0.)
+				{
+					_timeScale = Math.abs((_touchTimeOne-_touchTimeTwo) / (_currentPosOne-_currentPosTwo));
+					_timeOrigin = _touchTimeOne - _currentPosOne * _timeScale;
+				}
 				break;
 			
 			case TRANSLATE:
@@ -357,6 +372,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		}
 		
 		VideoModel.video.setPlaySequence((long) _timeOrigin, (long) (_timeOrigin + this.getBounds().width * _timeScale));
+		MainFrame.SWITCHER.resetPlay();
 	}
 	
 	@Override
@@ -365,11 +381,28 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		switch (_scrubState)
 		{
 			case FULL:
+				if (touchref == _touchOne)
+				{
+					_scrubState = TimeLineScrubStates.NONE;
+					Object ref = _touchTwo;
+					_touchOne = null;
+					_touchTwo = null;
+					addTouch((float) _currentPosTwo, 0, ref);
+				}
+				else
+				{
+					_scrubState = TimeLineScrubStates.NONE;
+					Object ref = _touchOne;
+					_touchOne = null;
+					_touchTwo = null;
+					addTouch((float) _currentPosOne, 0, ref);
+				}
 				break;
 			
 			case TRANSLATE:
 				if (_deltaTime != 0)
 					_speed = (_currentPosOne - _lastPosOne) / _deltaTime;
+				_scrubState = TimeLineScrubStates.NONE;
 				break;
 			
 			case NONE:
@@ -377,7 +410,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 				break;
 		}
 		
-		_scrubState = TimeLineScrubStates.NONE;
+		
 	}
 
 	@Override

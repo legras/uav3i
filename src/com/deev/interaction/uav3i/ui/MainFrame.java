@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements ActionListener
 	protected static TouchGlass _GLASS = null;
 	protected static TimeLine _TIMELINE;
 	
-	protected static Switcher3Buttons _SWITCHER;
+	public static Switcher3Buttons SWITCHER;
 	protected static SymbolMap _SMAP;;
 
 	public MainFrame()
@@ -132,7 +132,7 @@ public class MainFrame extends JFrame implements ActionListener
 		
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
-		_SWITCHER = mswitch;
+		SWITCHER = mswitch;
 		Dimension swd = mswitch.getSize();
 		mswitch.setBounds(screenSize.width/2-swd.width/2, 12, swd.width, swd.height);
 		clayer.add(mswitch);
@@ -177,7 +177,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 	public static MainFrameState getAppState()
 	{
-		switch (_SWITCHER.getMode())
+		switch (SWITCHER.getMode())
 		{
 			case COMMAND:
 				return MainFrameState.COMMAND;
@@ -196,7 +196,7 @@ public class MainFrame extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		switch (_SWITCHER.getMode())
+		switch (SWITCHER.getMode())
 		{
 			case COMMAND:
 				_TIMELINE.hide();

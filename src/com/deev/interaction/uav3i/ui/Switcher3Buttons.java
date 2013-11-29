@@ -123,6 +123,11 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 			}
 		}
 	}
+	
+	public void resetPlay()
+	{
+		_replayButton.setAlt(false);
+	}
 }
 
 
