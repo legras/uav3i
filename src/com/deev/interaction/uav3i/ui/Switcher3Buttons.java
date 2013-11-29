@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.ZeroPanel;
 import com.deev.interaction.touch.RoundToggleButton;
+import com.deev.interaction.uav3i.model.VideoModel;
 
 
 public class Switcher3Buttons extends ZeroPanel implements ActionListener
@@ -109,7 +110,23 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 		if (e.getSource() != _replayButton)
 			_replayButton.setAlt(true);
 		else
+		{
 			_replayButton.setAlt(!_replayButton.getAlt());
+			
+			if (_replayButton.getAlt())
+			{
+				VideoModel.video.play();
+			}
+			else
+			{
+				VideoModel.video.pause();
+			}
+		}
+	}
+	
+	public void resetPlay()
+	{
+		_replayButton.setAlt(false);
 	}
 }
 

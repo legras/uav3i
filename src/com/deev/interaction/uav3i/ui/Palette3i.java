@@ -13,7 +13,17 @@ import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 public enum Palette3i 
 {	
 	BUTTON_WHITE_BG(1.f, 1.f, 1.f, .5f),
-	BUTTON_DISABLED_BG("img/stripesGray32.png", 16);
+	BUTTON_DISABLED_BG("img/stripesGray32.png", 16),
+	TIME_LIGHT(.75f, .75f, .75f, .7f),
+	TIME_LIGHTER(.80f, .80f, .80f, .7f),
+	TIME_LIGHT_TEXT(.5f, .5f, .5f, 1.f),
+	TIME_DARK(.4f, .4f, .4f, .7f),
+	TIME_DARKER(.3f, .3f, .3f, .7f),
+	TIME_DARK_TEXT(.9f, .9f, .9f, 1.f),
+	TIME_DOT(.3f, .3f, .3f, 1.f),
+	TIME_CURSOR(.95f, .07f, .07f, 1.f),
+	TIME_CURSOR_FILL(.95f, .07f, .07f, .5f);
+	
 	
 	private Paint _paint;
 	
