@@ -29,8 +29,9 @@ public class Launcher
 	   switch (UAV3iSettings.getMode())
 	    {
 	      case REPLAY: // Lancement avec replay (infos dans le fichier).
-	        UAVModel.initialize(UAVModel.class.getResourceAsStream("13_10_01__10_41_07.data"));
+	        UAVModel.initialize(UAVModel.class.getResourceAsStream("pentrez.data"));
 	        VideoModel.initialize();
+
 	        break;
 //	      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
 //	        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
