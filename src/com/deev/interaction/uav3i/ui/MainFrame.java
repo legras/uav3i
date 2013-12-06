@@ -44,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener
 	public static ComponentLayer clayer;
 	
 	protected static TouchGlass _GLASS = null;
-	protected static TimeLine _TIMELINE;
+	public static TimeLine TIMELINE;
 	
 	public static Switcher3Buttons SWITCHER;
 	protected static SymbolMap _SMAP;;
@@ -138,13 +138,13 @@ public class MainFrame extends JFrame implements ActionListener
 		clayer.add(mswitch);
 
 		// ********** La TimeLine **********
-		_TIMELINE = new TimeLine(screenSize.width, screenSize.height);
-		lpane.add(_TIMELINE, new Integer(-3));
+		TIMELINE = new TimeLine(screenSize.width, screenSize.height);
+		lpane.add(TIMELINE, new Integer(-3));
 
 		_GLASS = new TouchGlass();
 
 		Animator.addComponent(fingerpane);
-		Animator.addAnimation(_TIMELINE);
+		Animator.addAnimation(TIMELINE);
 		Animator.addComponent(mapInteractionPane);
 		Animator.go();
 
@@ -167,7 +167,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 		_GLASS.addTouchable(fingerpane);
 		_GLASS.addTouchable(map);
-		_GLASS.addTouchable(_TIMELINE);
+		_GLASS.addTouchable(TIMELINE);
 		_GLASS.addTouchable(mapInteractionPane);
 		_GLASS.addTouchable(clayer);
 
@@ -199,14 +199,14 @@ public class MainFrame extends JFrame implements ActionListener
 		switch (SWITCHER.getMode())
 		{
 			case COMMAND:
-				_TIMELINE.hide();
+				TIMELINE.hide();
 				break;
 			case MAP:
-				_TIMELINE.hide();
+				TIMELINE.hide();
 				_SMAP.hideManoeuverButtons();
 				break;
 			case REPLAY:
-				_TIMELINE.show();
+				TIMELINE.show();
 				_SMAP.hideManoeuverButtons();
 				break;
 			default:

@@ -1,20 +1,16 @@
 package com.deev.interaction.touch;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.TexturePaint;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.util.logging.Level;
 import javax.swing.JToggleButton;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
+
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class RoundToggleButton extends JToggleButton
 {
@@ -31,7 +27,14 @@ public class RoundToggleButton extends JToggleButton
 	
 	public RoundToggleButton(BufferedImage on, BufferedImage off)
 	{
-		super();
+		super("dummy");
+		
+		LoggerUtil.LOG.log(Level.INFO, "inside");
+		
+		if (on == null || off == null)
+			LoggerUtil.LOG.log(Level.WARNING, "Making toggle button, null image");
+		
+		LoggerUtil.LOG.log(Level.INFO, "Making toggle button, size "+ on.getWidth() +"x"+ on.getHeight());
 		setPreferredSize(new Dimension(on.getWidth(), on.getHeight()));
 		setOpaque(false);
 		setBorderPainted(false);

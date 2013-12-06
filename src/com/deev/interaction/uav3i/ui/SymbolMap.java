@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
@@ -28,6 +29,7 @@ import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
@@ -44,6 +46,7 @@ public class SymbolMap extends Map implements Touchable
 	private long _lastTrajectoryUpdate = 0;
 
 	protected static BufferedImage _uavImage = null;
+	protected static BufferedImage _uavGrayImage = null;
 
 	public SymbolMap()
 	{
@@ -64,6 +67,7 @@ public class SymbolMap extends Map implements Touchable
 		try
 		{
 			_uavImage = ImageIO.read(this.getClass().getResource("img/uav.png"));
+			_uavGrayImage = ImageIO.read(this.getClass().getResource("img/uavGray.png"));
 		}
 		catch (IOException e)
 		{
@@ -120,15 +124,29 @@ public class SymbolMap extends Map implements Touchable
 		{
 			g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
 			// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
-			g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_BUTT,
-					BasicStroke.JOIN_ROUND));
-			g2.draw(fullTrajectory);
-			g2.setPaint(Color.RED);
 			g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT,
 					BasicStroke.JOIN_ROUND));
 			g2.draw(fullTrajectory);
+			g2.setPaint(Color.RED);
+			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_ROUND));
+			g2.draw(fullTrajectory);
 		}
-
+		
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		{
+			// Tracé de séquence
+			GeneralPath seqTrajectory = _trajectory.getTrajectorySequence(this,
+					MainFrame.TIMELINE.getTimeSeqStart(),
+					MainFrame.TIMELINE.getTimeSeqend());
+			
+			if (seqTrajectory != null)
+			{
+				g2.setPaint(new Color(1.f, 1.f, 1.f, .7f));
+				g2.setStroke(new BasicStroke(10.f, BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+				g2.draw(seqTrajectory);
+			}
+		}
 		// --------- Manoeuvers --------------------------------------------------
 		synchronized(this)
 		{
@@ -138,8 +156,19 @@ public class SymbolMap extends Map implements Touchable
 
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
+		BufferedImage uavImg;
+		UAVDataPoint uavpoint;
+		
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		{
+			uavImg = _uavGrayImage;
+		}
+		else
+		{
+			uavImg = _uavImage;
+		}
 
-		UAVDataPoint uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
+		uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
 		if (uavpoint != null)
 		{
 			Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
@@ -147,11 +176,31 @@ public class SymbolMap extends Map implements Touchable
 			g2.translate(uav.x, uav.y);
 
 			g2.rotate(Math.PI/2.-course);
-			g2.drawImage(_uavImage, -_uavImage.getWidth()/2, -_uavImage.getHeight()/2, null);
+			g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
 
 		}
 		g2.setTransform(old);
+		
+		
+		// Dessin UAV
+		old = g2.getTransform();	
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		{
+			uavImg = _uavImage;
+			
+			uavpoint = UAVModel.getDataPointAtTime(MainFrame.TIMELINE.getTimeCursorPosition());
+			if (uavpoint != null)
+			{
+				Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
+				double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
+				g2.translate(uav.x, uav.y);
 
+				g2.rotate(Math.PI/2.-course);
+				g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+
+			}
+		}
+		g2.setTransform(old);
 	}
 	
 	@Override
@@ -360,6 +409,8 @@ public class SymbolMap extends Map implements Touchable
 
 	public void addManoeuver(Manoeuver mnvr)
 	{
+		LoggerUtil.LOG.log(Level.INFO, "adding manoeuver");
+	
 		synchronized (this)
 		{
 			_manoeuvers.add(mnvr);

@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
@@ -17,11 +19,23 @@ import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
 
+import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+
 public class ManoeuverButtons implements Animation, ActionListener
 {
 	private enum ManoeuverButtonsStates {SHOWING, HIDING, IDLE};
 	private static double _RATE = .3;
 	private static ManoeuverButtons _BUTTONS_SHOWN = null;
+	
+	private static BufferedImage _uavIconOn = null;
+	private static BufferedImage _uavIconOff = null;
+	private static BufferedImage _submitIconOn = null;
+	private static BufferedImage _submitIconOff = null;
+	private static BufferedImage _pinIconOn = null;
+	private static BufferedImage _pinIconOff = null;
+	private static BufferedImage _deleteIcon = null;
+	private static BufferedImage _deleteIconWait = null;
 	
 	private RoundToggleButton _jumpButton;	
 	private RoundToggleButton _submitButton;
@@ -43,36 +57,50 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private Point2D.Double _posVect[] = {null, null, null, null};
 	private double _offset = 3000;
 
+	
 	public ManoeuverButtons(Manoeuver mnvr) throws IOException
 	{		
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
 		Color gray = new Color(.3f, .3f, .3f, 1.f);
+				
+		if (_uavIconOn == null) 		_uavIconOn 		= getImage("img/uavIconOn.png", blue);
+		if (_uavIconOff == null) 		_uavIconOff 	= getImage("img/uavIconOff.png", gray);
+		if (_submitIconOn == null) 		_submitIconOn 	= getImage("img/submitIconOn.png", blue);
+		if (_submitIconOff == null) 	_submitIconOff 	= getImage("img/submitIconOff.png", gray);
+		if (_pinIconOn == null) 		_pinIconOn 		= getImage("img/pinIconOn.png", blue);
+		if (_pinIconOff == null) 		_pinIconOff 	= getImage("img/pinIconOff.png", gray);
+		if (_deleteIcon == null) 		_deleteIcon 	= getImage("img/deleteIcon.png", Color.RED);
+		if (_deleteIconWait == null) 	_deleteIconWait = getImage("img/deleteIcon.png", gray);
+		
+		LoggerUtil.LOG.log(Level.INFO, "Making buttons");
 		
 		_manoeuver = mnvr;
 		
-		_jumpButton = new RoundToggleButton(
-				getImage("img/uavIconOn.png", blue), 
-				getImage("img/uavIconOff.png", gray));
-		_jumpButton.addActionListener(this);
-
-		_submitButton = new RoundToggleButton(
-				getImage("img/submitIconOn.png", blue), 
-				getImage("img/submitIconOff.png", gray));
-		_submitButton.addActionListener(this);
-
-		_pinButton = new RoundToggleButton(
-				getImage("img/pinIconOn.png", blue), 
-				getImage("img/pinIconOff.png", gray));
-		_pinButton.addActionListener(this);
-
-		_deleteButton = new RoundToggleButton(
-				getImage("img/deleteIcon.png", Color.RED), 
-				getImage("img/deleteIcon.png", gray));
-		_deleteButton.addActionListener(this);
+		class ManoeuverButtonsSwingBuilder implements Runnable
+		{
+			ManoeuverButtons _buttons;
+			
+			public ManoeuverButtonsSwingBuilder(ManoeuverButtons buttons)
+			{
+				_buttons = buttons;
+			}
+			
+			public void run()
+			{
+				_jumpButton = new RoundToggleButton(_uavIconOn, _uavIconOff);
+				_submitButton = new RoundToggleButton(_submitIconOn, _submitIconOff);
+				_pinButton = new RoundToggleButton(_pinIconOn, _pinIconOff);
+				_deleteButton = new RoundToggleButton(_deleteIcon, _deleteIconWait);
+				
+				_buttons.addActionListener(_buttons);
+				
+				show();
+			}
+		}
 		
+		SwingUtilities.invokeLater(new ManoeuverButtonsSwingBuilder(this));
+				
 		Animator.addAnimation(this);
-		
-		show();
 	}
 
 
@@ -151,18 +179,33 @@ public class ManoeuverButtons implements Animation, ActionListener
 		_state = ManoeuverButtonsStates.HIDING;
 	}
 
-	public void addTo(JComponent component)
+	public void addActionListener(ActionListener listener)
 	{
-		component.add(_jumpButton);
-		component.add(_submitButton);
-		component.add(_pinButton);
-		component.add(_deleteButton);
+		_jumpButton.addActionListener(listener);
+		_submitButton.addActionListener(listener);
+		_pinButton.addActionListener(listener);
+		_deleteButton.addActionListener(listener);		
+	}
+	
+	public void addTo(final JComponent component)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{	
+			public void run()
+			{
 
-		_jumpButton.setBounds(0, 0, _size, _size);
-		_submitButton.setBounds(0, 0, _size, _size);
-		_pinButton.setBounds(0, 0, _size, _size);
-		_deleteButton.setBounds(0, 0, _size, _size);
-		
+				component.add(_jumpButton);
+				component.add(_submitButton);
+				component.add(_pinButton);
+				component.add(_deleteButton);
+
+				_jumpButton.setBounds(0, 0, _size, _size);
+				_submitButton.setBounds(0, 0, _size, _size);
+				_pinButton.setBounds(0, 0, _size, _size);
+				_deleteButton.setBounds(0, 0, _size, _size);
+			}
+		});
+				
 		_home = component;
 	}
 	
@@ -225,6 +268,9 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (_positions[0] == null || _posVect[0] == null)
 			return;
 		
+		if (_jumpButton == null || _submitButton == null || _pinButton == null || _deleteButton == null)
+			return;
+		
 		_jumpButton.setBounds(
 				(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
 				(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),
@@ -250,6 +296,8 @@ public class ManoeuverButtons implements Animation, ActionListener
 	{
 		BufferedImage image = ImageIO.read(this.getClass().getResource(name));
 		_size = image.getWidth();
+		
+		LoggerUtil.LOG.log(Level.INFO, "Got image "+name);
 		
 		return new TintedBufferedImage(image, tint);
 	}

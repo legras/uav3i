@@ -85,4 +85,36 @@ public class Trajectory
 		return line;
 	}
 
+	public GeneralPath getTrajectorySequence(SymbolMap symbolMap, long start, long end)
+	{
+		GeneralPath line;
+		line = new GeneralPath();
+		boolean started = true;
+		Point2D.Double p;
+
+		if (_points.size() < 2)
+			return  null;
+
+		trajectory:
+		for (TrajectoryPoint tp : _points)
+		{
+			if (tp.time < start)
+				continue trajectory;
+			
+			if (tp.time > end)
+				break trajectory;
+			
+			p = symbolMap.getScreenForLatLng(tp.latlng);
+
+			if (started)
+			{
+				line.moveTo(p.x, p.y);
+				started = false;
+			}
+			else
+				line.lineTo(p.x, p.y);
+		}
+
+		return line;
+	}
 }

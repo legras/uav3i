@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import javax.swing.JComponent;
 
@@ -23,6 +24,7 @@ import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.airframe.AirframeFacade;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 @SuppressWarnings("serial")
 public class FingerPane extends JComponent implements Touchable
@@ -63,9 +65,12 @@ public class FingerPane extends JComponent implements Touchable
 
 		double delta = 40.;
 
+		LoggerUtil.LOG.log(Level.INFO, "interpreting gesture");
+		
 		if (rectangle.width < delta && rectangle.height < delta)
 		{
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
+		
 			CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
 			_smap.addManoeuver(circleMnvr);
 			Animator.addAnimation(circleMnvr);

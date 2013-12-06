@@ -89,6 +89,24 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		_timeScaleTgt = _timeScale = 10*60*1000 / 360.;
 	}
 
+	public long getTimeCursorPosition()
+	{
+		if (VideoModel.video.isPlaying())
+			return VideoModel.video.getCursorPosition();
+		else
+			return (long) _timeOrigin;
+	}
+	
+	public long getTimeSeqStart()
+	{
+		return (long) _timeOrigin;
+	}
+	
+	public long getTimeSeqend()
+	{
+		return (long) (_timeOrigin + this.getBounds().width * _timeScale);
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -113,10 +131,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		paintVideoSgments(g2);
 		
 		// -3-
-		if (VideoModel.video.isPlaying())
-			paintCursor(g2, VideoModel.video.getCursorPosition(), true);
-		else
-			paintCursor(g2, _timeOrigin, false);
+		paintCursor(g2, getTimeCursorPosition(), false);
 		
 		// -4-
 		paintDot(g2);
