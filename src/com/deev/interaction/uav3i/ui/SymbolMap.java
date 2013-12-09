@@ -408,6 +408,7 @@ public class SymbolMap extends Map implements Touchable
 			Touchable T = _touchedSymbols.get(touchref);
 			
 			T.cancelTouch(touchref);
+			// TODO à tester !
 		}
 	}
 
