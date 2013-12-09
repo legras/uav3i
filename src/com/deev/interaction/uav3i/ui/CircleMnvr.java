@@ -1,7 +1,5 @@
 package com.deev.interaction.uav3i.ui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
@@ -37,8 +35,7 @@ public class CircleMnvr extends Manoeuver
 		// ********** ManoeuverButtons **********
 		try
 		{
-			_buttons = new ManoeuverButtons(this);
-			_buttons.addTo(MainFrame.clayer);
+			_buttons = new ManoeuverButtons(this, MainFrame.clayer);
 		}
 		catch (IOException e1)
 		{

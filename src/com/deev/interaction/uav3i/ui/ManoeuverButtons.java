@@ -1,7 +1,6 @@
 package com.deev.interaction.uav3i.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
@@ -19,7 +18,6 @@ import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class ManoeuverButtons implements Animation, ActionListener
@@ -58,7 +56,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private double _offset = 3000;
 
 	
-	public ManoeuverButtons(Manoeuver mnvr) throws IOException
+	public ManoeuverButtons(Manoeuver mnvr, JComponent layer) throws IOException
 	{		
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
 		Color gray = new Color(.3f, .3f, .3f, 1.f);
@@ -72,17 +70,19 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (_deleteIcon == null) 		_deleteIcon 	= getImage("img/deleteIcon.png", Color.RED);
 		if (_deleteIconWait == null) 	_deleteIconWait = getImage("img/deleteIcon.png", gray);
 		
-		LoggerUtil.LOG.log(Level.INFO, "Making buttons");
-		
 		_manoeuver = mnvr;
+		_home = layer;
+		_size = _uavIconOn.getWidth();
 		
 		class ManoeuverButtonsSwingBuilder implements Runnable
 		{
 			ManoeuverButtons _buttons;
+			JComponent _layer;
 			
-			public ManoeuverButtonsSwingBuilder(ManoeuverButtons buttons)
+			public ManoeuverButtonsSwingBuilder(final ManoeuverButtons buttons, final JComponent layer)
 			{
 				_buttons = buttons;
+				_layer = layer;
 			}
 			
 			public void run()
@@ -92,13 +92,30 @@ public class ManoeuverButtons implements Animation, ActionListener
 				_pinButton = new RoundToggleButton(_pinIconOn, _pinIconOff);
 				_deleteButton = new RoundToggleButton(_deleteIcon, _deleteIconWait);
 				
+				_layer.add(_jumpButton);
+				_layer.add(_submitButton);
+				_layer.add(_pinButton);
+				_layer.add(_deleteButton);
+
+				_jumpButton.setBounds(0, 0, _size, _size);
+				_submitButton.setBounds(0, 0, _size, _size);
+				_pinButton.setBounds(0, 0, _size, _size);
+				_deleteButton.setBounds(0, 0, _size, _size);
+				
+				_jumpButton.setVisible(true);
+				_submitButton.setVisible(true);
+				_pinButton.setVisible(true);
+				_deleteButton.setVisible(true);
+				
 				_buttons.addActionListener(_buttons);
 				
 				show();
+				
+				LoggerUtil.LOG.log(Level.INFO, _jumpButton.toString());
 			}
 		}
 		
-		SwingUtilities.invokeLater(new ManoeuverButtonsSwingBuilder(this));
+		SwingUtilities.invokeLater(new ManoeuverButtonsSwingBuilder(this, layer));
 				
 		Animator.addAnimation(this);
 	}
@@ -141,16 +158,25 @@ public class ManoeuverButtons implements Animation, ActionListener
 	
 	public boolean isModifiable()
 	{
+		if (_submitButton == null || _pinButton == null)
+			return false;
+		
 		return !_submitButton.isSelected() && !_pinButton.isSelected();
 	}
 	
 	public boolean isSubmitted()
 	{
+		if (_submitButton == null)
+			return false;
+		
 		return _submitButton.isSelected();
 	}
 	
 	public void setSubmitted(boolean sub)
 	{
+		if (_submitButton == null)
+			return;
+		
 		_submitButton.setSelected(sub);
 		_submitButton.setEnabled(!sub);
 	}
@@ -158,6 +184,10 @@ public class ManoeuverButtons implements Animation, ActionListener
 	public void setJump(boolean jump)
 	{
 		setSubmitted(jump);
+		
+		if (_jumpButton == null)
+			return;
+		
 		_jumpButton.setSelected(jump);
 		_jumpButton.setEnabled(!jump);
 	}
@@ -176,6 +206,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	{
 		if (_offset < 1)
 			_offset = 1;
+		
 		_state = ManoeuverButtonsStates.HIDING;
 	}
 
@@ -185,28 +216,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 		_submitButton.addActionListener(listener);
 		_pinButton.addActionListener(listener);
 		_deleteButton.addActionListener(listener);		
-	}
-	
-	public void addTo(final JComponent component)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{	
-			public void run()
-			{
-
-				component.add(_jumpButton);
-				component.add(_submitButton);
-				component.add(_pinButton);
-				component.add(_deleteButton);
-
-				_jumpButton.setBounds(0, 0, _size, _size);
-				_submitButton.setBounds(0, 0, _size, _size);
-				_pinButton.setBounds(0, 0, _size, _size);
-				_deleteButton.setBounds(0, 0, _size, _size);
-			}
-		});
-				
-		_home = component;
 	}
 	
 	public void remove()
@@ -271,33 +280,39 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (_jumpButton == null || _submitButton == null || _pinButton == null || _deleteButton == null)
 			return;
 		
-		_jumpButton.setBounds(
-				(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
-				(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),
-				_size, _size);
-		
-		_submitButton.setBounds(
-				(int) _positions[1].x-_size/2 + (int) (_offset * _posVect[1].x),
-				(int) _positions[1].y-_size/2 + (int) (_offset * _posVect[1].y),
-				_size, _size);
-		
-		_pinButton.setBounds(
-				(int) _positions[2].x-_size/2 + (int) (_offset * _posVect[2].x),
-				(int) _positions[2].y-_size/2 + (int) (_offset * _posVect[2].y),
-				_size, _size);
-		
-		_deleteButton.setBounds(
-				(int) _positions[3].x-_size/2 + (int) (_offset * _posVect[3].x),
-				(int) _positions[3].y-_size/2 + (int) (_offset * _posVect[3].y),
-				_size, _size);	
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{	
+				_jumpButton.setBounds(
+						(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
+						(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),
+						_size, _size);
+				
+				_submitButton.setBounds(
+						(int) _positions[1].x-_size/2 + (int) (_offset * _posVect[1].x),
+						(int) _positions[1].y-_size/2 + (int) (_offset * _posVect[1].y),
+						_size, _size);
+				
+				_pinButton.setBounds(
+						(int) _positions[2].x-_size/2 + (int) (_offset * _posVect[2].x),
+						(int) _positions[2].y-_size/2 + (int) (_offset * _posVect[2].y),
+						_size, _size);
+				
+				_deleteButton.setBounds(
+						(int) _positions[3].x-_size/2 + (int) (_offset * _posVect[3].x),
+						(int) _positions[3].y-_size/2 + (int) (_offset * _posVect[3].y),
+						_size, _size);
+				
+				LoggerUtil.LOG.log(Level.INFO, "MB " + _state.toString()+" "+_offset);
+			}
+		});
+			
 	}
 	
 	private BufferedImage getImage(String name, Color tint) throws IOException
 	{
 		BufferedImage image = ImageIO.read(this.getClass().getResource(name));
-		_size = image.getWidth();
-		
-		LoggerUtil.LOG.log(Level.INFO, "Got image "+name);
 		
 		return new TintedBufferedImage(image, tint);
 	}
