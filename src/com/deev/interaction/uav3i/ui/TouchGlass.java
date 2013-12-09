@@ -125,6 +125,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	public void mousePressed(MouseEvent e)
 	{
 		addTouch(e.getXOnScreen(), e.getYOnScreen(), this);
+		updateTouch(e.getXOnScreen(), e.getYOnScreen(), this);
 	}
 
 	@Override
@@ -161,7 +162,8 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	public void mouseExited(MouseEvent e) {}
 
 	@Override
-	public float getInterestForPoint(float x, float y) {
+	public float getInterestForPoint(float x, float y)
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}

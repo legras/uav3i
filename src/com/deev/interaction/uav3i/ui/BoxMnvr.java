@@ -130,8 +130,7 @@ public class BoxMnvr extends Manoeuver
 		// ********** ManoeuverButtons **********
 		try
 		{
-			_buttons = new ManoeuverButtons(this);
-			_buttons.addTo(MainFrame.clayer);
+			_buttons = new ManoeuverButtons(this, MainFrame.clayer);
 		}
 		catch (IOException e1)
 		{

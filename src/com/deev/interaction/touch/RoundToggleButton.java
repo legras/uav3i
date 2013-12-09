@@ -27,14 +27,11 @@ public class RoundToggleButton extends JToggleButton
 	
 	public RoundToggleButton(BufferedImage on, BufferedImage off)
 	{
-		super("dummy");
-		
-		LoggerUtil.LOG.log(Level.INFO, "inside");
-		
+		super();
+
 		if (on == null || off == null)
 			LoggerUtil.LOG.log(Level.WARNING, "Making toggle button, null image");
 		
-		LoggerUtil.LOG.log(Level.INFO, "Making toggle button, size "+ on.getWidth() +"x"+ on.getHeight());
 		setPreferredSize(new Dimension(on.getWidth(), on.getHeight()));
 		setOpaque(false);
 		setBorderPainted(false);

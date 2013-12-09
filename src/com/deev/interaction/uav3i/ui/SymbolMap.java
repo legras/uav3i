@@ -89,9 +89,15 @@ public class SymbolMap extends Map implements Touchable
 		synchronized (_touchSymbols)
 		{
 			_touchSymbols.remove(t);
-			for (Entry<Object,Touchable> e : _touchedSymbols.entrySet())
-				if (e.getValue() == t)
-					_touchedSymbols.entrySet().remove(e);
+			
+			for(Iterator<Entry<Object,Touchable>> it = _touchedSymbols.entrySet().iterator(); it.hasNext();)
+			{
+				Entry<Object,Touchable> entry = it.next();
+			      if(entry.getValue() == t)
+			      {
+			        it.remove();
+			      }
+			}
 		}
 	}
 
@@ -124,12 +130,10 @@ public class SymbolMap extends Map implements Touchable
 		{
 			g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
 			// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
-			g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT,
-					BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 			g2.draw(fullTrajectory);
 			g2.setPaint(Color.RED);
-			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT,
-					BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 			g2.draw(fullTrajectory);
 		}
 		
