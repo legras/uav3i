@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -18,12 +17,12 @@ import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
 
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class ManoeuverButtons implements Animation, ActionListener
 {
 	private enum ManoeuverButtonsStates {SHOWING, HIDING, IDLE};
 	private static double _RATE = .3;
+	private static long _DELETE_DELAY = 2000;
 	private static ManoeuverButtons _BUTTONS_SHOWN = null;
 	
 	private static BufferedImage _uavIconOn = null;
@@ -340,10 +339,18 @@ public class ManoeuverButtons implements Animation, ActionListener
 				if (_isDead)
 					remove();
 				
-				if (_deleteEnabledTime > 0 && System.currentTimeMillis() - _deleteEnabledTime > 2000)
+				if (_deleteEnabledTime > 0)
 				{
-					_deleteButton.setSelected(false);
-					_deleteEnabledTime = -1;
+					if (System.currentTimeMillis() - _deleteEnabledTime > _DELETE_DELAY)
+					{
+						_deleteButton.setSelected(false);
+						_deleteButton.setPie(-1.);
+						_deleteEnabledTime = -1;
+					}
+					else
+					{
+						_deleteButton.setPie((double) (System.currentTimeMillis() - _deleteEnabledTime) / _DELETE_DELAY);
+					}
 				}
 				
 			default:

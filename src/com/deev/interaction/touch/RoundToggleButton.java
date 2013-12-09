@@ -3,9 +3,11 @@ package com.deev.interaction.touch;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
+
 import javax.swing.JToggleButton;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
@@ -23,7 +25,7 @@ public class RoundToggleButton extends JToggleButton
 	private BufferedImage _offIcon = null;
 	private BufferedImage _altIcon = null;
 	private boolean _isAlt = true;
-
+	private double _pie = -1.;
 	
 	public RoundToggleButton(BufferedImage on, BufferedImage off)
 	{
@@ -58,6 +60,12 @@ public class RoundToggleButton extends JToggleButton
 		
 		g2.fill(new Ellipse2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1));
 		
+		if (_pie > 0.)
+		{
+			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DELAY_BG));
+			g2.fill(new Arc2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1, 0., _pie*360., Arc2D.PIE));
+		}
+		
 		if (isSelected())
 		{
 			if (_altIcon != null && _isAlt)
@@ -79,5 +87,10 @@ public class RoundToggleButton extends JToggleButton
 	public boolean getAlt()
 	{
 		return _isAlt;
+	}
+	
+	public void setPie(double pie)
+	{
+		_pie = pie;
 	}
 }

@@ -14,6 +14,7 @@ public enum Palette3i
 {	
 	BUTTON_WHITE_BG(1.f, 1.f, 1.f, .5f),
 	BUTTON_DISABLED_BG("img/stripesGray32.png", 16),
+	BUTTON_DELAY_BG(0.f, 0.f, 0.f, .1f),
 	TIME_LIGHT(.75f, .75f, .75f, .7f),
 	TIME_LIGHTER(.80f, .80f, .80f, .7f),
 	TIME_LIGHT_TEXT(.5f, .5f, .5f, 1.f),
