@@ -64,8 +64,6 @@ public class FingerPane extends JComponent implements Touchable
 		BoundingRectangle rectangle = gesture.getSmallestEnclosingRectangle();
 
 		double delta = 40.;
-
-		LoggerUtil.LOG.log(Level.INFO, "interpreting gesture");
 		
 		if (rectangle.width < delta && rectangle.height < delta)
 		{

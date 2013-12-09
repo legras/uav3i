@@ -83,7 +83,6 @@ public class Animator
 
 	public static void addAnimation(Animation anim)
 	{
-		LoggerUtil.LOG.log(Level.INFO, "Adding animation "+anim.getClass().toString());
 		synchronized(_animations)
 		{
 			if (!_animations.contains(anim))

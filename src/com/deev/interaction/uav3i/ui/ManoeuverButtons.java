@@ -110,8 +110,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 				_buttons.addActionListener(_buttons);
 				
 				show();
-				
-				LoggerUtil.LOG.log(Level.INFO, _jumpButton.toString());
 			}
 		}
 		
@@ -303,8 +301,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 						(int) _positions[3].x-_size/2 + (int) (_offset * _posVect[3].x),
 						(int) _positions[3].y-_size/2 + (int) (_offset * _posVect[3].y),
 						_size, _size);
-				
-				LoggerUtil.LOG.log(Level.INFO, "MB " + _state.toString()+" "+_offset);
 			}
 		});
 			

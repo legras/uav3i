@@ -412,9 +412,7 @@ public class SymbolMap extends Map implements Touchable
 	}
 
 	public void addManoeuver(Manoeuver mnvr)
-	{
-		LoggerUtil.LOG.log(Level.INFO, "adding manoeuver");
-	
+	{	
 		synchronized (this)
 		{
 			_manoeuvers.add(mnvr);
