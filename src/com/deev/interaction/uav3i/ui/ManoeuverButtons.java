@@ -360,6 +360,11 @@ public class ManoeuverButtons implements Animation, ActionListener
 		return 1;
 	}
 
+	public boolean isShown()
+	{
+		return this == _BUTTONS_SHOWN;
+	}
+	
 	@Override
 	public int life()
 	{

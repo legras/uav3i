@@ -41,6 +41,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
 	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
+	private static Color _M_GREY = new Color(.1f, .1f, .1f, 1.f);
+	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .5f);
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -62,9 +64,11 @@ public abstract class Manoeuver implements Touchable, Animation
 			}
 		}
 		
+		float lineWidth = _buttons.isShown() ? 3.f : 1.f;
+		
 		g2.setPaint(_hashGW);
 		g2.fill(footprint);
-		g2.setStroke(new BasicStroke(3.f));
+		g2.setStroke(new BasicStroke(lineWidth));
 		g2.setPaint(_GREEN);
 		g2.draw(footprint);
 	}
@@ -90,13 +94,14 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-
+		float lineWidth = _buttons.isShown() ? 3.f : 1.f;
+		
 		final float dash1[] = {10.0f};
 	    final BasicStroke dashed =
-	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
+	        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
 	    
 	    final BasicStroke plain =
-	        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+	        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 	    
 	    final BasicStroke fat =
 	        new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
