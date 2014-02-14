@@ -7,6 +7,8 @@ import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -17,6 +19,8 @@ import javax.imageio.ImageIO;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Palette;
 import com.deev.interaction.touch.Touchable;
+import com.deev.interaction.uav3i.model.UAVDataPoint;
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
 public abstract class Manoeuver implements Touchable, Animation
@@ -41,8 +45,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
 	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
-	private static Color _M_GREY = new Color(.1f, .1f, .1f, 1.f);
-	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .5f);
+	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
+	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .2f);
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -64,7 +68,7 @@ public abstract class Manoeuver implements Touchable, Animation
 			}
 		}
 		
-		float lineWidth = _buttons.isShown() ? 3.f : 1.f;
+		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
 		
 		g2.setPaint(_hashGW);
 		g2.fill(footprint);
@@ -94,7 +98,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-		float lineWidth = _buttons.isShown() ? 3.f : 1.f;
+		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
 		
 		final float dash1[] = {10.0f};
 	    final BasicStroke dashed =
@@ -125,6 +129,53 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(line);
 	}
 	
+	public void paintLabelledLineAbove(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean opposite)
+	{
+		final double headL = 80.;
+		final double pp = .9;
+		
+		double L = A.distance(B);
+		Point2D.Double u = new Point2D.Double();
+		Point2D.Double v = new Point2D.Double();
+		
+		u.x = (B.x-A.x)/L;
+		u.y = (B.y-A.y)/L;
+		
+		v.x = -u.y;
+		v.y =  u.x;
+		
+		if (v.y > 0 != opposite)
+		{
+			v.x *= -1;
+			v.y *= -1;
+		}
+		
+		AffineTransform old = g2.getTransform();	// PUSH
+		
+		g2.translate(A.x,  A.y);
+		
+		GeneralPath p = new GeneralPath();		
+		
+		p.moveTo(0, 0);
+		p.lineTo(headL*v.x, headL*v.y);
+		p.moveTo(headL*v.x*pp, headL*v.y*pp);
+		p.lineTo(headL*v.x*pp + L*u.x, headL*v.y*pp + L*u.y);
+		p.moveTo(L*u.x, L*u.y);
+		p.lineTo(headL*v.x + L*u.x, headL*v.y + L*u.y);
+		
+		g2.setPaint(_M_WHITE);
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+		g2.draw(p);
+		
+		g2.setPaint(_M_GREY);
+		g2.setStroke(new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+		g2.draw(p);
+		
+		g2.setTransform(old);						// UNPUSH
+		
+		p.moveTo(A.x, A.y);
+	}
+	
 	public abstract void positionButtons();
 	
 	public void hidebuttons()
@@ -143,6 +194,11 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void stopAdjusting()
 	{
 		_adjusting = false;
+	}
+	
+	public boolean isFocusedMnvr()
+	{
+		return _buttons.isShown();
 	}
 	
 	public abstract boolean isAdjustmentInterestedAtPx(double x, double y);

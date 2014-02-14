@@ -105,6 +105,9 @@ public class LineMnvr extends Manoeuver
 
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+		
+		if (isFocusedMnvr())
+			paintLabelledLineAbove(g2, Apx, Bpx, "XXX.00 m", _currentRm > 0);
 
 		// Zone à regarder
 		GeneralPath line;
