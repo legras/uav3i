@@ -106,7 +106,7 @@ public class LineMnvr extends Manoeuver
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
 
-		// Zone à regarder : ligne rouge
+		// Zone à regarder
 		GeneralPath line;
 		line = new GeneralPath();
 		line.moveTo(Apx.x, Apx.y);
@@ -124,7 +124,7 @@ public class LineMnvr extends Manoeuver
 		Point2D.Double LBpx = new Point2D.Double(Bpx.x + _v.x * Rpx,
 				Bpx.y + _v.y * Rpx);
 
-		// Trajectoire du drone : ligne bleue
+		// Trajectoire du drone
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
 		paintAdjustLine(g2, l, isSubmitted(), _adjusting);
 
