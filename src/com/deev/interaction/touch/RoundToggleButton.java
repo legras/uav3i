@@ -63,7 +63,9 @@ public class RoundToggleButton extends JToggleButton
 		if (_pie > 0.)
 		{
 			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DELAY_BG));
-			g2.fill(new Arc2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1, 0., _pie*360., Arc2D.PIE));
+			// g2.fill(new Arc2D.Double(0, 0, _onIcon.getWidth()-1, _onIcon.getHeight()-1, 0., _pie*360., Arc2D.PIE));
+			double S = _onIcon.getWidth()/2.;
+			g2.fill(new Ellipse2D.Double(S*_pie, S*_pie, 2*S*(1-_pie), 2*S*(1-_pie)));
 		}
 		
 		if (isSelected())
