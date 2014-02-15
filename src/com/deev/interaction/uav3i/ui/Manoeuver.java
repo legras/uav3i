@@ -2,11 +2,14 @@ package com.deev.interaction.uav3i.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -129,7 +132,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(line);
 	}
 	
-	public void paintLabelledLineAbove(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean opposite)
+	public void drawLabelledLineAbove(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean opposite)
 	{
 		final double headL = 80.;
 		final double pp = .9;
@@ -170,10 +173,24 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.setPaint(_M_GREY);
 		g2.setStroke(new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 		g2.draw(p);
+
+		// Label
+		FontRenderContext frc = g2.getFontRenderContext();
+	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 24);
+	    TextLayout textTl;
+	    Shape outline;
+	    
+		textTl = new TextLayout(label, f, frc);
+		outline = textTl.getOutline(null);
+	    Rectangle2D b = outline.getBounds2D();
+	   
+	    g2.translate(L*u.x/2+headL*v.x*pp, L*u.y/2+headL*v.y*pp);
+	    g2.rotate(Math.atan2(u.y, u.x));
+	    g2.translate(-b.getWidth()/2, -4);
+	    
+		g2.fill(outline);
 		
 		g2.setTransform(old);						// UNPUSH
-		
-		p.moveTo(A.x, A.y);
 	}
 	
 	public abstract void positionButtons();
