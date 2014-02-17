@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D.Double;
 import java.io.IOException;
 import java.util.logging.Level;
 
@@ -73,6 +74,14 @@ public class CircleMnvr extends Manoeuver
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
 		paintAdjustLine(g2, ell, isSubmitted(), _adjusting);
+		
+		if (isFocusedMnvr())
+		{
+			String largS = Math.round(Math.abs(_currentRm))+" m";
+			Point2D.Double zero = new Point2D.Double();
+			Point2D.Double ll = new Point2D.Double(-Rpx*Math.cos(Math.PI/6), Rpx*Math.sin(Math.PI/6));
+			drawLabelledLine(g2, zero, ll, largS, false);
+		}
 
 		g2.setTransform(old);
 	}

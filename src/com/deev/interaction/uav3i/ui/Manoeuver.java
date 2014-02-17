@@ -141,7 +141,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		}
 		
 		final double headL = 50.;
-		final double pp = .9;
+		final double pp = 1.2;
 		
 		double L = A.distance(B);
 		Point2D.Double u = new Point2D.Double();

@@ -201,6 +201,17 @@ public class BoxMnvr extends Manoeuver
 			paintAdjustLine(g2, boxhndl.getPath(length, this), isSubmitted(), fat);
 		}
 		
+		if (isFocusedMnvr())
+		{
+			String widthS = Math.round(box.width/_smap.getPPM())+" m";
+			String heightS = Math.round(box.height/_smap.getPPM())+" m";
+			Point2D.Double TL = new Point2D.Double(box.x, box.y);
+			Point2D.Double TR = new Point2D.Double(box.x+box.width, box.y);
+			Point2D.Double BL = new Point2D.Double(box.x, box.y+box.height);
+			drawLabelledLine(g2, TL, TR, widthS, false);
+			drawLabelledLine(g2, BL, TL, heightS, false);
+		}
+		
 		g2.setTransform(old);
 	}
 	
