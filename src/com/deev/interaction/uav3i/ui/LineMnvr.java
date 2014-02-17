@@ -130,12 +130,14 @@ public class LineMnvr extends Manoeuver
 		
 		if (isFocusedMnvr())
 		{
-			drawLabelledLine(g2, LApx, LBpx, "XXX.00 m", LApx.y > Apx.y);
+			String distS = Math.round(Apx.distance(Bpx)/_smap.getPPM())+"m";
+			drawLabelledLine(g2, LApx, LBpx, distS, LApx.y > Apx.y);
 			
+			String largS = Math.abs(_currentRm)+"m";
 			if (LApx.y < LBpx.y)
-				drawLabelledLine(g2, Apx, LApx, "XXX.00 m", false);
+				drawLabelledLine(g2, Apx, LApx, largS, false);
 			else
-				drawLabelledLine(g2, Bpx, LBpx, "XXX.00 m", false);
+				drawLabelledLine(g2, Bpx, LBpx, largS, false);
 		}
 
 		g2.setTransform(old);
