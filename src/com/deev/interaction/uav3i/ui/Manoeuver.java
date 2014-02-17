@@ -49,7 +49,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
 	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
 	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
-	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .2f);
+	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
 	public abstract void paint(Graphics2D g2);
 	
@@ -132,9 +132,15 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(line);
 	}
 	
-	public void drawLabelledLineAbove(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean opposite)
+	public void drawLabelledLine(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean below)
 	{
-		final double headL = 80.;
+		if (A.x > B.x)
+		{
+			drawLabelledLine(g2, B, A, label, below);
+			return;
+		}
+		
+		final double headL = 50.;
 		final double pp = .9;
 		
 		double L = A.distance(B);
@@ -147,7 +153,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		v.x = -u.y;
 		v.y =  u.x;
 		
-		if (v.y > 0 != opposite)
+		if (!below)
 		{
 			v.x *= -1;
 			v.y *= -1;
@@ -171,7 +177,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		g2.draw(p);
 		
 		g2.setPaint(_M_GREY);
-		g2.setStroke(new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+		g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 		g2.draw(p);
 
 		// Label
@@ -188,6 +194,11 @@ public abstract class Manoeuver implements Touchable, Animation
 	    g2.rotate(Math.atan2(u.y, u.x));
 	    g2.translate(-b.getWidth()/2, -4);
 	    
+	    g2.setPaint(_M_WHITE);
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+		g2.draw(outline);
+		
+		g2.setPaint(_M_GREY);
 		g2.fill(outline);
 		
 		g2.setTransform(old);						// UNPUSH

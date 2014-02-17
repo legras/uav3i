@@ -105,9 +105,6 @@ public class LineMnvr extends Manoeuver
 
 		Area area = new Area();
 		BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
-		
-		if (isFocusedMnvr())
-			drawLabelledLineAbove(g2, Apx, Bpx, "XXX.00 m", _currentRm > 0);
 
 		// Zone à regarder
 		GeneralPath line;
@@ -130,6 +127,16 @@ public class LineMnvr extends Manoeuver
 		// Trajectoire du drone
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
 		paintAdjustLine(g2, l, isSubmitted(), _adjusting);
+		
+		if (isFocusedMnvr())
+		{
+			drawLabelledLine(g2, LApx, LBpx, "XXX.00 m", LApx.y > Apx.y);
+			
+			if (LApx.y < LBpx.y)
+				drawLabelledLine(g2, Apx, LApx, "XXX.00 m", false);
+			else
+				drawLabelledLine(g2, Bpx, LBpx, "XXX.00 m", false);
+		}
 
 		g2.setTransform(old);
 	}
