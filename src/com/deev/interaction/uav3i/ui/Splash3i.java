@@ -77,7 +77,6 @@ public class Splash3i extends JComponent implements Animation, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println(e);
 		if (_state != Splash3iStates.IDLE)
 			return;
 		
