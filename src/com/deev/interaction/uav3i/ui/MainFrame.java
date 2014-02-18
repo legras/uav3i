@@ -116,6 +116,18 @@ public class MainFrame extends JFrame implements ActionListener
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
 		
+		// ********** Splash ***************
+		Splash3i splash = null;
+		try
+		{
+			splash = new Splash3i(clayer);
+			splash.setCenter(screenSize.width/2, screenSize.height/2);
+		}
+		catch (IOException e1)
+		{
+			LoggerUtil.LOG.log(Level.WARNING, "Could not make splash screen");
+		}
+		
 		// ********** 3i button ************
 		try
 		{
@@ -125,6 +137,7 @@ public class MainFrame extends JFrame implements ActionListener
 					new TintedBufferedImage(icon3i, new Color(.3f, .3f, .3f, 1.f)));
 			clayer.add(button3i);
 			button3i.setBounds(screenSize.width-12-icon3i.getWidth(), 12, icon3i.getWidth(), icon3i.getHeight());
+			button3i.addActionListener(splash);
 		}
 		catch (IOException e1)
 		{
