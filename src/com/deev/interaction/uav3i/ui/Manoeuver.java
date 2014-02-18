@@ -141,7 +141,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		}
 		
 		final double headL = 50.;
-		final double pp = 1.2;
+		final double pp = 60.;
 		
 		double L = A.distance(B);
 		Point2D.Double u = new Point2D.Double();
@@ -167,10 +167,14 @@ public abstract class Manoeuver implements Touchable, Animation
 		
 		p.moveTo(0, 0);
 		p.lineTo(headL*v.x, headL*v.y);
-		p.moveTo(headL*v.x*pp, headL*v.y*pp);
-		p.lineTo(headL*v.x*pp + L*u.x, headL*v.y*pp + L*u.y);
+		p.lineTo(headL*v.x + (pp-headL)*(-u.x+v.x), headL*v.y + (pp-headL)*(-u.y+v.y));
+		
+		p.moveTo(pp*v.x, pp*v.y);
+		p.lineTo(pp*v.x + L*u.x, pp*v.y + L*u.y);
+		
 		p.moveTo(L*u.x, L*u.y);
 		p.lineTo(headL*v.x + L*u.x, headL*v.y + L*u.y);
+		p.lineTo(headL*v.x + L*u.x + (pp-headL)*(u.x+v.x), headL*v.y + L*u.y + (pp-headL)*(u.y+v.y));
 		
 		g2.setPaint(_M_WHITE);
 		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
@@ -190,7 +194,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		outline = textTl.getOutline(null);
 	    Rectangle2D b = outline.getBounds2D();
 	   
-	    g2.translate(L*u.x/2+headL*v.x*pp, L*u.y/2+headL*v.y*pp);
+	    g2.translate(L*u.x/2+v.x*pp, L*u.y/2+v.y*pp);
 	    g2.rotate(Math.atan2(u.y, u.x));
 	    g2.translate(-b.getWidth()/2, -4);
 	    
