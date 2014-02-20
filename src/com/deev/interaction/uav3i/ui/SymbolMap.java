@@ -44,6 +44,8 @@ public class SymbolMap extends Map implements Touchable
 
 	private Trajectory _trajectory;
 	private long _lastTrajectoryUpdate = 0;
+	
+	private Ruler _ruler = null;
 
 	protected static BufferedImage _uavImage = null;
 	protected static BufferedImage _uavGrayImage = null;
@@ -62,6 +64,9 @@ public class SymbolMap extends Map implements Touchable
 		_touchedSymbols = new HashMap<Object, Touchable>();
 		
 		_trajectory = new Trajectory();
+		
+		_ruler = new Ruler(this);
+		addTouchSymbol(_ruler);
 
 		// Dessin UAV
 		try
@@ -158,6 +163,9 @@ public class SymbolMap extends Map implements Touchable
 				m.paint(g2);
 		}
 
+		if (_ruler != null)
+			_ruler.paint(g2);
+		
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
 		BufferedImage uavImg;
