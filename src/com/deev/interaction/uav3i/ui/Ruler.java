@@ -8,6 +8,7 @@ import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
@@ -16,12 +17,14 @@ import org.apache.commons.math3.linear.LUDecomposition;
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.touch.Touchable;
+import com.deev.interaction.uav3i.model.UAVModel;
 
 public class Ruler implements Touchable
 {
 	Point2D.Double _A, _B;
 
-	static double RPX = 10.;
+	private static double _HALFW = 20.;
+	private static double _MIN_SEG_WIDTH = 100;
 	
 	private enum RulerMoveStates {NONE, TRANSLATE, FULL};
 	private RulerMoveStates _moveState = RulerMoveStates.NONE;
@@ -62,17 +65,65 @@ public class Ruler implements Touchable
 	public void paint(Graphics2D g2)
 	{
 		AffineTransform old = g2.getTransform();
-
-		GeneralPath p = new GeneralPath();		
 		
-		p.moveTo(_A.x, _A.y);
-		p.lineTo(_B.x,  _B.y);
+		final double timeSegmentsDurations[] = {2*10, 2*30, 2*60, 2*5*60, 2*10*60, 2*60*60};
+		int timeSegmentIndex = 0;
 		
-		g2.setPaint(Color.RED);
-		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
-		g2.draw(p);
+		while (timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed() < _MIN_SEG_WIDTH &&
+				timeSegmentIndex < timeSegmentsDurations.length-1)
+		{
+			timeSegmentIndex++;
+		}
+		
+		final double distSegmentsLengths[] = {5., 10., 25., 50., 100., 200., 500., 1000.};
+		int distSegmentIndex = 0;
+		
+		while (distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH &&
+				timeSegmentIndex < distSegmentsLengths.length-1)
+		{
+			distSegmentIndex++;
+		}
+		
+		g2.translate(_A.x, _A.y);
+		g2.rotate(Math.atan2(_B.y-_A.y, _B.x-_A.x));
+		
+		double maxL = _A.distance(_B);
+		
+		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), " m");
+		g2.translate(0, -_HALFW);
+		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), " min");
+		g2.translate(0, _HALFW);
 
+		BasicStroke stroke;
+		Line2D.Double line = new Line2D.Double(0, 0, L1>L2?L1:L2, 0);
+		stroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		g2.setStroke(stroke);
+		g2.setPaint(Color.WHITE);
+		g2.draw(line);
+		stroke = new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+		g2.setStroke(stroke);
+		g2.setPaint(Color.BLACK);
+		g2.draw(line);
+		
 		g2.setTransform(old);
+	}
+	
+	private double paintRuler(Graphics2D g2, double length, double segmentLengthPx, double pixelsPerUnit, String suffix)
+	{
+		final Color white = new Color(1.f, 1.f, 1.f, .8f);
+		final Color black = new Color(0.f, 0.f, 0.f, .5f);
+		
+		double x;
+		int color = 0;
+		
+		for (x=0.; x<=length; x+=segmentLengthPx)
+		{
+			g2.setPaint(color%2==0 ? white : black);
+			g2.fill(new Rectangle2D.Double(x, 0., segmentLengthPx, _HALFW));
+			color++;
+		}
+		
+		return x;
 	}
 	
 	@Override
@@ -87,7 +138,7 @@ public class Ruler implements Touchable
 		double u = X*_u.x + Y*_u.y;
 		double v = X*_v.x + Y*_v.y;
 
-		if (v > -2*RPX && v < 2*RPX && u > -2*RPX && u < _A.distance(_B)+2*RPX)
+		if (v > -2*_HALFW && v < 2*_HALFW && u > -2*_HALFW && u < _A.distance(_B)+2*_HALFW)
 			return _RULER_INTEREST;
 		else
 			return -1.f;

@@ -285,4 +285,13 @@ public class UAVModel
 	{
 		return paparazziCommunication;
 	}
+	
+	/**
+	 * @return reference cruise speed (m/s) for ETA calculations
+	 */
+	public static double getReferenceCruiseSpeed()
+	{
+		return 30.;
+	}
+	
 }

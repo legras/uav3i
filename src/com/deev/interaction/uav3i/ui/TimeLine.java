@@ -128,7 +128,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		paintBackgroundSegments(g2);
 		
 		// -2-
-		paintVideoSgments(g2);
+		paintVideoSegments(g2);
 		
 		// -3-
 		paintCursor(g2, getTimeCursorPosition(), false);
@@ -192,12 +192,17 @@ public class TimeLine extends JComponent implements Touchable, Animation
 
 	}
 	
-	private void paintVideoSgments(Graphics2D g2)
+	private void paintVideoSegments(Graphics2D g2)
 	{
 		ArrayList<VideoSegment> list = VideoModel.video.getVideoSegments();
 		
 		VideoSegment segment;
 		double start, end;
+		
+		FontRenderContext frc = g2.getFontRenderContext();
+	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_VID_SIZE);
+	    TextLayout textTl;
+	    Shape outline;
 		
 		for (int i=0; i<list.size(); i++)
 		{
@@ -219,10 +224,6 @@ public class TimeLine extends JComponent implements Touchable, Animation
 			g2.translate(_TEXT_VID_X_OFFSET, _TEXT_VID_SIZE+_TEXT_VID_Y_OFFSET);
 			
 			g2.setPaint(Palette3i.getPaint(Palette3i.TIME_DARK_TEXT));
-			FontRenderContext frc = g2.getFontRenderContext();
-		    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_VID_SIZE);
-		    TextLayout textTl;
-		    Shape outline;
 			
 			textTl = new TextLayout(segment.getName(), f, frc);
 			outline = textTl.getOutline(null);
