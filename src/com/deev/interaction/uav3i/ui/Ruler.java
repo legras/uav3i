@@ -2,7 +2,11 @@ package com.deev.interaction.uav3i.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
@@ -116,10 +120,25 @@ public class Ruler implements Touchable
 		double x;
 		int color = 0;
 		
+		FontRenderContext frc = g2.getFontRenderContext();
+	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 18);
+	    TextLayout textTl;
+	    Shape outline;
+		
 		for (x=0.; x<=length; x+=segmentLengthPx)
 		{
 			g2.setPaint(color%2==0 ? white : black);
 			g2.fill(new Rectangle2D.Double(x, 0., segmentLengthPx, _HALFW));
+			
+			textTl = new TextLayout(Math.round((x+segmentLengthPx)/pixelsPerUnit)+suffix, f, frc);
+			outline = textTl.getOutline(null);
+			
+			AffineTransform old = g2.getTransform();
+			g2.translate(x+segmentLengthPx-outline.getBounds().width-2, _HALFW-4);
+			g2.setPaint(color%2==0 ? Color.BLACK : Color.WHITE);
+			g2.fill(outline);
+			g2.setTransform(old);
+			
 			color++;
 		}
 		
