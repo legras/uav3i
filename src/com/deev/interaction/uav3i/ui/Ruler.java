@@ -73,8 +73,7 @@ public class Ruler implements Touchable
 		final double timeSegmentsDurations[] = {2*10, 2*30, 2*60, 2*5*60, 2*10*60, 2*60*60};
 		int timeSegmentIndex = 0;
 		
-		while (timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed() < _MIN_SEG_WIDTH &&
-				timeSegmentIndex < timeSegmentsDurations.length-1)
+		while (timeSegmentIndex < timeSegmentsDurations.length-1 && timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed() < _MIN_SEG_WIDTH)
 		{
 			timeSegmentIndex++;
 		}
@@ -82,8 +81,7 @@ public class Ruler implements Touchable
 		final double distSegmentsLengths[] = {5., 10., 25., 50., 100., 200., 500., 1000.};
 		int distSegmentIndex = 0;
 		
-		while (distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH &&
-				timeSegmentIndex < distSegmentsLengths.length-1)
+		while (timeSegmentIndex < distSegmentsLengths.length-1 && distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH)
 		{
 			distSegmentIndex++;
 		}

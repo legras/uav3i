@@ -147,8 +147,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		final double timeSegmentsDurations[] = {2*10*1000, 2*30*1000, 2*60*1000, 2*5*60*1000, 2*10*60*1000, 2*60*60*1000};
 		int timeSegmentIndex = 0;
 		
-		while (timeSegmentsDurations[timeSegmentIndex] / _timeScale < _MIN_TIME_SEG_WIDTH &&
-				timeSegmentIndex < timeSegmentsDurations.length-1)
+		while (timeSegmentIndex < timeSegmentsDurations.length-1 && timeSegmentsDurations[timeSegmentIndex] / _timeScale < _MIN_TIME_SEG_WIDTH)
 		{
 			timeSegmentIndex++;
 		}
