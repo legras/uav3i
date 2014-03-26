@@ -9,6 +9,8 @@ public class Test
 
   public static void main(String[] args)
   {
+    // ZOBI LA MOUCHE !
+    
     // int rouge = (rgba >> 16 ) & 0xFF;
     // int vert  = (rgba >> 8 ) & 0xFF;
     // int bleu  = rgba & 0xFF;
