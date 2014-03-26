@@ -291,7 +291,6 @@ public class UAVModel
     {
       case PAPARAZZI_DIRECT:
         LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-        System.out.println("####### mnvr.getClass().getSimpleName() = " + mnvr.getClass().getSimpleName());
         switch (mnvr.getClass().getSimpleName())
         {
           case "CircleMnvr":

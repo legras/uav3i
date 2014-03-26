@@ -56,8 +56,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 
 	
 	public ManoeuverButtons(Manoeuver mnvr, JComponent layer) throws IOException
-	{		
-	  System.out.println("####### ManoeuverButtons(" + mnvr + ", " + layer + ")");
+	{
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
 		Color gray = new Color(.3f, .3f, .3f, 1.f);
 				
@@ -122,7 +121,6 @@ public class ManoeuverButtons implements Animation, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-	  System.out.println("####### actionPerformed(" + e + ")");
 		if (e.getSource() == _jumpButton)
 		{
 			setJump(_jumpButton.isSelected());

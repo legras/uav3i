@@ -222,9 +222,7 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajA()
 	{
-	  System.out.println("####### trajA = " + getOffsetPoint(_A) + " _A = " + _A);
 		return getOffsetPoint(_A);
-//	  return _A;
 	}
 
 	/**
@@ -234,7 +232,6 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajB()
 	{
-    System.out.println("####### trajB = " + getOffsetPoint(_B) + " _B = " + _B);
 		return getOffsetPoint(_B);
 	}
 
