@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -45,6 +46,7 @@ import com.deev.interaction.touch.Gesture;
 import com.deev.interaction.touch.Touchable;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
@@ -78,6 +80,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
+			LoggerUtil.LOG.log(Level.CONFIG, "TUIO OK");
 		}
 		
 		if (UAV3iSettings.getFullscreen())

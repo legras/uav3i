@@ -81,7 +81,7 @@ public class Ruler implements Touchable
 		final double distSegmentsLengths[] = {5., 10., 25., 50., 100., 200., 500., 1000.};
 		int distSegmentIndex = 0;
 		
-		while (timeSegmentIndex < distSegmentsLengths.length-1 && distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH)
+		while (distSegmentIndex < distSegmentsLengths.length-1 && distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH)
 		{
 			distSegmentIndex++;
 		}
