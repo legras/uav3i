@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -12,13 +11,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 
+import uk.me.jstott.jcoord.LatLng;
+
+import com.deev.interaction.uav3i.ui.BoxMnvr;
+import com.deev.interaction.uav3i.ui.CircleMnvr;
+import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 
-import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
 import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
+import eu.telecom_bretagne.uav3i.paparazzi_settings.airframe.AirframeFacade;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
@@ -242,18 +246,26 @@ public class UAVModel
 		
 		final Manoeuver manoeuver = mnvr;
 		
-		new Timer().schedule(new TimerTask()
-		{          
-		    @Override
-		    public void run()
-		    {
-		        if (Math.random() < .5)
-		        {
-		        	LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-		        	manoeuver.kill();
-		        }
-		    }
-		}, 2000);
+		switch (UAV3iSettings.getMode())
+    {
+      case PAPARAZZI_DIRECT:
+        LoggerUtil.LOG.log(Level.INFO, "Manoeuver automaticaly accepted: mode = PAPARAZZI_DIRECT");
+        break;
+      default:
+        new Timer().schedule(new TimerTask()
+        {
+          @Override
+          public void run()
+          {
+            if (Math.random() < .5)
+            {
+              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
+              manoeuver.kill();
+            }
+          }
+        }, 2000);
+    }
+		
 	}
 
 	public static void jumpToManoeuver(Manoeuver mnvr)
@@ -261,30 +273,82 @@ public class UAVModel
 		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
 		
 		final Manoeuver manoeuver = mnvr;
-		
-		new Timer().schedule(new TimerTask()
-		{          
-		    @Override
-		    public void run()
-		    {
-		        if (Math.random() < .5)
-		        {
-		        	LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-		        	manoeuver.kill();
-		        }
-		        else
-		        {
-		        	LoggerUtil.LOG.log(Level.INFO, "Manoeuver accepted");
-		        	manoeuver.delete();
-		        }
-		    }
-		}, 2000);
+
+//    new Timer().schedule(new TimerTask()
+//    {          
+//        @Override
+//        public void run()
+//        {
+//            if (Math.random() < .5)
+//            {
+//              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
+//              manoeuver.kill();
+//            }
+//        }
+//    }, 2000);
+
+    switch (UAV3iSettings.getMode())
+    {
+      case PAPARAZZI_DIRECT:
+        LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
+        System.out.println("####### mnvr.getClass().getSimpleName() = " + mnvr.getClass().getSimpleName());
+        switch (mnvr.getClass().getSimpleName())
+        {
+          case "CircleMnvr":
+            CircleMnvr circleMnvr = (CircleMnvr) mnvr;
+            // Move way point for circle center.
+            paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+            paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
+            paparazziCommunication.jumpToBlock("Circle");
+            break;
+          case "LineMnvr":
+            LineMnvr lineMnvr = (LineMnvr) mnvr;
+            // Move way points to each side of the line.
+            paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
+            paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
+            // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+            paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+            paparazziCommunication.jumpToBlock("Line_L1-L2");
+            break;
+          case "BoxMnvr":
+            BoxMnvr boxMnvr = (BoxMnvr) mnvr;
+            // Move way points to each side of the box.
+            paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
+            paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
+            // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+            paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+            if(boxMnvr.isNorthSouth())
+              paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
+            else  // West-East
+              paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
+            break;
+        }
+        break;
+      default:
+        new Timer().schedule(new TimerTask()
+        {
+          @Override
+          public void run()
+          {
+            if (Math.random() < .5)
+            {
+              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
+              manoeuver.kill();
+            }
+            else
+            {
+              LoggerUtil.LOG.log(Level.INFO, "Manoeuver accepted");
+              manoeuver.delete();
+            }
+          }
+        }, 2000);
+    }
 	}
 	
-	public static PaparazziCommunication getPaparazziCommunication()
-	{
-		return paparazziCommunication;
-	}
+//	public static PaparazziCommunication getPaparazziCommunication()
+//	{
+//		return paparazziCommunication;
+//	}
 	
 	/**
 	 * @return reference cruise speed (m/s) for ETA calculations

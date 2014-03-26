@@ -1,7 +1,6 @@
 package com.deev.interaction.uav3i.ui;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -15,7 +14,6 @@ import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 
 import uk.me.jstott.jcoord.LatLng;
-import uk.me.jstott.jcoord.UTMRef;
 
 public class LineMnvr extends Manoeuver
 {
@@ -208,18 +206,13 @@ public class LineMnvr extends Manoeuver
 		return v > currentRpx-GRIP && v < currentRpx+GRIP && u > -GRIP && u < Apx.distance(Bpx)+GRIP;
 	}
 
-	private LatLng getOffsetPoint(LatLng point)
+	private LatLng getOffsetPoint(LatLng pointLatLng)
 	{
-		UTMRef utm = _A.toUTMRef();
-		char letter = utm.getLatZone();
-		int number = utm.getLngZone();
-		
-		double north = utm.getEasting() + _currentRm * _v.y;
-		double east = utm.getNorthing() + _currentRm * _v.x;
-		
-		UTMRef utmOff = new UTMRef(north, east, letter, number);
-		
-		return utmOff.toLatLng();
+    Point2D.Double pointPixels = _smap.getScreenForLatLng(pointLatLng);
+    double Rpx = _smap.getPPM() * _currentRm;
+    Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
+                                                           pointPixels.y + _v.y * Rpx);
+    return _smap.getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
 	}
 	
 	/**
@@ -229,7 +222,9 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajA()
 	{
+	  System.out.println("####### trajA = " + getOffsetPoint(_A) + " _A = " + _A);
 		return getOffsetPoint(_A);
+//	  return _A;
 	}
 
 	/**
@@ -239,6 +234,7 @@ public class LineMnvr extends Manoeuver
 	 */
 	public LatLng getTrajB()
 	{
+    System.out.println("####### trajB = " + getOffsetPoint(_B) + " _B = " + _B);
 		return getOffsetPoint(_B);
 	}
 
@@ -389,7 +385,6 @@ public class LineMnvr extends Manoeuver
 		_u = new Point2D.Double((Bpx.x-Apx.x)/d, (Bpx.y-Apx.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
 	}
-
 }
 
 

@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.TexturePaint;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
@@ -22,8 +20,6 @@ import javax.imageio.ImageIO;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Palette;
 import com.deev.interaction.touch.Touchable;
-import com.deev.interaction.uav3i.model.UAVDataPoint;
-import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
 public abstract class Manoeuver implements Touchable, Animation

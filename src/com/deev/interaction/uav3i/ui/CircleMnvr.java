@@ -1,22 +1,14 @@
 package com.deev.interaction.uav3i.ui;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D.Double;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.swing.SwingUtilities;
-
-import com.deev.interaction.uav3i.model.UAVModel;
-
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
-import sun.security.action.GetLongAction;
 import uk.me.jstott.jcoord.LatLng;
+import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class CircleMnvr extends Manoeuver
 {
@@ -198,4 +190,10 @@ public class CircleMnvr extends Manoeuver
 		
 		positionButtons();
 	}
+
+
+  public LatLng getCenter()
+  {
+    return _center;
+  }
 }

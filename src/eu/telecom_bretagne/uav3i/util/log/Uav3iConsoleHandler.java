@@ -1,11 +1,9 @@
 package eu.telecom_bretagne.uav3i.util.log;
 
 import java.util.logging.ErrorManager;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Par défaut, la classe ConsoleHandler écrit tout sur la sortie d'erreurs (en
