@@ -92,7 +92,7 @@ public class UAVPositionListener implements IvyMessageListener
           }
           catch (RemoteException e)
           {
-            LoggerUtil.LOG.severe(e.getMessage());
+            LoggerUtil.LOG.severe(e.getMessage().replace("\n", " "));
           }
         }
         else
