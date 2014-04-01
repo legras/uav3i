@@ -34,9 +34,9 @@ public class UAVPositionListener implements IvyMessageListener
   @Override
   public void receive(IvyClient client, String[] args)
   {
-    //System.out.println("Longueur du tableau args = " + args.length);
-    //for(int i=0; i<args.length; i++)
-    //  System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") ["+i+"]= " + args[i]);
+//    System.out.println("Longueur du tableau args = " + args.length);
+//    for(int i=0; i<args.length; i++)
+//      System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") ["+i+"]= " + args[i]);
     
     String tokens = args[1];
 

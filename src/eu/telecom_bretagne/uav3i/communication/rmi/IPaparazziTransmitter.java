@@ -3,6 +3,8 @@ package eu.telecom_bretagne.uav3i.communication.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
+
 import uk.me.jstott.jcoord.LatLng;
 
 public interface IPaparazziTransmitter extends Remote
@@ -41,5 +43,7 @@ public interface IPaparazziTransmitter extends Remote
    * @throws RemoteException
    */
   public void register(String uav3iHostname, int uav3iPort) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  public boolean submitManoeuver(Manoeuver mnvr) throws RemoteException;
   //-----------------------------------------------------------------------------
 }

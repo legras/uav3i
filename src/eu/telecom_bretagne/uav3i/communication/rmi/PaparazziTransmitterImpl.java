@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
+
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
@@ -75,6 +77,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
     LoggerUtil.LOG.info("jumpToBlock(" + blockName + ") - Message sent to Ivy bus");
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean submitManoeuver(Manoeuver mnvr) throws RemoteException
+  {
+    LoggerUtil.LOG.info("submitManoeuver("+mnvr+")");
+    return true;
   }
   //-----------------------------------------------------------------------------
   /**
