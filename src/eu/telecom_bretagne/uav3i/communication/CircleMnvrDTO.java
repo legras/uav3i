@@ -19,4 +19,10 @@ public class CircleMnvrDTO extends ManoeuverDTO
   public LatLng get_center()    { return _center;    }
   public double get_currentRm() { return _currentRm; }
   //-----------------------------------------------------------------------------
+  @Override
+  public String toString()
+  {
+    return "CircleMnvrDTO [_center=" + _center + ", _currentRm=" + _currentRm + "]";
+  }
+  //-----------------------------------------------------------------------------
 }
