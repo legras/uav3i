@@ -11,8 +11,11 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
+
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
@@ -170,6 +173,20 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+  {
+    try
+    {
+      return paparazziTransmitter.submitManoeuver(mnvrDTO);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+    return false;
   }
   //-----------------------------------------------------------------------------
 }

@@ -1,7 +1,10 @@
 package eu.telecom_bretagne.uav3i.communication.direct;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
+
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -88,6 +91,13 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   {
     try { bus.sendMsg(message); }
     catch (IvyException e) { e.printStackTrace(); }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+  {
+    // Return true because MODE is PAPARAZZI_DIRECT
+    return true;
   }
   //-----------------------------------------------------------------------------
 }

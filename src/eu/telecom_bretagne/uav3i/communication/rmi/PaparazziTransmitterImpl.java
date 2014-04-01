@@ -5,10 +5,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import com.deev.interaction.uav3i.ui.Manoeuver;
-
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
@@ -80,9 +79,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public boolean submitManoeuver(Manoeuver mnvr) throws RemoteException
+  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
-    LoggerUtil.LOG.info("submitManoeuver("+mnvr+")");
+    LoggerUtil.LOG.info("submitManoeuver("+mnvrDTO+")");
     return true;
   }
   //-----------------------------------------------------------------------------

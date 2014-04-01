@@ -26,4 +26,6 @@ public abstract class PaparazziCommunication
    */
   public abstract void jumpToBlock(String blockName);
   //-----------------------------------------------------------------------------
+  public abstract boolean submitManoeuver(ManoeuverDTO mnvrDTO);
+  //-----------------------------------------------------------------------------
 }

@@ -13,6 +13,7 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 import uk.me.jstott.jcoord.LatLng;
 
 public class LineMnvr extends Manoeuver
@@ -382,6 +383,12 @@ public class LineMnvr extends Manoeuver
 		_u = new Point2D.Double((Bpx.x-Apx.x)/d, (Bpx.y-Apx.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
 	}
+
+  @Override
+  public ManoeuverDTO toDTO()
+  {
+    return null;
+  }
 }
 
 
