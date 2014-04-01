@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import uk.me.jstott.jcoord.LatLng;
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class CircleMnvr extends Manoeuver
@@ -195,5 +196,12 @@ public class CircleMnvr extends Manoeuver
   public LatLng getCenter()
   {
     return _center;
+  }
+
+
+  @Override
+  public ManoeuverDTO toDTO()
+  {
+    return null;
   }
 }

@@ -242,7 +242,7 @@ public class UAVModel
 
 	public static void submitManoeuver(Manoeuver mnvr)
 	{
-		LoggerUtil.LOG.log(Level.INFO, "Manoeuver submitted");
+		LoggerUtil.LOG.log(Level.INFO, "Manoeuver submitted: " + mnvr);
 		
 		final Manoeuver manoeuver = mnvr;
 		
@@ -250,6 +250,10 @@ public class UAVModel
     {
       case PAPARAZZI_DIRECT:
         LoggerUtil.LOG.log(Level.INFO, "Manoeuver automaticaly accepted: mode = PAPARAZZI_DIRECT");
+        break;
+      case PAPARAZZI_REMOTE:
+        boolean resultSubmit = paparazziCommunication.submitManoeuver(mnvr.toDTO());
+        LoggerUtil.LOG.log(Level.INFO, "Manoeuver accepted by Veto Server? " + resultSubmit);
         break;
       default:
         new Timer().schedule(new TimerTask()

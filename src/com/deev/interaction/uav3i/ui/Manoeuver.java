@@ -22,6 +22,8 @@ import com.deev.interaction.touch.Palette;
 import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
+import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
+
 public abstract class Manoeuver implements Touchable, Animation
 {
 	protected enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
@@ -48,6 +50,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
 	public abstract void paint(Graphics2D g2);
+	
+	public abstract ManoeuverDTO toDTO();
 	
 	public void paintFootprint(Graphics2D g2, Shape footprint, boolean blink)
 	{
