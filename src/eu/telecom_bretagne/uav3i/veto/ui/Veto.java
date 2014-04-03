@@ -57,8 +57,6 @@ public class Veto extends JFrame
                                                          UAV3iSettings.getOffLineMinZoom(), 
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
-
-    
     this.getContentPane().add(mapViewer);
     
     try

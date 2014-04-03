@@ -79,6 +79,7 @@ public class UAVPositionListener implements IvyMessageListener
                                      Long.parseLong(message[9]));   // t
         break;
       case PAPARAZZI_REMOTE:
+      case VETO:
         if(uav3iTransmitter != null)
         {
           try
