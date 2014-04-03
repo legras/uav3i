@@ -1,4 +1,4 @@
-package eu.telecom_bretagne.uav3i.communication;
+package eu.telecom_bretagne.uav3i.communication.dto;
 
 import uk.me.jstott.jcoord.LatLng;
 

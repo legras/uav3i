@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import uk.me.jstott.jcoord.LatLng;
-import eu.telecom_bretagne.uav3i.communication.CircleMnvrDTO;
-import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
+import eu.telecom_bretagne.uav3i.communication.dto.CircleMnvrDTO;
+import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class CircleMnvr extends Manoeuver

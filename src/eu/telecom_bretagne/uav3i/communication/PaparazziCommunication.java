@@ -1,5 +1,6 @@
 package eu.telecom_bretagne.uav3i.communication;
 
+import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 import uk.me.jstott.jcoord.LatLng;
 
 public abstract class PaparazziCommunication
