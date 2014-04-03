@@ -51,7 +51,6 @@ public class Launcher
 		    });
 				break;
 			case VETO:
-        UAVModel.initialize();
         SwingUtilities.invokeLater(new Runnable()
         {
           public void run()

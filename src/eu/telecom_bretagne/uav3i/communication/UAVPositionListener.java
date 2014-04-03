@@ -17,6 +17,11 @@ import fr.dgac.ivy.IvyMessageListener;
  */
 public class UAVPositionListener implements IvyMessageListener
 {
+  public UAVPositionListener()
+  {
+    System.out.println("####### UAVPositionListener()");
+  }
+  
   //-----------------------------------------------------------------------------
   private IUav3iTransmitter uav3iTransmitter = null;
   //-----------------------------------------------------------------------------
@@ -78,8 +83,8 @@ public class UAVPositionListener implements IvyMessageListener
                                      Integer.parseInt(message[5]),  // alt
                                      Long.parseLong(message[9]));   // t
         break;
-      case PAPARAZZI_REMOTE:
       case VETO:
+        // On transmet via RMI à l'IHM table tactile la position du drone.
         if(uav3iTransmitter != null)
         {
           try
@@ -97,7 +102,15 @@ public class UAVPositionListener implements IvyMessageListener
           }
         }
         else
-          LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre...");
+          LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);
+        
+        // On transmet aussi la position du drone à l'IHM Veto pour l'affichage local.
+        UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
+                                 Integer.parseInt(message[3]),  // utmNorth
+                                 Integer.parseInt(message[10]), // utm_zone
+                                 Integer.parseInt(message[4]),  // course
+                                 Integer.parseInt(message[5]),  // alt
+                                 Long.parseLong(message[9]));   // t
         break;
       default:
         break;

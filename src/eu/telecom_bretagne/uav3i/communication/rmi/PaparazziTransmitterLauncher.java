@@ -120,16 +120,4 @@ public class PaparazziTransmitterLauncher
     LoggerUtil.LOG.info(UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");
   }
   //-----------------------------------------------------------------------------
-  public static void main(String[] args)
-  {
-    try
-    {
-      new PaparazziTransmitterLauncher();
-    }
-    catch (RemoteException | IvyException | NotBoundException e)
-    {
-      e.printStackTrace();
-    }
-  }
-  //-----------------------------------------------------------------------------
 }
