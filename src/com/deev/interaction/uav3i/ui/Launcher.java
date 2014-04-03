@@ -6,6 +6,8 @@ import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.VideoModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
+import eu.telecom_bretagne.uav3i.veto.ui.Veto;
 import fr.dgac.ivy.IvyException;
 
 /**
@@ -31,35 +33,38 @@ public class Launcher
 			case REPLAY: // Lancement avec replay (infos dans le fichier).
 				UAVModel.initialize(UAVModel.class.getResourceAsStream("pentrez.data"));
 				VideoModel.initialize();
-	
 				break;
-				//	      case IVY: // Lancement en écoute sur le bus Ivy des infos transmises par Paparazzi.
-				//	        // TODO A finaliser, rien ne s'affiche si Paparazzi n'est pas lancé.
-				//	        UAVDataStore.initialize();
 			case PAPARAZZI_DIRECT:
-				UAVModel.initialize();
-				VideoModel.initialize();
-				break;
 			case PAPARAZZI_REMOTE:
 				UAVModel.initialize();
 				VideoModel.initialize();
+		    SwingUtilities.invokeLater(new Runnable()
+		    {
+		      public void run()
+		      { 
+		        final MainFrame frame = new MainFrame();
+		        frame.setVisible(true); 
+		        frame.requestFocusInWindow();
+		        if (UAV3iSettings.getFullscreen())
+		          java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+		      }
+		    });
 				break;
+			case VETO:
+        UAVModel.initialize();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+          public void run()
+          { 
+            final Veto frame = new Veto();
+            frame.setVisible(true); 
+            frame.requestFocusInWindow();
+          }
+        });
+			  break;
 			default:
 				break;
 		}
 
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{	
-				// DIModernPlaf.initModernLookAndFeel();
-
-				final MainFrame frame = new MainFrame();
-				frame.setVisible(true);	
-				frame.requestFocusInWindow();
-				if (UAV3iSettings.getFullscreen())
-					java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-			}
-		});
 	}
 }

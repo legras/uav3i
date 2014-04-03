@@ -118,6 +118,7 @@ public class UAVModel
 		switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
+      case VETO:
         paparazziCommunication = new PaparazziDirectCommunication();
         break;
       case PAPARAZZI_REMOTE:
