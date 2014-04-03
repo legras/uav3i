@@ -17,6 +17,7 @@ import com.deev.interaction.uav3i.ui.BoxMnvr;
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverStates;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
@@ -242,41 +243,34 @@ public class UAVModel
 
 	public static void submitManoeuver(Manoeuver mnvr)
 	{
-		LoggerUtil.LOG.log(Level.INFO, "Manoeuver submitted: " + mnvr);
-		
-		final Manoeuver manoeuver = mnvr;
-		
 		switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
-        LoggerUtil.LOG.log(Level.INFO, "Manoeuver automaticaly accepted: mode = PAPARAZZI_DIRECT");
+        LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
+        mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
         break;
       case PAPARAZZI_REMOTE:
-        boolean resultSubmit = paparazziCommunication.submitManoeuver(mnvr.toDTO());
-        LoggerUtil.LOG.log(Level.INFO, "Manoeuver accepted by Veto Server? " + resultSubmit);
+        if(paparazziCommunication.submitManoeuver(mnvr.toDTO()))  // ACCEPTED
+        {
+          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
+          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
+        }
+        else  // REJECTED
+        {
+          mnvr.kill();
+          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
+        }
         break;
       default:
-        new Timer().schedule(new TimerTask()
-        {
-          @Override
-          public void run()
-          {
-            if (Math.random() < .5)
-            {
-              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-              manoeuver.kill();
-            }
-          }
-        }, 2000);
+        break;
     }
-		
 	}
 
 	public static void jumpToManoeuver(Manoeuver mnvr)
 	{
 		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
 		
-		final Manoeuver manoeuver = mnvr;
+//		final Manoeuver manoeuver = mnvr;
 
 //    new Timer().schedule(new TimerTask()
 //    {          
@@ -291,63 +285,43 @@ public class UAVModel
 //        }
 //    }, 2000);
 
-    switch (UAV3iSettings.getMode())
+    if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
+      submitManoeuver(mnvr);
+    if(mnvr.getManoeuverState() == ManoeuverStates.SUBMITTED)
     {
-      case PAPARAZZI_DIRECT:
-        LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-        switch (mnvr.getClass().getSimpleName())
-        {
-          case "CircleMnvr":
-            CircleMnvr circleMnvr = (CircleMnvr) mnvr;
-            // Move way point for circle center.
-            paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
-            paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
-            paparazziCommunication.jumpToBlock("Circle");
-            break;
-          case "LineMnvr":
-            LineMnvr lineMnvr = (LineMnvr) mnvr;
-            // Move way points to each side of the line.
-            paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
-            paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
-            // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-            paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-            paparazziCommunication.jumpToBlock("Line_L1-L2");
-            break;
-          case "BoxMnvr":
-            BoxMnvr boxMnvr = (BoxMnvr) mnvr;
-            // Move way points to each side of the box.
-            paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
-            paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
-            // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-            paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-            if(boxMnvr.isNorthSouth())
-              paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
-            else  // West-East
-              paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
-            break;
-        }
-        break;
-      default:
-        new Timer().schedule(new TimerTask()
-        {
-          @Override
-          public void run()
-          {
-            if (Math.random() < .5)
-            {
-              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-              manoeuver.kill();
-            }
-            else
-            {
-              LoggerUtil.LOG.log(Level.INFO, "Manoeuver accepted");
-              manoeuver.delete();
-            }
-          }
-        }, 2000);
+      switch (mnvr.getClass().getSimpleName())
+      {
+        case "CircleMnvr":
+          CircleMnvr circleMnvr = (CircleMnvr) mnvr;
+          // Move way point for circle center.
+          paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+          paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
+          paparazziCommunication.jumpToBlock("Circle");
+          break;
+        case "LineMnvr":
+          LineMnvr lineMnvr = (LineMnvr) mnvr;
+          // Move way points to each side of the line.
+          paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
+          paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
+          // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+          paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+          paparazziCommunication.jumpToBlock("Line_L1-L2");
+          break;
+        case "BoxMnvr":
+          BoxMnvr boxMnvr = (BoxMnvr) mnvr;
+          // Move way points to each side of the box.
+          paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
+          paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
+          // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+          paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+          if(boxMnvr.isNorthSouth())
+            paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
+          else  // West-East
+            paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
+          break;
+      }
     }
 	}
-	
 //	public static PaparazziCommunication getPaparazziCommunication()
 //	{
 //		return paparazziCommunication;

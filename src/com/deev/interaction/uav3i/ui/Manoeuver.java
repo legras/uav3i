@@ -26,7 +26,15 @@ import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
 
 public abstract class Manoeuver implements Touchable, Animation
 {
-	protected enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
+	/**
+	 * <ul>
+   *   <li>READY : état à la création, non encore soumis. La maneuvre est encore modifiable.</li>
+   *   <li>REJECTED : soumis et rejeté -> état inutile, la manoeuvre aura été supprimée...</li>
+   *   <li>SUBMITTED : soumis et accepté -> l'exécution de la manoeuvre peut être demandée.</li>
+   *   <li>FADING : ??? <i>En cours d'exécution ?</i></li>
+   * </ul>
+	 */
+	public enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
 	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
 	protected ManoeuverButtons _buttons;
 
@@ -52,6 +60,16 @@ public abstract class Manoeuver implements Touchable, Animation
 	public abstract void paint(Graphics2D g2);
 	
 	public abstract ManoeuverDTO toDTO();
+	
+	public void setManoeuverState(ManoeuverStates mnvrState)
+	{
+	  _mnvrState = mnvrState;
+	}
+	
+	public ManoeuverStates getManoeuverState()
+	{
+	  return _mnvrState;
+	}
 	
 	public void paintFootprint(Graphics2D g2, Shape footprint, boolean blink)
 	{
