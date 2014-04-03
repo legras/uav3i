@@ -139,7 +139,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.setNavRadius(radius);
-      LoggerUtil.LOG.info("setNavRadius("+radius+") - Message sent to PaparazziTransmitter");
+      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - setNavRadius("+radius+")");
     }
     catch (RemoteException e)
     {
@@ -153,7 +153,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.moveWayPoint(waypointName, coordinate);
-      LoggerUtil.LOG.info("moveWayPoint(" + waypointName + ", " + coordinate + ") - Message sent to PaparazziTransmitter");
+      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - moveWayPoint(" + waypointName + ", " + coordinate + ")");
     }
     catch (RemoteException e)
     {
@@ -167,7 +167,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     try
     {
       paparazziTransmitter.jumpToBlock(blockName);
-      LoggerUtil.LOG.info("jumpToBlock(" + blockName + ") - Message sent to PaparazziTransmitter");
+      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - jumpToBlock(" + blockName + ")");
     }
     catch (RemoteException e)
     {
