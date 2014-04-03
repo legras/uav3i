@@ -54,7 +54,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     // Exemple : dl DL_SETTING 5 6 1000.000000
     // Que veux dire le 6 ?
     sendMsg("dl DL_SETTING 5 6 " + radius);
-    LoggerUtil.LOG.info("setNavRadius(" + radius + ") - Message sent to Ivy bus");
+    LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
@@ -65,7 +65,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       throws RemoteException
   {
     sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
-    LoggerUtil.LOG.info("moveWayPoint(" + waypointName + ", " + coordinate + ") - Message sent to Ivy bus");
+    LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)
@@ -75,7 +75,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void jumpToBlock(String blockName) throws RemoteException
   {
     sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
-    LoggerUtil.LOG.info("jumpToBlock(" + blockName + ") - Message sent to Ivy bus");
+    LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
   }
   //-----------------------------------------------------------------------------
   @Override
