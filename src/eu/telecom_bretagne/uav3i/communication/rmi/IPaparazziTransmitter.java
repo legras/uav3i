@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import uk.me.jstott.jcoord.LatLng;
-import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
+import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 
 public interface IPaparazziTransmitter extends Remote
 {

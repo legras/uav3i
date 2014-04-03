@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.communication.ManoeuverDTO;
+import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
