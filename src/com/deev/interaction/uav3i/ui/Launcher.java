@@ -58,6 +58,8 @@ public class Launcher
             final Veto frame = new Veto();
             frame.setVisible(true); 
             frame.requestFocusInWindow();
+            
+            //UAVModel.initialize();
           }
         });
 			  break;

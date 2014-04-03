@@ -17,13 +17,26 @@ import fr.dgac.ivy.IvyMessageListener;
  */
 public class UAVPositionListener implements IvyMessageListener
 {
-  public UAVPositionListener()
-  {
-    System.out.println("####### UAVPositionListener()");
-  }
-  
   //-----------------------------------------------------------------------------
+  /**
+   * <b>Singleton</b><br/>
+   * Pour éviter que le Veto ait deux écouteurs : l'un pour la transmission vers la
+   * table tactile et l'autre pour mettre ses informations locales à jour. La même
+   * instance est partagée.
+   */
+  private static UAVPositionListener instance = null;
   private IUav3iTransmitter uav3iTransmitter = null;
+  //-----------------------------------------------------------------------------
+  private UAVPositionListener()
+  {
+  }
+  //-----------------------------------------------------------------------------
+  public static UAVPositionListener getInstance()
+  {
+    if(instance == null)
+      instance = new UAVPositionListener();
+    return instance;
+  }
   //-----------------------------------------------------------------------------
   /**
    * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
@@ -33,6 +46,7 @@ public class UAVPositionListener implements IvyMessageListener
    */
   public void setUav3iTransmitter(IUav3iTransmitter uav3iTransmitter)
   {
+    System.out.println("####### appel de setUav3iTransmitter(" + uav3iTransmitter + ")");
     this.uav3iTransmitter = uav3iTransmitter;
   }
   //-----------------------------------------------------------------------------
@@ -77,11 +91,11 @@ public class UAVPositionListener implements IvyMessageListener
     {
       case PAPARAZZI_DIRECT:
         UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-                                     Integer.parseInt(message[3]),  // utmNorth
-                                     Integer.parseInt(message[10]), // utm_zone
-                                     Integer.parseInt(message[4]),  // course
-                                     Integer.parseInt(message[5]),  // alt
-                                     Long.parseLong(message[9]));   // t
+                                 Integer.parseInt(message[3]),  // utmNorth
+                                 Integer.parseInt(message[10]), // utm_zone
+                                 Integer.parseInt(message[4]),  // course
+                                 Integer.parseInt(message[5]),  // alt
+                                 Long.parseLong(message[9]));   // t
         break;
       case VETO:
         // On transmet via RMI à l'IHM table tactile la position du drone.

@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import com.deev.interaction.uav3i.model.UAVModel;
+
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
 import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
@@ -28,6 +30,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     super();
     initializeIvy();
+    UAVModel.initialize();
     new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------
@@ -41,7 +44,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    uavPositionListener = new UAVPositionListener();
+    uavPositionListener = UAVPositionListener.getInstance();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------

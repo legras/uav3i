@@ -28,13 +28,9 @@ import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
 {
-	public static UAVModel store = null;
-	//private static IvyCommunication ivyCommunication;
+	public static UAVModel                store = null;
 	private static PaparazziCommunication paparazziCommunication;
-
-	//  private ArrayList<UAVDataPoint> _dataPoints;
-	private ArrayList<UAVDataPoint> _dataPoints = new ArrayList<UAVDataPoint>();
-	//	private long deltaIvy = 0;
+	private ArrayList<UAVDataPoint>       _dataPoints = new ArrayList<UAVDataPoint>();
 
 	public static void initialize(InputStream stream)
 	{
@@ -42,11 +38,9 @@ public class UAVModel
 			store = new UAVModel(stream);
 	}
 
-	//  public static void initialize(Ivy bus)
 	public static void initialize()
 	{
-		if (store == null)
-			//      store = new UAVDataStore(bus);
+	  if (store == null)
 			store = new UAVModel();
 	}
 
@@ -55,8 +49,6 @@ public class UAVModel
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String strLine;
 		long delta = 0;
-
-		//		_dataPoints = new ArrayList<UAVDataPoint>();
 
 		//Read File Line By Line
 		try
@@ -103,10 +95,6 @@ public class UAVModel
 		}
 	}
 
-	//	public UAVDataStore(Ivy bus)
-	//	{
-	//		
-	//	}
 	/**
 	 * Constructeur pour une utilisation de l'<code>UAVDataStore</code> en écoute
 	 * du bus Ivy.
@@ -115,6 +103,7 @@ public class UAVModel
 	 */
 	public UAVModel()
 	{
+	  System.out.println("####### Appel du constructeur UAVModel()");
 		switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
@@ -141,8 +130,6 @@ public class UAVModel
 	{
 		if(store != null)
 		{
-			//      if (store.deltaIvy == 0)
-			//        store.deltaIvy = System.currentTimeMillis() - t + 2000;
 			store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t));
 		}
 	}
@@ -239,7 +226,10 @@ public class UAVModel
 
 	public static boolean isEmpty()
 	{
-		return store._dataPoints.size() == 0;
+	  if(store != null)
+	    return store._dataPoints.size() == 0;
+	  else
+	    return false;
 	}
 
 	public static void submitManoeuver(Manoeuver mnvr)

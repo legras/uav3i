@@ -1,12 +1,10 @@
 package eu.telecom_bretagne.uav3i.communication.direct;
 
-import com.deev.interaction.uav3i.ui.Manoeuver;
-
 import uk.me.jstott.jcoord.LatLng;
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
 import eu.telecom_bretagne.uav3i.communication.UAVPositionListener;
+import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
 import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 import fr.dgac.ivy.Ivy;
@@ -57,7 +55,7 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     
     // Mise en écoute des messages GPS
     // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-    bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
+    bus.bindMsg("(.*)GPS(.*)", UAVPositionListener.getInstance());
   }
   //-----------------------------------------------------------------------------
   @Override

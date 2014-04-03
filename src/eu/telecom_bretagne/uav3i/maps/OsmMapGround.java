@@ -11,9 +11,12 @@ import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
+import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.ui.Map;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
 
 public class OsmMapGround extends Map
 {
@@ -24,10 +27,14 @@ public class OsmMapGround extends Map
   public OsmMapGround()
   {
     mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
-    //mapViewer.setDisplayPositionByLatLon(48.359407, -4.57013, 14);
-    mapViewer.setDisplayPositionByLatLon(UAV3iSettings.getInitialLatitude(),
-                                         UAV3iSettings.getInitialLongitude(),
-                                         UAV3iSettings.getInitialZoom());
+
+    //mapViewer.setDisplayPositionByLatLon(UAV3iSettings.getInitialLatitude(),
+    //                                     UAV3iSettings.getInitialLongitude(),
+    //                                     UAV3iSettings.getInitialZoom());
+    LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
+    mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
+                                         startPoint.getLng(),
+                                         UAV3iSettings.getTrajectoryZoom());
     
     switch (UAV3iSettings.getMapType())
     {

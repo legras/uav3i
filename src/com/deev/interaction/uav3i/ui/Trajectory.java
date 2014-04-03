@@ -9,6 +9,7 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.model.UAVModel;
 
 import eu.telecom_bretagne.uav3i.UAV3iSettings;
+import eu.telecom_bretagne.uav3i.veto.ui.SymbolMapVeto;
 
 /**
  * @author legras
@@ -84,6 +85,33 @@ public class Trajectory
 
 		return line;
 	}
+	
+	 public GeneralPath getFullPath(SymbolMapVeto symbolMapVeto)
+	  {
+	    GeneralPath line;
+	    line = new GeneralPath();
+	    boolean start = true;
+	    Point2D.Double p;
+
+	    if (_points.size() < 2)
+	      return  null;
+
+	    for (TrajectoryPoint tp : _points)
+	    {
+	      p = symbolMapVeto.getScreenForLatLng(tp.latlng);
+
+	      if (start)
+	      {
+	        line.moveTo(p.x, p.y);
+	        start = false;
+	      }
+	      else
+	        line.lineTo(p.x, p.y);
+	    }
+
+	    return line;
+	  }
+
 
 	public GeneralPath getTrajectorySequence(SymbolMap symbolMap, long start, long end)
 	{

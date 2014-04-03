@@ -81,8 +81,8 @@ public class UAV3iSettings
   public static int     getOffLineMinZoom()         { return Integer.parseInt(props.getProperty("OFF_LINE_MIN_ZOOM"));    }
   public static int     getOffLineMaxZoom()         { return Integer.parseInt(props.getProperty("OFF_LINE_MAX_ZOOM"));    }
   public static int     getInitialZoom()            { return Integer.parseInt(props.getProperty("INITIAL_ZOOM"));         }
-  public static double  getInitialLatitude()        { return Double.parseDouble(props.getProperty("INITIAL_LATITUDE"));   }
-  public static double  getInitialLongitude()       { return Double.parseDouble(props.getProperty("INITIAL_LONGITUDE"));  }
+//  public static double  getInitialLatitude()        { return Double.parseDouble(props.getProperty("INITIAL_LATITUDE"));   }
+//  public static double  getInitialLongitude()       { return Double.parseDouble(props.getProperty("INITIAL_LONGITUDE"));  }
   public static boolean getTUIO()                   { return Boolean.parseBoolean(props.getProperty("TUIO"));             }
   public static boolean getFullscreen()             { return Boolean.parseBoolean(props.getProperty("FULLSCREEN"));       }
   public static boolean getInteractionMode()        { return Boolean.parseBoolean(props.getProperty("INTERACTION_MODE")); }
