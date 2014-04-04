@@ -21,10 +21,10 @@ import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
-import eu.telecom_bretagne.uav3i.paparazzi_settings.airframe.AirframeFacade;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 @SuppressWarnings("serial")
 public class FingerPane extends JComponent implements Touchable

@@ -13,8 +13,9 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 
-import eu.telecom_bretagne.uav3i.communication.dto.LineMnvrDTO;
-import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+
 import uk.me.jstott.jcoord.LatLng;
 
 public class LineMnvr extends Manoeuver

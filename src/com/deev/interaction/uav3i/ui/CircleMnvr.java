@@ -7,10 +7,11 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+
 import uk.me.jstott.jcoord.LatLng;
-import eu.telecom_bretagne.uav3i.communication.dto.CircleMnvrDTO;
-import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
 
 public class CircleMnvr extends Manoeuver
 {

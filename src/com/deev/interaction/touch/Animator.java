@@ -9,8 +9,6 @@ import java.util.logging.Level;
 
 import javax.swing.JComponent;
 
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
-
 public class Animator
 {	
 	private static int _DELAY_ = 50;//en milliseconde = temps de rafraichissement de l'appli

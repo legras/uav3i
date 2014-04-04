@@ -27,9 +27,9 @@ import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.UAV3iSettings.Mode;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")

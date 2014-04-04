@@ -21,8 +21,7 @@ import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Palette;
 import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
-
-import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public abstract class Manoeuver implements Touchable, Animation
 {

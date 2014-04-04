@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import com.deev.interaction.touch.Palette;
 
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public enum Palette3i 
 {	

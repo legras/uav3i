@@ -18,13 +18,13 @@ import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverStates;
+import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.direct.PaparazziDirectCommunication;
+import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziRemoteCommunication;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
-import eu.telecom_bretagne.uav3i.communication.direct.PaparazziDirectCommunication;
-import eu.telecom_bretagne.uav3i.communication.rmi.PaparazziRemoteCommunication;
-import eu.telecom_bretagne.uav3i.paparazzi_settings.airframe.AirframeFacade;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
 {

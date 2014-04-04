@@ -8,8 +8,9 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import eu.telecom_bretagne.uav3i.communication.dto.BoxMnvrDTO;
-import eu.telecom_bretagne.uav3i.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+
 import uk.me.jstott.jcoord.LatLng;
 
 public class BoxMnvr extends Manoeuver

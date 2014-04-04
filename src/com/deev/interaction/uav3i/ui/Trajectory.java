@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.veto.ui.SymbolMapVeto;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.veto.ui.SymbolMapVeto;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
 
 /**
  * @author legras

@@ -4,10 +4,9 @@ import javax.swing.SwingUtilities;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.VideoModel;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.communication.PaparazziCommunication;
-import eu.telecom_bretagne.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
 import fr.dgac.ivy.IvyException;
 
 /**

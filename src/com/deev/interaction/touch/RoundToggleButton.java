@@ -12,7 +12,7 @@ import javax.swing.JToggleButton;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
 
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public class RoundToggleButton extends JToggleButton
 {

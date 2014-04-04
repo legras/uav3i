@@ -45,8 +45,8 @@ import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.touch.Gesture;
 import com.deev.interaction.touch.Touchable;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;

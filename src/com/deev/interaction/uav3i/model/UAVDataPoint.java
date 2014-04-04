@@ -1,6 +1,6 @@
 package com.deev.interaction.uav3i.model;
 
-import eu.telecom_bretagne.uav3i.paparazzi_settings.flight_plan.FlightPlanFacade;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
 

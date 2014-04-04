@@ -23,11 +23,11 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.touch.TintedBufferedImage;
+import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
+import com.deev.interaction.uav3i.ui.maps.OsmMapInteractionPanel;
 
-import eu.telecom_bretagne.uav3i.UAV3iSettings;
-import eu.telecom_bretagne.uav3i.maps.OsmMapGround;
-import eu.telecom_bretagne.uav3i.maps.OsmMapInteractionPanel;
-import eu.telecom_bretagne.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 /*
  * 
