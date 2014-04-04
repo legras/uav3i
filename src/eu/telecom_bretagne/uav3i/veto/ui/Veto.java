@@ -52,9 +52,11 @@ public class Veto extends JFrame
     osmMapGround = new OsmMapGround();
     //lpane.add(osmMapGround,-20);
     
-    SymbolMapVeto symbolMapVeto = new SymbolMapVeto();
+//    SymbolMapVeto symbolMapVeto = new SymbolMapVeto();
     //lpane.add(symbolMapVeto);
-    this.getContentPane().add(symbolMapVeto);
+//    this.getContentPane().add(symbolMapVeto);
+    
+    this.getContentPane().add(osmMapGround);
     
     //lpane.setVisible(true);
 
