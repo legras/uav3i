@@ -32,6 +32,7 @@ Distribution Lubuntu 13.10 64-bit
            raccourci sur le bureau pour un lancement manuel à chaque démarrage.
     -> Installations d'outils additionnels via Synaptic Package Manager :
          * gedit
+         * Plugin Flash
          
 Java (Linux x64)
 ----------------
