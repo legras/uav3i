@@ -32,9 +32,19 @@ public class OsmMapGround extends Map
     //                                     UAV3iSettings.getInitialLongitude(),
     //                                     UAV3iSettings.getInitialZoom());
     LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
-    mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
-                                         startPoint.getLng(),
-                                         UAV3iSettings.getTrajectoryZoom());
+    switch (UAV3iSettings.getMode())
+    {
+      case VETO:
+        mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
+                                             startPoint.getLng(),
+                                             UAV3iSettings.getTrajectoryZoom() - 1);
+        break;
+      default:
+        mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
+                                             startPoint.getLng(),
+                                             UAV3iSettings.getTrajectoryZoom());
+        break;
+    }
     
     switch (UAV3iSettings.getMapType())
     {

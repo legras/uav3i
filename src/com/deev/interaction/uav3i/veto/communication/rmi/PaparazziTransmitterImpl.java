@@ -44,7 +44,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    uavPositionListener = UAVPositionListener.getInstance();
+    uavPositionListener = new UAVPositionListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------

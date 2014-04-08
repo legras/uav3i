@@ -103,11 +103,10 @@ public class UAVModel
 	 */
 	public UAVModel()
 	{
-	  System.out.println("####### Appel du constructeur UAVModel()");
 		switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
-      case VETO:
+//      case VETO:
         paparazziCommunication = new PaparazziDirectCommunication();
         break;
       case PAPARAZZI_REMOTE:

@@ -56,7 +56,7 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     
     // Mise en écoute des messages GPS
     // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-    bus.bindMsg("(.*)GPS(.*)", UAVPositionListener.getInstance());
+    bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
   }
   //-----------------------------------------------------------------------------
   @Override

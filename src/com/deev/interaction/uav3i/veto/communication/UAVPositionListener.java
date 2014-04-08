@@ -18,25 +18,7 @@ import fr.dgac.ivy.IvyMessageListener;
 public class UAVPositionListener implements IvyMessageListener
 {
   //-----------------------------------------------------------------------------
-  /**
-   * <b>Singleton</b><br/>
-   * Pour éviter que le Veto ait deux écouteurs : l'un pour la transmission vers la
-   * table tactile et l'autre pour mettre ses informations locales à jour. La même
-   * instance est partagée.
-   */
-  private static UAVPositionListener instance = null;
   private IUav3iTransmitter uav3iTransmitter = null;
-  //-----------------------------------------------------------------------------
-  private UAVPositionListener()
-  {
-  }
-  //-----------------------------------------------------------------------------
-  public static UAVPositionListener getInstance()
-  {
-    if(instance == null)
-      instance = new UAVPositionListener();
-    return instance;
-  }
   //-----------------------------------------------------------------------------
   /**
    * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
@@ -46,7 +28,6 @@ public class UAVPositionListener implements IvyMessageListener
    */
   public void setUav3iTransmitter(IUav3iTransmitter uav3iTransmitter)
   {
-    System.out.println("####### appel de setUav3iTransmitter(" + uav3iTransmitter + ")");
     this.uav3iTransmitter = uav3iTransmitter;
   }
   //-----------------------------------------------------------------------------

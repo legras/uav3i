@@ -1,5 +1,7 @@
 package com.deev.interaction.uav3i.veto.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -7,8 +9,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
@@ -48,18 +52,21 @@ public class Veto extends JFrame
       e1.printStackTrace();
     }
     
-    //JLayeredPane lpane = this.getLayeredPane();
+    this.getContentPane().setPreferredSize(new Dimension(960, 600));
+    this.pack();
+    
+    JLayeredPane lpane = new JLayeredPane();
     
     osmMapGround = new OsmMapGround();
-    //lpane.add(osmMapGround,-20);
+    osmMapGround.setBounds(0, 0, 960, 600);
+    lpane.add(osmMapGround,10);
+
+    SymbolMapVeto symbolMapVeto = new SymbolMapVeto();
+    symbolMapVeto.setBounds(0, 0, 960, 600);
+    lpane.add(symbolMapVeto,5);
+
     
-//    SymbolMapVeto symbolMapVeto = new SymbolMapVeto();
-    //lpane.add(symbolMapVeto);
-//    this.getContentPane().add(symbolMapVeto);
-    
-    this.getContentPane().add(osmMapGround);
-    
-    //lpane.setVisible(true);
+    this.getContentPane().add(lpane);
 
     try
     {
@@ -71,24 +78,4 @@ public class Veto extends JFrame
     }
   }
   //-----------------------------------------------------------------------------
-  
-//  new Thread(new Test()).start();
-//  private class Test implements Runnable
-//  {
-//
-//    @Override
-//    public void run()
-//    {
-//      JMapViewer map = osmMapGround.getMapViewer();
-//      while(true)
-//      {
-//        try { Thread.sleep(1000); } catch (InterruptedException e) {}
-//        Point center = map.getCenter();
-//        Coordinate coordinate = map.getPosition();
-//        
-//        System.out.println("####### center coordinate = " +  coordinate);
-//      }
-//    }
-//    
-//  }
 }
