@@ -27,11 +27,23 @@ public class Launcher
 		// Lecture du fichier de configuration pour le système de logs.
 		System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
 
+		// TODO améliorer la gestion des différents cas de figure...
 		switch (UAV3iSettings.getMode())
 		{
 			case REPLAY: // Lancement avec replay (infos dans le fichier).
 				UAVModel.initialize(UAVModel.class.getResourceAsStream("pentrez.data"));
 				VideoModel.initialize();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+          public void run()
+          { 
+            final MainFrame frame = new MainFrame();
+            frame.setVisible(true); 
+            frame.requestFocusInWindow();
+            if (UAV3iSettings.getFullscreen())
+              java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+          }
+        });
 				break;
 			case PAPARAZZI_DIRECT:
 			case PAPARAZZI_REMOTE:
