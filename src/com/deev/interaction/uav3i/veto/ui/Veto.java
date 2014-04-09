@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+import com.deev.interaction.touch.Animator;
 import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
 
@@ -59,14 +60,18 @@ public class Veto extends JFrame
     
     osmMapGround = new OsmMapGround();
     osmMapGround.setBounds(0, 0, 960, 600);
-    lpane.add(osmMapGround,10);
+    lpane.add(osmMapGround, 10);
 
     SymbolMapVeto symbolMapVeto = new SymbolMapVeto();
     symbolMapVeto.setBounds(0, 0, 960, 600);
-    lpane.add(symbolMapVeto,5);
+    lpane.add(symbolMapVeto, 0);
 
-    
     this.getContentPane().add(lpane);
+    
+    Animator.addComponent(symbolMapVeto);
+    //Animator.addAnimation(osmMapGround);
+    Animator.go();
+
 
     try
     {

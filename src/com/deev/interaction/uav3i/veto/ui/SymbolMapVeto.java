@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,8 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.model.UAVDataPoint;
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.Trajectory;
 
 public class SymbolMapVeto extends JComponent
@@ -84,7 +87,7 @@ public class SymbolMapVeto extends JComponent
   }
   //-----------------------------------------------------------------------------
   public synchronized void paint(Graphics2D g2)
-  { 
+  {
     long currentTime = System.currentTimeMillis();
 
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -113,6 +116,29 @@ public class SymbolMapVeto extends JComponent
       g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
       g2.draw(fullTrajectory);
     }
+    
+    // Dessin UAV
+    AffineTransform old = g2.getTransform();  
+    BufferedImage uavImg;
+    UAVDataPoint uavpoint;
+
+    old = g2.getTransform();
+
+      uavImg = uavImage;
+      
+      uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
+      if (uavpoint != null)
+      {
+        Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
+        double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
+        g2.translate(uav.x, uav.y);
+
+        g2.rotate(Math.PI/2.-course);
+        g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+
+      }
+      g2.setTransform(old);
+
   }
   //-----------------------------------------------------------------------------
 }
