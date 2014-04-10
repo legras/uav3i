@@ -124,6 +124,14 @@ public class UAVModel
         break;
     }
 	}
+	
+	public static void reinit()
+	{
+    if(store != null)
+    {
+      store._dataPoints = new ArrayList<UAVDataPoint>();
+    }
+	}
 
 	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
 	{
@@ -135,7 +143,7 @@ public class UAVModel
 
 	public static UAVDataPoint getDataPointAtTime(long time)
 	{
-		if (store._dataPoints == null || store._dataPoints.size() < 1)
+		if (store._dataPoints == null || store._dataPoints.size() <= 1)
 			return null;
 
 		int index = store.getIndexBeforeTime(time);
@@ -226,9 +234,12 @@ public class UAVModel
 	public static boolean isEmpty()
 	{
 	  if(store != null)
-	    return store._dataPoints.size() == 0;
+	  {
+      //return store._dataPoints.size() == 0;
+      return store._dataPoints.size() <= 1;
+	  }
 	  else
-	    return false;
+      return false;
 	}
 
 	public static void submitManoeuver(Manoeuver mnvr)

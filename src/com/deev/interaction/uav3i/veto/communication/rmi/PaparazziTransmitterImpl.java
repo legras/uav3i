@@ -8,11 +8,15 @@ import java.rmi.registry.Registry;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 
 import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
 
@@ -101,6 +105,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void register(String uav3iHostname, int uav3iPort)  throws RemoteException
   {
+    Veto.state = StateVeto.RECEIVING;
     try
     {
       bus.start(null);
@@ -134,10 +139,11 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   //-----------------------------------------------------------------------------
   public void unRegisterUav3iTransmitter()
   {
-    uav3iTransmitter = null;
     bus.stop();
+    Veto.state = StateVeto.IDLE;
+    uav3iTransmitter = null;
+    Veto.reinit();
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");
-
   }
   //-----------------------------------------------------------------------------
 

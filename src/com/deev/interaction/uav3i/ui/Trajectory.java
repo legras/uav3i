@@ -4,11 +4,13 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.veto.ui.SymbolMapVeto;
-
+import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 
 /**
@@ -24,7 +26,7 @@ public class Trajectory
 {
 	private class TrajectoryPoint
 	{
-		public LatLng latlng;
+    public LatLng latlng;
 		public long time;
 
 		public TrajectoryPoint(LatLng ll, long t)
@@ -32,6 +34,12 @@ public class Trajectory
 			latlng = ll;
 			time = t;
 		}
+		
+    @Override
+    public String toString()
+    {
+      return "TrajectoryPoint [latlng=" + latlng + ", time=" + time + "]";
+    }
 	}
 
 	private ArrayList<TrajectoryPoint> _points;
@@ -39,6 +47,11 @@ public class Trajectory
 	public Trajectory()
 	{
 		_points = new ArrayList<Trajectory.TrajectoryPoint>();
+	}
+	
+	public void reinit()
+	{
+    _points = new ArrayList<Trajectory.TrajectoryPoint>();
 	}
 
 	public void update()
@@ -54,9 +67,19 @@ public class Trajectory
 		// Centrage de la carte lors de l'insertion du premier point de la trajectoire.
 		if(_points.size() == 1)
 		{
-			MainFrame.OSMMap.getMapViewer().setDisplayPositionByLatLon(ll.getLat(),
-					ll.getLng(),
-					UAV3iSettings.getTrajectoryZoom());
+		  JMapViewer mapViewer;
+		  switch (UAV3iSettings.getMode())
+      {
+        case VETO:
+          mapViewer = Veto.getMapViewer();
+          break;
+        default:
+          mapViewer = MainFrame.OSMMap.getMapViewer();
+          break;
+      }
+			mapViewer.setDisplayPositionByLatLon(ll.getLat(),
+					                                 ll.getLng(),
+					                                 UAV3iSettings.getTrajectoryZoom());
 		}
 	}
 
@@ -94,7 +117,7 @@ public class Trajectory
 	    Point2D.Double p;
 
 	    if (_points.size() < 2)
-	      return  null;
+        return  null;
 
 	    for (TrajectoryPoint tp : _points)
 	    {

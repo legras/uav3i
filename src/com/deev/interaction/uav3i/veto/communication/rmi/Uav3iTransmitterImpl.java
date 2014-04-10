@@ -3,6 +3,8 @@ package com.deev.interaction.uav3i.veto.communication.rmi;
 import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {
@@ -15,7 +17,8 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
                               int  alt, 
                               long t) throws RemoteException
   {
-    UAVModel.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
+    if(Veto.state == StateVeto.RECEIVING)
+      UAVModel.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
   }
   //-----------------------------------------------------------------------------
   @Override

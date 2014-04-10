@@ -28,9 +28,6 @@ public class OsmMapGround extends Map
   {
     mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
 
-    //mapViewer.setDisplayPositionByLatLon(UAV3iSettings.getInitialLatitude(),
-    //                                     UAV3iSettings.getInitialLongitude(),
-    //                                     UAV3iSettings.getInitialZoom());
     LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
     switch (UAV3iSettings.getMode())
     {
@@ -84,9 +81,6 @@ public class OsmMapGround extends Map
     
     this.setLayout(new BorderLayout());
     this.add(mapViewer);
-    
-//    System.out.println("------------------> " + mapViewer.getPosition());
-//    System.out.println("------------------> " + mapViewer.getPosition(100,100));
   }
   //-----------------------------------------------------------------------------
   public JMapViewer getMapViewer()

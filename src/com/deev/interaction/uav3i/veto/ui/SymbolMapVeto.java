@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -31,7 +32,6 @@ public class SymbolMapVeto extends JComponent
   private Trajectory    trajectory;
   private long          lastTrajectoryUpdate = 0;
   private BufferedImage uavImage = null;
-
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -54,7 +54,7 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   public Point2D.Double getScreenForLatLng(LatLng latlng)
   { 
-    Point a = Veto.osmMapGround.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+    Point a = Veto.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
     Point b = new Point(a.x+1, a.y+1);
     
     LatLng A = getLatLngForScreen(a.x, a.y);
@@ -71,8 +71,8 @@ public class SymbolMapVeto extends JComponent
     int X = (int) x;
     int Y = (int) y;
 
-    Coordinate A = Veto.osmMapGround.getMapViewer().getPosition(X, Y);
-    Coordinate B = Veto.osmMapGround.getMapViewer().getPosition(X+1, Y+1);
+    Coordinate A = Veto.getMapViewer().getPosition(X, Y);
+    Coordinate B = Veto.getMapViewer().getPosition(X+1, Y+1);
 
     double lat = A.getLat() + (y-(double)Y) * (B.getLat()-A.getLat());
     double lon = A.getLon() + (x-(double)X) * (B.getLon()-A.getLon());
@@ -139,6 +139,11 @@ public class SymbolMapVeto extends JComponent
       }
       g2.setTransform(old);
 
+  }
+  //-----------------------------------------------------------------------------
+  public void reinit()
+  {
+    trajectory.reinit();
   }
   //-----------------------------------------------------------------------------
 }
