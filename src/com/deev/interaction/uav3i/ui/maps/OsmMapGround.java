@@ -1,22 +1,18 @@
 package com.deev.interaction.uav3i.ui.maps;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Point;
 
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
-import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOpenAerialTileSource;
-import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Map;
-
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
+import com.deev.interaction.uav3i.veto.ui.UAVScope;
 
 public class OsmMapGround extends Map
 {
@@ -34,7 +30,9 @@ public class OsmMapGround extends Map
       case VETO:
         mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
                                              startPoint.getLng(),
-                                             UAV3iSettings.getTrajectoryZoom() - 1);
+                                             UAV3iSettings.getTrajectoryZoom() - 3);
+        UAVScope scope = new UAVScope();
+        mapViewer.addMapMarker(scope);
         break;
       default:
         mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
@@ -60,28 +58,46 @@ public class OsmMapGround extends Map
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
     
-    // Test de configuation du JMapViewer
-    
-    //mapViewer.setTileGridVisible(true);
-    //mapViewer.setZoomContolsVisible(false);
-    //mapViewer.setZoomButtonStyle(JMapViewer.ZOOM_BUTTON_STYLE.VERTICAL);
-    
-     // Choix de la source cartographique : si aucun choix n'est précisé,
-     // La source OsmTileSource.Mapnik() est prise par défaut.
-
-    //
-    //
-    //
-    //mapViewer.setTileSource(new MapQuestOpenAerialTileSource());
-    //mapViewer.setTileSource(new MapQuestOsmTileSource());
-
-    // Sans layout (layout null), la carte ne s'affiche pas. Avec un FlowLayout,
-    // la carte s'affiche avec sa dimension par défaut (400 X 400), avec un
-    // BorderLayout, la carte occupe tout l'espace disponible.
-    
     this.setLayout(new BorderLayout());
     this.add(mapViewer);
   }
+  //-----------------------------------------------------------------------------
+//  public void setDisplayToFitMaxScope(UAVScope scope, JMapViewer mapViewer)
+//  {
+//    int x_min = Integer.MAX_VALUE;
+//    int y_min = Integer.MAX_VALUE;
+//    int x_max = Integer.MIN_VALUE;
+//    int y_max = Integer.MIN_VALUE;
+//    
+//    int mapZoomMax = mapViewer.getTileController().getTileSource().getMaxZoom();
+//
+//    int xScopeCenter = OsmMercator.LonToX(scope.getLon(), mapZoomMax);
+//    int yScopeCenter = OsmMercator.LatToY(scope.getLat(), mapZoomMax);
+//    x_max = Math.max(x_max, xScopeCenter);
+//    y_max = Math.max(y_max, yScopeCenter);
+//    x_min = Math.min(x_min, xScopeCenter);
+//    y_min = Math.min(y_min, yScopeCenter);
+//
+//
+//    System.out.println("####### getWidth() = " + mapViewer.getWidth() + " / getHeight() = " + mapViewer.getHeight());
+//    int height = Math.max(0, 600);
+//    int width = Math.max(0, 960);
+//    int newZoom = mapZoomMax;
+//    int x = x_max - x_min;
+//    int y = y_max - y_min;
+//    while (x > width || y > height)
+//    {
+//      newZoom--;
+//      x >>= 1;
+//      y >>= 1;
+//    }
+//    x = x_min + (x_max - x_min) / 2;
+//    y = y_min + (y_max - y_min) / 2;
+//    int z = 1 << (mapZoomMax - newZoom);
+//    x /= z;
+//    y /= z;
+//    mapViewer.setDisplayPosition(x, y, newZoom);
+//  }
   //-----------------------------------------------------------------------------
   public JMapViewer getMapViewer()
   {
