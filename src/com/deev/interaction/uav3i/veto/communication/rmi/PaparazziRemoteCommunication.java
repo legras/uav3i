@@ -175,12 +175,39 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     }
   }
   //-----------------------------------------------------------------------------
+//  @Override
+//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+//  {
+//    try
+//    {
+//      return paparazziTransmitter.submitManoeuver(mnvrDTO);
+//    }
+//    catch (RemoteException e)
+//    {
+//      e.printStackTrace();
+//    }
+//    return false;
+//  }
+  //-----------------------------------------------------------------------------
   @Override
-  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO)
   {
     try
     {
-      return paparazziTransmitter.submitManoeuver(mnvrDTO);
+      paparazziTransmitter.communicateManoeuver(mnvrDTO);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean executeManoeuver(ManoeuverDTO mnvrDTO)
+  {
+    try
+    {
+      return paparazziTransmitter.executeManoeuver(mnvrDTO);
     }
     catch (RemoteException e)
     {

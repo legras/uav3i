@@ -29,11 +29,13 @@ public abstract class PaparazziCommunication
   public abstract void jumpToBlock(String blockName);
   //-----------------------------------------------------------------------------
   /**
-   * Soumission d'une manoeuvre au responsable du vol.
+   * Communication d'une manoeuvre au responsable du vol.
    * @param mnvrDTO objet DTO (transfert de données) représentant les données de
    *                la manoeuvre.
    * @return
    */
-  public abstract boolean submitManoeuver(ManoeuverDTO mnvrDTO);
+  public abstract void communicateManoeuver(ManoeuverDTO mnvrDTO);
+  //-----------------------------------------------------------------------------
+  public abstract boolean executeManoeuver(ManoeuverDTO mnvrDTO);
   //-----------------------------------------------------------------------------
 }

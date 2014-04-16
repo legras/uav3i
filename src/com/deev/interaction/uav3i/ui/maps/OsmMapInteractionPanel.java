@@ -3,16 +3,12 @@ package com.deev.interaction.uav3i.ui.maps;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import com.deev.interaction.touch.Animation;
-import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.CircleAnim;
 import com.deev.interaction.touch.ImageLighteningAnim;
 import com.deev.interaction.touch.Touchable;

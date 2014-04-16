@@ -251,7 +251,7 @@ public class UAVModel
         mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
         break;
       case PAPARAZZI_REMOTE:
-        if(paparazziCommunication.submitManoeuver(mnvr.toDTO()))  // ACCEPTED
+        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
         {
           mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
           LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");

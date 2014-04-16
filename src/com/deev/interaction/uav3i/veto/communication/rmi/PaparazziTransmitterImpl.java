@@ -85,10 +85,23 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
   }
   //-----------------------------------------------------------------------------
+//  @Override
+//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+//  {
+//    LoggerUtil.LOG.info("submitManoeuver("+mnvrDTO+")");
+//    return true;
+//  }
+  //-----------------------------------------------------------------------------
   @Override
-  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
-    LoggerUtil.LOG.info("submitManoeuver("+mnvrDTO+")");
+    LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  {
+    LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
     return true;
   }
   //-----------------------------------------------------------------------------

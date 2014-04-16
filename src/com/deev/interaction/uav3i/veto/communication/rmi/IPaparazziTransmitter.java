@@ -44,6 +44,10 @@ public interface IPaparazziTransmitter extends Remote
    */
   public void register(String uav3iHostname, int uav3iPort) throws RemoteException;
   //-----------------------------------------------------------------------------
-  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  public boolean executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
 }

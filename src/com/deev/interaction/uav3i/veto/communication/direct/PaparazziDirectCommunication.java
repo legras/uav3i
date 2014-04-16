@@ -92,8 +92,20 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     catch (IvyException e) { e.printStackTrace(); }
   }
   //-----------------------------------------------------------------------------
+//  @Override
+//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+//  {
+//    // Return true because MODE is PAPARAZZI_DIRECT
+//    return true;
+//  }
+  //-----------------------------------------------------------------------------
   @Override
-  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO)
+  {
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public boolean executeManoeuver(ManoeuverDTO mnvrDTO)
   {
     // Return true because MODE is PAPARAZZI_DIRECT
     return true;
