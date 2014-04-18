@@ -122,7 +122,8 @@ public class LineMnvrDTO extends ManoeuverDTO
         return false;
     }
     
-    // equals(...) is not defined inside the LatLng class.
+    // equals(...) is not defined inside the LatLng class so the equality
+    // between values for latitude ang longitude are tested.
     
     //else if (!_A.equals(other._A))
     else if(!(_A.getLat() == other._A.getLat() && _A.getLng() == _A.getLng()))  

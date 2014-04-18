@@ -107,17 +107,7 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   public void deleteManoeuver(ManoeuverDTO manoeuverDTO)
   {
-    ManoeuverDTO manoeuverDTOToBeRemoved = null;
-    for(ManoeuverDTO mDTO : manoeuvers)
-    {
-      if(mDTO.equals(manoeuverDTO))
-      {
-        manoeuverDTOToBeRemoved = mDTO;
-      }
-      
-    }
-    if(manoeuverDTOToBeRemoved != null)
-      manoeuvers.remove(manoeuverDTOToBeRemoved);
+    manoeuvers.remove(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
   public synchronized void paint(Graphics2D g2)
