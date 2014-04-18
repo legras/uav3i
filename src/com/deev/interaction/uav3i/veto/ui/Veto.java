@@ -87,10 +87,8 @@ public class Veto extends JFrame
     }
   }
   //-----------------------------------------------------------------------------
-  public static JMapViewer getMapViewer()
-  {
-    return osmMapGround.getMapViewer();
-  }
+  public static JMapViewer    getMapViewer()     { return osmMapGround.getMapViewer(); }
+  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto;               }
   //-----------------------------------------------------------------------------
   public static void reinit()
   {

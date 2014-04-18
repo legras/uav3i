@@ -1,5 +1,7 @@
 package com.deev.interaction.uav3i.veto.communication.dto;
 
+import java.awt.Graphics2D;
+
 import uk.me.jstott.jcoord.LatLng;
 
 public class BoxMnvrDTO extends ManoeuverDTO
@@ -20,6 +22,11 @@ public class BoxMnvrDTO extends ManoeuverDTO
   public LatLng  get_A()        { return _A;            }
   public LatLng  get_B()        { return _B;            }
   public boolean isNorthSouth() { return _isNorthSouth; }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void paint(Graphics2D g2)
+  {
+  }
   //-----------------------------------------------------------------------------
   @Override
   public String toString()

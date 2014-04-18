@@ -11,27 +11,30 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
-import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Trajectory;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class SymbolMapVeto extends JComponent
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 8553028045589171104L;
   
-  private Trajectory    trajectory;
-  private long          lastTrajectoryUpdate = 0;
-  private BufferedImage uavImage = null;
+  private Trajectory              trajectory;
+  private long                    lastTrajectoryUpdate = 0;
+  private BufferedImage           uavImage = null;
+  private ArrayList<ManoeuverDTO> manoeuvers = null;
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -41,6 +44,7 @@ public class SymbolMapVeto extends JComponent
     Color back = new Color(0.f, 0.f, 0.f, .0f);
     setBackground(back);  
     trajectory = new Trajectory();
+    manoeuvers = new ArrayList<ManoeuverDTO>();
     try
     {
       uavImage = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
@@ -80,10 +84,26 @@ public class SymbolMapVeto extends JComponent
     return new LatLng(lat, lon);
   }
   //-----------------------------------------------------------------------------
+  public double getPPM()
+  {
+    return 1. / Veto.getMapViewer().getMeterPerPixel();
+  }
+  //-----------------------------------------------------------------------------
   public void paintComponent(Graphics g)
   {
     Graphics2D g2 = (Graphics2D) g;
     paint(g2);
+  }
+  //-----------------------------------------------------------------------------
+  public void reinit()
+  {
+    trajectory.reinit();
+    manoeuvers = new ArrayList<ManoeuverDTO>();
+  }
+  //-----------------------------------------------------------------------------
+  public void addManoeuver(ManoeuverDTO manoeuverDTO)
+  {
+    manoeuvers.add(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
   public synchronized void paint(Graphics2D g2)
@@ -124,26 +144,24 @@ public class SymbolMapVeto extends JComponent
 
     old = g2.getTransform();
 
-      uavImg = uavImage;
-      
-      uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
-      if (uavpoint != null)
-      {
-        Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
-        double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
-        g2.translate(uav.x, uav.y);
+    uavImg = uavImage;
+    uavpoint = UAVModel.getDataPointAtTime(System.currentTimeMillis());
+    if (uavpoint != null)
+    {
+      Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
+      double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
+      g2.translate(uav.x, uav.y);
 
-        g2.rotate(Math.PI/2.-course);
-        g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
-
-      }
-      g2.setTransform(old);
-
-  }
-  //-----------------------------------------------------------------------------
-  public void reinit()
-  {
-    trajectory.reinit();
+      g2.rotate(Math.PI/2.-course);
+      g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+    }
+    g2.setTransform(old);
+    
+    synchronized(this)
+    {
+      for (ManoeuverDTO m : manoeuvers)
+        m.paint(g2);
+    }
   }
   //-----------------------------------------------------------------------------
 }

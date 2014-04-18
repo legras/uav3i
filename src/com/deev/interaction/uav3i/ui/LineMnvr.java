@@ -389,7 +389,7 @@ public class LineMnvr extends Manoeuver
   @Override
   public ManoeuverDTO toDTO()
   {
-    return new LineMnvrDTO(_A, _B, _currentRm);
+    return new LineMnvrDTO(_A, _B, _currentRm, _u, _v);
   }
 }
 
