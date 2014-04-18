@@ -329,7 +329,7 @@ public class UAVModel
 	
 	public static void deleteManoeuver(Manoeuver mnvr)
 	{
-	  
+	  paparazziCommunication.deleteManoeuver(mnvr.toDTO());
 	}
 //	public static PaparazziCommunication getPaparazziCommunication()
 //	{
