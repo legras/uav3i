@@ -57,7 +57,7 @@ public class LineMnvrDTO extends ManoeuverDTO
 
     area.add(new Area(stroke.createStrokedShape(line)));
 
-    //paintFootprint(g2, area, isSubmitted());
+    paintFootprint(g2, area);
 
     double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
 
@@ -88,7 +88,56 @@ public class LineMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "LineMnvrDTO [_A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + "]";
+    return "LineMnvrDTO [_A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + ", _u=" + _u + ", _v=" + _v + "]";
+  }
+  //-----------------------------------------------------------------------------
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((_A == null) ? 0 : _A.hashCode());
+    result = prime * result + ((_B == null) ? 0 : _B.hashCode());
+    return result;
+  }
+  //-----------------------------------------------------------------------------
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)                   return true;
+    if (obj == null)                   return false;
+    if (!(obj instanceof LineMnvrDTO)) return false;
+
+    LineMnvrDTO other = (LineMnvrDTO) obj;
+    
+    if (_A == null)
+    {
+      if (other._A != null)
+        return false;
+    }
+    
+    // equals(...) is not defined inside the LatLng class.
+    
+    //else if (!_A.equals(other._A))
+    else if(!(_A.getLat() == other._A.getLat() && _A.getLng() == _A.getLng()))  
+      return false;
+    
+    if (_B == null)
+    {
+      if (other._B != null)
+        return false;
+    }
+    //else if (!_B.equals(other._B))
+    else if (!(_B.getLat() == other._B.getLat() && _B.getLng() == _B.getLng()))
+      return false;
+    
+    return true;
   }
   //-----------------------------------------------------------------------------
 }

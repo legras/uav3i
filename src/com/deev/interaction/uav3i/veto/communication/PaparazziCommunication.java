@@ -38,4 +38,6 @@ public abstract class PaparazziCommunication
   //-----------------------------------------------------------------------------
   public abstract boolean executeManoeuver(ManoeuverDTO mnvrDTO);
   //-----------------------------------------------------------------------------
+  public abstract void deleteManoeuver(ManoeuverDTO mnvrDTO);
+  //-----------------------------------------------------------------------------
 }

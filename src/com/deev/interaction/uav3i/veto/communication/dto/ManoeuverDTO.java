@@ -4,9 +4,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.Serializable;
 
-import com.deev.interaction.touch.Palette;
+import javax.imageio.ImageIO;
 
 public abstract class ManoeuverDTO implements Serializable
 {
@@ -15,12 +19,12 @@ public abstract class ManoeuverDTO implements Serializable
   
   protected static double RPX = 10.;
   
-  private static Color _GREEN   = new Color(.3f, .7f, 0.f, 1.f);
-  private static Color _YELLOW  = new Color(1.f, 1.f, 0.f, 1.f);
-  private static Color _RED     = new Color(.9f, .3f, 0.f, 1.f);
-  private static Color _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
-  private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
-
+  private static Color        _GREEN   = new Color(.3f, .7f, 0.f, 1.f);
+  private static Color        _YELLOW  = new Color(1.f, 1.f, 0.f, 1.f);
+  private static Color        _RED     = new Color(.9f, .3f, 0.f, 1.f);
+  private static Color        _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
+  private static Color        _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
+  private static TexturePaint _hashGW  = null;
   //-----------------------------------------------------------------------------
   public abstract void paint(Graphics2D g2);
   //-----------------------------------------------------------------------------
@@ -52,6 +56,32 @@ public abstract class ManoeuverDTO implements Serializable
       g2.setPaint(_GREEN);
       g2.setStroke(dashed);
     g2.draw(line);
+  }
+  //-----------------------------------------------------------------------------
+  public void paintFootprint(Graphics2D g2, Shape footprint)
+  {
+    if (_hashGW == null)
+    {
+      BufferedImage stripes;
+      try
+      {
+        stripes = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/squaresGY.png"));
+        _hashGW = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 32, 32));
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
+    
+    //float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
+    float lineWidth = 3.f;
+    
+    g2.setPaint(_hashGW);
+    g2.fill(footprint);
+    g2.setStroke(new BasicStroke(lineWidth));
+    g2.setPaint(_GREEN);
+    g2.draw(footprint);
   }
   //-----------------------------------------------------------------------------
 }

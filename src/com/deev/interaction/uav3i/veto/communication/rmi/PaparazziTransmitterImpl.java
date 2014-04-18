@@ -68,8 +68,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
    * @see eu.telecom_bretagne.uav3i.communication.IPaparazziTransmitter#moveWayPoint(java.lang.String, uk.me.jstott.jcoord.LatLng)
    */
   @Override
-  public void moveWayPoint(String waypointName, LatLng coordinate)
-      throws RemoteException
+  public void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
   {
     sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
     LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
@@ -96,6 +95,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
+    Veto.getSymbolMapVeto().addManoeuver(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -103,6 +103,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
     return true;
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void deleteManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  {
+    LoggerUtil.LOG.info("deleteManoeuver("+mnvrDTO+")");
+    Veto.getSymbolMapVeto().deleteManoeuver(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
   /**

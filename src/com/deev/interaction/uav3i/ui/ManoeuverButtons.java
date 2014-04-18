@@ -144,6 +144,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 			if (!_deleteButton.isSelected())
 			{
 				_isDead = true;
+        UAVModel.deleteManoeuver(_manoeuver);
 				_manoeuver.delete();
 			}
 			else

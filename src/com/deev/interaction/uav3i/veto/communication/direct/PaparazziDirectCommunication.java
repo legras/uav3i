@@ -102,6 +102,7 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   @Override
   public void communicateManoeuver(ManoeuverDTO mnvrDTO)
   {
+    // Nothing to do...
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -109,6 +110,12 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   {
     // Return true because MODE is PAPARAZZI_DIRECT
     return true;
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void deleteManoeuver(ManoeuverDTO mnvrDTO)
+  {
+    // Nothing to do...
   }
   //-----------------------------------------------------------------------------
 }

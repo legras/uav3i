@@ -326,6 +326,11 @@ public class UAVModel
       }
     }
 	}
+	
+	public static void deleteManoeuver(Manoeuver mnvr)
+	{
+	  
+	}
 //	public static PaparazziCommunication getPaparazziCommunication()
 //	{
 //		return paparazziCommunication;
