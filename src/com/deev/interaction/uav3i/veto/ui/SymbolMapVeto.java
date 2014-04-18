@@ -22,7 +22,6 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
-import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Trajectory;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 

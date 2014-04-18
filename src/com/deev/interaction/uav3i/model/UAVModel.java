@@ -242,7 +242,8 @@ public class UAVModel
       return false;
 	}
 
-	public static void submitManoeuver(Manoeuver mnvr)
+  //public static void submitManoeuver(Manoeuver mnvr)
+  public static void communicateManoeuver(Manoeuver mnvr)
 	{
 		switch (UAV3iSettings.getMode())
     {
@@ -251,16 +252,17 @@ public class UAVModel
         mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
         break;
       case PAPARAZZI_REMOTE:
-        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
-        {
-          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
-          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
-        }
-        else  // REJECTED
-        {
-          mnvr.kill();
-          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
-        }
+//        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
+//        {
+//          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
+//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
+//        }
+//        else  // REJECTED
+//        {
+//          mnvr.kill();
+//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
+//        }
+          paparazziCommunication.communicateManoeuver(mnvr.toDTO());
         break;
       default:
         break;
@@ -287,7 +289,8 @@ public class UAVModel
 //    }, 2000);
 
     if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
-      submitManoeuver(mnvr);
+      //submitManoeuver(mnvr);
+      communicateManoeuver(mnvr);
     if(mnvr.getManoeuverState() == ManoeuverStates.SUBMITTED)
     {
       switch (mnvr.getClass().getSimpleName())
