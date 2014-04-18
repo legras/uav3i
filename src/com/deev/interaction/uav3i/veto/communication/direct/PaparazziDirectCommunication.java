@@ -1,13 +1,16 @@
 package com.deev.interaction.uav3i.veto.communication.direct;
 
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.UAVGroundLevelListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
 
@@ -57,6 +60,8 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     // Mise en écoute des messages GPS
     // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
     bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
+    
+    bus.bindMsg("(.*)ESTIMATOR(.*)", new UAVGroundLevelListener());
   }
   //-----------------------------------------------------------------------------
   @Override

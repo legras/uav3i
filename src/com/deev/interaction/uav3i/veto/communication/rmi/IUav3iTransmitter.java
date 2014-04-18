@@ -24,6 +24,8 @@ public interface IUav3iTransmitter extends Remote
                               int  alt,
                               long t) throws RemoteException;
   //-----------------------------------------------------------------------------
+  public void addGroundLevel(double groundLevel, double verticalSpeed) throws RemoteException;
+  //-----------------------------------------------------------------------------
   /**
    * Appelé par l'appli côté Paparazzi pour savoir si le client est en vie. La méthode
    * ne fait rien mais son appel réussi indique qur tout va bien...
