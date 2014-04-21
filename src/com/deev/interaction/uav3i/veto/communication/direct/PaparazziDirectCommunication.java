@@ -60,7 +60,7 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     // Mise en écoute des messages GPS
     // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
     bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
-    
+    // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
     bus.bindMsg("(.*)ESTIMATOR(.*)", new UAVGroundLevelListener());
   }
   //-----------------------------------------------------------------------------

@@ -28,9 +28,13 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
 {
-	public static UAVModel                store = null;
+	public  static UAVModel                store = null;
 	private static PaparazziCommunication paparazziCommunication;
-	private ArrayList<UAVDataPoint>       _dataPoints = new ArrayList<UAVDataPoint>();
+	private        ArrayList<UAVDataPoint>       _dataPoints = new ArrayList<UAVDataPoint>();
+	private double groundLevel;
+	private double verticalSpeed;
+	private double groundSpeed;
+	
 
 	public static void initialize(InputStream stream)
 	{
@@ -343,5 +347,68 @@ public class UAVModel
 	{
 		return 30.;
 	}
-	
+
+  /**
+   * @return the groundLevel
+   */
+  public static Double getGroundLevel()
+  {
+    if(store == null)
+      return null;
+    return store.groundLevel;
+  }
+
+  /**
+   * @param groundLevel the groundLevel to set
+   */
+  public static void setGroundLevel(double groundLevel)
+  {
+    if(store != null)
+    {
+      store.groundLevel = groundLevel;
+    }
+  }
+
+  /**
+   * @return the verticalSpeed
+   */
+  public static Double getVerticalSpeed()
+  {
+    if(store == null)
+      return null;
+    return store.verticalSpeed;
+  }
+
+  /**
+   * @param verticalSpeed the verticalSpeed to set
+   */
+  public static void setVerticalSpeed(double verticalSpeed)
+  {
+    if(store != null)
+    {
+      store.verticalSpeed = verticalSpeed;
+    }
+  }
+
+  /**
+   * @return the groundSpeed
+   */
+  public static Double getGroundSpeed()
+  {
+    if(store == null)
+      return null;
+    return store.groundSpeed;
+  }
+
+  /**
+   * @param groundSpeed the groundSpeed to set
+   */
+  public static void setGroundSpeed(double groundSpeed)
+  {
+    if(store != null)
+    {
+      store.groundSpeed = groundSpeed;
+    }
+  }
+
 }

@@ -2,6 +2,7 @@ package com.deev.interaction.uav3i.veto.communication;
 
 import java.rmi.RemoteException;
 
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
@@ -36,7 +37,7 @@ public class UAVGroundLevelListener implements IvyMessageListener
   @Override
   public void receive(IvyClient client, String[] args)
   {
-    // On en envoie qu'un sur 10
+    // On n'envoie les infos qu'une fois sur 10...
     cpt++;
     if(cpt%10 != 0)
       return;
@@ -59,9 +60,12 @@ public class UAVGroundLevelListener implements IvyMessageListener
     switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
+        UAVModel.setGroundLevel(groundLevel);
+        UAVModel.setVerticalSpeed(verticalSpeed);
+        LoggerUtil.LOG.info("Ground Level = " + groundLevel + " / Vertical Speed = " + verticalSpeed);
         break;
       case VETO:
-        // On transmet via RMI à l'IHM table tactile la position du drone.
+        // On transmet via RMI à l'IHM table tactile l'altitude et la vitesse ascentionnelle.
         if(uav3iTransmitter != null && Veto.state == StateVeto.RECEIVING)
         {
           try
@@ -73,13 +77,9 @@ public class UAVGroundLevelListener implements IvyMessageListener
             LoggerUtil.LOG.severe(e.getMessage().replace("\n", " "));
           }
           
-//          // On transmet aussi la position du drone à l'IHM Veto pour l'affichage local.
-//          UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-//                                   Integer.parseInt(message[3]),  // utmNorth
-//                                   Integer.parseInt(message[10]), // utm_zone
-//                                   Integer.parseInt(message[4]),  // course
-//                                   Integer.parseInt(message[5]),  // alt
-//                                   Long.parseLong(message[9]));   // t
+          // On transmet aussi l'altitude et la vitesse ascentionnelle à l'IHM Veto pour l'affichage local.
+          UAVModel.setGroundLevel(groundLevel);
+          UAVModel.setVerticalSpeed(verticalSpeed);
         }
         else
           LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);

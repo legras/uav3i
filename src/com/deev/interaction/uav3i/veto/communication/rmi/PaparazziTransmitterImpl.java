@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.veto.communication.UAVGroundLevelListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.ui.Veto;
@@ -23,12 +24,13 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterImpl implements IPaparazziTransmitter
 {
   //-----------------------------------------------------------------------------
-  private String              applicationName = "uav3i (PT)";
-  private Ivy                 bus;
-  private IUav3iTransmitter   uav3iTransmitter;
+  private String                 applicationName = "uav3i (PT)";
+  private Ivy                    bus;
+  private IUav3iTransmitter      uav3iTransmitter;
 //  private String              uav3iHostname;
 //  private int                 uav3iPort;
-  private UAVPositionListener uavPositionListener = null;
+  private UAVPositionListener    uavPositionListener = null;
+  private UAVGroundLevelListener uavGroundLevelListener = null;
   //-----------------------------------------------------------------------------
   public PaparazziTransmitterImpl() throws IvyException, RemoteException
   {
@@ -49,6 +51,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
                   applicationName + " Ready",
                   null);
     uavPositionListener = new UAVPositionListener();
+    uavGroundLevelListener = new UAVGroundLevelListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -143,12 +146,18 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       Registry remoteRegistry = LocateRegistry.getRegistry(uav3iHostname, uav3iPort);
       uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
 
-      // Mise à jour du proxy dans le listener. En cas de déconnexion/reconnexion d'uav3i,
+      // Mise à jour du proxy dans les listeners. En cas de déconnexion/reconnexion d'uav3i,
       // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
+      uavGroundLevelListener.setUav3iTransmitter(uav3iTransmitter);
+      
       // Mise en écoute des messages GPS
       // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
+      
+      // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
+      bus.bindMsg("(.*)ESTIMATOR(.*)", uavGroundLevelListener);
+
     }
     catch (NotBoundException | IvyException e)
     {

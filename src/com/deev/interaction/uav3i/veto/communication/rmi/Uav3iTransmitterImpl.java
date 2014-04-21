@@ -22,6 +22,8 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   @Override
   public void addGroundLevel(double groundLevel, double verticalSpeed)
   {
+    UAVModel.setGroundLevel(groundLevel);
+    UAVModel.setVerticalSpeed(verticalSpeed);
     LoggerUtil.LOG.info("Ground Level = " + groundLevel + " / Vertical Speed = " + verticalSpeed);
   }
   //-----------------------------------------------------------------------------
