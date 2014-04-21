@@ -24,7 +24,10 @@ public interface IUav3iTransmitter extends Remote
                               int  alt,
                               long t) throws RemoteException;
   //-----------------------------------------------------------------------------
-  public void addGroundLevel(double groundLevel, double verticalSpeed) throws RemoteException;
+  public void addFlightParams(double altitude,
+                              double verticalSpeed,
+                              double groundAltitude, 
+                              double groundSpeed) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Appelé par l'appli côté Paparazzi pour savoir si le client est en vie. La méthode

@@ -63,10 +63,10 @@ public class UAVPositionListener implements IvyMessageListener
     // Les messages "GPS_SOL" passe par le pattern, on les filtre ici. 
     if(message[0].equals("_SOL")) return;
 
-//  System.out.print("---------------> ");
-//  for(int i=0; i<message.length; i++)
-//    System.out.print("["+i+" = " + message[i] + "] ");
-//  System.out.println();
+    //System.out.print("---------------> ");
+    //for(int i=0; i<message.length; i++)
+    //  System.out.print("["+i+" = " + message[i] + "] ");
+    //System.out.println();
 
     // ---------------> [0 = ] [1 = 3] [2 = 72344664] [3 = 532066912] [4 = 932] [5 = 75826] [6 = 1443] [7 = 447] [8 = 0] [9 = 127047240] [10 = 30] [11 = 8]
   

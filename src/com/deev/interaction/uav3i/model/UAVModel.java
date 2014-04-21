@@ -31,8 +31,9 @@ public class UAVModel
 	public  static UAVModel                store = null;
 	private static PaparazziCommunication paparazziCommunication;
 	private        ArrayList<UAVDataPoint>       _dataPoints = new ArrayList<UAVDataPoint>();
-	private double groundLevel;
+	private double altitude;
 	private double verticalSpeed;
+	private double groundAltitude;
 	private double groundSpeed;
 	
 
@@ -349,23 +350,23 @@ public class UAVModel
 	}
 
   /**
-   * @return the groundLevel
+   * @return the altitude
    */
-  public static Double getGroundLevel()
+  public static Double getAltitude()
   {
     if(store == null)
       return null;
-    return store.groundLevel;
+    return store.altitude;
   }
 
   /**
-   * @param groundLevel the groundLevel to set
+   * @param altitude the altitude to set
    */
-  public static void setGroundLevel(double groundLevel)
+  public static void setAltitude(double altitude)
   {
     if(store != null)
     {
-      store.groundLevel = groundLevel;
+      store.altitude = altitude;
     }
   }
 
@@ -408,6 +409,27 @@ public class UAVModel
     if(store != null)
     {
       store.groundSpeed = groundSpeed;
+    }
+  }
+
+  /**
+   * @return the groundAltitude
+   */
+  public static Double getGroundAltitude()
+  {
+    if(store == null)
+      return null;
+    return store.groundAltitude;
+  }
+
+  /**
+   * @param groundAltitude the groundAltitude to set
+   */
+  public static void setGroundAltitude(double groundAltitude)
+  {
+    if(store != null)
+    {
+      store.groundAltitude = groundAltitude;
     }
   }
 
