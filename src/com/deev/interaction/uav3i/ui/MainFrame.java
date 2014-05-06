@@ -173,7 +173,6 @@ public class MainFrame extends JFrame implements ActionListener
           buttonZoomPlus.setEnabled(newZoom < maxZoom);
           buttonZoomMinus.setEnabled(newZoom > minZoom);
           mapViewer.setZoom(newZoom);
-          System.out.println("####### Zoom plus ! zoom = " + mapViewer.getZoom() + " --> (" + minZoom + " - " + maxZoom + ")");
         }
       });
       buttonZoomMinus.addActionListener(new ActionListener()
@@ -185,7 +184,6 @@ public class MainFrame extends JFrame implements ActionListener
           buttonZoomPlus.setEnabled(newZoom < maxZoom);
           buttonZoomMinus.setEnabled(newZoom > minZoom);
           mapViewer.setZoom(newZoom);
-          System.out.println("####### Zoom minus ! zoom = " + mapViewer.getZoom() + " --> (" + minZoom + " - " + maxZoom + ")");
         }
       });
     }
