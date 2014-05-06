@@ -19,13 +19,15 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
+import com.deev.interaction.touch.RoundButton;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
 import com.deev.interaction.uav3i.ui.maps.OsmMapInteractionPanel;
-
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
@@ -143,7 +145,56 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			LoggerUtil.LOG.log(Level.WARNING, "Could not load 3i icon for button");
 		}
-		
+
+    // ********** Zoom control ************
+		try
+    {
+      BufferedImage zoomPlus  = ImageIO.read(this.getClass().getResource("img/zoom_plus.png"));
+      BufferedImage zoomMinus = ImageIO.read(this.getClass().getResource("img/zoom_minus.png"));
+      final RoundButton buttonZoomPlus  = new RoundButton(new TintedBufferedImage(zoomPlus, new Color(.4f, .4f, .4f, 1.f)));
+      final RoundButton buttonZoomMinus = new RoundButton(new TintedBufferedImage(zoomMinus, new Color(.4f, .4f, .4f, 1.f)));
+      clayer.add(buttonZoomPlus);
+      clayer.add(buttonZoomMinus);
+      buttonZoomPlus.setBounds(screenSize.width-12-zoomPlus.getWidth(),
+                               12 + zoomPlus.getHeight() + 48,
+                               zoomPlus.getWidth(), zoomPlus.getHeight());
+      buttonZoomMinus.setBounds(screenSize.width-12-zoomMinus.getWidth(),
+                                12 + zoomPlus.getHeight() + 48 + zoomMinus.getHeight() + 12,
+                                zoomMinus.getWidth(), zoomMinus.getHeight());
+      final JMapViewer mapViewer = grnd.getMapViewer();
+      final int maxZoom = mapViewer.getTileController().getTileSource().getMaxZoom();
+      final int minZoom = mapViewer.getTileController().getTileSource().getMinZoom();
+      buttonZoomPlus.addActionListener(new ActionListener()
+      {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+          int newZoom = mapViewer.getZoom() + 1;
+          buttonZoomPlus.setEnabled(newZoom < maxZoom);
+          buttonZoomMinus.setEnabled(newZoom > minZoom);
+          mapViewer.setZoom(newZoom);
+          System.out.println("####### Zoom plus ! zoom = " + mapViewer.getZoom() + " --> (" + minZoom + " - " + maxZoom + ")");
+        }
+      });
+      buttonZoomMinus.addActionListener(new ActionListener()
+      {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+          int newZoom = mapViewer.getZoom() - 1;
+          buttonZoomPlus.setEnabled(newZoom < maxZoom);
+          buttonZoomMinus.setEnabled(newZoom > minZoom);
+          mapViewer.setZoom(newZoom);
+          System.out.println("####### Zoom minus ! zoom = " + mapViewer.getZoom() + " --> (" + minZoom + " - " + maxZoom + ")");
+        }
+      });
+    }
+    catch (IOException e1)
+    {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+
 		
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
