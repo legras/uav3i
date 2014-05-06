@@ -44,6 +44,8 @@ public class UAVFlightParamsListener implements IvyMessageListener
     else
       cpt = 0;
 
+    // Definition of messages in paparazzi_v5.0.3_stable/conf/messages.xml
+    //
     // <message name="FLIGHT_PARAM" ID="11">
     //   <field name="ac_id"  type="string"/>                            1
     //   <field name="roll"   type="float" unit="deg"/>                  
@@ -100,9 +102,11 @@ public class UAVFlightParamsListener implements IvyMessageListener
             LoggerUtil.LOG.severe(e.getMessage().replace("\n", " "));
           }
           
-          // On transmet aussi l'altitude et la vitesse ascentionnelle à l'IHM Veto pour l'affichage local.
+          // On transmet aussi les infos à l'IHM Veto pour l'affichage local.
           UAVModel.setAltitude(altitude);
           UAVModel.setVerticalSpeed(verticalSpeed);
+          UAVModel.setGroundSpeed(groundSpeed);
+          UAVModel.setGroundAltitude(groundAltitude);
         }
         else
           LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);
