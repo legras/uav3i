@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -26,10 +27,11 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
-
+import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+
 import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
@@ -47,8 +49,9 @@ public class SymbolMap extends Map implements Touchable
 	
 	private Ruler _ruler = null;
 
-	protected static BufferedImage _uavImage = null;
-	protected static BufferedImage _uavGrayImage = null;
+	protected static BufferedImage _uavImage      = null;
+	protected static BufferedImage _uavGrayImage  = null;
+	protected static BufferedImage _waypointImage = null;
 
 	public SymbolMap()
 	{
@@ -68,11 +71,12 @@ public class SymbolMap extends Map implements Touchable
 		_ruler = new Ruler(this);
 		addTouchSymbol(_ruler);
 
-		// Dessin UAV
+		// Dessin UAV + way points
 		try
 		{
-			_uavImage = ImageIO.read(this.getClass().getResource("img/uav.png"));
-			_uavGrayImage = ImageIO.read(this.getClass().getResource("img/uavGray.png"));
+			_uavImage      = ImageIO.read(this.getClass().getResource("img/uav.png"));
+			_uavGrayImage  = ImageIO.read(this.getClass().getResource("img/uavGray.png"));
+			_waypointImage = ImageIO.read(this.getClass().getResource("img/waypoint.png"));
 		}
 		catch (IOException e)
 		{
@@ -120,6 +124,23 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
+		// WayPoints
+		for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+		{
+		  LatLng wayPointPosition = wayPoint.getWayPointPosition();
+		  if(wayPointPosition != null)
+		  {
+	      Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+	      g2.drawImage(_waypointImage,
+	                   p.x - _waypointImage.getWidth()/2,
+	                   p.y - _waypointImage.getHeight()/2,
+	                   null);
+	      g2.setColor(Color.blue);
+	      g2.drawString(wayPoint.getWayPointName(),
+	                    p.x + _waypointImage.getWidth()/2 + 3, 
+	                    p.y - _waypointImage.getHeight()/2);
+		  }
+		}
 
 		// Update de trajectoire
 		if (currentTime - _lastTrajectoryUpdate > 500)

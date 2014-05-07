@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class UAVWayPoints
@@ -14,12 +15,20 @@ public class UAVWayPoints
   //-----------------------------------------------------------------------------
   /**
    * Three scenarios exist:
-   *   - The waypoint to be updated doen't exist, it is added to the HashMap
+   * <ol>
+   *   <li>
+   *     The waypoint to be updated doen't exist, it is added to the HashMap
    *     (return <code>true</code>).
-   *   - The waypoint exists but not modified: no change needs to be done (return
+   *   </li>
+   *   <li>
+   *     The waypoint exists and modified: the value is updated in the HashMap
+   *     (return <code>true</code>).
+   *   </li>
+   *   <li>
+   *     The waypoint exists but not modified: no change needs to be done (return
    *     <code>false</code>).
-   *   - The waypoint exists and modified: the value is updated in the HashMap
-   *     (return <code>true</code>).
+   *   </li>
+   * </ol>
    * 
    * @param wayPoint the waypoint to be updated.
    * @return <code>true</code> if the waypoint was added or modified, <code>false</code> otherwise.
@@ -42,6 +51,11 @@ public class UAVWayPoints
       else
         return false;
     }
+  }
+  //-----------------------------------------------------------------------------
+  public Collection<UAVWayPoint> getWayPoints()
+  {
+    return wayPoints.values();
   }
   //-----------------------------------------------------------------------------
 }
