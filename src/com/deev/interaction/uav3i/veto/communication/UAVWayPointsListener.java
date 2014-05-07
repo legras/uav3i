@@ -32,7 +32,6 @@ public class UAVWayPointsListener implements IvyMessageListener
   public void setUav3iTransmitter(IUav3iTransmitter uav3iTransmitter)
   {
     this.uav3iTransmitter = uav3iTransmitter;
-    System.out.println("####### ");
   }
   //-----------------------------------------------------------------------------
   @Override

@@ -22,6 +22,8 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Trajectory;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
@@ -32,8 +34,9 @@ public class SymbolMapVeto extends JComponent
   
   private Trajectory              trajectory;
   private long                    lastTrajectoryUpdate = 0;
-  private BufferedImage           uavImage = null;
-  private ArrayList<ManoeuverDTO> manoeuvers = null;
+  private BufferedImage           uavImage      = null;
+  protected BufferedImage         waypointImage = null;
+  private ArrayList<ManoeuverDTO> manoeuvers    = null;
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -46,7 +49,8 @@ public class SymbolMapVeto extends JComponent
     manoeuvers = new ArrayList<ManoeuverDTO>();
     try
     {
-      uavImage = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
+      uavImage      = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
+      waypointImage = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/waypoint.png"));
     }
     catch (IOException e)
     {
@@ -118,7 +122,23 @@ public class SymbolMapVeto extends JComponent
     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     
-    g2.drawString("SymbolMapVeto", 50, 50);
+    // WayPoints
+    for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+    {
+      LatLng wayPointPosition = wayPoint.getWayPointPosition();
+      if(wayPointPosition != null)
+      {
+        Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+        g2.drawImage(waypointImage,
+                     p.x - waypointImage.getWidth()/2,
+                     p.y - waypointImage.getHeight()/2,
+                     null);
+        g2.setColor(Color.blue);
+        g2.drawString(wayPoint.getWayPointName(),
+                      p.x + waypointImage.getWidth()/2 + 3, 
+                      p.y - waypointImage.getHeight()/2);
+      }
+    }
 
     // Update de trajectoire
     if (currentTime - lastTrajectoryUpdate > 500)
