@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.veto.communication.rmi;
 import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
@@ -29,7 +30,14 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
     UAVModel.setVerticalSpeed(verticalSpeed);
     UAVModel.setGroundSpeed(groundSpeed);
     UAVModel.setGroundAltitude(groundAltitude);
-    LoggerUtil.LOG.info("Flight params : altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
+    LoggerUtil.LOG.info("Flight params: altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void updateWayPoint(UAVWayPoint wayPoint) throws RemoteException
+  {
+    UAVModel.getWayPoints().updateWayPoint(wayPoint);
+    LoggerUtil.LOG.info("WayPoint updated: " + wayPoint);
   }
   //-----------------------------------------------------------------------------
   @Override

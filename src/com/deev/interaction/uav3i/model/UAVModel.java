@@ -35,6 +35,7 @@ public class UAVModel
 	private double verticalSpeed;
 	private double groundAltitude;
 	private double groundSpeed;
+	private UAVWayPoints uavWayPoints = new UAVWayPoints();
 	
 
 	public static void initialize(InputStream stream)
@@ -431,6 +432,13 @@ public class UAVModel
     {
       store.groundAltitude = groundAltitude;
     }
+  }
+  
+  public static UAVWayPoints getWayPoints()
+  {
+    if(store == null)
+      return null;
+    return store.uavWayPoints;
   }
 
 }

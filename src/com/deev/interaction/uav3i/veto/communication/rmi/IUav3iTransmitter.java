@@ -3,6 +3,8 @@ package com.deev.interaction.uav3i.veto.communication.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import com.deev.interaction.uav3i.model.UAVWayPoint;
+
 public interface IUav3iTransmitter extends Remote
 {
   //-----------------------------------------------------------------------------
@@ -24,10 +26,27 @@ public interface IUav3iTransmitter extends Remote
                               int  alt,
                               long t) throws RemoteException;
   //-----------------------------------------------------------------------------
+  /**
+   * Transmission au logiciel côté table des paramètres de vol du drone.
+   * 
+   * @param altitude
+   * @param verticalSpeed
+   * @param groundAltitude
+   * @param groundSpeed
+   * @throws RemoteException
+   */
   public void addFlightParams(double altitude,
                               double verticalSpeed,
                               double groundAltitude, 
                               double groundSpeed) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  /**
+   * Mise à jour d'un WayPoint.
+   * 
+   * @param wayPoint
+   * @throws RemoteException
+   */
+  public void updateWayPoint(UAVWayPoint wayPoint) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Appelé par l'appli côté Paparazzi pour savoir si le client est en vie. La méthode

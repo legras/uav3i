@@ -1,5 +1,8 @@
 package com.deev.interaction.uav3i.veto.communication;
 
+import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
 
 import fr.dgac.ivy.IvyClient;
@@ -57,9 +60,27 @@ public class UAVWayPointsListener implements IvyMessageListener
     
     int    wpId = Integer.parseInt(message[2]);
     double lat  = Double.parseDouble(message[3]);
-    double lon  = Double.parseDouble(message[4]);
+    double lng  = Double.parseDouble(message[4]);
     double alt  = Double.parseDouble(message[5]);
     
+    UAVWayPoint wayPoint = new UAVWayPoint(wpId, lat, lng, alt);
+
+    switch (UAV3iSettings.getMode())
+    {
+      case PAPARAZZI_DIRECT:
+        UAVModel.getWayPoints().updateWayPoint(wayPoint);
+        break;
+      case VETO:
+        if(UAVModel.getWayPoints().updateWayPoint(wayPoint))
+        {
+          
+        }
+        break;
+      default:
+        break;
+    }
+
+
 //    switch (UAV3iSettings.getMode())
 //    {
 //      case PAPARAZZI_DIRECT:
