@@ -18,10 +18,14 @@ public class UAVWayPoint implements Serializable
   //-----------------------------------------------------------------------------
   public UAVWayPoint(int wayPointId, double lat, double lng, double altitude)
   {
-    this.wayPointId       = wayPointId;
-    this.wayPointName     = FlightPlanFacade.getInstance().getWaypoint(wayPointId).getName();
-    this.wayPointPosition = new LatLng(lat, lng);
-    this.altitude         = altitude;
+    // Il existe 
+    if(wayPointId > 0)
+    {
+      this.wayPointId       = wayPointId;
+      this.wayPointName     = FlightPlanFacade.getInstance().getWaypoint(wayPointId).getName();
+      this.wayPointPosition = new LatLng(lat, lng);
+      this.altitude         = altitude;
+    }
   }
   //-----------------------------------------------------------------------------
   @Override

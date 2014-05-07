@@ -136,6 +136,7 @@ public class UAVModel
     if(store != null)
     {
       store._dataPoints = new ArrayList<UAVDataPoint>();
+      store.uavWayPoints = new UAVWayPoints();
     }
 	}
 

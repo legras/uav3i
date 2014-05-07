@@ -1,9 +1,14 @@
 package com.deev.interaction.uav3i.veto.communication;
 
+import java.rmi.RemoteException;
+
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyMessageListener;
@@ -71,49 +76,26 @@ public class UAVWayPointsListener implements IvyMessageListener
         UAVModel.getWayPoints().updateWayPoint(wayPoint);
         break;
       case VETO:
-        if(UAVModel.getWayPoints().updateWayPoint(wayPoint))
+        if(UAVModel.getWayPoints().updateWayPoint(wayPoint))  // Mise à jour côté Veto lors du test
         {
-          
+          if(uav3iTransmitter != null && Veto.state == StateVeto.RECEIVING)
+          {
+            try
+            {
+              uav3iTransmitter.updateWayPoint(wayPoint);
+            }
+            catch (RemoteException e)
+            {
+              LoggerUtil.LOG.severe(e.getMessage().replace("\n", " "));
+            }
+          }
+          else
+            LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);
         }
         break;
       default:
         break;
     }
-
-
-//    switch (UAV3iSettings.getMode())
-//    {
-//      case PAPARAZZI_DIRECT:
-//        UAVModel.setAltitude(altitude);
-//        UAVModel.setVerticalSpeed(verticalSpeed);
-//        UAVModel.setGroundSpeed(groundSpeed);
-//        UAVModel.setGroundAltitude(groundAltitude);
-//        LoggerUtil.LOG.info("Flight params : altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
-//        break;
-//      case VETO:
-//        // On transmet via RMI à l'IHM table tactile la position du drone.
-//        if(uav3iTransmitter != null && Veto.state == StateVeto.RECEIVING)
-//        {
-//          try
-//          {
-//            uav3iTransmitter.addFlightParams(altitude, verticalSpeed, groundAltitude, groundSpeed);
-//          }
-//          catch (RemoteException e)
-//          {
-//            LoggerUtil.LOG.severe(e.getMessage().replace("\n", " "));
-//          }
-//          
-//          // On transmet aussi l'altitude et la vitesse ascentionnelle à l'IHM Veto pour l'affichage local.
-//          UAVModel.setAltitude(altitude);
-//          UAVModel.setVerticalSpeed(verticalSpeed);
-//        }
-//        else
-//          LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);
-//        
-//        break;
-//      default:
-//        break;
-//    }
   }
   //-----------------------------------------------------------------------------
 }

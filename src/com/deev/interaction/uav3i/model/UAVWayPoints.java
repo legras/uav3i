@@ -11,27 +11,19 @@ public class UAVWayPoints
   {
     wayPoints = new HashMap<>();
   }
-//  //-----------------------------------------------------------------------------
-//  public void addWayPoint(int wayPointId, double lat, double lng, double altitude)
-//  {
-//    if(wayPoints.get(wayPointId) == null)
-//      wayPoints.put(wayPointId, new UAVWayPoint(wayPointId, lat, lng, altitude));
-//  }
-//  //-----------------------------------------------------------------------------
-//  public void addWayPoint(UAVWayPoint wayPoint)
-//  {
-//    if(wayPoints.get(wayPoint.getWayPointId()) == null)
-//      wayPoints.put(wayPoint.getWayPointId(), wayPoint);
-//  }
-//  //-----------------------------------------------------------------------------
-//  public boolean isWayPointChanged(UAVWayPoint wayPoint)
-//  {
-//    if(wayPoints.get(wayPoint.getWayPointId()) == null)
-//      return true;
-//    else
-//      return wayPoint.equals(wayPoints.get(wayPoint.getWayPointId()));
-//  }
   //-----------------------------------------------------------------------------
+  /**
+   * Three scenarios exist:
+   *   - The waypoint to be updated doen't exist, it is added to the HashMap
+   *     (return <code>true</code>).
+   *   - The waypoint exists but not modified: no change needs to be done (return
+   *     <code>false</code>).
+   *   - The waypoint exists and modified: the value is updated in the HashMap
+   *     (return <code>true</code>).
+   * 
+   * @param wayPoint the waypoint to be updated.
+   * @return <code>true</code> if the waypoint was added or modified, <code>false</code> otherwise.
+   */
   public boolean updateWayPoint(UAVWayPoint wayPoint)
   {
     int wayPointId = wayPoint.getWayPointId();

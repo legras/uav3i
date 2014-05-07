@@ -104,8 +104,8 @@ public class FlightPlanFacade
    * Le waypoint est retrouvé par l'intermédiaire de son nom (valeur de l'attribut
    * <code>name</code> de l'élément <code>&lt;waypoint&gt;</code>). Il aurait été
    * intéressant de positionner une contrainte d'unicité sur la valeur (type IDREF)
-   * ce qui est malheusement impossible : Paparazzi s'attend à trouver un waypoint
-   * nommé "1" et un IDREF ne peut commencer par un chiffre...
+   * ce qui est malheusement impossible : Paparazzi s'attend à trouver potentielle
+   * des waypoints commençant par un chiffre, ce qui est impossible pour un IDREF...
    * 
    * @see #getBlockIndex(String)
    * @param name nom du waypoint à retrouver.
@@ -142,7 +142,8 @@ public class FlightPlanFacade
    */
   public Waypoint getWaypoint(int index)
   {
-    return waypoints.get(index);
+    // See getWayPointsIndex() method for "- 1". 
+    return waypoints.get(index - 1);
   }
   //-----------------------------------------------------------------------------
   /**
