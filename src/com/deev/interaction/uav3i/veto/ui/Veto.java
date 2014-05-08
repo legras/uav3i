@@ -14,7 +14,9 @@ import javax.swing.JLayeredPane;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import com.deev.interaction.touch.Animator;
+import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.ui.FlightParamsPanel;
 import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
 
@@ -25,9 +27,10 @@ public class Veto extends JFrame
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = -5099360406109028956L;
   
-  private static OsmMapGround  osmMapGround  = null;
-  private static SymbolMapVeto symbolMapVeto = null;
-  public static  StateVeto     state = StateVeto.IDLE;
+  private static OsmMapGround   osmMapGround  = null;
+  private static SymbolMapVeto  symbolMapVeto = null;
+  private static ComponentLayer clayer        = null;
+  public static  StateVeto      state         = StateVeto.IDLE;
   //-----------------------------------------------------------------------------
   public enum StateVeto {IDLE, RECEIVING}
   //-----------------------------------------------------------------------------
@@ -69,6 +72,20 @@ public class Veto extends JFrame
     symbolMapVeto = new SymbolMapVeto();
     symbolMapVeto.setBounds(0, 0, 960, 600);
     lpane.add(symbolMapVeto, 0);
+    
+    clayer = new ComponentLayer();
+    System.out.println(osmMapGround.getSize());
+    clayer.setBounds(0, 0, getSize().width, getSize().height);
+    lpane.add(clayer, new Integer(20));
+
+    // ********** Flight params **********
+    FlightParamsPanel flightParamsPanel = new FlightParamsPanel();
+    clayer.add(flightParamsPanel);
+    flightParamsPanel.setBounds(osmMapGround.getSize().width-(flightParamsPanel.getWidth()+5),
+                                osmMapGround.getSize().height-(flightParamsPanel.getHeight()+15), 
+                                flightParamsPanel.getWidth(), 
+                                flightParamsPanel.getHeight());
+
 
     this.getContentPane().add(lpane);
     
