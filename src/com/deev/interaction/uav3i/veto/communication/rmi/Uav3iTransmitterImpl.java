@@ -30,7 +30,7 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
     UAVModel.setVerticalSpeed(verticalSpeed);
     UAVModel.setGroundSpeed(groundSpeed);
     UAVModel.setGroundAltitude(groundAltitude);
-    LoggerUtil.LOG.info("Flight params: altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
+    //LoggerUtil.LOG.info("Flight params: altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
   }
   //-----------------------------------------------------------------------------
   @Override

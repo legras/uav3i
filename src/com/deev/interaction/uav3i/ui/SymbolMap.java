@@ -141,7 +141,7 @@ public class SymbolMap extends Map implements Touchable
 	                    p.y - _waypointImage.getHeight()/2);
 		  }
 		}
-
+		
 		// Update de trajectoire
 		if (currentTime - _lastTrajectoryUpdate > 500)
 		{

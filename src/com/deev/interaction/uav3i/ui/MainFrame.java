@@ -193,6 +193,13 @@ public class MainFrame extends JFrame implements ActionListener
       e1.printStackTrace();
     }
 
+    // ********** Flight params **********
+		FlightParamsPanel flightParamsPanel = new FlightParamsPanel();
+    clayer.add(flightParamsPanel);
+    flightParamsPanel.setBounds(screenSize.width-(flightParamsPanel.getWidth()+5),
+                                screenSize.height-(flightParamsPanel.getHeight()+5+100), 
+                                flightParamsPanel.getWidth(), 
+                                flightParamsPanel.getHeight());
 		
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
