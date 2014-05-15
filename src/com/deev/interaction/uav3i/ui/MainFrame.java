@@ -40,14 +40,14 @@ public class MainFrame extends JFrame implements ActionListener
 {
 
 	public static OsmMapGround OSMMap;
-	
+
 	public enum MainFrameState {COMMAND, MAP, REPLAY};
 	public static MainFrameState state = MainFrameState.MAP;
 	public static ComponentLayer clayer;
-	
+
 	protected static TouchGlass _GLASS = null;
 	public static TimeLine TIMELINE;
-	
+
 	public static Switcher3Buttons SWITCHER;
 	protected static SymbolMap _SMAP;;
 
@@ -117,7 +117,7 @@ public class MainFrame extends JFrame implements ActionListener
 		clayer = new ComponentLayer();
 		clayer.setBounds(0, 0, screenSize.width, screenSize.height);
 		lpane.add(clayer, new Integer(-1));
-		
+
 		// ********** Splash ***************
 		Splash3i splash = null;
 		try
@@ -129,6 +129,8 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			LoggerUtil.LOG.log(Level.WARNING, "Could not make splash screen");
 		}
+
+		final Color gray3i = new Color(.3f, .3f, .3f, 1.f);
 		
 		// ********** 3i button ************
 		try
@@ -136,7 +138,7 @@ public class MainFrame extends JFrame implements ActionListener
 			BufferedImage icon3i = ImageIO.read(this.getClass().getResource("img/3iButton.png"));
 			RoundToggleButton button3i = new RoundToggleButton(
 					new TintedBufferedImage(icon3i, new Color(.74f, .80f, .03f, 1.f)),
-					new TintedBufferedImage(icon3i, new Color(.3f, .3f, .3f, 1.f)));
+					new TintedBufferedImage(icon3i, gray3i));
 			clayer.add(button3i);
 			button3i.setBounds(screenSize.width-12-icon3i.getWidth(), 12, icon3i.getWidth(), icon3i.getHeight());
 			button3i.addActionListener(splash);
@@ -146,61 +148,67 @@ public class MainFrame extends JFrame implements ActionListener
 			LoggerUtil.LOG.log(Level.WARNING, "Could not load 3i icon for button");
 		}
 
-    // ********** Zoom control ************
+		// ********** Zoom control ************
 		try
-    {
-      BufferedImage zoomPlus  = ImageIO.read(this.getClass().getResource("img/zoom_plus.png"));
-      BufferedImage zoomMinus = ImageIO.read(this.getClass().getResource("img/zoom_minus.png"));
-      final RoundButton buttonZoomPlus  = new RoundButton(new TintedBufferedImage(zoomPlus, new Color(.4f, .4f, .4f, 1.f)));
-      final RoundButton buttonZoomMinus = new RoundButton(new TintedBufferedImage(zoomMinus, new Color(.4f, .4f, .4f, 1.f)));
-      clayer.add(buttonZoomPlus);
-      clayer.add(buttonZoomMinus);
-      buttonZoomPlus.setBounds(screenSize.width-12-zoomPlus.getWidth(),
-                               12 + zoomPlus.getHeight() + 48,
-                               zoomPlus.getWidth(), zoomPlus.getHeight());
-      buttonZoomMinus.setBounds(screenSize.width-12-zoomMinus.getWidth(),
-                                12 + zoomPlus.getHeight() + 48 + zoomMinus.getHeight() + 12,
-                                zoomMinus.getWidth(), zoomMinus.getHeight());
-      final JMapViewer mapViewer = grnd.getMapViewer();
-      final int maxZoom = mapViewer.getTileController().getTileSource().getMaxZoom();
-      final int minZoom = mapViewer.getTileController().getTileSource().getMinZoom();
-      buttonZoomPlus.addActionListener(new ActionListener()
-      {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-          int newZoom = mapViewer.getZoom() + 1;
-          buttonZoomPlus.setEnabled(newZoom < maxZoom);
-          buttonZoomMinus.setEnabled(newZoom > minZoom);
-          mapViewer.setZoom(newZoom);
-        }
-      });
-      buttonZoomMinus.addActionListener(new ActionListener()
-      {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-          int newZoom = mapViewer.getZoom() - 1;
-          buttonZoomPlus.setEnabled(newZoom < maxZoom);
-          buttonZoomMinus.setEnabled(newZoom > minZoom);
-          mapViewer.setZoom(newZoom);
-        }
-      });
-    }
-    catch (IOException e1)
-    {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
+		{
+			BufferedImage zoomPlus  = ImageIO.read(this.getClass().getResource("img/zoom_plus.png"));
+			BufferedImage zoomMinus = ImageIO.read(this.getClass().getResource("img/zoom_minus.png"));
+			BufferedImage zoomPlusPressed  = ImageIO.read(this.getClass().getResource("img/zoom_plus_pressed.png"));
+			BufferedImage zoomMinusPressed = ImageIO.read(this.getClass().getResource("img/zoom_minus_pressed.png"));
+			final RoundButton buttonZoomPlus  = new RoundButton(
+					new TintedBufferedImage(zoomPlus, gray3i),
+					new TintedBufferedImage(zoomPlusPressed, gray3i));
+			final RoundButton buttonZoomMinus = new RoundButton(
+					new TintedBufferedImage(zoomMinus, gray3i),
+					new TintedBufferedImage(zoomMinusPressed, gray3i));
+			clayer.add(buttonZoomPlus);
+			clayer.add(buttonZoomMinus);
+			buttonZoomPlus.setBounds(screenSize.width-20-zoomPlus.getWidth(),
+					12 + zoomPlus.getHeight() + 48,
+					zoomPlus.getWidth(), zoomPlus.getHeight());
+			buttonZoomMinus.setBounds(screenSize.width-20-zoomMinus.getWidth(),
+					12 + zoomPlus.getHeight() + 48 + zoomMinus.getHeight() + 12,
+					zoomMinus.getWidth(), zoomMinus.getHeight());
+			final JMapViewer mapViewer = grnd.getMapViewer();
+			final int maxZoom = mapViewer.getTileController().getTileSource().getMaxZoom();
+			final int minZoom = mapViewer.getTileController().getTileSource().getMinZoom();
+			buttonZoomPlus.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					int newZoom = mapViewer.getZoom() + 1;
+					buttonZoomPlus.setEnabled(newZoom < maxZoom);
+					buttonZoomMinus.setEnabled(newZoom > minZoom);
+					mapViewer.setZoom(newZoom);
+				}
+			});
+			buttonZoomMinus.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					int newZoom = mapViewer.getZoom() - 1;
+					buttonZoomPlus.setEnabled(newZoom < maxZoom);
+					buttonZoomMinus.setEnabled(newZoom > minZoom);
+					mapViewer.setZoom(newZoom);
+				}
+			});
+		}
+		catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-    // ********** Flight params **********
+		// ********** Flight params **********
 		FlightParamsPanel flightParamsPanel = new FlightParamsPanel();
-    clayer.add(flightParamsPanel);
-    flightParamsPanel.setBounds(screenSize.width-(flightParamsPanel.getWidth()+5),
-                                screenSize.height-(flightParamsPanel.getHeight()+5+100), 
-                                flightParamsPanel.getWidth(), 
-                                flightParamsPanel.getHeight());
-		
+		clayer.add(flightParamsPanel);
+		flightParamsPanel.setBounds(screenSize.width-(flightParamsPanel.getWidth()+5),
+				screenSize.height-(flightParamsPanel.getHeight()+5+100), 
+				flightParamsPanel.getWidth(), 
+				flightParamsPanel.getHeight());
+
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
 		SWITCHER = mswitch;
@@ -250,15 +258,15 @@ public class MainFrame extends JFrame implements ActionListener
 	{
 		switch (SWITCHER.getMode())
 		{
-			case COMMAND:
-				return MainFrameState.COMMAND;
-			case REPLAY:
-				return MainFrameState.REPLAY;
-			case MAP:
-			default:
-				return MainFrameState.MAP;
+		case COMMAND:
+			return MainFrameState.COMMAND;
+		case REPLAY:
+			return MainFrameState.REPLAY;
+		case MAP:
+		default:
+			return MainFrameState.MAP;
 		}	}
-	
+
 	public TouchGlass getGlass()
 	{
 		return _GLASS;
@@ -269,19 +277,19 @@ public class MainFrame extends JFrame implements ActionListener
 	{
 		switch (SWITCHER.getMode())
 		{
-			case COMMAND:
-				TIMELINE.hide();
-				break;
-			case MAP:
-				TIMELINE.hide();
-				_SMAP.hideManoeuverButtons();
-				break;
-			case REPLAY:
-				TIMELINE.show();
-				_SMAP.hideManoeuverButtons();
-				break;
-			default:
-				return;
+		case COMMAND:
+			TIMELINE.hide();
+			break;
+		case MAP:
+			TIMELINE.hide();
+			_SMAP.hideManoeuverButtons();
+			break;
+		case REPLAY:
+			TIMELINE.show();
+			_SMAP.hideManoeuverButtons();
+			break;
+		default:
+			return;
 		}
 	}
 }

@@ -18,22 +18,28 @@ public class RoundButton extends JButton
 	 * 
 	 */
 	private static final long serialVersionUID = 6827723936968056808L;
-		
-  private BufferedImage _icon = null;
-	private double _pie = -1.;
-	
-  public RoundButton(BufferedImage icon)
+
+	private BufferedImage _icon = null;
+	private BufferedImage _iconPressed = null;
+
+	public RoundButton(BufferedImage icon, BufferedImage iconPressed)
 	{
 		super();
 
 		if (icon == null)
 			LoggerUtil.LOG.log(Level.WARNING, "Making toggle button, null image");
-		
-    setPreferredSize(new Dimension(icon.getWidth(), icon.getHeight()));
+
+		setPreferredSize(new Dimension(icon.getWidth(), icon.getHeight()));
 		setOpaque(false);
 		setBorderPainted(false);
-		
+
 		_icon = icon;
+		_iconPressed = iconPressed;
+	}
+
+	public RoundButton(BufferedImage icon)
+	{
+		this(icon, null);
 	}
 
 	@Override
@@ -44,21 +50,12 @@ public class RoundButton extends JButton
 			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_WHITE_BG));
 		else
 			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DISABLED_BG));
-		
+
 		g2.fill(new Ellipse2D.Double(0, 0, _icon.getWidth()-1, _icon.getHeight()-1));
-		
-		if (_pie > 0.)
-		{
-			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DELAY_BG));
-			double S = _icon.getWidth()/2.;
-			g2.fill(new Ellipse2D.Double(S*_pie, S*_pie, 2*S*(1-_pie), 2*S*(1-_pie)));
-		}
-		
-		g2.drawImage(_icon, 0, 0, null);
-	}
-	
-	public void setPie(double pie)
-	{
-		_pie = pie;
+
+		if (getModel().isPressed() && _iconPressed != null)
+			g2.drawImage(_iconPressed, 0, 0, null);
+		else
+			g2.drawImage(_icon, 0, 0, null);
 	}
 }
