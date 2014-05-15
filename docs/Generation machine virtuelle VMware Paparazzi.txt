@@ -1,0 +1,104 @@
+Génération machine virtuelle VMware Paparazzi
+=============================================
+
+06/04/2014
+
+Distribution Lubuntu 13.10 64-bit
+---------------------------------
+  URL : http://www.ubuntu-fr.org/telechargement?variante=lubuntu
+  Fichier : lubuntu-13.10-desktop-amd64.iso
+  
+- Création de la machine virtuelle avec VMware Worksation 9.0
+    -> Configuration :
+         * RAM    : 2 Go
+         * Disque : 20 Go
+    -> Compte utilisateur :
+         * Nom          : Paparazzi User
+         * Login        : paparazzi
+         * Mot de passe : paparazzi
+    -> Configuration réseau en NAT non fonctionnelle (?), positionnée en
+       Bridged : la VM possède sa propre adresse IP qu'elle récupère en DHCP.
+    -> Lancement des mises à jour : menu principal / System Tools / Software
+       Updater.
+       Téléchargement et installation.
+       Redémarrage nécessaire.
+    -> Installation des VMware Tools (support carte graphique, etc.)
+         * L'installation utilise les outils gcc et make qui ne sont pas
+           installés : installation via Synaptic Package Manager
+           (menu principal / System Tools)
+         * Installation avec les choix par défaut.
+         * Attention : contrairement à d'autres distributions les VMware Tools
+           ne se lance pas automatiquement au démarrage (?) -> création d'un
+           raccourci sur le bureau pour un lancement manuel à chaque démarrage.
+    -> Installations d'outils additionnels via Synaptic Package Manager :
+         * gedit
+         * Plugin Flash
+         
+Java (Linux x64)
+----------------
+  URL : http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+  Fichier : jdk-7u51-linux-x64.tar.gz
+  Installation dans /opt (copie après déarchivage)
+    -> Mise à jour du PATH pour tous les utilisateurs, ajout des instructions
+       suivantes dans le fichier /etc/bash.bashrc :
+         export PATH=$PATH:/opt/jdk1.7.0_51/bin
+         export JAVA_HOME=/opt/jdk1.7.0_51
+    -> Création du lien symbolique java dans /usr/bin (pour permettre le
+       lancement d'Eclipse avec le raccourci créé sur le bureau) :
+         sudo ln -s /opt/jdk1.7.0_51/bin/java /usr/binjava
+  Vérification : lancement de "java -version" dans un nouveau terminal.
+
+Eclipse
+-------
+  Package :  Eclipse IDE for Java EE Developers (Linux 64-bit)
+  Installation dans /opt (copie après déarchivage)
+  Workspace dans /home/paparazzi/workspace
+  Création du raccourci sur le bureau
+  Note : aucun choix de présentation personnel, aucune configuration git,
+         aucun projet n'est ouvert, etc.
+
+Paparazzi (version 5.0.3)
+-------------------------
+  Note : version indiquée pour l'utilisation dans 3i est une 5.0.3 stable. À la
+  date de cette installation, une version stable 5.0.4 est cependant disponible.
+  Descriton, de l'installation disponible à l'URL :
+    http://wiki.paparazziuav.org/wiki/Installation
+  Téléchargement sur le GIT de Paparazzi (suivre le lien "releases") :
+    https://github.com/paparazzi/paparazzi/releases
+  Fichier : paparazzi_v5.0.3_stable.tar.gz
+  Installation dans le répertoire home (déarchivage dans un répertoire
+  paparazzi_v5.0.3_stable)
+    -> Instation des prerequisites tools pour Linux (compilateurs, librairies,
+       etc. : 794 Mo !)
+       Description à l'URL : http://wiki.paparazziuav.org/wiki/Installation/Linux
+         sudo add-apt-repository ppa:paparazzi-uav/ppa
+         sudo apt-get update 
+         sudo apt-get install paparazzi-dev
+       Note : ne s'occuper que de la partie "Installation of dependencies" et ne
+       pas tenir compte de la partie "ARM embedded toolchain". Cette dernière
+       permet l'installation d'outils de cross-compilation et de déploiement sur
+       des cartes auto-pilotes, etc. (de ce que j'imagine... ?). Pour jouer la
+       simulation, la première partie est suffisante.
+    -> Compilation de Paparazzi :
+         make
+       Note : l'exécution du makefile s'arrête sur une erreur due à la non
+       installation de la seconde partie :
+         make[3]: arm-none-eabi-gcc: Command not found
+       Le fichier exécutable "paparazzi" est cependant généré.
+  Configuration de Paparazzi
+    -> Lancement du Paparazzi Center (icône installée) :
+         Choix du A/C (?) : Microjet
+         Modification du plan de vol proposé par le fichier uav3i_france.xml
+         (fichier copié dans le répertoire
+         ~/paparazzi_v5.0.3_stable/conf/flight_plans)
+         Création de la configuration : bouton "Build"
+         Lancement de la simulation (pas hyper user friendly !) avec le bouton
+         "Executer" :
+           * Ouverture fenêtre "Simulator type" : choisir "sim"
+           * Ouverture de deux fenêtres, "Microjet" et "GCS" (Ground Control
+             Station) : bouton Launch dans "Microjet".
+           * Pour augmenter la vitesse de la simulation : fenêtre "Paparazzi
+             Center", menu Tools > Environment Simulator. Dans la fenêtre,
+             saisir 10 (valeur max) + entrée.
+         Arrêt de la simulation : fenêtre "Paparazzi Center", bouton
+         "Stop/Remove All Processes". Toutes les autres fenêtres se ferment.
