@@ -54,6 +54,8 @@ public class Ruler implements Touchable
 	
 	SymbolMap _smap;
 	
+	private double _smallestDistancePx;
+	
 	public Ruler(SymbolMap map)
 	{
 		_smap = map;
@@ -108,6 +110,8 @@ public class Ruler implements Touchable
 		g2.draw(line);
 		
 		g2.setTransform(old);
+		
+		_smallestDistancePx = distSegmentsLengths[distSegmentIndex]*_smap.getPPM();
 	}
 	
 	private double paintRuler(Graphics2D g2, double length, double segmentLengthPx, double pixelsPerUnit, String suffix)
@@ -267,6 +271,11 @@ public class Ruler implements Touchable
 		double d = _A.distance(_B);
 		_u = new Point2D.Double((_B.x-_A.x)/d, (_B.y-_A.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
+	}
+
+	public double getSmallestPxStep()
+	{
+		return _smallestDistancePx;
 	}
 
 }

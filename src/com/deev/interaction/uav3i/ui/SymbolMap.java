@@ -3,10 +3,12 @@ package com.deev.interaction.uav3i.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
@@ -31,6 +33,7 @@ import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -124,6 +127,42 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
+		// Command Grid ?
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.COMMAND)
+		{
+			int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+			LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
+
+			Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(startPoint.getLat(), startPoint.getLng(), false);
+			
+			double step = _ruler.getSmallestPxStep();
+			
+			int x, y;
+			
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			g2.setPaint(Color.WHITE);
+			
+			for (x = p.x; x < screenSize.width; x += step)
+			{
+				g2.drawLine(x, 0, x, screenSize.height);				
+			}
+			
+			for (x = p.x - (int) step; x > 0; x -= step)
+			{
+				g2.drawLine(x, 0, x, screenSize.height);				
+			}
+			
+			for (y = p.y; y < screenSize.height; y += step)
+			{
+				g2.drawLine(0, y, screenSize.width, y);				
+			}
+			
+			for (y = p.y - (int) step; y > 0; y -= step)
+			{
+				g2.drawLine(0, y, screenSize.width, y);				
+			}
+		}
+		
 		// WayPoints
 		for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
 		{
