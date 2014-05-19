@@ -123,7 +123,7 @@ public class Ruler implements Touchable
 		int color = 0;
 		
 		FontRenderContext frc = g2.getFontRenderContext();
-		Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 18);
+		Font f = new Font("Futura", Font.BOLD, 18);
 		TextLayout textTl;
 		Shape outline;
 		

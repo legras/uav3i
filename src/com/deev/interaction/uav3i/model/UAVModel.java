@@ -36,7 +36,7 @@ public class UAVModel
 	private double groundAltitude;
 	private double groundSpeed;
 	private UAVWayPoints uavWayPoints = new UAVWayPoints();
-	
+
 
 	public static void initialize(InputStream stream)
 	{
@@ -46,7 +46,7 @@ public class UAVModel
 
 	public static void initialize()
 	{
-	  if (store == null)
+		if (store == null)
 			store = new UAVModel();
 	}
 
@@ -60,20 +60,20 @@ public class UAVModel
 		try
 		{
 			// 4.822 5 GPS 3 39485814 534857683 899 0 0 1 0 204086959 30 3
-      //      <message name="GPS" ID="8">
-      //      <field name="mode" type="uint8" unit="byte_mask"/>
-      //      <field name="utm_east" type="int32" unit="cm"/>       4
-      //      <field name="utm_north" type="int32" unit="cm"/>      5
-      //      <field name="course" type="int16" unit="decideg"/>    6
-      //      <field name="alt" type="int32" unit="cm"/>            7
-      //      <field name="speed" type="uint16" unit="cm/s"/>
-      //      <field name="climb" type="int16" unit="cm/s"/>
-      //      <field name="itow" type="uint32" unit="ms"/>          10 Time ?
-      //      <field name="utm_zone" type="uint8"/>                 11 Erreur !
-      //      <field name="gps_nb_err" type="uint8"/>
-      //    </message>
-      // Il doit y avoir une erreur dans la doc !!! A l'évidence le 10ème n'est pas le temps/
-		  
+			//      <message name="GPS" ID="8">
+			//      <field name="mode" type="uint8" unit="byte_mask"/>
+			//      <field name="utm_east" type="int32" unit="cm"/>       4
+			//      <field name="utm_north" type="int32" unit="cm"/>      5
+			//      <field name="course" type="int16" unit="decideg"/>    6
+			//      <field name="alt" type="int32" unit="cm"/>            7
+			//      <field name="speed" type="uint16" unit="cm/s"/>
+			//      <field name="climb" type="int16" unit="cm/s"/>
+			//      <field name="itow" type="uint32" unit="ms"/>          10 Time ?
+			//      <field name="utm_zone" type="uint8"/>                 11 Erreur !
+			//      <field name="gps_nb_err" type="uint8"/>
+			//    </message>
+			// Il doit y avoir une erreur dans la doc !!! A l'évidence le 10ème n'est pas le temps/
+
 			while ((strLine = br.readLine()) != null)
 			{
 				String[] tokens = strLine.split(" ");
@@ -110,34 +110,34 @@ public class UAVModel
 	public UAVModel()
 	{
 		switch (UAV3iSettings.getMode())
-    {
-      case PAPARAZZI_DIRECT:
-//      case VETO:
-        paparazziCommunication = new PaparazziDirectCommunication();
-        break;
-      case PAPARAZZI_REMOTE:
-        try
-        {
-          paparazziCommunication = new PaparazziRemoteCommunication();
-        }
-        catch (RemoteException | NotBoundException e)
-        {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-        break;
-      default:
-        break;
-    }
+		{
+		case PAPARAZZI_DIRECT:
+			//      case VETO:
+			paparazziCommunication = new PaparazziDirectCommunication();
+			break;
+		case PAPARAZZI_REMOTE:
+			try
+			{
+				paparazziCommunication = new PaparazziRemoteCommunication();
+			}
+			catch (RemoteException | NotBoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		default:
+			break;
+		}
 	}
-	
+
 	public static void reinit()
 	{
-    if(store != null)
-    {
-      store._dataPoints = new ArrayList<UAVDataPoint>();
-      store.uavWayPoints = new UAVWayPoints();
-    }
+		if(store != null)
+		{
+			store._dataPoints = new ArrayList<UAVDataPoint>();
+			store.uavWayPoints = new UAVWayPoints();
+		}
 	}
 
 	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
@@ -166,11 +166,11 @@ public class UAVModel
 		else
 			return store._dataPoints.get(store._dataPoints.size()-1);
 	}
-	
+
 	public static LatLng getLatLngAtTime(long time)
 	{
 		UAVDataPoint point = getDataPointAtTime(time);
-		
+
 		if (point == null)
 			return null;
 		else
@@ -180,7 +180,7 @@ public class UAVModel
 	public static LatLng getLatLngNow()
 	{
 		UAVDataPoint point = getDataPointNow();
-		
+
 		if (point == null)
 			return null;
 		else
@@ -194,7 +194,7 @@ public class UAVModel
 	public static double getCourseAtTime(long time)
 	{
 		UAVDataPoint point = getDataPointAtTime(time);
-		
+
 		if (point == null)
 			return 0.;
 		else
@@ -207,7 +207,7 @@ public class UAVModel
 	public static double getCourseNow()
 	{
 		UAVDataPoint point = getDataPointNow();
-		
+
 		if (point == null)
 			return 0.;
 		else
@@ -240,109 +240,109 @@ public class UAVModel
 
 	public static boolean isEmpty()
 	{
-	  if(store != null)
-	  {
-      //return store._dataPoints.size() == 0;
-      return store._dataPoints.size() <= 1;
-	  }
-	  else
-      return false;
+		if(store != null)
+		{
+			//return store._dataPoints.size() == 0;
+			return store._dataPoints.size() <= 1;
+		}
+		else
+			return false;
 	}
 
-  //public static void submitManoeuver(Manoeuver mnvr)
-  public static void communicateManoeuver(Manoeuver mnvr)
+	//public static void submitManoeuver(Manoeuver mnvr)
+	public static void communicateManoeuver(Manoeuver mnvr)
 	{
 		switch (UAV3iSettings.getMode())
-    {
-      case PAPARAZZI_DIRECT:
-        LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-        mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
-        break;
-      case PAPARAZZI_REMOTE:
-//        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
-//        {
-//          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
-//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
-//        }
-//        else  // REJECTED
-//        {
-//          mnvr.kill();
-//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
-//        }
-          paparazziCommunication.communicateManoeuver(mnvr.toDTO());
-        break;
-      default:
-        break;
-    }
+		{
+		case PAPARAZZI_DIRECT:
+			LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
+			mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
+			break;
+		case PAPARAZZI_REMOTE:
+			//        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
+			//        {
+			//          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
+			//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
+			//        }
+			//        else  // REJECTED
+			//        {
+			//          mnvr.kill();
+			//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
+			//        }
+			paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+			break;
+		default:
+			break;
+		}
 	}
 
 	public static void jumpToManoeuver(Manoeuver mnvr)
 	{
 		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
-		
-//		final Manoeuver manoeuver = mnvr;
 
-//    new Timer().schedule(new TimerTask()
-//    {          
-//        @Override
-//        public void run()
-//        {
-//            if (Math.random() < .5)
-//            {
-//              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-//              manoeuver.kill();
-//            }
-//        }
-//    }, 2000);
+		//		final Manoeuver manoeuver = mnvr;
 
-    if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
-      //submitManoeuver(mnvr);
-      communicateManoeuver(mnvr);
-    if(mnvr.getManoeuverState() == ManoeuverStates.SUBMITTED)
-    {
-      switch (mnvr.getClass().getSimpleName())
-      {
-        case "CircleMnvr":
-          CircleMnvr circleMnvr = (CircleMnvr) mnvr;
-          // Move way point for circle center.
-          paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
-          paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
-          paparazziCommunication.jumpToBlock("Circle");
-          break;
-        case "LineMnvr":
-          LineMnvr lineMnvr = (LineMnvr) mnvr;
-          // Move way points to each side of the line.
-          paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
-          paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
-          // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-          paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-          paparazziCommunication.jumpToBlock("Line_L1-L2");
-          break;
-        case "BoxMnvr":
-          BoxMnvr boxMnvr = (BoxMnvr) mnvr;
-          // Move way points to each side of the box.
-          paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
-          paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
-          // Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-          paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-          if(boxMnvr.isNorthSouth())
-            paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
-          else  // West-East
-            paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
-          break;
-      }
-    }
+		//    new Timer().schedule(new TimerTask()
+		//    {          
+		//        @Override
+		//        public void run()
+		//        {
+		//            if (Math.random() < .5)
+		//            {
+		//              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
+		//              manoeuver.kill();
+		//            }
+		//        }
+		//    }, 2000);
+
+		if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
+			//submitManoeuver(mnvr);
+			communicateManoeuver(mnvr);
+		if(mnvr.getManoeuverState() == ManoeuverStates.SUBMITTED)
+		{
+			switch (mnvr.getClass().getSimpleName())
+			{
+			case "CircleMnvr":
+				CircleMnvr circleMnvr = (CircleMnvr) mnvr;
+				// Move way point for circle center.
+				paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+				paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
+				paparazziCommunication.jumpToBlock("Circle");
+				break;
+			case "LineMnvr":
+				LineMnvr lineMnvr = (LineMnvr) mnvr;
+				// Move way points to each side of the line.
+				paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
+				paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
+				// Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+				paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				paparazziCommunication.jumpToBlock("Line_L1-L2");
+				break;
+			case "BoxMnvr":
+				BoxMnvr boxMnvr = (BoxMnvr) mnvr;
+				// Move way points to each side of the box.
+				paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
+				paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
+				// Circle radius may have previously been modified by a circle manoeuver, set it to default. 
+				paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+				if(boxMnvr.isNorthSouth())
+					paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
+				else  // West-East
+					paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
+				break;
+			}
+		}
 	}
-	
+
 	public static void deleteManoeuver(Manoeuver mnvr)
 	{
-	  paparazziCommunication.deleteManoeuver(mnvr.toDTO());
+		paparazziCommunication.deleteManoeuver(mnvr.toDTO());
 	}
-//	public static PaparazziCommunication getPaparazziCommunication()
-//	{
-//		return paparazziCommunication;
-//	}
-	
+	//	public static PaparazziCommunication getPaparazziCommunication()
+	//	{
+	//		return paparazziCommunication;
+	//	}
+
 	/**
 	 * @return reference cruise speed (m/s) for ETA calculations
 	 */
@@ -351,95 +351,95 @@ public class UAVModel
 		return 30.;
 	}
 
-  /**
-   * @return the altitude
-   */
-  public static Double getAltitude()
-  {
-    if(store == null)
-      return null;
-    return store.altitude;
-  }
+	/**
+	 * @return the altitude
+	 */
+	public static Double getAltitude()
+	{
+		if(store == null)
+			return null;
+		return store.altitude;
+	}
 
-  /**
-   * @param altitude the altitude to set
-   */
-  public static void setAltitude(double altitude)
-  {
-    if(store != null)
-    {
-      store.altitude = altitude;
-    }
-  }
+	/**
+	 * @param altitude the altitude to set
+	 */
+	public static void setAltitude(double altitude)
+	{
+		if(store != null)
+		{
+			store.altitude = altitude;
+		}
+	}
 
-  /**
-   * @return the verticalSpeed
-   */
-  public static Double getVerticalSpeed()
-  {
-    if(store == null)
-      return null;
-    return store.verticalSpeed;
-  }
+	/**
+	 * @return the verticalSpeed
+	 */
+	public static Double getVerticalSpeed()
+	{
+		if(store == null)
+			return null;
+		return store.verticalSpeed;
+	}
 
-  /**
-   * @param verticalSpeed the verticalSpeed to set
-   */
-  public static void setVerticalSpeed(double verticalSpeed)
-  {
-    if(store != null)
-    {
-      store.verticalSpeed = verticalSpeed;
-    }
-  }
+	/**
+	 * @param verticalSpeed the verticalSpeed to set
+	 */
+	public static void setVerticalSpeed(double verticalSpeed)
+	{
+		if(store != null)
+		{
+			store.verticalSpeed = verticalSpeed;
+		}
+	}
 
-  /**
-   * @return the groundSpeed
-   */
-  public static Double getGroundSpeed()
-  {
-    if(store == null)
-      return null;
-    return store.groundSpeed;
-  }
+	/**
+	 * @return the groundSpeed
+	 */
+	public static Double getGroundSpeed()
+	{
+		if(store == null)
+			return null;
+		return store.groundSpeed;
+	}
 
-  /**
-   * @param groundSpeed the groundSpeed to set
-   */
-  public static void setGroundSpeed(double groundSpeed)
-  {
-    if(store != null)
-    {
-      store.groundSpeed = groundSpeed;
-    }
-  }
+	/**
+	 * @param groundSpeed the groundSpeed to set
+	 */
+	public static void setGroundSpeed(double groundSpeed)
+	{
+		if(store != null)
+		{
+			store.groundSpeed = groundSpeed;
+		}
+	}
 
-  /**
-   * @return the groundAltitude
-   */
-  public static Double getGroundAltitude()
-  {
-    if(store == null)
-      return null;
-    return store.groundAltitude;
-  }
+	/**
+	 * @return the groundAltitude
+	 */
+	public static Double getGroundAltitude()
+	{
+		if(store == null)
+			return null;
+		return store.groundAltitude;
+	}
 
-  /**
-   * @param groundAltitude the groundAltitude to set
-   */
-  public static void setGroundAltitude(double groundAltitude)
-  {
-    if(store != null)
-    {
-      store.groundAltitude = groundAltitude;
-    }
-  }
-  
-  public static UAVWayPoints getWayPoints()
-  {
-    if(store == null)
-      return null;
-    return store.uavWayPoints;
-  }
+	/**
+	 * @param groundAltitude the groundAltitude to set
+	 */
+	public static void setGroundAltitude(double groundAltitude)
+	{
+		if(store != null)
+		{
+			store.groundAltitude = groundAltitude;
+		}
+	}
+
+	public static UAVWayPoints getWayPoints()
+	{
+		if(store == null)
+			return null;
+		return store.uavWayPoints;
+	}
 
 }

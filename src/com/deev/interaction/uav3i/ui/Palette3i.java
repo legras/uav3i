@@ -12,6 +12,8 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public enum Palette3i 
 {	
+	FOOTPRINT_DRAW(1.f, 1.f, 1.f, 1.f),
+	FOOTPRINT_FILL(0.f, 0.f, 0.f, .2f),
 	BUTTON_WHITE_BG(1.f, 1.f, 1.f, .5f),
 	BUTTON_DISABLED_BG("img/stripesGray32.png", 16),
 	BUTTON_DELAY_BG(0.f, 0.f, 0.f, .1f),

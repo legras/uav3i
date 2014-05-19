@@ -28,6 +28,19 @@ public class VideoModel
 		_segmentList = VideoSegment.makeDummyVSegmentList();
 	}
 	
+	public CameraFootprint getFootprintNow()
+	{
+		return getFootprintAtTime(System.currentTimeMillis());
+	}
+	
+	public CameraFootprint getFootprintAtTime(long time)
+	{
+		UAVDataPoint data = UAVModel.store.getDataPointAtTime(time);
+		return new CameraFootprint(data.latlng, data.course, time);
+	}
+	
+	
+	
 	public void setPlaySequence(long start, long end)
 	{
 		_seqStart = start;

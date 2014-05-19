@@ -27,9 +27,11 @@ import javax.imageio.ImageIO;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import com.deev.interaction.touch.Touchable;
+import com.deev.interaction.uav3i.model.CameraFootprint;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.model.VideoModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
@@ -127,10 +129,12 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
+		int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+		
 		// Command Grid ?
 		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.COMMAND)
 		{
-			int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+			
 			LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
 
 			Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(startPoint.getLat(), startPoint.getLng(), false);
@@ -191,14 +195,18 @@ public class SymbolMap extends Map implements Touchable
 		// Tracé de trajectoire
 		GeneralPath fullTrajectory = _trajectory.getFullPath(this);	
 
+		final float dash1[] = {8.f, 4.f};
+	    final BasicStroke dashed =
+	        new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10.0f, dash1, 0.f);
+		
 		if (fullTrajectory != null)
 		{
 			g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
 			// g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
-			g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+			g2.setStroke(new BasicStroke(4.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 			g2.draw(fullTrajectory);
 			g2.setPaint(Color.RED);
-			g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+			g2.setStroke(dashed);
 			g2.draw(fullTrajectory);
 		}
 		
@@ -225,6 +233,19 @@ public class SymbolMap extends Map implements Touchable
 
 		if (_ruler != null)
 			_ruler.paint(g2);
+		
+		// Footprint
+		long time;
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+			time = MainFrame.TIMELINE.getTimeCursorPosition();
+		else
+			time = System.currentTimeMillis();
+		GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
+		g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
+		g2.fill(foot);
+		g2.setStroke(new BasicStroke(2.f));
+		g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
+		g2.draw(foot);
 		
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
@@ -275,6 +296,31 @@ public class SymbolMap extends Map implements Touchable
 		g2.setTransform(old);
 	}
 	
+	private GeneralPath footPrintPath(CameraFootprint footprint)
+	{
+		GeneralPath poly = new GeneralPath();
+		
+		Point2D.Double p = null;
+		
+		for (LatLng ll : footprint)
+		{
+			if (p == null)
+			{
+				p = getScreenForLatLng(ll);
+				poly.moveTo(p.x,  p.y);
+			}
+			else
+			{
+				p = getScreenForLatLng(ll);
+				poly.lineTo(p.x,  p.y);
+			}
+		}
+
+		poly.closePath();
+		
+		return poly;
+	}
+
 	@Override
 	public double getPPM()
 	{

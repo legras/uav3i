@@ -86,7 +86,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		setBounds(0, 0, screenWidth, screenHeight);
 		
 		_timeOriginTgt = _timeOrigin = System.currentTimeMillis();
-		_timeScaleTgt = _timeScale = 10*60*1000 / 360.;
+		_timeScaleTgt = _timeScale = 60*100 / 360.;
 	}
 
 	public long getTimeCursorPosition()
@@ -156,7 +156,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		double segWidth = timeSegmentsDurations[timeSegmentIndex] / _timeScale;
 
 		FontRenderContext frc = g2.getFontRenderContext();
-	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_BGD_SIZE);
+	    Font f = new Font("Futura", Font.PLAIN, _TEXT_BGD_SIZE);
 	    TextLayout textTl;
 	    Shape outline;
 						
@@ -199,7 +199,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		double start, end;
 		
 		FontRenderContext frc = g2.getFontRenderContext();
-	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_VID_SIZE);
+	    Font f = new Font("Futura", Font.PLAIN, _TEXT_VID_SIZE);
 	    TextLayout textTl;
 	    Shape outline;
 		
@@ -257,7 +257,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		
 		// Time
 		FontRenderContext frc = g2.getFontRenderContext();
-	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, _TEXT_BGD_SIZE);
+	    Font f = new Font("Futura", Font.PLAIN, _TEXT_BGD_SIZE);
 	    TextLayout textTl;
 	    Shape outline;
 		
@@ -440,7 +440,7 @@ public class TimeLine extends JComponent implements Touchable, Animation
 		if (_scrubState == TimeLineScrubStates.NONE)
 		{
 			_speed *= _SPEED_RATE;
-			if (_speed < .05)
+			if (Math.abs(_speed) < .05)
 				_speed = 0.;
 			double d = (double) time * _speed * _timeScale;
 			_timeOrigin -= d;
