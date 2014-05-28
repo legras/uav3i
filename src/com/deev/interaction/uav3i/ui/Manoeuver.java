@@ -26,7 +26,7 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 public abstract class Manoeuver implements Touchable, Animation
 {
 	public enum ManoeuverRequestedStatus {NONE, ASKED, REFUSED, ACCEPTED};
-	
+	protected ManoeuverRequestedStatus _mnvrReqStatus= ManoeuverRequestedStatus.NONE;
 	
 	/**
 	 * <ul>
@@ -63,12 +63,12 @@ public abstract class Manoeuver implements Touchable, Animation
 	{
 		return _buttons.isPinned();
 	}
-	
+
 	public boolean isSelected()
 	{
-		return false;
+		return _buttons.isShown();
 	}
-
+	
 	public boolean isShared()
 	{
 		return _buttons.isSubmitted();
@@ -76,9 +76,19 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public ManoeuverRequestedStatus getRequestedStatus()
 	{
-		return ManoeuverRequestedStatus.NONE;
+		return _mnvrReqStatus;
 	}
 
+	public void setReqStatusAccepted()
+	{
+		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
+	}
+
+	public void setReqStatusRefused()
+	{
+		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
+	}
+	
 	public abstract void paint(Graphics2D g2);
 
 	public abstract ManoeuverDTO toDTO();
@@ -100,7 +110,7 @@ public abstract class Manoeuver implements Touchable, Animation
 			BufferedImage stripes;
 			try
 			{
-				stripes = ImageIO.read(this.getClass().getResource("img/sqPurple.png"));
+				stripes = ImageIO.read(this.getClass().getResource("img/sqBW.png"));
 
 				_hashGW = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 32, 32));
 			}
@@ -111,7 +121,7 @@ public abstract class Manoeuver implements Touchable, Animation
 			}
 		}
 
-		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
+		float lineWidth = isSelected() ? 3.f : 1.f;
 
 		g2.setPaint(_hashGW);
 		g2.fill(footprint);
@@ -141,7 +151,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
+		float lineWidth = isSelected() ? 3.f : 1.f;
 
 		final float dash1[] = {10.0f};
 		final BasicStroke dashed =
@@ -258,19 +268,10 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public abstract boolean adjustAtPx(double x, double y);
 
-	public boolean isAdjusting()
-	{
-		return _adjusting;
-	}
 
 	public void stopAdjusting()
 	{
 		_adjusting = false;
-	}
-
-	public boolean isFocusedMnvr()
-	{
-		return _buttons.isShown();
 	}
 
 	public abstract boolean isAdjustmentInterestedAtPx(double x, double y);

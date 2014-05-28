@@ -163,12 +163,19 @@ public class MainFrame extends JFrame implements ActionListener
 					new TintedBufferedImage(zoomMinusPressed, gray3i));
 			clayer.add(buttonZoomPlus);
 			clayer.add(buttonZoomMinus);
-			buttonZoomPlus.setBounds(screenSize.width-20-zoomPlus.getWidth(),
-					12 + zoomPlus.getHeight() + 48,
-					zoomPlus.getWidth(), zoomPlus.getHeight());
-			buttonZoomMinus.setBounds(screenSize.width-20-zoomMinus.getWidth(),
-					12 + zoomPlus.getHeight() + 48 + zoomMinus.getHeight() + 12,
-					zoomMinus.getWidth(), zoomMinus.getHeight());
+			
+			buttonZoomPlus.setBounds(
+					screenSize.width-20-zoomPlus.getWidth(),
+					screenSize.height/2 - 6 - zoomPlus.getHeight(),
+					zoomPlus.getWidth(),
+					zoomPlus.getHeight());
+			
+			buttonZoomMinus.setBounds(
+					screenSize.width-20-zoomMinus.getWidth(),
+					screenSize.height/2 + 6,
+					zoomMinus.getWidth(),
+					zoomMinus.getHeight());
+			
 			final JMapViewer mapViewer = grnd.getMapViewer();
 			final int maxZoom = mapViewer.getTileController().getTileSource().getMaxZoom();
 			final int minZoom = mapViewer.getTileController().getTileSource().getMinZoom();
