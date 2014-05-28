@@ -176,7 +176,7 @@ public class BoxMnvr extends Manoeuver
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
-		paintFootprint(g2, box, isSubmitted());
+		paintFootprint(g2, box, isShared());
 
 		for (BoxMnvrHandles boxhndl : BoxMnvrHandles.values())
 		{
@@ -201,10 +201,10 @@ public class BoxMnvr extends Manoeuver
 					length = max/2;
 			}
 			
-			paintAdjustLine(g2, boxhndl.getPath(length, this), isSubmitted(), fat);
+			paintAdjustLine(g2, boxhndl.getPath(length, this), isShared(), fat);
 		}
 		
-		if (isFocusedMnvr())
+		if (isSelected())
 		{
 			String widthS = Math.round(box.width/_smap.getPPM())+" m";
 			String heightS = Math.round(box.height/_smap.getPPM())+" m";
@@ -269,7 +269,7 @@ public class BoxMnvr extends Manoeuver
 	@Override
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		if (isSubmitted())
+		if (isShared())
 			return false;
 		
 		Rectangle2D.Double box = getBoxOnScreen();

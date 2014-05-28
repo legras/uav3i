@@ -62,15 +62,15 @@ public class CircleMnvr extends Manoeuver
 		g2.translate(centerPx.x, centerPx.y);
 		Ellipse2D.Double ell = new Ellipse2D.Double(-RPX, -RPX, 2*RPX, 2*RPX);
 
-		paintFootprint(g2, ell, isSubmitted());
+		paintFootprint(g2, ell, isShared());
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-		paintAdjustLine(g2, ell, isSubmitted(), _adjusting);
+		paintAdjustLine(g2, ell, isShared(), _adjusting);
 		
-		if (isFocusedMnvr())
+		if (isSelected())
 		{
 			String largS = Math.round(Math.abs(_currentRm))+" m";
 			Point2D.Double zero = new Point2D.Double();

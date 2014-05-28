@@ -376,13 +376,6 @@ public class SymbolMap extends Map implements Touchable
 		return result;
 	}
 
-	public boolean isAdjusting()
-	{
-		if (_adjustingMnvr == null)
-			return false;
-
-		return _adjustingMnvr.isAdjusting();
-	}
 
 	public void stopAdjusting()
 	{

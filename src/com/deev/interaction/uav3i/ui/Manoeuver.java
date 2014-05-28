@@ -25,29 +25,32 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public abstract class Manoeuver implements Touchable, Animation
 {
+	public enum ManoeuverRequestedStatus {NONE, ASKED, REFUSED, ACCEPTED};
+	
+	
 	/**
 	 * <ul>
-   *   <li>READY : état à la création, non encore soumis. La maneuvre est encore modifiable.</li>
-   *   <li>REJECTED : soumis et rejeté -> état inutile, la manoeuvre aura été supprimée...</li>
-   *   <li>SUBMITTED : soumis et accepté -> l'exécution de la manoeuvre peut être demandée.</li>
-   *   <li>FADING : ??? <i>En cours d'exécution ?</i></li>
-   * </ul>
+	 *   <li>READY : état à la création, non encore soumis. La maneuvre est encore modifiable.</li>
+	 *   <li>REJECTED : soumis et rejeté -> état inutile, la manoeuvre aura été supprimée...</li>
+	 *   <li>SUBMITTED : soumis et accepté -> l'exécution de la manoeuvre peut être demandée.</li>
+	 *   <li>FADING : ??? <i>En cours d'exécution ?</i></li>
+	 * </ul>
 	 */
 	public enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
 	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
 	protected ManoeuverButtons _buttons;
 
 	protected SymbolMap _smap;
-	
+
 	private static float _ADJUST_INTEREST = 20.f;
 	private static float _MOVE_INTEREST = 15.f;
-	
+
 	protected boolean _adjusting = false;
 	protected static double GRIP = 30.;
 	private static TexturePaint _hashGW = null;
 	private long _killTime = -1;
 	private boolean _killed = false;
-	
+
 	private static long _DEATH_LENGTH = 1000;
 
 	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
@@ -56,20 +59,40 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
 	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
+	public boolean isPinned()
+	{
+		return _buttons.isPinned();
+	}
+	
+	public boolean isSelected()
+	{
+		return false;
+	}
+
+	public boolean isShared()
+	{
+		return _buttons.isSubmitted();
+	}
+	
+	public ManoeuverRequestedStatus getRequestedStatus()
+	{
+		return ManoeuverRequestedStatus.NONE;
+	}
+
 	public abstract void paint(Graphics2D g2);
-	
+
 	public abstract ManoeuverDTO toDTO();
-	
+
 	public void setManoeuverState(ManoeuverStates mnvrState)
 	{
-	  _mnvrState = mnvrState;
+		_mnvrState = mnvrState;
 	}
-	
+
 	public ManoeuverStates getManoeuverState()
 	{
-	  return _mnvrState;
+		return _mnvrState;
 	}
-	
+
 	public void paintFootprint(Graphics2D g2, Shape footprint, boolean blink)
 	{
 		if (_hashGW == null)
@@ -77,7 +100,7 @@ public abstract class Manoeuver implements Touchable, Animation
 			BufferedImage stripes;
 			try
 			{
-				stripes = ImageIO.read(this.getClass().getResource("img/squaresGY.png"));
+				stripes = ImageIO.read(this.getClass().getResource("img/sqPurple.png"));
 
 				_hashGW = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 32, 32));
 			}
@@ -87,68 +110,68 @@ public abstract class Manoeuver implements Touchable, Animation
 				e.printStackTrace();
 			}
 		}
-		
+
 		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
-		
+
 		g2.setPaint(_hashGW);
 		g2.fill(footprint);
 		g2.setStroke(new BasicStroke(lineWidth));
 		g2.setPaint(_GREEN);
 		g2.draw(footprint);
 	}
-	
+
 	public void kill()
 	{
 		_killTime = _DEATH_LENGTH;
 		_killed = true;
 		hidebuttons();
 	}
-	
+
 	public boolean isDying()
 	{
 		return _killed;
 	}
-	
+
 	public void delete()
 	{
 		_smap.deleteManoeuver(this);
 		hidebuttons();
 	}
-	
+
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
 		float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
-		
+
 		final float dash1[] = {10.0f};
-	    final BasicStroke dashed =
-	        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
-	    
-	    final BasicStroke plain =
-	        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-	    
-	    final BasicStroke fat =
-	        new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-				
+		final BasicStroke dashed =
+				new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
+
+		final BasicStroke plain =
+				new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+
+		final BasicStroke fat =
+				new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+
 		if (adjust)
 		{
 			g2.setStroke(fat);
 			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
 			g2.draw(line);
 		}
-		
+
 		g2.setPaint(_YELLOW);
-	    g2.setStroke(plain);
+		g2.setStroke(plain);
 		g2.draw(line);
-		
+
 		if (isDying())
 			g2.setPaint(Palette.blendColors(_YELLOW, (int) _killTime, (int) _DEATH_LENGTH, _RED));
 		else
 			g2.setPaint(_GREEN);
-	    g2.setStroke(dashed);
+		g2.setStroke(dashed);
 		g2.draw(line);
 	}
-	
+
 	public void drawLabelledLine(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean below)
 	{
 		if (A.x > B.x)
@@ -156,124 +179,124 @@ public abstract class Manoeuver implements Touchable, Animation
 			drawLabelledLine(g2, B, A, label, below);
 			return;
 		}
-		
+
 		final double headL = 50.;
 		final double pp = 60.;
-		
+
 		double L = A.distance(B);
 		Point2D.Double u = new Point2D.Double();
 		Point2D.Double v = new Point2D.Double();
-		
+
 		u.x = (B.x-A.x)/L;
 		u.y = (B.y-A.y)/L;
-		
+
 		v.x = -u.y;
 		v.y =  u.x;
-		
+
 		if (!below)
 		{
 			v.x *= -1;
 			v.y *= -1;
 		}
-		
+
 		AffineTransform old = g2.getTransform();	// PUSH
-		
+
 		g2.translate(A.x,  A.y);
-		
+
 		GeneralPath p = new GeneralPath();		
-		
+
 		p.moveTo(0, 0);
 		p.lineTo(headL*v.x, headL*v.y);
 		p.lineTo(headL*v.x + (pp-headL)*(-u.x+v.x), headL*v.y + (pp-headL)*(-u.y+v.y));
-		
+
 		p.moveTo(pp*v.x, pp*v.y);
 		p.lineTo(pp*v.x + L*u.x, pp*v.y + L*u.y);
-		
+
 		p.moveTo(L*u.x, L*u.y);
 		p.lineTo(headL*v.x + L*u.x, headL*v.y + L*u.y);
 		p.lineTo(headL*v.x + L*u.x + (pp-headL)*(u.x+v.x), headL*v.y + L*u.y + (pp-headL)*(u.y+v.y));
-		
+
 		g2.setPaint(_M_WHITE);
 		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
 		g2.draw(p);
-		
+
 		g2.setPaint(_M_GREY);
 		g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
 		g2.draw(p);
 
 		// Label
 		FontRenderContext frc = g2.getFontRenderContext();
-	    Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 24);
-	    TextLayout textTl;
-	    Shape outline;
-	    
+		Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 24);
+		TextLayout textTl;
+		Shape outline;
+
 		textTl = new TextLayout(label, f, frc);
 		outline = textTl.getOutline(null);
-	    Rectangle2D b = outline.getBounds2D();
-	   
-	    g2.translate(L*u.x/2+v.x*pp, L*u.y/2+v.y*pp);
-	    g2.rotate(Math.atan2(u.y, u.x));
-	    g2.translate(-b.getWidth()/2, -4);
-	    
-	    g2.setPaint(_M_WHITE);
+		Rectangle2D b = outline.getBounds2D();
+
+		g2.translate(L*u.x/2+v.x*pp, L*u.y/2+v.y*pp);
+		g2.rotate(Math.atan2(u.y, u.x));
+		g2.translate(-b.getWidth()/2, -4);
+
+		g2.setPaint(_M_WHITE);
 		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
 		g2.draw(outline);
-		
+
 		g2.setPaint(_M_GREY);
 		g2.fill(outline);
-		
+
 		g2.setTransform(old);						// UNPUSH
 	}
-	
+
 	public abstract void positionButtons();
-	
+
 	public void hidebuttons()
 	{
 		if (_buttons != null)
 			_buttons.hide();
 	}
-	
+
 	public abstract boolean adjustAtPx(double x, double y);
-	
+
 	public boolean isAdjusting()
 	{
 		return _adjusting;
 	}
-	
+
 	public void stopAdjusting()
 	{
 		_adjusting = false;
 	}
-	
+
 	public boolean isFocusedMnvr()
 	{
 		return _buttons.isShown();
 	}
-	
+
 	public abstract boolean isAdjustmentInterestedAtPx(double x, double y);
-	
+
 	/**
 	 * @return common value for manoeuvers concerning moves 
 	 */
 	protected float getMoveInterest()
 	{
-		if (isSubmitted())
+		if (isShared())
 			return -1.f;
-		
+
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
 			return _MOVE_INTEREST;
 		else
 			return -1.f;
 	}
-	
+
 	/**
 	 * @return common value for manoeuvers concerning adjustment 
 	 */
 	protected float getAdjustInterest()
 	{
-		if (isSubmitted())
+		if (isShared())
 			return -1.f;
-		
+
 		if (MainFrame.getAppState() == MainFrameState.COMMAND)
 			return _ADJUST_INTEREST;
 		else
@@ -290,30 +313,25 @@ public abstract class Manoeuver implements Touchable, Animation
 		positionButtons();
 	}
 
-	public boolean isSubmitted()
-	{
-		return _buttons.isSubmitted();
-	}
-
 	public boolean isModifiable()
 	{
 		return _buttons.isModifiable();
 	}
-	
+
 	@Override
 	public int tick(int time)
 	{	
 		_killTime -= time;
-		
+
 		if (isDying() && _killTime < 0)
 		{
 			delete();
 			return 0;
 		}
-		
+
 		return 1;
 	}
-	
+
 	@Override
 	public int life()
 	{

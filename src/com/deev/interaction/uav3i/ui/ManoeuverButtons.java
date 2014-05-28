@@ -154,12 +154,20 @@ public class ManoeuverButtons implements Animation, ActionListener
 		}
 	}
 	
-	public boolean isModifiable()
+	public boolean isPinned()
 	{
-		if (_submitButton == null || _pinButton == null)
+		if (_pinButton == null)
 			return false;
 		
-		return !_submitButton.isSelected() && !_pinButton.isSelected();
+		return _pinButton.isSelected();
+	}
+	
+	public boolean isModifiable()
+	{
+		if (_submitButton == null)
+			return false;
+		
+		return !_submitButton.isSelected() && !isPinned();
 	}
 	
 	public boolean isSubmitted()
