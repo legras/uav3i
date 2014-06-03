@@ -69,6 +69,16 @@ public class LineMnvrDTO extends ManoeuverDTO
     Line2D.Double l = new Line2D.Double(LApx, LBpx);
     //paintAdjustLine(g2, l, isSubmitted(), _adjusting);
     paintAdjustLine(g2, l);
+
+    String distS = Math.round(Apx.distance(Bpx)/Veto.getSymbolMapVeto().getPPM())+" m";
+    drawLabelledLine(g2, LApx, LBpx, distS, LApx.y > Apx.y);
+    
+    String largS = Math.round(Math.abs(_currentRm))+" m";
+    if (LApx.y < LBpx.y)
+      drawLabelledLine(g2, Apx, LApx, largS, false);
+    else
+      drawLabelledLine(g2, Bpx, LBpx, largS, false);
+
     
 //    if (isFocusedMnvr())
 //    {

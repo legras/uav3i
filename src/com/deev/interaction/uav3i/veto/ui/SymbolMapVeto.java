@@ -106,6 +106,7 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   public void addManoeuver(ManoeuverDTO manoeuverDTO)
   {
+    manoeuvers = new ArrayList<ManoeuverDTO>();
     manoeuvers.add(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
@@ -184,7 +185,10 @@ public class SymbolMapVeto extends JComponent
     synchronized(this)
     {
       for (ManoeuverDTO m : manoeuvers)
+      {
+        //System.out.println("Et pourtant j'en ai au moins une à dessiner ! --> " + m);
         m.paint(g2);
+      }
     }
   }
   //-----------------------------------------------------------------------------
