@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
@@ -26,7 +27,7 @@ public class Veto extends JFrame
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = -5099360406109028956L;
-  
+
   private static OsmMapGround   osmMapGround  = null;
   private static SymbolMapVeto  symbolMapVeto = null;
   private static ComponentLayer clayer        = null;
@@ -37,11 +38,15 @@ public class Veto extends JFrame
   public Veto()
   {
     super("uav3i - Veto");
+    this.setSize(1280, 800);
+    this.setLocationRelativeTo(null);
+    this.setResizable(false);
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.addWindowListener(new WindowAdapter()
     { 
       public void windowClosing(WindowEvent we)
       {
-        System.exit(0);
+        askIfReallyQuit();
       }
 
       public void windowActivated(WindowEvent e)
@@ -49,8 +54,6 @@ public class Veto extends JFrame
         getContentPane().requestFocus();  
       }
     });
-    this.setSize(1280, 800);
-    this.setLocationRelativeTo(null);
     try
     {
       setIconImage(ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/3i_icon_small.png")));
@@ -111,6 +114,17 @@ public class Veto extends JFrame
   {
     symbolMapVeto.reinit();
     UAVModel.reinit();
+  }
+  //-----------------------------------------------------------------------------
+  private void askIfReallyQuit()
+  {
+    int response = JOptionPane.showConfirmDialog(this,
+                                                 "<html><b>Are you sure?</b<br>This will stop the communication between<br>the table screen and Paparazzi!",
+                                                 "Stop the Veto User Interface",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE);
+    if(response == 0)
+      System.exit(0);
   }
   //-----------------------------------------------------------------------------
 }
