@@ -240,12 +240,21 @@ public class SymbolMap extends Map implements Touchable
 			time = MainFrame.TIMELINE.getTimeCursorPosition();
 		else
 			time = System.currentTimeMillis();
-		GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
-		g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
-		g2.fill(foot);
-		g2.setStroke(new BasicStroke(2.f));
-		g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
-		g2.draw(foot);
+
+		// FIXME : en mode PAPARAZZI_REMOTE, le temps de recevoir des données, une NullPointerException se fait un peu vive...
+		// On la catche pour le moment...
+		try
+		{
+	    GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
+	    g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
+	    g2.fill(foot);
+	    g2.setStroke(new BasicStroke(2.f));
+	    g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
+	    g2.draw(foot);
+		}
+		catch(NullPointerException npe)
+		{
+		}
 		
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
