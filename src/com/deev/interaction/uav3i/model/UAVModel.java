@@ -280,21 +280,49 @@ public class UAVModel
 	{
 		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
 
-		//		final Manoeuver manoeuver = mnvr;
+    // Communication de la manoeuvre pour dessin sur l'IHM Veto.
+    paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+		
+    switch (mnvr.getClass().getSimpleName())
+    {
+      case "CircleMnvr":
+        CircleMnvr circleMnvr = (CircleMnvr) mnvr;
+//        // Communication de la manoeuvre pour dessin sur l'IHM Veto.
+//        paparazziCommunication.communicateManoeuver(circleMnvr.toDTO());
+        // Move way point for circle center.
+        paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+        paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
+        paparazziCommunication.jumpToBlock("Circle");
+        break;
+      case "LineMnvr":
+        LineMnvr lineMnvr = (LineMnvr) mnvr;
+//        paparazziCommunication.communicateManoeuver(lineMnvr.toDTO());
+        // Move way points to each side of the line.
+        paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
+        paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
+        // Circle radius may have previously been modified by a circle
+        // manoeuver, set it to default.
+        paparazziCommunication.setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+        paparazziCommunication.jumpToBlock("Line_L1-L2");
+        break;
+      case "BoxMnvr":
+        BoxMnvr boxMnvr = (BoxMnvr) mnvr;
+//        paparazziCommunication.communicateManoeuver(boxMnvr.toDTO());
+        // Move way points to each side of the box.
+        paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
+        paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
+        // Circle radius may have previously been modified by a circle
+        // manoeuver, set it to default.
+        paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+        if (boxMnvr.isNorthSouth())
+          paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
+        else
+          // West-East
+          paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
+        break;
+    }
 
-		//    new Timer().schedule(new TimerTask()
-		//    {          
-		//        @Override
-		//        public void run()
-		//        {
-		//            if (Math.random() < .5)
-		//            {
-		//              LoggerUtil.LOG.log(Level.INFO, "Manoeuver refused");
-		//              manoeuver.kill();
-		//            }
-		//        }
-		//    }, 2000);
-
+		/*
 		if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
 			//submitManoeuver(mnvr);
 			communicateManoeuver(mnvr);
@@ -332,6 +360,7 @@ public class UAVModel
 				break;
 			}
 		}
+		*/
 	}
 
 	public static void deleteManoeuver(Manoeuver mnvr)
