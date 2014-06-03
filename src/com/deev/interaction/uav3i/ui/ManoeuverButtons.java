@@ -184,7 +184,11 @@ public class ManoeuverButtons implements Animation, ActionListener
 			return;
 		
 		_submitButton.setSelected(sub);
-		_submitButton.setEnabled(!sub);
+		
+		if (!_submitButton.isSelected())
+			setJump(false);
+		
+		//_submitButton.setEnabled(!sub);
 	}
 	
 	public void setJump(boolean jump)

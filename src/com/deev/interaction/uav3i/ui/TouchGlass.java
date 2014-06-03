@@ -103,6 +103,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	public void addTuioCursor(TuioCursor arg0)
 	{
 		addTouch(arg0.getX()*getBounds().width, arg0.getY()*getBounds().height, arg0);
+		updateTouch(arg0.getX()*getBounds().width, arg0.getY()*getBounds().height, arg0);
 	}
 
 	@Override

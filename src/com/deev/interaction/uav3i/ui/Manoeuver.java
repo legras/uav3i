@@ -102,6 +102,11 @@ public abstract class Manoeuver implements Touchable, Animation
 	{
 		return _mnvrState;
 	}
+	
+	public void wasModified()
+	{
+		_mnvrReqStatus = ManoeuverRequestedStatus.NONE;
+	}
 
 	public void paintFootprint(Graphics2D g2, Shape footprint, boolean blink)
 	{
