@@ -195,7 +195,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			_touched.put(touchref, T);
 			
 			T.addTouch(x, y, touchref);
-			//T.updateTouch(x, y, touchref);
+			T.updateTouch(x, y, touchref);
 		}
 	}
 
