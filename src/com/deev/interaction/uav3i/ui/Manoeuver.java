@@ -265,6 +265,12 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public abstract void positionButtons();
 
+	public void instaMoveButtons()
+	{
+		positionButtons();
+		_buttons.setBounds();
+	}
+	
 	public void hidebuttons()
 	{
 		if (_buttons != null)
@@ -289,7 +295,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		if (isShared())
 			return -1.f;
 
-		if (MainFrame.getAppState() == MainFrameState.COMMAND)
+		if (MainFrame.getAppState() != MainFrameState.REPLAY)
 			return _MOVE_INTEREST;
 		else
 			return -1.f;

@@ -282,7 +282,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 		setBounds();
 	}
 
-	private void setBounds()
+	protected void setBounds()
 	{
 		if (_positions[0] == null || _posVect[0] == null)
 			return;

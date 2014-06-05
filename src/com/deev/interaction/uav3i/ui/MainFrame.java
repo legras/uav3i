@@ -209,12 +209,14 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 
 		// ********** Flight params **********
+		/*
 		FlightParamsPanel flightParamsPanel = new FlightParamsPanel();
 		clayer.add(flightParamsPanel);
 		flightParamsPanel.setBounds(screenSize.width-(flightParamsPanel.getWidth()+5),
 				screenSize.height-(flightParamsPanel.getHeight()+5+100), 
 				flightParamsPanel.getWidth(), 
 				flightParamsPanel.getHeight());
+		*/
 
 		// ********** Mode switch **********
 		Switcher3Buttons mswitch = new Switcher3Buttons(this);
@@ -252,7 +254,7 @@ public class MainFrame extends JFrame implements ActionListener
 		this.addMouseMotionListener(_GLASS);
 
 		_GLASS.addTouchable(fingerpane);
-		_GLASS.addTouchable(map);
+		_GLASS.addTouchable(_SMAP);
 		_GLASS.addTouchable(TIMELINE);
 		_GLASS.addTouchable(mapInteractionPane);
 		_GLASS.addTouchable(clayer);
@@ -289,7 +291,6 @@ public class MainFrame extends JFrame implements ActionListener
 			break;
 		case MAP:
 			TIMELINE.hide();
-			_SMAP.hideManoeuverButtons();
 			break;
 		case REPLAY:
 			TIMELINE.show();
