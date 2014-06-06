@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.font.FontRenderContext;
@@ -52,10 +53,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	private boolean _killed = false;
 
 	private static long _DEATH_LENGTH = 1000;
-
-	private static Color _GREEN = new Color(.3f, .7f, 0.f, 1.f);
-	private static Color _YELLOW = new Color(1.f, 1.f, 0.f, 1.f);
-	private static Color _RED = new Color(.9f, .3f, 0.f, 1.f);
+	
 	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
 	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
@@ -110,28 +108,23 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public void paintFootprint(Graphics2D g2, Shape footprint, boolean blink)
 	{
-		if (_hashGW == null)
-		{
-			BufferedImage stripes;
-			try
-			{
-				stripes = ImageIO.read(this.getClass().getResource("img/sqBW.png"));
+		float lineWidth = isShared() ? 3.f : 2.f;
+		float fatWidth = isSelected() ? 10.f : 4.f;
 
-				_hashGW = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 32, 32));
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
+		if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+			paint = Palette3i.MNVR_REFUSED.getPaint();
+		if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+			paint = Palette3i.MNVR_ACCEPTED.getPaint();
+		
 
-		float lineWidth = isSelected() ? 3.f : 1.f;
-
-		g2.setPaint(_hashGW);
+		g2.setStroke(new BasicStroke(lineWidth+2.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g2.setPaint(Palette3i.WHITE_BG.getPaint());
+		g2.draw(footprint);
+		g2.setPaint(Palette3i.MNVR_FOOT_BGRND.getPaint());
 		g2.fill(footprint);
 		g2.setStroke(new BasicStroke(lineWidth));
-		g2.setPaint(_GREEN);
+		g2.setPaint(paint);
 		g2.draw(footprint);
 	}
 
@@ -156,9 +149,10 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink, boolean adjust)
 	{
 		float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-		float lineWidth = isSelected() ? 3.f : 1.f;
+		float lineWidth = isShared() ? 3.f : 2.f;
+		float fatWidth = isSelected() ? 10.f : 4.f;
 
-		final float dash1[] = {10.0f};
+		final float dash1[] = {10.f, 5.f};
 		final BasicStroke dashed =
 				new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
 
@@ -166,23 +160,25 @@ public abstract class Manoeuver implements Touchable, Animation
 				new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 
 		final BasicStroke fat =
-				new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+				new BasicStroke(lineWidth+(adjust?4.f:2.f)*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-		if (adjust)
-		{
-			g2.setStroke(fat);
-			g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-			g2.draw(line);
-		}
+		g2.setStroke(fat);
+		g2.setPaint(Palette3i.WHITE_BG.getPaint());
+		g2.draw(line);
+		
+		Paint bgPaint = isPinned() ? Palette3i.MNVR_BACK_PINNED.getPaint() : Palette3i.MNVR_BACK_NOT_PINNED.getPaint();
+		
+		Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
+		if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+			paint = Palette3i.MNVR_REFUSED.getPaint();
+		if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+			paint = Palette3i.MNVR_ACCEPTED.getPaint();
 
-		g2.setPaint(_YELLOW);
+		g2.setPaint(bgPaint);
 		g2.setStroke(plain);
 		g2.draw(line);
 
-		if (isDying())
-			g2.setPaint(Palette.blendColors(_YELLOW, (int) _killTime, (int) _DEATH_LENGTH, _RED));
-		else
-			g2.setPaint(_GREEN);
+		g2.setPaint(paint);
 		g2.setStroke(dashed);
 		g2.draw(line);
 	}

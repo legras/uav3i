@@ -54,7 +54,7 @@ public class RoundToggleButton extends JToggleButton
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		if (isEnabled())
-			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_WHITE_BG));
+			g2.setPaint(Palette3i.getPaint(Palette3i.WHITE_BG));
 		else
 			g2.setPaint(Palette3i.getPaint(Palette3i.BUTTON_DISABLED_BG));
 		
