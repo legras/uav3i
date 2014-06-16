@@ -305,7 +305,7 @@ public abstract class Manoeuver implements Touchable, Animation
 		if (isShared())
 			return -1.f;
 
-		if (MainFrame.getAppState() == MainFrameState.COMMAND)
+		if (MainFrame.getAppState() != MainFrameState.REPLAY)
 			return _ADJUST_INTEREST;
 		else
 			return -1.f;
