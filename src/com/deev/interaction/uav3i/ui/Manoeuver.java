@@ -77,11 +77,17 @@ public abstract class Manoeuver implements Touchable, Animation
 		return _mnvrReqStatus;
 	}
 
+	/**
+	 * A completer retour VETO
+	 */
 	public void setReqStatusAccepted()
 	{
 		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
 	}
 
+	/**
+	 * A completer retour VETO
+	 */
 	public void setReqStatusRefused()
 	{
 		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
