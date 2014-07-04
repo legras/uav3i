@@ -8,6 +8,7 @@ import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlan
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import fr.dgac.ivy.Ivy;
@@ -61,7 +62,8 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
     bus.bindMsg("(.*)GPS(.*)", new UAVPositionListener());
     // Mise en écoute des messages concernant les paramètres de vol
     bus.bindMsg("(.*)FLIGHT_PARAM(.*)", new UAVFlightParamsListener());
-    
+    // Mise en écoute des messages concernant les waypoints
+    bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", new UAVWayPointsListener());
   }
   //-----------------------------------------------------------------------------
   @Override
