@@ -13,6 +13,7 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.LUDecomposition;
 
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
@@ -115,7 +116,7 @@ public class LineMnvr extends Manoeuver
 
 		area.add(new Area(stroke.createStrokedShape(line)));
 
-		paintFootprint(g2, area, isShared());
+		paintFootprint(g2, area, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
 
 		double Rpx = _smap.getPPM() * _currentRm;
 
@@ -127,7 +128,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-		paintAdjustLine(g2, l, isShared(), _adjusting);
+		paintAdjustLine(g2, l, getRequestedStatus() != ManoeuverRequestedStatus.NONE, _adjusting);
 		
 		if (isSelected())
 		{

@@ -23,7 +23,7 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 	 */
 	private static final long serialVersionUID = 4524343907872790149L;
 	
-	public enum Mode {COMMAND, MAP, REPLAY};
+	public enum Switcher3ButtonsMode {COMMAND, MAP, REPLAY};
 	
 	private RoundToggleButton _commandButton;
 	private RoundToggleButton _mapButton;
@@ -97,12 +97,13 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 		_mapButton.setSelected(true);
 	}
 	
-	public Mode getMode()
+	public Switcher3ButtonsMode getMode()
 	{
-		if (_commandButton.isSelected()) return Mode.COMMAND;
-		if (_replayButton.isSelected()) return Mode.REPLAY;
-		return Mode.MAP;
+		if (_commandButton.isSelected()) return Switcher3ButtonsMode.COMMAND;
+		if (_replayButton.isSelected()) return Switcher3ButtonsMode.REPLAY;
+		return Switcher3ButtonsMode.MAP;
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -122,6 +123,12 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 				VideoModel.video.pause();
 			}
 		}
+	}
+	
+	public void resetToMap()
+	{
+		_replayButton.setAlt(false);
+		_mapButton.setSelected(true);
 	}
 	
 	public void resetPlay()

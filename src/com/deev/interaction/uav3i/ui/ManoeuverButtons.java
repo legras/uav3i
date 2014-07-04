@@ -184,7 +184,11 @@ public class ManoeuverButtons implements Animation, ActionListener
 			return;
 		
 		_submitButton.setSelected(sub);
-		_submitButton.setEnabled(!sub);
+		
+		if (!_submitButton.isSelected())
+			setJump(false);
+		
+		//_submitButton.setEnabled(!sub);
 	}
 	
 	public void setJump(boolean jump)
@@ -278,7 +282,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 		setBounds();
 	}
 
-	private void setBounds()
+	protected void setBounds()
 	{
 		if (_positions[0] == null || _posVect[0] == null)
 			return;

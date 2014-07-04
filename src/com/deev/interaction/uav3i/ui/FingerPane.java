@@ -20,7 +20,7 @@ import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.MainFrame.MainFrameState;
-
+import com.deev.interaction.uav3i.ui.Switcher3Buttons.Switcher3ButtonsMode;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
@@ -73,6 +73,8 @@ public class FingerPane extends JComponent implements Touchable
 			_smap.addManoeuver(circleMnvr);
 			Animator.addAnimation(circleMnvr);
 
+			MainFrame.SWITCHER.resetToMap();
+			
 			return;
 		}
 
@@ -87,7 +89,10 @@ public class FingerPane extends JComponent implements Touchable
 			BoxMnvr boxMnvr = new BoxMnvr(_smap, A, B);
 			_smap.addManoeuver(boxMnvr);
 			Animator.addAnimation(boxMnvr);
+
+			MainFrame.SWITCHER.resetToMap();
 			
+			return;
 		}
 		
 		if (rectangle.height < delta)
@@ -101,6 +106,8 @@ public class FingerPane extends JComponent implements Touchable
 			LineMnvr line = new LineMnvr(_smap, A, B);
 			_smap.addManoeuver(line);
 			Animator.addAnimation(line);
+
+			MainFrame.SWITCHER.resetToMap();
 
 			return;
 		}
@@ -117,6 +124,7 @@ public class FingerPane extends JComponent implements Touchable
 			_smap.addManoeuver(lineMnvr);
 			Animator.addAnimation(lineMnvr);
 
+			MainFrame.SWITCHER.resetToMap();
 
 			return;
 		}

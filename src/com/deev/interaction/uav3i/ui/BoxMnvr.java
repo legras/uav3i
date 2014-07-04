@@ -176,7 +176,7 @@ public class BoxMnvr extends Manoeuver
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
-		paintFootprint(g2, box, isShared());
+		paintFootprint(g2, box, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
 
 		for (BoxMnvrHandles boxhndl : BoxMnvrHandles.values())
 		{
@@ -201,7 +201,7 @@ public class BoxMnvr extends Manoeuver
 					length = max/2;
 			}
 			
-			paintAdjustLine(g2, boxhndl.getPath(length, this), isShared(), fat);
+			paintAdjustLine(g2, boxhndl.getPath(length, this), getRequestedStatus() != ManoeuverRequestedStatus.NONE, fat);
 		}
 		
 		if (isSelected())

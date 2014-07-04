@@ -43,7 +43,7 @@ import uk.me.jstott.jcoord.LatLng;
 public class SymbolMap extends Map implements Touchable
 {		
 	private ArrayList<Manoeuver> _manoeuvers = null;
-	private Manoeuver _adjustingMnvr = null;
+	private Manoeuver _currentMnvr = null;
 	private Object _adjustingTouch = null;
 	
 	private ArrayList<Touchable> _touchSymbols;
@@ -123,6 +123,11 @@ public class SymbolMap extends Map implements Touchable
 
 	public synchronized void paint(Graphics2D g2)
 	{	
+		if (_currentMnvr != null)
+		{
+			_currentMnvr.instaMoveButtons();
+		}
+		
 		long currentTime = System.currentTimeMillis();
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -132,7 +137,7 @@ public class SymbolMap extends Map implements Touchable
 		int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
 		
 		// Command Grid ?
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.COMMAND)
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.COMMAND)
 		{
 			
 			LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
@@ -210,7 +215,7 @@ public class SymbolMap extends Map implements Touchable
 			g2.draw(fullTrajectory);
 		}
 		
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
 		{
 			// Tracé de séquence
 			GeneralPath seqTrajectory = _trajectory.getTrajectorySequence(this,
@@ -236,7 +241,7 @@ public class SymbolMap extends Map implements Touchable
 		
 		// Footprint
 		long time;
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
 			time = MainFrame.TIMELINE.getTimeCursorPosition();
 		else
 			time = System.currentTimeMillis();
@@ -261,7 +266,7 @@ public class SymbolMap extends Map implements Touchable
 		BufferedImage uavImg;
 		UAVDataPoint uavpoint;
 		
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
 		{
 			uavImg = _uavGrayImage;
 		}
@@ -286,7 +291,7 @@ public class SymbolMap extends Map implements Touchable
 		
 		// Dessin UAV
 		old = g2.getTransform();	
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Mode.REPLAY)
+		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
 		{
 			uavImg = _uavImage;
 			
@@ -367,20 +372,20 @@ public class SymbolMap extends Map implements Touchable
 
 	public boolean adjustAtPx(double x, double y)
 	{
-		if (_adjustingMnvr == null)
+		if (_currentMnvr == null)
 			synchronized(this)
 			{
 				for (Manoeuver m : _manoeuvers)
 					if (m.isAdjustmentInterestedAtPx(x, y))
-						_adjustingMnvr = m;
+						_currentMnvr = m;
 						
 			}
 		
 		// On demande au manoeuver de s'ajuster et on récupère la valeur booléenne
 		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
-		boolean result = _adjustingMnvr.adjustAtPx(x, y);
+		boolean result = _currentMnvr.adjustAtPx(x, y);
 
-		_adjustingMnvr.positionButtons();
+		_currentMnvr.positionButtons();
 		
 		return result;
 	}
@@ -388,21 +393,12 @@ public class SymbolMap extends Map implements Touchable
 
 	public void stopAdjusting()
 	{
-		if (_adjustingMnvr == null)
+		if (_currentMnvr == null)
 			return;
 		
-		_adjustingMnvr.positionButtons();
-		_adjustingMnvr.stopAdjusting();
-		_adjustingMnvr = null;
-	}
-
-
-	@Override
-	public void alignWith(Map map)
-	{
-		super.alignWith(map);
-		//		if (_zoneSTracker != null)
-		//			_zoneSTracker.align();
+		_currentMnvr.positionButtons();
+		_currentMnvr.stopAdjusting();
+		//_adjustingMnvr = null;
 	}
 
 	@Override
@@ -442,7 +438,7 @@ public class SymbolMap extends Map implements Touchable
 			for (Manoeuver m : _manoeuvers)
 				if (m.isAdjustmentInterestedAtPx(x, y))
 				{
-					_adjustingMnvr = m;
+					_currentMnvr = m;
 					_adjustingTouch = touchref;
 					adjustAtPx(x, y);
 					return;
@@ -474,9 +470,9 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public void updateTouch(float x, float y, Object touchref)
 	{
-		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		if (_currentMnvr != null && _adjustingTouch == touchref)
 		{
-			if (_adjustingMnvr.isModifiable())
+			if (_currentMnvr.isModifiable())
 			{
 				adjustAtPx(x, y);
 				return;
@@ -492,14 +488,15 @@ public class SymbolMap extends Map implements Touchable
 		{
 			Touchable T = _touchedSymbols.get(touchref);
 			
-			T.updateTouch(x, y, touchref);
+			if (T != null)
+				T.updateTouch(x, y, touchref);
 		}
 	}
 
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		if (_currentMnvr != null && _adjustingTouch == touchref)
 		{
 			stopAdjusting();
 			return;
@@ -509,14 +506,15 @@ public class SymbolMap extends Map implements Touchable
 		{
 			Touchable T = _touchedSymbols.get(touchref);
 			
-			T.removeTouch(x, y, touchref);
+			if (T != null)
+				T.removeTouch(x, y, touchref);
 		}
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		if (_adjustingMnvr != null && _adjustingTouch == touchref)
+		if (_currentMnvr != null && _adjustingTouch == touchref)
 			stopAdjusting();
 		
 		synchronized (_touchedSymbols)
@@ -534,6 +532,7 @@ public class SymbolMap extends Map implements Touchable
 		{
 			_manoeuvers.add(mnvr);
 			addTouchSymbol(mnvr);
+			_currentMnvr = mnvr;
 		}
 	}
 	
