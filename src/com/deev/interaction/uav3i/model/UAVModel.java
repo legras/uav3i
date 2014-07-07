@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 import uk.me.jstott.jcoord.LatLng;
@@ -17,14 +15,12 @@ import com.deev.interaction.uav3i.ui.BoxMnvr;
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
-import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverStates;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.direct.PaparazziDirectCommunication;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziRemoteCommunication;
-
-import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
-import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 public class UAVModel
 {
@@ -256,7 +252,7 @@ public class UAVModel
 		{
 		case PAPARAZZI_DIRECT:
 			LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-			mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
+//			mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
 			break;
 		case PAPARAZZI_REMOTE:
 			//        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED

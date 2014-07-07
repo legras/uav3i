@@ -29,16 +29,6 @@ public abstract class Manoeuver implements Touchable, Animation
 	public enum ManoeuverRequestedStatus {NONE, ASKED, REFUSED, ACCEPTED};
 	protected ManoeuverRequestedStatus _mnvrReqStatus= ManoeuverRequestedStatus.NONE;
 	
-	/**
-	 * <ul>
-	 *   <li>READY : état à la création, non encore soumis. La maneuvre est encore modifiable.</li>
-	 *   <li>REJECTED : soumis et rejeté -> état inutile, la manoeuvre aura été supprimée...</li>
-	 *   <li>SUBMITTED : soumis et accepté -> l'exécution de la manoeuvre peut être demandée.</li>
-	 *   <li>FADING : ??? <i>En cours d'exécution ?</i></li>
-	 * </ul>
-	 */
-	public enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
-	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
 	protected ManoeuverButtons _buttons;
 
 	protected SymbolMap _smap;
@@ -74,6 +64,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public ManoeuverRequestedStatus getRequestedStatus()
 	{
+	  //System.out.println("####### getRequestedStatus() = " + _mnvrReqStatus);
 		return _mnvrReqStatus;
 	}
 
@@ -97,16 +88,6 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public abstract ManoeuverDTO toDTO();
 
-	public void setManoeuverState(ManoeuverStates mnvrState)
-	{
-		_mnvrState = mnvrState;
-	}
-
-	public ManoeuverStates getManoeuverState()
-	{
-		return _mnvrState;
-	}
-	
 	public void wasModified()
 	{
 		_mnvrReqStatus = ManoeuverRequestedStatus.NONE;
