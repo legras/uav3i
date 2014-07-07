@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
 import uk.me.jstott.jcoord.LatLng;
@@ -35,11 +36,13 @@ public class CircleMnvrDTO extends ManoeuverDTO
     g2.translate(centerPx.x, centerPx.y);
     Ellipse2D.Double ell = new Ellipse2D.Double(-RPX, -RPX, 2*RPX, 2*RPX);
 
+    paintFootprint(g2, ell);
+
+    
     double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
 
     ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-    //paintAdjustLine(g2, ell, isShared(), _adjusting);
     paintAdjustLine(g2, ell);
 
     String largS = Math.round(Math.abs(_currentRm))+" m";

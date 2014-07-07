@@ -117,30 +117,15 @@ public class BoxMnvrDTO extends ManoeuverDTO
   public void paint(Graphics2D g2)
   {
     AffineTransform old = g2.getTransform();
-    
     Rectangle2D.Double box = getBoxOnScreen();
-    
-    //paintFootprint(g2, box, isShared());
     paintFootprint(g2, box);
 
     for (BoxMnvrHandles boxhndl : BoxMnvrHandles.values())
     {
-      //boolean fat = _adjusting && boxhndl == _adjustingHandle;
       boolean fat = true;
-      
-      //double al = fat ? _adjustingLength : 0;
       double al = 10;
-      
       double length = 0;
-      
-//      if (_adjusting)
-//      {
-//        if (fat)
-//          length = al;
-//      }
-//      else
-//      {
-        double max = _isNorthSouth ? box.height : box.width;
+      double max = _isNorthSouth ? box.height : box.width;
 
         if (_isNorthSouth && boxhndl.isNorthsouth())
           length = max/2;

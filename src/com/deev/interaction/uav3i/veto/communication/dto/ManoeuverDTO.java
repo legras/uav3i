@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.TexturePaint;
 import java.awt.font.FontRenderContext;
@@ -19,6 +20,8 @@ import java.io.Serializable;
 import javax.imageio.ImageIO;
 
 import com.deev.interaction.touch.Palette;
+import com.deev.interaction.uav3i.ui.Palette3i;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 
 public abstract class ManoeuverDTO implements Serializable
 {
@@ -37,59 +40,79 @@ public abstract class ManoeuverDTO implements Serializable
   //-----------------------------------------------------------------------------
   public abstract void paint(Graphics2D g2);
   //-----------------------------------------------------------------------------
+  /**
+   * Dessin de la ligne d'ajoustement : choix NS dans la box, éloignement de
+   * la trajectoire dans la ligne ou cercle.
+   * 
+   * @param g2
+   * @param line
+   */
   public void paintAdjustLine(Graphics2D g2, Shape line)
   {
-    //float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
-    float phase = (float) (System.currentTimeMillis() % 200)/10;
+    //float phase = (float) (System.currentTimeMillis() % 200)/10;
+    float phase = 0.f;
     float lineWidth = 3.f;
-    
-    final float dash1[] = {10.0f};
-    final BasicStroke dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
-    final BasicStroke plain  = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-    //final BasicStroke fat    = new BasicStroke((float) GRIP*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        
-//    if (adjust)
-//    {
-//      g2.setStroke(fat);
-//      g2.setPaint(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-//      g2.draw(line);
-//    }
-    
-    g2.setPaint(_YELLOW);
-      g2.setStroke(plain);
+    float fatWidth = 4.f;
+
+    final float dash1[] = {10.f, 5.f};
+    final BasicStroke dashed =
+        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
+
+    final BasicStroke plain =
+        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+
+    final BasicStroke fat =
+        new BasicStroke(lineWidth+4.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+
+    g2.setStroke(fat);
+    g2.setPaint(Palette3i.WHITE_BG.getPaint());
     g2.draw(line);
     
-//    if (isDying())
-//      g2.setPaint(Palette.blendColors(_YELLOW, (int) _killTime, (int) _DEATH_LENGTH, _RED));
-//    else
-      g2.setPaint(_GREEN);
-      g2.setStroke(dashed);
+    Paint bgPaint = Palette3i.MNVR_BACK_NOT_PINNED.getPaint();
+    
+    Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
+//    if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+//      paint = Palette3i.MNVR_REFUSED.getPaint();
+//    if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+//      paint = Palette3i.MNVR_ACCEPTED.getPaint();
+
+    g2.setPaint(bgPaint);
+    g2.setStroke(plain);
+    g2.draw(line);
+
+    g2.setPaint(paint);
+    g2.setStroke(dashed);
     g2.draw(line);
   }
   //-----------------------------------------------------------------------------
+  /**
+   * Dessin de l'emprise (zone à observer) de la manoeuvre.
+   * 
+   * @param g2
+   * @param footprint
+   */
   public void paintFootprint(Graphics2D g2, Shape footprint)
   {
-    if (_hashGW == null)
-    {
-      BufferedImage stripes;
-      try
-      {
-        stripes = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/squaresGY.png"));
-        _hashGW = new TexturePaint(stripes, new Rectangle2D.Double(0, 0, 32, 32));
-      }
-      catch (IOException e)
-      {
-        e.printStackTrace();
-      }
-    }
-    
-    //float lineWidth = isFocusedMnvr() ? 3.f : 1.f;
+//    float lineWidth = isShared() ? 3.f : 2.f;
+//    float fatWidth = isSelected() ? 10.f : 4.f;
     float lineWidth = 3.f;
+    float fatWidth = 10.f;
+
+//    Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
+//    if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+//      paint = Palette3i.MNVR_REFUSED.getPaint();
+//    if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+//      paint = Palette3i.MNVR_ACCEPTED.getPaint();
+    Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
     
-    g2.setPaint(_hashGW);
+
+    g2.setStroke(new BasicStroke(lineWidth+2.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    g2.setPaint(Palette3i.WHITE_BG.getPaint());
+    g2.draw(footprint);
+    g2.setPaint(Palette3i.MNVR_FOOT_BGRND.getPaint());
     g2.fill(footprint);
     g2.setStroke(new BasicStroke(lineWidth));
-    g2.setPaint(_GREEN);
+    g2.setPaint(paint);
     g2.draw(footprint);
   }
   //-----------------------------------------------------------------------------
