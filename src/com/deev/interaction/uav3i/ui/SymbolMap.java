@@ -288,26 +288,25 @@ public class SymbolMap extends Map implements Touchable
 		}
 		g2.setTransform(old);
 		
-		
-		// Dessin UAV
-		old = g2.getTransform();	
-		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
-		{
-			uavImg = _uavImage;
-			
-			uavpoint = UAVModel.getDataPointAtTime(MainFrame.TIMELINE.getTimeCursorPosition());
-			if (uavpoint != null)
-			{
-				Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
-				double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
-				g2.translate(uav.x, uav.y);
-
-				g2.rotate(Math.PI/2.-course);
-				g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
-
-			}
-		}
-		g2.setTransform(old);
+//		// Dessin UAV
+//		old = g2.getTransform();	
+//		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.REPLAY)
+//		{
+//			uavImg = _uavImage;
+//			
+//			uavpoint = UAVModel.getDataPointAtTime(MainFrame.TIMELINE.getTimeCursorPosition());
+//			if (uavpoint != null)
+//			{
+//				Point2D.Double uav = getScreenForLatLng(uavpoint.latlng);
+//				double course = Math.PI/2. - uavpoint.course/180.*Math.PI;
+//				g2.translate(uav.x, uav.y);
+//
+//				g2.rotate(Math.PI/2.-course);
+//				g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+//
+//			}
+//		}
+//		g2.setTransform(old);
 	}
 	
 	private GeneralPath footPrintPath(CameraFootprint footprint)
