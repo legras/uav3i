@@ -272,9 +272,9 @@ public class UAVModel
 		}
 	}
 
-	public static void jumpToManoeuver(Manoeuver mnvr)
+	public static void executeManoeuver(Manoeuver mnvr)
 	{
-		LoggerUtil.LOG.log(Level.INFO, "Jump to manoeuver requested");
+		LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
 
     // Communication de la manoeuvre pour dessin sur l'IHM Veto.
     paparazziCommunication.communicateManoeuver(mnvr.toDTO());
