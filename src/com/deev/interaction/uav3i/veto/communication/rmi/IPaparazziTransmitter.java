@@ -46,9 +46,15 @@ public interface IPaparazziTransmitter extends Remote
   //-----------------------------------------------------------------------------
 //  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
+  /**
+   * Communication de la manoeuvre au Veto : permet son dessin sur l'IHM.
+   * 
+   * @param mnvrDTO le DTO de la manoeuvre à afficher.
+   * @throws RemoteException
+   */
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
-  public boolean executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
   public void deleteManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------

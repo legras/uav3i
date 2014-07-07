@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import javax.swing.JOptionPane;
+
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVModel;
@@ -102,10 +104,15 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public boolean executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
-    return true;
+    //return true;
+//    int response = JOptionPane.showConfirmDialog(Veto.frame,
+//                                                 "<html>Execution of this manoeuver?",
+//                                                 "Execution?",
+//                                                 JOptionPane.YES_NO_OPTION,
+//                                                 JOptionPane.WARNING_MESSAGE);
   }
   //-----------------------------------------------------------------------------
   @Override

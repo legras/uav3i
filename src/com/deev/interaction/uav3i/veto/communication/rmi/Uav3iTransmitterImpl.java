@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {
@@ -38,6 +39,12 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   {
     UAVModel.getWayPoints().updateWayPoint(wayPoint);
     LoggerUtil.LOG.info("WayPoint updated: " + wayPoint);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
+  {
+    
   }
   //-----------------------------------------------------------------------------
   @Override

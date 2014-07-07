@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public interface IUav3iTransmitter extends Remote
 {
@@ -47,6 +48,16 @@ public interface IUav3iTransmitter extends Remote
    * @throws RemoteException
    */
   public void updateWayPoint(UAVWayPoint wayPoint) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  /**
+   * Transmission du résultat de la demande de la demande d'exécution
+   * d'une manoeuvre.
+   * 
+   * @param mnvrDTO
+   * @param result
+   * @throws RemoteException
+   */
+  public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Appelé par l'appli côté Paparazzi pour savoir si le client est en vie. La méthode

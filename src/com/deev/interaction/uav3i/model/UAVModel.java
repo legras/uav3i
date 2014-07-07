@@ -273,7 +273,7 @@ public class UAVModel
     paparazziCommunication.communicateManoeuver(mnvrDTO);
     
     mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
-    System.out.println(paparazziCommunication.executeManoeuver(mnvrDTO));
+    paparazziCommunication.executeManoeuver(mnvrDTO);
 		
 //    switch (mnvr.getClass().getSimpleName())
 //    {
