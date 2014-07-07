@@ -107,6 +107,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
+    new Thread(new AskPaparazziGuruForExecution(mnvrDTO)).start();
     //return true;
 //    int response = JOptionPane.showConfirmDialog(Veto.frame,
 //                                                 "<html>Execution of this manoeuver?",
