@@ -162,6 +162,15 @@ public class SymbolMapVeto extends JComponent
       g2.draw(fullTrajectory);
     }
     
+    synchronized(this)
+    {
+      for (ManoeuverDTO m : manoeuvers)
+      {
+        //System.out.println("Et pourtant j'en ai au moins une à dessiner ! --> " + m);
+        m.paint(g2);
+      }
+    }
+    
     // Dessin UAV
     AffineTransform old = g2.getTransform();  
     BufferedImage uavImg;
@@ -182,14 +191,7 @@ public class SymbolMapVeto extends JComponent
     }
     g2.setTransform(old);
     
-    synchronized(this)
-    {
-      for (ManoeuverDTO m : manoeuvers)
-      {
-        //System.out.println("Et pourtant j'en ai au moins une à dessiner ! --> " + m);
-        m.paint(g2);
-      }
-    }
+
   }
   //-----------------------------------------------------------------------------
 }
