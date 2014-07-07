@@ -300,4 +300,9 @@ public class MainFrame extends JFrame implements ActionListener
 			return;
 		}
 	}
+
+  public static SymbolMap getSymbolMap()
+  {
+    return _SMAP;
+  }
 }
