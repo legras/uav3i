@@ -66,7 +66,6 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public ManoeuverRequestedStatus getRequestedStatus()
 	{
-	  System.out.println("####### getRequestedStatus() = " + _mnvrReqStatus);
 		return _mnvrReqStatus;
 	}
 
