@@ -176,7 +176,7 @@ public class BoxMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "BoxMnvrDTO [_A=" + _A + ", _B=" + _B + ", _isNorthSouth=" + _isNorthSouth + "]";
+    return "BoxMnvrDTO [id=" + id + ", _A=" + _A + ", _B=" + _B + ", _isNorthSouth=" + _isNorthSouth + "]";
   }
   //-----------------------------------------------------------------------------
 }

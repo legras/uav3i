@@ -45,6 +45,7 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   @Override
   public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
   {
+    System.out.println("####### Uav3iTransmitterImpl.resultAskExecution(" + mnvrDTO + ", " + result + ")");
   }
   //-----------------------------------------------------------------------------
   @Override

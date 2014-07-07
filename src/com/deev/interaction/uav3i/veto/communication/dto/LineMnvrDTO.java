@@ -100,7 +100,7 @@ public class LineMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "LineMnvrDTO [_A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + ", _u=" + _u + ", _v=" + _v + "]";
+    return "LineMnvrDTO [id=" + id + ", _A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + ", _u=" + _u + ", _v=" + _v + "]";
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)

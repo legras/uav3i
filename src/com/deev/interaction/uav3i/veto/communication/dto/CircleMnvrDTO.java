@@ -66,7 +66,7 @@ public class CircleMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "CircleMnvrDTO [_center=" + _center + ", _currentRm=" + _currentRm + "]";
+    return "CircleMnvrDTO [id=" + id + ", _center=" + _center + ", _currentRm=" + _currentRm + "]";
   }
   //-----------------------------------------------------------------------------
 }
