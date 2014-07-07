@@ -15,11 +15,13 @@ import com.deev.interaction.uav3i.ui.BoxMnvr;
 import com.deev.interaction.uav3i.ui.CircleMnvr;
 import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.direct.PaparazziDirectCommunication;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziRemoteCommunication;
 
 public class UAVModel
@@ -252,19 +254,8 @@ public class UAVModel
 		{
 		case PAPARAZZI_DIRECT:
 			LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-//			mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
 			break;
 		case PAPARAZZI_REMOTE:
-			//        if(paparazziCommunication.executeManoeuver(mnvr.toDTO()))  // ACCEPTED
-			//        {
-			//          mnvr.setManoeuverState(ManoeuverStates.SUBMITTED);
-			//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") SUBMITED");
-			//        }
-			//        else  // REJECTED
-			//        {
-			//          mnvr.kill();
-			//          LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") REJECTED");
-			//        }
 			paparazziCommunication.communicateManoeuver(mnvr.toDTO());
 			break;
 		default:
@@ -276,87 +267,48 @@ public class UAVModel
 	{
 		LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
 
-    // Communication de la manoeuvre pour dessin sur l'IHM Veto.
-    paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+		ManoeuverDTO mnvrDTO = mnvr.toDTO();
 		
-    switch (mnvr.getClass().getSimpleName())
-    {
-      case "CircleMnvr":
-        CircleMnvr circleMnvr = (CircleMnvr) mnvr;
-//        // Communication de la manoeuvre pour dessin sur l'IHM Veto.
-//        paparazziCommunication.communicateManoeuver(circleMnvr.toDTO());
-        // Move way point for circle center.
-        paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
-        paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
-        paparazziCommunication.jumpToBlock("Circle");
-        break;
-      case "LineMnvr":
-        LineMnvr lineMnvr = (LineMnvr) mnvr;
-//        paparazziCommunication.communicateManoeuver(lineMnvr.toDTO());
-        // Move way points to each side of the line.
-        paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
-        paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
-        // Circle radius may have previously been modified by a circle
-        // manoeuver, set it to default.
-        paparazziCommunication.setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
-        paparazziCommunication.jumpToBlock("Line_L1-L2");
-        break;
-      case "BoxMnvr":
-        BoxMnvr boxMnvr = (BoxMnvr) mnvr;
-//        paparazziCommunication.communicateManoeuver(boxMnvr.toDTO());
-        // Move way points to each side of the box.
-        paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
-        paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
-        // Circle radius may have previously been modified by a circle
-        // manoeuver, set it to default.
-        paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-        if (boxMnvr.isNorthSouth())
-          paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
-        else
-          // West-East
-          paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
-        break;
-    }
-
-		/*
-		if(mnvr.getManoeuverState() == ManoeuverStates.READY)  // Manoeuver not already submited to the Veto Server
-			//submitManoeuver(mnvr);
-			communicateManoeuver(mnvr);
-		if(mnvr.getManoeuverState() == ManoeuverStates.SUBMITTED)
-		{
-			switch (mnvr.getClass().getSimpleName())
-			{
-			case "CircleMnvr":
-				CircleMnvr circleMnvr = (CircleMnvr) mnvr;
-				// Move way point for circle center.
-				paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
-				paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
-				paparazziCommunication.jumpToBlock("Circle");
-				break;
-			case "LineMnvr":
-				LineMnvr lineMnvr = (LineMnvr) mnvr;
-				// Move way points to each side of the line.
-				paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
-				paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
-				// Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-				paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-				paparazziCommunication.jumpToBlock("Line_L1-L2");
-				break;
-			case "BoxMnvr":
-				BoxMnvr boxMnvr = (BoxMnvr) mnvr;
-				// Move way points to each side of the box.
-				paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
-				paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
-				// Circle radius may have previously been modified by a circle manoeuver, set it to default. 
-				paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-				if(boxMnvr.isNorthSouth())
-					paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
-				else  // West-East
-					paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
-				break;
-			}
-		}
-		*/
+    // Communication de la manoeuvre pour dessin sur l'IHM Veto.
+    paparazziCommunication.communicateManoeuver(mnvrDTO);
+    
+    mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+    System.out.println(paparazziCommunication.executeManoeuver(mnvrDTO));
+		
+//    switch (mnvr.getClass().getSimpleName())
+//    {
+//      case "CircleMnvr":
+//        CircleMnvr circleMnvr = (CircleMnvr) mnvr;
+//        // Move way point for circle center.
+//        paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+//        paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
+//        paparazziCommunication.jumpToBlock("Circle");
+//        break;
+//      case "LineMnvr":
+//        LineMnvr lineMnvr = (LineMnvr) mnvr;
+//        // Move way points to each side of the line.
+//        paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
+//        paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
+//        // Circle radius may have previously been modified by a circle
+//        // manoeuver, set it to default.
+//        paparazziCommunication.setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+//        paparazziCommunication.jumpToBlock("Line_L1-L2");
+//        break;
+//      case "BoxMnvr":
+//        BoxMnvr boxMnvr = (BoxMnvr) mnvr;
+//        // Move way points to each side of the box.
+//        paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
+//        paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
+//        // Circle radius may have previously been modified by a circle
+//        // manoeuver, set it to default.
+//        paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+//        if (boxMnvr.isNorthSouth())
+//          paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
+//        else
+//          // West-East
+//          paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
+//        break;
+//    }
 	}
 
 	public static void deleteManoeuver(Manoeuver mnvr)

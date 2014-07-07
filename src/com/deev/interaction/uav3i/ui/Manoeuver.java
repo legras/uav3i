@@ -64,24 +64,29 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public ManoeuverRequestedStatus getRequestedStatus()
 	{
-	  //System.out.println("####### getRequestedStatus() = " + _mnvrReqStatus);
+	  System.out.println("####### getRequestedStatus() = " + _mnvrReqStatus);
 		return _mnvrReqStatus;
 	}
 
-	/**
-	 * A completer retour VETO
-	 */
-	public void setReqStatusAccepted()
+//	/**
+//	 * A completer retour VETO
+//	 */
+//	public void setReqStatusAccepted()
+//	{
+//		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
+//	}
+//
+//	/**
+//	 * A completer retour VETO
+//	 */
+//	public void setReqStatusRefused()
+//	{
+//		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
+//	}
+	
+	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
-		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
-	}
-
-	/**
-	 * A completer retour VETO
-	 */
-	public void setReqStatusRefused()
-	{
-		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
+	  _mnvrReqStatus = status;
 	}
 	
 	public abstract void paint(Graphics2D g2);
