@@ -18,8 +18,9 @@ public class CircleMnvrDTO extends ManoeuverDTO
   private LatLng _center;
   private double _currentRm = 500.;
   //-----------------------------------------------------------------------------
-  public CircleMnvrDTO(LatLng center, double currentRm)
+  public CircleMnvrDTO(int id, LatLng center, double currentRm)
   {
+    this.id    = id;
     _center    = center;
     _currentRm = currentRm;
   }

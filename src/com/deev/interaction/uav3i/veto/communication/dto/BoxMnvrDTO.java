@@ -102,8 +102,9 @@ public class BoxMnvrDTO extends ManoeuverDTO
   };
 
   //-----------------------------------------------------------------------------
-  public BoxMnvrDTO(LatLng A, LatLng B, boolean isNorthSouth)
+  public BoxMnvrDTO(int id, LatLng A, LatLng B, boolean isNorthSouth)
   {
+    this.id       = id;
     _A            = A;
     _B            = B;
     _isNorthSouth = isNorthSouth;

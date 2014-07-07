@@ -205,6 +205,6 @@ public class CircleMnvr extends Manoeuver
   @Override
   public ManoeuverDTO toDTO()
   {
-    return new CircleMnvrDTO(_center, _currentRm);
+    return new CircleMnvrDTO(id, _center, _currentRm);
   }
 }

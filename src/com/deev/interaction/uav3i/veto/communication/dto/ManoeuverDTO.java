@@ -37,6 +37,8 @@ public abstract class ManoeuverDTO implements Serializable
   private static Color        _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
   private static Color        _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
   private static TexturePaint _hashGW  = null;
+  
+  protected int id;
   //-----------------------------------------------------------------------------
   public abstract void paint(Graphics2D g2);
   //-----------------------------------------------------------------------------
@@ -226,5 +228,14 @@ public abstract class ManoeuverDTO implements Serializable
 //    g2.setStroke(dashed);
 //    g2.draw(line);
 //  }
+  //-----------------------------------------------------------------------------
+  /**
+   * @return the id
+   */
+  public int getId() { return id; }
+  /**
+   * @param id the id to set
+   */
+  public void setId(int id) { this.id = id; }
   //-----------------------------------------------------------------------------
 }

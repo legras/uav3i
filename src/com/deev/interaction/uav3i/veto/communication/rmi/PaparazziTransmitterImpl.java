@@ -228,4 +228,38 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     }
   }
   //-----------------------------------------------------------------------------
+
+  
+  
+  
+  
+  
+  
+  //-----------------------------------------------------------------------------
+  private class AskPaparazziGuruForExecution implements Runnable
+  {
+    private ManoeuverDTO mnvrDTO;
+    public AskPaparazziGuruForExecution(ManoeuverDTO mnvrDTO)
+    {
+      this.mnvrDTO = mnvrDTO;
+    }
+    @Override
+    public void run()
+    {
+      int response = JOptionPane.showConfirmDialog(Veto.frame,
+                                                   "<html>Execution of this manoeuver?",
+                                                   "Execution?",
+                                                   JOptionPane.YES_NO_OPTION,
+                                                   JOptionPane.WARNING_MESSAGE);
+      try
+      {
+        uav3iTransmitter.resultAskExecution(mnvrDTO, (response == 0));
+      }
+      catch (RemoteException e)
+      {
+        e.printStackTrace();
+      }
+    }
+  }
+  //-----------------------------------------------------------------------------
 }

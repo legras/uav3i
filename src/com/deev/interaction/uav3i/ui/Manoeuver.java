@@ -47,6 +47,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
 	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
+	protected int id;
+	
 	public boolean isPinned()
 	{
 		return _buttons.isPinned();
@@ -337,4 +339,20 @@ public abstract class Manoeuver implements Touchable, Animation
 	{
 		return 1;
 	}
+
+  /**
+   * @return the number
+   */
+  public int getId()
+  {
+    return id;
+  }
+
+  /**
+   * @param number the number to set
+   */
+  public void setId(int id)
+  {
+    this.id = id;
+  }
 }

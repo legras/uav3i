@@ -23,10 +23,12 @@ public class LineMnvrDTO extends ManoeuverDTO
   // Codage de l'orientation de la droite dans le plan ?
   private Point2D.Double _u, _v;
   //-----------------------------------------------------------------------------
-  public LineMnvrDTO(LatLng A, LatLng B,
+  public LineMnvrDTO(int id,
+                     LatLng A, LatLng B,
                      double currentRm,
                      Point2D.Double u, Point2D.Double v)
   {
+    this.id   = id;
     _A         = A;
     _B         = B;
     _currentRm = currentRm;
