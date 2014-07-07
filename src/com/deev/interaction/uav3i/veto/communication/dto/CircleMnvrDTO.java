@@ -25,8 +25,8 @@ public class CircleMnvrDTO extends ManoeuverDTO
     _currentRm = currentRm;
   }
   //-----------------------------------------------------------------------------
-  public LatLng getCenter()    { return _center;    }
-  public double getCurrentRm() { return _currentRm; }
+  public LatLng getCenter()        { return _center;    }
+  public double getCurrentRadius() { return _currentRm; }
   //-----------------------------------------------------------------------------
   @Override
   public void paint(Graphics2D g2)

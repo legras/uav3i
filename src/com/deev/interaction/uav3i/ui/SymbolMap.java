@@ -556,11 +556,11 @@ public class SymbolMap extends Map implements Touchable
 		}
 	}
 	
-	public Manoeuver findManoeuverByManoeuverDTO(ManoeuverDTO mnvrDTO)
+	public Manoeuver findManoeuverById(int manoeuverId)
 	{
 	  for(Manoeuver mnvr : _manoeuvers)
 	  {
-	    if(mnvr.getId() == mnvrDTO.getId())
+	    if(mnvr.getId() == manoeuverId)
 	      return mnvr;
 	  }
 	  return null;

@@ -110,8 +110,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
     _isNorthSouth = isNorthSouth;
   }
   //-----------------------------------------------------------------------------
-  public LatLng  get_A()        { return _A;            }
-  public LatLng  get_B()        { return _B;            }
+  public LatLng  getBoxA()      { return _A;            }
+  public LatLng  getBoxB()      { return _B;            }
   public boolean isNorthSouth() { return _isNorthSouth; }
   //-----------------------------------------------------------------------------
   @Override

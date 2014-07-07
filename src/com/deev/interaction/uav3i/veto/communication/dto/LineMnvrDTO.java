@@ -36,9 +36,11 @@ public class LineMnvrDTO extends ManoeuverDTO
     _v         = v;
   }
   //-----------------------------------------------------------------------------
-  public LatLng getA()         { return _A;         }
-  public LatLng getB()         { return _B;         }
-  public double getCurrentRm() { return _currentRm; }
+  public LatLng get_A()        { return _A;                 }
+  public LatLng getTrajA()     { return getOffsetPoint(_A); }
+  public LatLng get_B()        { return _B;                 }
+  public LatLng getTrajB()     { return getOffsetPoint(_B); }
+  public double getCurrentRm() { return _currentRm;         }
   //-----------------------------------------------------------------------------
   @Override
   public void paint(Graphics2D g2)
@@ -95,6 +97,15 @@ public class LineMnvrDTO extends ManoeuverDTO
 //    }
 
     g2.setTransform(old);
+  }
+  //-----------------------------------------------------------------------------
+  private LatLng getOffsetPoint(LatLng pointLatLng)
+  {
+    Point2D.Double pointPixels = Veto.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
+    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
+                                                           pointPixels.y + _v.y * Rpx);
+    return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
   }
   //-----------------------------------------------------------------------------
   @Override
