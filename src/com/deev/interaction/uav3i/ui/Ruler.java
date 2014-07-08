@@ -95,7 +95,7 @@ public class Ruler implements Touchable
 		
 		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), " m");
 		g2.translate(0, -_HALFW);
-		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), " min");
+		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), " s");
 		g2.translate(0, _HALFW);
 
 		BasicStroke stroke;

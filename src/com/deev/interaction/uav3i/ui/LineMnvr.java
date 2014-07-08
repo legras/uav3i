@@ -192,9 +192,6 @@ public class LineMnvr extends Manoeuver
 
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		if (isShared())
-			return false;
-		
 		// On projette tout en screen
 		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
 		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
@@ -242,6 +239,7 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
+		System.out.println(_moveState);
 		if (_moveState == LineMnvrMoveStates.FULL)
 			return -1.f;
 

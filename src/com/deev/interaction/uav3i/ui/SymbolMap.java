@@ -412,7 +412,7 @@ public class SymbolMap extends Map implements Touchable
 
 		synchronized (_touchSymbols)
 		{
-			float interest = -1.f;;
+			float interest = -1.f;
 			
 			Iterator<Touchable> itr = _touchSymbols.iterator();
 			while(itr.hasNext())
@@ -495,7 +495,7 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		if (_currentMnvr != null && _adjustingTouch == touchref)
+		if (_adjustingTouch == touchref)
 		{
 			stopAdjusting();
 			return;
@@ -513,7 +513,7 @@ public class SymbolMap extends Map implements Touchable
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		if (_currentMnvr != null && _adjustingTouch == touchref)
+		if (_adjustingTouch == touchref)
 			stopAdjusting();
 		
 		synchronized (_touchedSymbols)

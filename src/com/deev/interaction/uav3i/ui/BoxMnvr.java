@@ -269,9 +269,6 @@ public class BoxMnvr extends Manoeuver
 	@Override
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		if (isShared())
-			return false;
-		
 		Rectangle2D.Double box = getBoxOnScreen();
 		
 		if (!_isNorthSouth)
