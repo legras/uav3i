@@ -40,7 +40,6 @@ public class Veto extends JFrame
   {
     super("uav3i - Veto");
     this.setSize(1280, 800);
-    this.setLocationRelativeTo(null);
     this.setResizable(false);
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.addWindowListener(new WindowAdapter()
@@ -106,7 +105,8 @@ public class Veto extends JFrame
     {
       e.printStackTrace();
     }
-    
+    this.setLocationRelativeTo(null);
+
     frame = this;
   }
   //-----------------------------------------------------------------------------
