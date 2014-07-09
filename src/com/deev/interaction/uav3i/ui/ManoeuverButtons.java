@@ -167,7 +167,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (_submitButton == null)
 			return false;
 		
-		return !_submitButton.isSelected() && !isPinned();
+		return !isPinned();
 	}
 	
 	public boolean isSubmitted()
@@ -184,22 +184,21 @@ public class ManoeuverButtons implements Animation, ActionListener
 			return;
 		
 		_submitButton.setSelected(sub);
-		
-		if (!_submitButton.isSelected())
-			setJump(false);
-		
-		//_submitButton.setEnabled(!sub);
 	}
 	
 	public void setJump(boolean jump)
 	{
-		setSubmitted(jump);
+		if (_jumpButton.isSelected() == false)
+			return;
+		
+		setSubmitted(true);
+		_manoeuver.setReqStatusAsked();
 		
 		if (_jumpButton == null)
 			return;
 		
-		_jumpButton.setSelected(jump);
-		_jumpButton.setEnabled(!jump);
+		_jumpButton.setSelected(true);
+		_jumpButton.setEnabled(false);
 	}
 	
 	public void show()

@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.channels.spi.AbstractSelectionKey;
 
 import javax.imageio.ImageIO;
 
@@ -69,22 +70,6 @@ public abstract class Manoeuver implements Touchable, Animation
 		return _mnvrReqStatus;
 	}
 
-//	/**
-//	 * A completer retour VETO
-//	 */
-//	public void setReqStatusAccepted()
-//	{
-//		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
-//	}
-//
-//	/**
-//	 * A completer retour VETO
-//	 */
-//	public void setReqStatusRefused()
-//	{
-//		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
-//	}
-	
 	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
 	  _mnvrReqStatus = status;
@@ -281,10 +266,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	 */
 	protected float getMoveInterest()
 	{
-		if (isShared())
-			return -1.f;
-
-		if (MainFrame.getAppState() != MainFrameState.REPLAY)
+		if (getRequestedStatus() != ManoeuverRequestedStatus.ASKED &&
+			MainFrame.getAppState() != MainFrameState.REPLAY)
 			return _MOVE_INTEREST;
 		else
 			return -1.f;
@@ -295,10 +278,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	 */
 	protected float getAdjustInterest()
 	{
-		if (isShared())
-			return -1.f;
-
-		if (MainFrame.getAppState() != MainFrameState.REPLAY)
+		if (getRequestedStatus() != ManoeuverRequestedStatus.ASKED &&
+			MainFrame.getAppState() != MainFrameState.REPLAY)
 			return _ADJUST_INTEREST;
 		else
 			return -1.f;

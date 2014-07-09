@@ -33,47 +33,47 @@ public class Launcher
 			case REPLAY: // Lancement avec replay (infos dans le fichier).
 				UAVModel.initialize(UAVModel.class.getResourceAsStream("pentrez.data"));
 				VideoModel.initialize();
-        SwingUtilities.invokeLater(new Runnable()
-        {
-          public void run()
-          { 
-            final MainFrame frame = new MainFrame();
-            frame.setVisible(true); 
-            frame.requestFocusInWindow();
-            if (UAV3iSettings.getFullscreen())
-              java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-          }
-        });
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{ 
+						final MainFrame frame = new MainFrame();
+						frame.setVisible(true); 
+						frame.requestFocusInWindow();
+						if (UAV3iSettings.getFullscreen())
+							java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+					}
+				});
 				break;
 			case PAPARAZZI_DIRECT:
 			case PAPARAZZI_REMOTE:
 				UAVModel.initialize();
 				VideoModel.initialize();
-		    SwingUtilities.invokeLater(new Runnable()
-		    {
-		      public void run()
-		      { 
-		        final MainFrame frame = new MainFrame();
-		        frame.setVisible(true); 
-		        frame.requestFocusInWindow();
-		        if (UAV3iSettings.getFullscreen())
-		          java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-		      }
-		    });
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{ 
+						final MainFrame frame = new MainFrame();
+						frame.setVisible(true); 
+						frame.requestFocusInWindow();
+						if (UAV3iSettings.getFullscreen())
+							java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+					}
+				});
 				break;
 			case VETO:
-        SwingUtilities.invokeLater(new Runnable()
-        {
-          public void run()
-          { 
-            final Veto frame = new Veto();
-            frame.setVisible(true); 
-            frame.requestFocusInWindow();
-            
-            //UAVModel.initialize();
-          }
-        });
-			  break;
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{ 
+						final Veto frame = new Veto();
+						frame.setVisible(true); 
+						frame.requestFocusInWindow();
+	
+						//UAVModel.initialize();
+					}
+				});
+				break;
 			default:
 				break;
 		}
