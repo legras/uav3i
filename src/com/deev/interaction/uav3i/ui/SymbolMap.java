@@ -533,12 +533,28 @@ public class SymbolMap extends Map implements Touchable
 	public void shareManoeuver(Manoeuver mnvr)
 	{
 		UAVModel.communicateManoeuver(mnvr);
+		
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+			{
+				if (m == mnvr)
+					m.setShared(true);
+				else
+					m.setShared(false);
+			}
+		}
+	}
+	
+	public void askManoeuver(Manoeuver mnvr)
+	{
+		
 	}
 	
 	
 	public void addManoeuver(Manoeuver mnvr)
 	{
-	  mnvr.setId(++manoeuverSequence);
+		mnvr.setId(++manoeuverSequence);
 		synchronized (this)
 		{
 			_manoeuvers.add(mnvr);
