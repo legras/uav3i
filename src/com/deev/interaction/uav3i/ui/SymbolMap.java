@@ -597,14 +597,14 @@ public class SymbolMap extends Map implements Touchable
 		// On unlock les share et les jump et le delete
 		_areShareAndAskLocked = false;
 		
-		synchronized(this)
-		{
+//		synchronized(this)
+//		{
 			for (Manoeuver m : _manoeuvers)
 			{
 				m.lockShareAndAsk(false);
 				m.lockDelete(false);
 			}
-		}
+//		}
 	}
 	
 	public boolean areShareAndAskLocked()
