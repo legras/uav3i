@@ -102,15 +102,16 @@ public class BoxMnvrDTO extends ManoeuverDTO
   };
 
   //-----------------------------------------------------------------------------
-  public BoxMnvrDTO(LatLng A, LatLng B, boolean isNorthSouth)
+  public BoxMnvrDTO(int id, LatLng A, LatLng B, boolean isNorthSouth)
   {
+    this.id       = id;
     _A            = A;
     _B            = B;
     _isNorthSouth = isNorthSouth;
   }
   //-----------------------------------------------------------------------------
-  public LatLng  get_A()        { return _A;            }
-  public LatLng  get_B()        { return _B;            }
+  public LatLng  getBoxA()      { return _A;            }
+  public LatLng  getBoxB()      { return _B;            }
   public boolean isNorthSouth() { return _isNorthSouth; }
   //-----------------------------------------------------------------------------
   @Override
@@ -175,7 +176,7 @@ public class BoxMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "BoxMnvrDTO [_A=" + _A + ", _B=" + _B + ", _isNorthSouth=" + _isNorthSouth + "]";
+    return "BoxMnvrDTO [id=" + id + ", _A=" + _A + ", _B=" + _B + ", _isNorthSouth=" + _isNorthSouth + "]";
   }
   //-----------------------------------------------------------------------------
 }

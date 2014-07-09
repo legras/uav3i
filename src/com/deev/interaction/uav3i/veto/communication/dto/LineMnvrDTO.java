@@ -23,10 +23,12 @@ public class LineMnvrDTO extends ManoeuverDTO
   // Codage de l'orientation de la droite dans le plan ?
   private Point2D.Double _u, _v;
   //-----------------------------------------------------------------------------
-  public LineMnvrDTO(LatLng A, LatLng B,
+  public LineMnvrDTO(int id,
+                     LatLng A, LatLng B,
                      double currentRm,
                      Point2D.Double u, Point2D.Double v)
   {
+    this.id   = id;
     _A         = A;
     _B         = B;
     _currentRm = currentRm;
@@ -34,9 +36,11 @@ public class LineMnvrDTO extends ManoeuverDTO
     _v         = v;
   }
   //-----------------------------------------------------------------------------
-  public LatLng getA()         { return _A;         }
-  public LatLng getB()         { return _B;         }
-  public double getCurrentRm() { return _currentRm; }
+  public LatLng get_A()        { return _A;                 }
+  public LatLng getTrajA()     { return getOffsetPoint(_A); }
+  public LatLng get_B()        { return _B;                 }
+  public LatLng getTrajB()     { return getOffsetPoint(_B); }
+  public double getCurrentRm() { return _currentRm;         }
   //-----------------------------------------------------------------------------
   @Override
   public void paint(Graphics2D g2)
@@ -95,10 +99,19 @@ public class LineMnvrDTO extends ManoeuverDTO
     g2.setTransform(old);
   }
   //-----------------------------------------------------------------------------
+  private LatLng getOffsetPoint(LatLng pointLatLng)
+  {
+    Point2D.Double pointPixels = Veto.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
+    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
+                                                           pointPixels.y + _v.y * Rpx);
+    return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+  }
+  //-----------------------------------------------------------------------------
   @Override
   public String toString()
   {
-    return "LineMnvrDTO [_A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + ", _u=" + _u + ", _v=" + _v + "]";
+    return "LineMnvrDTO [id=" + id + ", _A=" + _A + ", _B=" + _B + ", _currentRm=" + _currentRm + ", _u=" + _u + ", _v=" + _v + "]";
   }
   //-----------------------------------------------------------------------------
   /* (non-Javadoc)

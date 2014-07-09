@@ -18,14 +18,15 @@ public class CircleMnvrDTO extends ManoeuverDTO
   private LatLng _center;
   private double _currentRm = 500.;
   //-----------------------------------------------------------------------------
-  public CircleMnvrDTO(LatLng center, double currentRm)
+  public CircleMnvrDTO(int id, LatLng center, double currentRm)
   {
+    this.id    = id;
     _center    = center;
     _currentRm = currentRm;
   }
   //-----------------------------------------------------------------------------
-  public LatLng getCenter()    { return _center;    }
-  public double getCurrentRm() { return _currentRm; }
+  public LatLng getCenter()        { return _center;    }
+  public double getCurrentRadius() { return _currentRm; }
   //-----------------------------------------------------------------------------
   @Override
   public void paint(Graphics2D g2)
@@ -65,7 +66,7 @@ public class CircleMnvrDTO extends ManoeuverDTO
   @Override
   public String toString()
   {
-    return "CircleMnvrDTO [_center=" + _center + ", _currentRm=" + _currentRm + "]";
+    return "CircleMnvrDTO [id=" + id + ", _center=" + _center + ", _currentRm=" + _currentRm + "]";
   }
   //-----------------------------------------------------------------------------
 }

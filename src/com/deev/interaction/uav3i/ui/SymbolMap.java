@@ -36,6 +36,7 @@ import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -45,6 +46,7 @@ public class SymbolMap extends Map implements Touchable
 	private ArrayList<Manoeuver> _manoeuvers = null;
 	private Manoeuver _currentMnvr = null;
 	private Object _adjustingTouch = null;
+	private int manoeuverSequence = 0;
 	
 	private ArrayList<Touchable> _touchSymbols;
 	private HashMap<Object, Touchable> _touchedSymbols;
@@ -526,7 +528,8 @@ public class SymbolMap extends Map implements Touchable
 	}
 
 	public void addManoeuver(Manoeuver mnvr)
-	{	
+	{
+	  mnvr.setId(++manoeuverSequence);
 		synchronized (this)
 		{
 			_manoeuvers.add(mnvr);
@@ -551,6 +554,16 @@ public class SymbolMap extends Map implements Touchable
 			_manoeuvers.remove(mnvr);
 			removeTouchSymbol(mnvr);
 		}
+	}
+	
+	public Manoeuver findManoeuverById(int manoeuverId)
+	{
+	  for(Manoeuver mnvr : _manoeuvers)
+	  {
+	    if(mnvr.getId() == manoeuverId)
+	      return mnvr;
+	  }
+	  return null;
 	}
 
 }

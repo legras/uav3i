@@ -30,16 +30,6 @@ public abstract class Manoeuver implements Touchable, Animation
 	public enum ManoeuverRequestedStatus {NONE, ASKED, REFUSED, ACCEPTED};
 	protected ManoeuverRequestedStatus _mnvrReqStatus= ManoeuverRequestedStatus.NONE;
 	
-	/**
-	 * <ul>
-	 *   <li>READY : état à la création, non encore soumis. La maneuvre est encore modifiable.</li>
-	 *   <li>REJECTED : soumis et rejeté -> état inutile, la manoeuvre aura été supprimée...</li>
-	 *   <li>SUBMITTED : soumis et accepté -> l'exécution de la manoeuvre peut être demandée.</li>
-	 *   <li>FADING : ??? <i>En cours d'exécution ?</i></li>
-	 * </ul>
-	 */
-	public enum ManoeuverStates {READY, SUBMITTED, REJECTED, FADING};
-	protected ManoeuverStates _mnvrState = ManoeuverStates.READY;
 	protected ManoeuverButtons _buttons;
 
 	protected SymbolMap _smap;
@@ -57,6 +47,8 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
 	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
+	
+	protected int id;
 	
 	public boolean isPinned()
 	{
@@ -78,44 +70,15 @@ public abstract class Manoeuver implements Touchable, Animation
 		return _mnvrReqStatus;
 	}
 
-	/**
-	 * Interne
-	 */
-	public void setReqStatusAsked()
+	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
-		_mnvrReqStatus = ManoeuverRequestedStatus.ASKED;
-	}
-
-	/**
-	 * A completer retour VETO
-	 */
-	public void setReqStatusAccepted()
-	{
-		_mnvrReqStatus = ManoeuverRequestedStatus.ACCEPTED;
-	}
-
-	/**
-	 * A completer retour VETO
-	 */
-	public void setReqStatusRefused()
-	{
-		_mnvrReqStatus = ManoeuverRequestedStatus.REFUSED;
+	  _mnvrReqStatus = status;
 	}
 	
 	public abstract void paint(Graphics2D g2);
 
 	public abstract ManoeuverDTO toDTO();
 
-	public void setManoeuverState(ManoeuverStates mnvrState)
-	{
-		_mnvrState = mnvrState;
-	}
-
-	public ManoeuverStates getManoeuverState()
-	{
-		return _mnvrState;
-	}
-	
 	public void wasModified()
 	{
 		_mnvrReqStatus = ManoeuverRequestedStatus.NONE;
@@ -356,4 +319,20 @@ public abstract class Manoeuver implements Touchable, Animation
 	{
 		return 1;
 	}
+
+  /**
+   * @return the number
+   */
+  public int getId()
+  {
+    return id;
+  }
+
+  /**
+   * @param number the number to set
+   */
+  public void setId(int id)
+  {
+    this.id = id;
+  }
 }

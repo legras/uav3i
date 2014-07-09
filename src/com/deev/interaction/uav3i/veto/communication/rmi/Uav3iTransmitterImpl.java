@@ -4,7 +4,11 @@ import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.ui.Manoeuver;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {
@@ -38,6 +42,15 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   {
     UAVModel.getWayPoints().updateWayPoint(wayPoint);
     LoggerUtil.LOG.info("WayPoint updated: " + wayPoint);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
+  {
+    Manoeuver mnvr = MainFrame.getSymbolMap().findManoeuverById(mnvrDTO.getId());
+    mnvr.setRequestedStatus(result?ManoeuverRequestedStatus.ACCEPTED:ManoeuverRequestedStatus.REFUSED);
+      
+    System.out.println("####### Uav3iTransmitterImpl.resultAskExecution(" + mnvrDTO + ", " + result + ")");
   }
   //-----------------------------------------------------------------------------
   @Override

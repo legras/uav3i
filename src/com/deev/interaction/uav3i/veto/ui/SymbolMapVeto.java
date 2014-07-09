@@ -24,6 +24,7 @@ import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.ui.Switcher3Buttons;
 import com.deev.interaction.uav3i.ui.Trajectory;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
@@ -149,16 +150,20 @@ public class SymbolMapVeto extends JComponent
     }
 
     // Tracé de trajectoire
-    GeneralPath fullTrajectory = trajectory.getFullPath(this);
+    GeneralPath fullTrajectory = trajectory.getFullPath(this); 
+
+    final float dash1[] = {8.f, 4.f};
+      final BasicStroke dashed =
+          new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10.0f, dash1, 0.f);
     
     if (fullTrajectory != null)
     {
       g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
       // g2.setPaint(new Color(0.f, 0.f, 0.f, .3f));
-      g2.setStroke(new BasicStroke(2.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+      g2.setStroke(new BasicStroke(4.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
       g2.draw(fullTrajectory);
       g2.setPaint(Color.RED);
-      g2.setStroke(new BasicStroke(1.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+      g2.setStroke(dashed);
       g2.draw(fullTrajectory);
     }
     

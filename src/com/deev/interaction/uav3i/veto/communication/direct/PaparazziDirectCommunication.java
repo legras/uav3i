@@ -113,10 +113,10 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   }
   //-----------------------------------------------------------------------------
   @Override
-  public boolean executeManoeuver(ManoeuverDTO mnvrDTO)
+  public void executeManoeuver(ManoeuverDTO mnvrDTO)
   {
     // Return true because MODE is PAPARAZZI_DIRECT
-    return true;
+    //return true;
   }
   //-----------------------------------------------------------------------------
   @Override

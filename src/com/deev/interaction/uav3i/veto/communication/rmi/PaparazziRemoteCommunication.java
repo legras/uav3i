@@ -203,17 +203,16 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
   }
   //-----------------------------------------------------------------------------
   @Override
-  public boolean executeManoeuver(ManoeuverDTO mnvrDTO)
+  public void executeManoeuver(ManoeuverDTO mnvrDTO)
   {
     try
     {
-      return paparazziTransmitter.executeManoeuver(mnvrDTO);
+      paparazziTransmitter.executeManoeuver(mnvrDTO);
     }
     catch (RemoteException e)
     {
       e.printStackTrace();
     }
-    return false;
   }
   //-----------------------------------------------------------------------------
   @Override

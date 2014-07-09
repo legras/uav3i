@@ -32,6 +32,7 @@ public class Veto extends JFrame
   private static SymbolMapVeto  symbolMapVeto = null;
   private static ComponentLayer clayer        = null;
   public static  StateVeto      state         = StateVeto.IDLE;
+  public static  Veto           frame;
   //-----------------------------------------------------------------------------
   public enum StateVeto {IDLE, RECEIVING}
   //-----------------------------------------------------------------------------
@@ -105,6 +106,8 @@ public class Veto extends JFrame
     {
       e.printStackTrace();
     }
+    
+    frame = this;
   }
   //-----------------------------------------------------------------------------
   public static JMapViewer    getMapViewer()     { return osmMapGround.getMapViewer(); }

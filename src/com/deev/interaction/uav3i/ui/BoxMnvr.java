@@ -433,7 +433,7 @@ public class BoxMnvr extends Manoeuver
   @Override
   public ManoeuverDTO toDTO()
   {
-    return new BoxMnvrDTO(_A, _B, _isNorthSouth);
+    return new BoxMnvrDTO(id, _A, _B, _isNorthSouth);
   }
 
 }
