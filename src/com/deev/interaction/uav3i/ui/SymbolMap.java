@@ -386,6 +386,10 @@ public class SymbolMap extends Map implements Touchable
 		// On demande au manoeuver de s'ajuster et on récupère la valeur booléenne
 		// du résultat pour la renvoyer ensuite même si elle n'est pas utilisée...
 		boolean result = _currentMnvr.adjustAtPx(x, y);
+		
+		// Move update on Veto UI
+		if(_currentMnvr.isShared())
+		  UAVModel.communicateManoeuver(_currentMnvr);
 
 		_currentMnvr.positionButtons();
 		
@@ -489,9 +493,16 @@ public class SymbolMap extends Map implements Touchable
 		synchronized (_touchedSymbols)
 		{
 			Touchable T = _touchedSymbols.get(touchref);
-			
+
 			if (T != null)
+			{
 				T.updateTouch(x, y, touchref);
+				Manoeuver mnvr = (Manoeuver) T;
+		    // Move update on Veto UI
+		    if(mnvr.isShared())
+		      UAVModel.communicateManoeuver(mnvr);
+
+			}
 		}
 	}
 
