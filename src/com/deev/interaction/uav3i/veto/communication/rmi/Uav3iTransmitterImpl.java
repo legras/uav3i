@@ -47,10 +47,7 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   @Override
   public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
   {
-    Manoeuver mnvr = MainFrame.getSymbolMap().findManoeuverById(mnvrDTO.getId());
-    mnvr.setRequestedStatus(result?ManoeuverRequestedStatus.ACCEPTED:ManoeuverRequestedStatus.REFUSED);
-      
-    System.out.println("####### Uav3iTransmitterImpl.resultAskExecution(" + mnvrDTO + ", " + result + ")");
+    MainFrame.getSymbolMap().answerManoeuver(mnvrDTO.getId(), result);
   }
   //-----------------------------------------------------------------------------
   @Override
