@@ -16,6 +16,7 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.TintedBufferedImage;
 import com.deev.interaction.touch.RoundToggleButton;
 import com.deev.interaction.uav3i.model.UAVModel;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 
 
 public class ManoeuverButtons implements Animation, ActionListener
@@ -192,7 +193,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 			return;
 		
 		setSubmitted(true);
-		_manoeuver.setReqStatusAsked();
+		_manoeuver.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 		
 		if (_jumpButton == null)
 			return;
