@@ -549,7 +549,7 @@ public class SymbolMap extends Map implements Touchable
 	
 	public void askManoeuver(Manoeuver mnvr)
 	{
-		// On lock les share et les jump
+		// On lock les share et les jump pour tous et le delete sur mnvr
 	}
 	
 	public void answerManoeuver(int id, boolean accepted)
@@ -561,7 +561,7 @@ public class SymbolMap extends Map implements Touchable
 		else
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
 		
-		// On unlock les share et les jump
+		// On unlock les share et les jump et le delete
 	}
 	
 	public void addManoeuver(Manoeuver mnvr)
