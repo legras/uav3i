@@ -177,22 +177,25 @@ public class SymbolMap extends Map implements Touchable
 		}
 		
 		// WayPoints
-		for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
-		{
-		  LatLng wayPointPosition = wayPoint.getWayPointPosition();
-		  if(wayPointPosition != null)
-		  {
-	      Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
-	      g2.drawImage(_waypointImage,
-	                   p.x - _waypointImage.getWidth()/2,
-	                   p.y - _waypointImage.getHeight()/2,
-	                   null);
-	      g2.setColor(Color.blue);
-	      g2.drawString(wayPoint.getWayPointName(),
-	                    p.x + _waypointImage.getWidth()/2 + 3, 
-	                    p.y - _waypointImage.getHeight()/2);
-		  }
-		}
+		synchronized (this)
+    {
+	    for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+	    {
+	      LatLng wayPointPosition = wayPoint.getWayPointPosition();
+	      if(wayPointPosition != null)
+	      {
+	        Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+	        g2.drawImage(_waypointImage,
+	                     p.x - _waypointImage.getWidth()/2,
+	                     p.y - _waypointImage.getHeight()/2,
+	                     null);
+	        g2.setColor(Color.blue);
+	        g2.drawString(wayPoint.getWayPointName(),
+	                      p.x + _waypointImage.getWidth()/2 + 3, 
+	                      p.y - _waypointImage.getHeight()/2);
+	      }
+	    }
+    }
 		
 		// Update de trajectoire
 		if (currentTime - _lastTrajectoryUpdate > 500)
