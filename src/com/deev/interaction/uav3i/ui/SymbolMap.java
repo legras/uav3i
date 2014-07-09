@@ -47,6 +47,7 @@ public class SymbolMap extends Map implements Touchable
 	private ArrayList<Manoeuver> _manoeuvers = null;
 	private Manoeuver _currentMnvr = null;
 	private Object _adjustingTouch = null;
+	private boolean _areShareAndAskLocked = false;
 	private int manoeuverSequence = 0;
 	
 	private ArrayList<Touchable> _touchSymbols;
@@ -549,7 +550,22 @@ public class SymbolMap extends Map implements Touchable
 	
 	public void askManoeuver(Manoeuver mnvr)
 	{
+		shareManoeuver(mnvr);
+		UAVModel.executeManoeuver(mnvr);
+		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+		
 		// On lock les share et les jump pour tous et le delete sur mnvr
+		_areShareAndAskLocked = true;
+		
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+			{
+				m.lockShareAndAsk(true);
+			}
+			
+			mnvr.lockDelete(true);
+		}
 	}
 	
 	public void answerManoeuver(int id, boolean accepted)
@@ -562,6 +578,21 @@ public class SymbolMap extends Map implements Touchable
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
 		
 		// On unlock les share et les jump et le delete
+		_areShareAndAskLocked = false;
+		
+		synchronized(this)
+		{
+			for (Manoeuver m : _manoeuvers)
+			{
+				m.lockShareAndAsk(false);
+				m.lockDelete(false);
+			}
+		}
+	}
+	
+	public boolean areShareAndAskLocked()
+	{
+		return _areShareAndAskLocked;
 	}
 	
 	public void addManoeuver(Manoeuver mnvr)
