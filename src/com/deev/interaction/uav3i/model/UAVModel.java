@@ -315,9 +315,9 @@ public class UAVModel
 //    }
 	}
 
-	public static void deleteManoeuver(Manoeuver mnvr)
+	public static void clearManoeuver()
 	{
-		paparazziCommunication.deleteManoeuver(mnvr.toDTO());
+		paparazziCommunication.clearManoeuver();
 	}
 	//	public static PaparazziCommunication getPaparazziCommunication()
 	//	{
