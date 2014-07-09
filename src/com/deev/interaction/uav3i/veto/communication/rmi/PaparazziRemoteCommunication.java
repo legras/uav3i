@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,11 +12,15 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.swing.JOptionPane;
+
+import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
@@ -125,8 +130,18 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
     Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
                                                          UAV3iSettings.getVetoServerPort());
-    //paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup("PaparazziTransmitter");
-    paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
+    try
+    {
+      paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
+    }
+    catch (ConnectIOException cioe)
+    {
+      JOptionPane.showMessageDialog(null,
+                                    "The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort(),
+                                    "Impossible to connect to Veto",
+                                    JOptionPane.ERROR_MESSAGE);
+      System.exit(-1);
+    }
     // On signale à PaparazziTansmitter qu'il peut maintenant se connecter à uav3i :
     // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.
     paparazziTransmitter.register(UAV3iSettings.getUav3iServerIP(),
