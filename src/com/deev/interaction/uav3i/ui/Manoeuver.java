@@ -67,7 +67,12 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public void setShared(boolean shared)
 	{
-		_buttons.setSubmitted(shared);
+		_buttons.submitButton.setSelected(shared);
+	}
+	
+	public void setAsked(boolean asked)
+	{
+		_buttons.jumpButton.setSelected(asked);
 	}
 	
 	public ManoeuverRequestedStatus getRequestedStatus()
@@ -78,6 +83,17 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
 	  _mnvrReqStatus = status;
+	}
+	
+	public void lockShareAndAsk(boolean lock)
+	{
+		_buttons.submitButton.setEnabled(!lock);
+		_buttons.jumpButton.setEnabled(!lock);
+	}
+	
+	public void lockDelete(boolean lock)
+	{
+		_buttons.deleteButton.setEnabled(!lock);
 	}
 	
 	public abstract void paint(Graphics2D g2);

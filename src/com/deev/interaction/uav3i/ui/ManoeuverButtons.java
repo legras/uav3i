@@ -25,7 +25,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private static double _RATE = .3;
 	private static long _DELETE_DELAY = 2000;
 	private static ManoeuverButtons _BUTTONS_SHOWN = null;
-	
+
 	private static BufferedImage _uavIconOn = null;
 	private static BufferedImage _uavIconOff = null;
 	private static BufferedImage _submitIconOn = null;
@@ -34,33 +34,33 @@ public class ManoeuverButtons implements Animation, ActionListener
 	private static BufferedImage _pinIconOff = null;
 	private static BufferedImage _deleteIcon = null;
 	private static BufferedImage _deleteIconWait = null;
-	
-	private RoundToggleButton _jumpButton;	
-	private RoundToggleButton _submitButton;
-	private RoundToggleButton _pinButton;
-	private RoundToggleButton _deleteButton;
+
+	RoundToggleButton jumpButton;	
+	RoundToggleButton submitButton;
+	RoundToggleButton pinButton;
+	RoundToggleButton deleteButton;
 
 	private int _size;
-	
+
 	private ManoeuverButtonsStates _state = ManoeuverButtonsStates.IDLE;
-	
+
 	private static int _PAD = 13;
-	
+
 	private Manoeuver _manoeuver = null;
 	private JComponent _home;
 	private boolean _isDead = false;
 	private long _deleteEnabledTime = -1;
-	
+
 	private Point2D.Double _positions[] = {null, null, null, null};
 	private Point2D.Double _posVect[] = {null, null, null, null};
 	private double _offset = 3000;
 
-	
+
 	public ManoeuverButtons(Manoeuver mnvr, JComponent layer) throws IOException
 	{
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
 		Color gray = new Color(.3f, .3f, .3f, 1.f);
-				
+
 		if (_uavIconOn == null) 		_uavIconOn 		= getImage("img/uavIconOn.png", blue);
 		if (_uavIconOff == null) 		_uavIconOff 	= getImage("img/uavIconOff.png", gray);
 		if (_submitIconOn == null) 		_submitIconOn 	= getImage("img/submitIconOn.png", blue);
@@ -69,52 +69,58 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (_pinIconOff == null) 		_pinIconOff 	= getImage("img/pinIconOff.png", gray);
 		if (_deleteIcon == null) 		_deleteIcon 	= getImage("img/deleteIcon.png", Color.RED);
 		if (_deleteIconWait == null) 	_deleteIconWait = getImage("img/deleteIcon.png", gray);
-		
+
 		_manoeuver = mnvr;
 		_home = layer;
 		_size = _uavIconOn.getWidth();
-		
+
 		class ManoeuverButtonsSwingBuilder implements Runnable
 		{
 			ManoeuverButtons _buttons;
 			JComponent _layer;
-			
+
 			public ManoeuverButtonsSwingBuilder(final ManoeuverButtons buttons, final JComponent layer)
 			{
 				_buttons = buttons;
 				_layer = layer;
 			}
-			
+
 			public void run()
 			{
-				_jumpButton = new RoundToggleButton(_uavIconOn, _uavIconOff);
-				_submitButton = new RoundToggleButton(_submitIconOn, _submitIconOff);
-				_pinButton = new RoundToggleButton(_pinIconOn, _pinIconOff);
-				_deleteButton = new RoundToggleButton(_deleteIcon, _deleteIconWait);
-				
-				_layer.add(_jumpButton);
-				_layer.add(_submitButton);
-				_layer.add(_pinButton);
-				_layer.add(_deleteButton);
+				jumpButton = new RoundToggleButton(_uavIconOn, _uavIconOff);
+				submitButton = new RoundToggleButton(_submitIconOn, _submitIconOff);
+				pinButton = new RoundToggleButton(_pinIconOn, _pinIconOff);
+				deleteButton = new RoundToggleButton(_deleteIcon, _deleteIconWait);
 
-				_jumpButton.setBounds(0, 0, _size, _size);
-				_submitButton.setBounds(0, 0, _size, _size);
-				_pinButton.setBounds(0, 0, _size, _size);
-				_deleteButton.setBounds(0, 0, _size, _size);
+				_layer.add(jumpButton);
+				_layer.add(submitButton);
+				_layer.add(pinButton);
+				_layer.add(deleteButton);
+
+				jumpButton.setBounds(0, 0, _size, _size);
+				submitButton.setBounds(0, 0, _size, _size);
+				pinButton.setBounds(0, 0, _size, _size);
+				deleteButton.setBounds(0, 0, _size, _size);
+
+				jumpButton.setVisible(true);
+				submitButton.setVisible(true);
+				pinButton.setVisible(true);
+				deleteButton.setVisible(true);
 				
-				_jumpButton.setVisible(true);
-				_submitButton.setVisible(true);
-				_pinButton.setVisible(true);
-				_deleteButton.setVisible(true);
-				
+				if (MainFrame.getSymbolMap().areShareAndAskLocked())
+				{
+					submitButton.setEnabled(false);
+					jumpButton.setEnabled(false);
+				}
+
 				_buttons.addActionListener(_buttons);
-				
+
 				show();
 			}
 		}
-		
+
 		SwingUtilities.invokeLater(new ManoeuverButtonsSwingBuilder(this, layer));
-				
+
 		Animator.addAnimation(this);
 	}
 
@@ -122,30 +128,29 @@ public class ManoeuverButtons implements Animation, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == _jumpButton)
-		{
-			setJump(_jumpButton.isSelected());
-			
-			if (_jumpButton.isSelected())
-				UAVModel.executeManoeuver(_manoeuver);
-		}
-		else if (e.getSource() == _submitButton)
+		if (e.getSource() == jumpButton)
 		{			
-			if (_submitButton.isSelected())
+			if (jumpButton.isSelected())
+				MainFrame.getSymbolMap().askManoeuver(_manoeuver);
+		}
+		else if (e.getSource() == submitButton)
+		{			
+			if (submitButton.isSelected())
 				MainFrame.getSymbolMap().shareManoeuver(_manoeuver);
 			else
 				MainFrame.getSymbolMap().shareManoeuver(null);			
 		}
-		else if (e.getSource() == _pinButton)
+		else if (e.getSource() == pinButton)
 		{
-			
+
 		}
-		else if (e.getSource() == _deleteButton)
+		else if (e.getSource() == deleteButton)
 		{
-			if (!_deleteButton.isSelected())
+			if (!deleteButton.isSelected())
 			{
 				_isDead = true;
-        UAVModel.clearManoeuver();
+				if (_manoeuver.isShared())
+					UAVModel.clearManoeuver();
 				_manoeuver.delete();
 			}
 			else
@@ -154,90 +159,67 @@ public class ManoeuverButtons implements Animation, ActionListener
 			}
 		}
 	}
-	
+
 	public boolean isPinned()
 	{
-		if (_pinButton == null)
+		if (pinButton == null)
 			return false;
-		
-		return _pinButton.isSelected();
+
+		return pinButton.isSelected();
 	}
-	
+
 	public boolean isModifiable()
 	{
-		if (_submitButton == null)
+		if (submitButton == null)
 			return false;
-		
+
 		return !isPinned();
 	}
-	
+
 	public boolean isSubmitted()
 	{
-		if (_submitButton == null)
+		if (submitButton == null)
 			return false;
-		
-		return _submitButton.isSelected();
+
+		return submitButton.isSelected();
 	}
-	
-	public void setSubmitted(boolean sub)
-	{
-		if (_submitButton == null)
-			return;
-		
-		_submitButton.setSelected(sub);
-	}
-	
-	public void setJump(boolean jump)
-	{
-		if (_jumpButton.isSelected() == false)
-			return;
-		
-		setSubmitted(true);
-		_manoeuver.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
-		
-		if (_jumpButton == null)
-			return;
-		
-		_jumpButton.setSelected(true);
-		_jumpButton.setEnabled(false);
-	}
-	
+
 	public void show()
 	{
 		_state = ManoeuverButtonsStates.SHOWING;
-		
+
 		if (_BUTTONS_SHOWN != this && _BUTTONS_SHOWN != null)
 			_BUTTONS_SHOWN.hide();
-		
+
 		_BUTTONS_SHOWN = this;
 	}
-	
+
 	public void hide()
 	{
 		if (_offset < 1)
 			_offset = 1;
-		
+
 		_state = ManoeuverButtonsStates.HIDING;
 	}
 
 	public void addActionListener(ActionListener listener)
 	{
-		_jumpButton.addActionListener(listener);
-		_submitButton.addActionListener(listener);
-		_pinButton.addActionListener(listener);
-		_deleteButton.addActionListener(listener);		
+		jumpButton.addActionListener(listener);
+		submitButton.addActionListener(listener);
+		pinButton.addActionListener(listener);
+		deleteButton.addActionListener(listener);		
 	}
-	
+
 	public void remove()
 	{
 		if (_home == null)
 			return;
-		
-		_home.remove(_jumpButton);
-		_home.remove(_submitButton);
-		_home.remove(_pinButton);
-		_home.remove(_deleteButton);
-		
+
+		_home.remove(jumpButton);
+		_home.remove(submitButton);
+		_home.remove(pinButton);
+		_home.remove(deleteButton);
+
 		_home = null;
 	}
 
@@ -246,7 +228,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (isArc)
 		{
 			double delta = (_size + _PAD) / distance;
-			
+
 			for (int i=0; i<4; i++)
 			{
 				double a = theta + (-1.5+i)*delta;
@@ -278,7 +260,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 			_posVect[i].x /= _positions[i].distance(ref);
 			_posVect[i].y /= _positions[i].distance(ref);
 		}
-		
+
 		setBounds();
 	}
 
@@ -286,42 +268,42 @@ public class ManoeuverButtons implements Animation, ActionListener
 	{
 		if (_positions[0] == null || _posVect[0] == null)
 			return;
-		
-		if (_jumpButton == null || _submitButton == null || _pinButton == null || _deleteButton == null)
+
+		if (jumpButton == null || submitButton == null || pinButton == null || deleteButton == null)
 			return;
-		
+
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{	
-				_jumpButton.setBounds(
+				jumpButton.setBounds(
 						(int) _positions[0].x-_size/2 + (int) (_offset * _posVect[0].x),
 						(int) _positions[0].y-_size/2 + (int) (_offset * _posVect[0].y),
 						_size, _size);
-				
-				_submitButton.setBounds(
+
+				submitButton.setBounds(
 						(int) _positions[1].x-_size/2 + (int) (_offset * _posVect[1].x),
 						(int) _positions[1].y-_size/2 + (int) (_offset * _posVect[1].y),
 						_size, _size);
-				
-				_pinButton.setBounds(
+
+				pinButton.setBounds(
 						(int) _positions[2].x-_size/2 + (int) (_offset * _posVect[2].x),
 						(int) _positions[2].y-_size/2 + (int) (_offset * _posVect[2].y),
 						_size, _size);
-				
-				_deleteButton.setBounds(
+
+				deleteButton.setBounds(
 						(int) _positions[3].x-_size/2 + (int) (_offset * _posVect[3].x),
 						(int) _positions[3].y-_size/2 + (int) (_offset * _posVect[3].y),
 						_size, _size);
 			}
 		});
-			
+
 	}
-	
+
 	private BufferedImage getImage(String name, Color tint) throws IOException
 	{
 		BufferedImage image = ImageIO.read(this.getClass().getResource(name));
-		
+
 		return new TintedBufferedImage(image, tint);
 	}
 
@@ -330,46 +312,46 @@ public class ManoeuverButtons implements Animation, ActionListener
 	{
 		switch (_state)
 		{
-			case SHOWING:
-				_offset *= _RATE;
-				if (_offset < 1)
+		case SHOWING:
+			_offset *= _RATE;
+			if (_offset < 1)
+			{
+				_offset = 0;
+				_state = ManoeuverButtonsStates.IDLE;
+			}
+			setBounds();
+			break;
+
+		case HIDING:
+			_offset /= _RATE;
+			if (_offset > 3000)
+			{
+				_state = ManoeuverButtonsStates.IDLE;
+			}
+			setBounds();
+			break;
+		case IDLE:
+			if (_isDead)
+				remove();
+
+			if (_deleteEnabledTime > 0)
+			{
+				if (System.currentTimeMillis() - _deleteEnabledTime > _DELETE_DELAY)
 				{
-					_offset = 0;
-					_state = ManoeuverButtonsStates.IDLE;
+					deleteButton.setSelected(false);
+					deleteButton.setPie(-1.);
+					_deleteEnabledTime = -1;
 				}
-				setBounds();
-				break;
-				
-			case HIDING:
-				_offset /= _RATE;
-				if (_offset > 3000)
+				else
 				{
-					_state = ManoeuverButtonsStates.IDLE;
+					deleteButton.setPie((double) (System.currentTimeMillis() - _deleteEnabledTime) / _DELETE_DELAY);
 				}
-				setBounds();
-				break;
-			case IDLE:
-				if (_isDead)
-					remove();
-				
-				if (_deleteEnabledTime > 0)
-				{
-					if (System.currentTimeMillis() - _deleteEnabledTime > _DELETE_DELAY)
-					{
-						_deleteButton.setSelected(false);
-						_deleteButton.setPie(-1.);
-						_deleteEnabledTime = -1;
-					}
-					else
-					{
-						_deleteButton.setPie((double) (System.currentTimeMillis() - _deleteEnabledTime) / _DELETE_DELAY);
-					}
-				}
-				
-			default:
-				break;
+			}
+
+		default:
+			break;
 		}
-		
+
 		return 1;
 	}
 
@@ -377,7 +359,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 	{
 		return this == _BUTTONS_SHOWN;
 	}
-	
+
 	@Override
 	public int life()
 	{
