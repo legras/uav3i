@@ -32,6 +32,7 @@ import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.model.VideoModel;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
@@ -548,9 +549,20 @@ public class SymbolMap extends Map implements Touchable
 	
 	public void askManoeuver(Manoeuver mnvr)
 	{
-		
+		// On lock les share et les jump
 	}
 	
+	public void answerManoeuver(int id, boolean accepted)
+	{
+		Manoeuver mnvr = findManoeuverById(id);
+		
+		if (accepted)
+			mnvr.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+		else
+			mnvr.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
+		
+		// On unlock les share et les jump
+	}
 	
 	public void addManoeuver(Manoeuver mnvr)
 	{

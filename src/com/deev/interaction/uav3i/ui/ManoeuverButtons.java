@@ -130,9 +130,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 				UAVModel.executeManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == _submitButton)
-		{
-			setSubmitted(_submitButton.isSelected());
-			
+		{			
 			if (_submitButton.isSelected())
 				MainFrame.getSymbolMap().shareManoeuver(_manoeuver);
 			else
