@@ -173,7 +173,8 @@ public class SymbolMapVeto extends JComponent
     
     synchronized(this)
     {
-      sharedManoeuver.paint(g2);
+    	if(sharedManoeuver != null)
+    		sharedManoeuver.paint(g2);
 //      for (ManoeuverDTO m : manoeuvers)
 //      {
 //        m.paint(g2);
