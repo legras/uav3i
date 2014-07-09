@@ -250,6 +250,10 @@ public class UAVModel
 	//public static void submitManoeuver(Manoeuver mnvr)
 	public static void communicateManoeuver(Manoeuver mnvr)
 	{
+		// TODO: Philippe traite le cas null
+		if (mnvr == null)
+			return;
+		
 		switch (UAV3iSettings.getMode())
 		{
 		case PAPARAZZI_DIRECT:
