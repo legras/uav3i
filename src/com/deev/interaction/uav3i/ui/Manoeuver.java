@@ -65,6 +65,11 @@ public abstract class Manoeuver implements Touchable, Animation
 		return _buttons.isSubmitted();
 	}
 	
+	public void setShared(boolean shared)
+	{
+		_buttons.setSubmitted(shared);
+	}
+	
 	public ManoeuverRequestedStatus getRequestedStatus()
 	{
 		return _mnvrReqStatus;
