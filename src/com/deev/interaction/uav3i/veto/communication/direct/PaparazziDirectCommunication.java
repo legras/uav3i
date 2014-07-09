@@ -120,7 +120,7 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void deleteManoeuver(ManoeuverDTO mnvrDTO)
+  public void clearManoeuver()
   {
     // Nothing to do...
   }

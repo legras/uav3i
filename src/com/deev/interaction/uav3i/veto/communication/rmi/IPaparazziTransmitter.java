@@ -56,6 +56,6 @@ public interface IPaparazziTransmitter extends Remote
   //-----------------------------------------------------------------------------
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
-  public void deleteManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  public void clearManoeuver() throws RemoteException;
   //-----------------------------------------------------------------------------
 }

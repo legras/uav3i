@@ -161,10 +161,10 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void deleteManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void clearManoeuver() throws RemoteException
   {
-    LoggerUtil.LOG.info("deleteManoeuver("+mnvrDTO+")");
-    Veto.getSymbolMapVeto().deleteManoeuver(mnvrDTO);
+    LoggerUtil.LOG.info("clearManoeuver()");
+    Veto.getSymbolMapVeto().clearManoeuver();
   }
   //-----------------------------------------------------------------------------
   /**

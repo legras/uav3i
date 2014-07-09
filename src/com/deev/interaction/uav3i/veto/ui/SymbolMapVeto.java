@@ -33,11 +33,12 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 8553028045589171104L;
   
-  private Trajectory              trajectory;
-  private long                    lastTrajectoryUpdate = 0;
-  private BufferedImage           uavImage      = null;
-  protected BufferedImage         waypointImage = null;
-  private ArrayList<ManoeuverDTO> manoeuvers    = null;
+  private   Trajectory    trajectory;
+  private   long          lastTrajectoryUpdate = 0;
+  private   BufferedImage uavImage             = null;
+  protected BufferedImage waypointImage        = null;
+  private   ManoeuverDTO  sharedManoeuver      = null;
+  //private ArrayList<ManoeuverDTO> manoeuvers    = null;
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -47,7 +48,7 @@ public class SymbolMapVeto extends JComponent
     Color back = new Color(0.f, 0.f, 0.f, .0f);
     setBackground(back);  
     trajectory = new Trajectory();
-    manoeuvers = new ArrayList<ManoeuverDTO>();
+    //manoeuvers = new ArrayList<ManoeuverDTO>();
     try
     {
       uavImage      = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
@@ -102,18 +103,21 @@ public class SymbolMapVeto extends JComponent
   public void reinit()
   {
     trajectory.reinit();
-    manoeuvers = new ArrayList<ManoeuverDTO>();
+    //manoeuvers = new ArrayList<ManoeuverDTO>();
+    sharedManoeuver = null;
   }
   //-----------------------------------------------------------------------------
   public void addManoeuver(ManoeuverDTO manoeuverDTO)
   {
-    manoeuvers = new ArrayList<ManoeuverDTO>();
-    manoeuvers.add(manoeuverDTO);
+    sharedManoeuver = manoeuverDTO;
+    //manoeuvers = new ArrayList<ManoeuverDTO>();
+    //manoeuvers.add(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
-  public void deleteManoeuver(ManoeuverDTO manoeuverDTO)
+  public void clearManoeuver()
   {
-    manoeuvers.remove(manoeuverDTO);
+    sharedManoeuver = null;
+    //manoeuvers.remove(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
   public synchronized void paint(Graphics2D g2)
@@ -169,11 +173,11 @@ public class SymbolMapVeto extends JComponent
     
     synchronized(this)
     {
-      for (ManoeuverDTO m : manoeuvers)
-      {
-        //System.out.println("Et pourtant j'en ai au moins une à dessiner ! --> " + m);
-        m.paint(g2);
-      }
+      sharedManoeuver.paint(g2);
+//      for (ManoeuverDTO m : manoeuvers)
+//      {
+//        m.paint(g2);
+//      }
     }
     
     // Dessin UAV
