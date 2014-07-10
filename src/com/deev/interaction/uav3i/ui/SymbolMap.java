@@ -467,6 +467,8 @@ public class SymbolMap extends Map implements Touchable
 			
 			T.addTouch(x, y, touchref);
 			_touchedSymbols.put(touchref, T);
+			if (T instanceof Manoeuver)
+				_currentMnvr = (Manoeuver) T;
 		}
 	}
 
@@ -565,6 +567,7 @@ public class SymbolMap extends Map implements Touchable
 			}
 			
 			mnvr.lockDelete(true);
+			mnvr.setAsked(true);
 		}
 	}
 	
@@ -586,6 +589,7 @@ public class SymbolMap extends Map implements Touchable
 			{
 				m.lockShareAndAsk(false);
 				m.lockDelete(false);
+				m.setAsked(false);
 			}
 		}
 	}

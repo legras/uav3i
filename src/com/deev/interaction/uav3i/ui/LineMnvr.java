@@ -42,7 +42,7 @@ public class LineMnvr extends Manoeuver
 	// TRANSLATE
 	private Point2D.Double _offsetA;
 	private Point2D.Double _offsetB;
-	
+
 	// FULL
 	private LatLng _startA;
 	private LatLng _startB;
@@ -50,8 +50,8 @@ public class LineMnvr extends Manoeuver
 	private Point2D.Double _startPosTwo;
 	private Point2D.Double _currentPosOne;
 	private Point2D.Double _currentPosTwo;
-	
-	
+
+
 
 	public LineMnvr(SymbolMap map, LatLng A, LatLng B)
 	{
@@ -66,7 +66,7 @@ public class LineMnvr extends Manoeuver
 		double d = a.distance(b);
 		_u = new Point2D.Double((b.x-a.x)/d, (b.y-a.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
-		
+
 		// ********** ManoeuverButtons **********
 		try
 		{
@@ -78,7 +78,7 @@ public class LineMnvr extends Manoeuver
 			e1.printStackTrace();
 			_buttons = null;
 		}
-		
+
 		positionButtons();
 	}
 
@@ -88,7 +88,7 @@ public class LineMnvr extends Manoeuver
 		Point2D.Double Apx = _smap.getScreenForLatLng(_A);
 		Point2D.Double Bpx = _smap.getScreenForLatLng(_B);
 		double side = _currentRm > 0 ? 1 : 0;
-		
+
 		if (_buttons != null)
 			_buttons.setPositions(
 					new Point2D.Double((Apx.x+Bpx.x)/2, (Apx.y+Bpx.y)/2),
@@ -96,7 +96,7 @@ public class LineMnvr extends Manoeuver
 					Math.atan2(_v.y, _v.x) + side*Math.PI,
 					false);
 	}
-	
+
 	@Override
 	public void paint(Graphics2D g2)
 	{
@@ -129,12 +129,12 @@ public class LineMnvr extends Manoeuver
 		// Trajectoire du drone
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
 		paintAdjustLine(g2, l, getRequestedStatus() != ManoeuverRequestedStatus.NONE, _adjusting);
-		
+
 		if (isSelected())
 		{
 			String distS = Math.round(Apx.distance(Bpx)/_smap.getPPM())+" m";
 			drawLabelledLine(g2, LApx, LBpx, distS, LApx.y > Apx.y);
-			
+
 			String largS = Math.round(Math.abs(_currentRm))+" m";
 			if (LApx.y < LBpx.y)
 				drawLabelledLine(g2, Apx, LApx, largS, false);
@@ -159,7 +159,7 @@ public class LineMnvr extends Manoeuver
 	public boolean adjustAtPx(double x, double y)
 	{
 		_buttons.show();
-		
+
 		// Parallélisme avec la zone à regarder
 		Point2D.Double p = getUVforPx(x, y);
 		double v = p.y;
@@ -209,13 +209,13 @@ public class LineMnvr extends Manoeuver
 
 	private LatLng getOffsetPoint(LatLng pointLatLng)
 	{
-    Point2D.Double pointPixels = _smap.getScreenForLatLng(pointLatLng);
-    double Rpx = _smap.getPPM() * _currentRm;
-    Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
-                                                           pointPixels.y + _v.y * Rpx);
-    return _smap.getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+		Point2D.Double pointPixels = _smap.getScreenForLatLng(pointLatLng);
+		double Rpx = _smap.getPPM() * _currentRm;
+		Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
+				pointPixels.y + _v.y * Rpx);
+		return _smap.getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
 	}
-	
+
 	/**
 	 * Getter pour le point A de la trajectoire du drone (et non de la zone à regarder).
 	 * 
@@ -239,7 +239,6 @@ public class LineMnvr extends Manoeuver
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		System.out.println(_moveState);
 		if (_moveState == LineMnvrMoveStates.FULL)
 			return -1.f;
 
@@ -263,37 +262,37 @@ public class LineMnvr extends Manoeuver
 	public void addTouch(float x, float y, Object touchref)
 	{
 		super.addTouch(x, y, touchref);
-		
+
 		if (!isModifiable())
 		{
 			cancelTouch(touchref);
 			return;
 		}
-		
+
 		switch (_moveState)
 		{
-			case FULL:
-				return;
-			case TRANSLATE:
-				_touchTwo = touchref;
-				_startA = _A;
-				_startB = _B;
-				_startPosTwo = new Point2D.Double(x, y);
-				_currentPosOne = _startPosOne;
-				_currentPosTwo = _startPosTwo;
-				_moveState = LineMnvrMoveStates.FULL;
-				return;
-			case NONE:
-				_touchOne = touchref;
-				_startPosOne = new Point2D.Double(x, y);
-				Point2D.Double pA = _smap.getScreenForLatLng(_A);
-				_offsetA = new Point2D.Double(x-pA.x, y-pA.y);
-				Point2D.Double pB = _smap.getScreenForLatLng(_B);
-				_offsetB = new Point2D.Double(x-pB.x, y-pB.y);
-				_moveState = LineMnvrMoveStates.TRANSLATE;
-				return;
-			default:
-				return;
+		case FULL:
+			return;
+		case TRANSLATE:
+			_touchTwo = touchref;
+			_startA = _A;
+			_startB = _B;
+			_startPosTwo = new Point2D.Double(x, y);
+			_currentPosOne = _startPosOne;
+			_currentPosTwo = _startPosTwo;
+			_moveState = LineMnvrMoveStates.FULL;
+			return;
+		case NONE:
+			_touchOne = touchref;
+			_startPosOne = new Point2D.Double(x, y);
+			Point2D.Double pA = _smap.getScreenForLatLng(_A);
+			_offsetA = new Point2D.Double(x-pA.x, y-pA.y);
+			Point2D.Double pB = _smap.getScreenForLatLng(_B);
+			_offsetB = new Point2D.Double(x-pB.x, y-pB.y);
+			_moveState = LineMnvrMoveStates.TRANSLATE;
+			return;
+		default:
+			return;
 		}
 	}
 
@@ -302,33 +301,33 @@ public class LineMnvr extends Manoeuver
 	{
 		if (touchref != _touchOne && touchref != _touchTwo)
 			return;
-		
+
 		super.updateTouch(x, y, touchref);
-		
+
 		switch (_moveState)
 		{
-			case FULL:				
-				if (touchref == _touchOne)
-					_currentPosOne = new Point2D.Double(x, y);
-				else
-					_currentPosTwo = new Point2D.Double(x, y);
-				updateGeometry();
-				break;
-				
-			case TRANSLATE:
-				if (touchref == _touchOne)
-				{
-					_A = _smap.getLatLngForScreen(x-_offsetA.x, y-_offsetA.y);
-					_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
-					_startPosOne = new Point2D.Double(x, y);
-				}
-				break;
-				
-			case NONE:
-			default:
-				break;
+		case FULL:				
+			if (touchref == _touchOne)
+				_currentPosOne = new Point2D.Double(x, y);
+			else
+				_currentPosTwo = new Point2D.Double(x, y);
+			updateGeometry();
+			break;
+
+		case TRANSLATE:
+			if (touchref == _touchOne)
+			{
+				_A = _smap.getLatLngForScreen(x-_offsetA.x, y-_offsetA.y);
+				_B = _smap.getLatLngForScreen(x-_offsetB.x, y-_offsetB.y);
+				_startPosOne = new Point2D.Double(x, y);
+			}
+			break;
+
+		case NONE:
+		default:
+			break;
 		}
-		
+
 		positionButtons();
 	}
 
@@ -336,7 +335,7 @@ public class LineMnvr extends Manoeuver
 	public void removeTouch(float x, float y, Object touchref)
 	{
 		_moveState = LineMnvrMoveStates.NONE;
-		
+
 		positionButtons();
 	}
 
@@ -344,7 +343,7 @@ public class LineMnvr extends Manoeuver
 	public void cancelTouch(Object touchref)
 	{
 		_moveState = LineMnvrMoveStates.NONE;
-		
+
 		positionButtons();
 	}
 
@@ -352,44 +351,44 @@ public class LineMnvr extends Manoeuver
 	{
 		Array2DRowRealMatrix x = new Array2DRowRealMatrix(new double[][]
 				{
-					{ 0, _startPosOne.getX(), _startPosTwo.getX() },
-					{ 0, _startPosOne.getY(), _startPosTwo.getY() },
-					{ 1, 1, 1 }
+				{ 0, _startPosOne.getX(), _startPosTwo.getX() },
+				{ 0, _startPosOne.getY(), _startPosTwo.getY() },
+				{ 1, 1, 1 }
 				});
 
 		Array2DRowRealMatrix y = new Array2DRowRealMatrix(new double[][]
 				{
-					{ 0, _currentPosOne.getX(), _currentPosTwo.getX() },
-					{ 0, _currentPosOne.getY(), _currentPosTwo.getY() },
-					{ 0, 0, 0 }
+				{ 0, _currentPosOne.getX(), _currentPosTwo.getX() },
+				{ 0, _currentPosOne.getY(), _currentPosTwo.getY() },
+				{ 0, 0, 0 }
 				});
-		
+
 		DecompositionSolver solver = new LUDecomposition(x).getSolver();
 		if (!solver.isNonSingular())
 			return;
 		double[][] data = y.multiply(solver.getInverse()).getData();
-		
+
 		AffineTransform t = new AffineTransform(new double[] { data[0][0], data[1][0], data[0][1], data[1][1], data[0][2], data[1][2] });
-	
+
 		Point2D.Double Apx = _smap.getScreenForLatLng(_startA);
 		Point2D.Double Bpx = _smap.getScreenForLatLng(_startB);
-		
+
 		t.transform(Apx, Apx);
 		t.transform(Bpx, Bpx);
 
 		_A = _smap.getLatLngForScreen(Apx.x, Apx.y);
 		_B = _smap.getLatLngForScreen(Bpx.x, Bpx.y);
-		
+
 		double d = Apx.distance(Bpx);
 		_u = new Point2D.Double((Bpx.x-Apx.x)/d, (Bpx.y-Apx.y)/d);
 		_v = new Point2D.Double(-_u.y, _u.x);
 	}
 
-  @Override
-  public ManoeuverDTO toDTO()
-  {
-    return new LineMnvrDTO(id, _A, _B, _currentRm, _u, _v);
-  }
+	@Override
+	public ManoeuverDTO toDTO()
+	{
+		return new LineMnvrDTO(id, _A, _B, _currentRm, _u, _v);
+	}
 }
 
 
