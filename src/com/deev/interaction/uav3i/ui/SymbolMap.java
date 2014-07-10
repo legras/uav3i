@@ -559,41 +559,35 @@ public class SymbolMap extends Map implements Touchable
 		// On lock les share et les jump pour tous et le delete sur mnvr
 		_areShareAndAskLocked = true;
 		
-		synchronized(this)
+		for (Manoeuver m : _manoeuvers)
 		{
-			for (Manoeuver m : _manoeuvers)
-			{
-				m.lockShareAndAsk(true);
-			}
-			
-			mnvr.lockDelete(true);
-			mnvr.setAsked(true);
+			m.lockShareAndAsk(true);
 		}
+
+		mnvr.lockDelete(true);
+		mnvr.setAsked(true);
 	}
 	
 	public void answerManoeuver(int id, boolean accepted)
 	{
 		Manoeuver mnvr = findManoeuverById(id);
-		
+
 		if (accepted)
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
 		else
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
-		
+
 		// On unlock les share et les jump et le delete
 		_areShareAndAskLocked = false;
-		
-		synchronized(this)
+
+		for (Manoeuver m : _manoeuvers)
 		{
-			for (Manoeuver m : _manoeuvers)
-			{
-				m.lockShareAndAsk(false);
-				m.lockDelete(false);
-				m.setAsked(false);
-			}
+			m.lockShareAndAsk(false);
+			m.lockDelete(false);
+			m.setAsked(false);
 		}
 	}
-	
+
 	public boolean areShareAndAskLocked()
 	{
 		return _areShareAndAskLocked;
