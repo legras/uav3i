@@ -137,7 +137,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     catch (ConnectIOException cioe)
     {
       JOptionPane.showMessageDialog(null,
-                                    "The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort(),
+                                    "<html>The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort()+"<br><br><i>"+cioe.getMessage(),
                                     "Impossible to connect to Veto",
                                     JOptionPane.ERROR_MESSAGE);
       System.exit(-1);
