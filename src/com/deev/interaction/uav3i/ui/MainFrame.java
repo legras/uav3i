@@ -54,8 +54,9 @@ public class MainFrame extends JFrame implements ActionListener
 	public MainFrame()
 	{
 		super();
-		// Pour capter les évenements TUIO via le bridge Touch2Tuio sous Windows.
-		setTitle("uav3i");
+		// Il est nécessaire de nommer la frame pour capter les évenements
+		// TUIO via le bridge Touch2Tuio sous Windows (prend en paramètre le nom de la fenêtre).
+    setTitle("uav3i");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try
 		{

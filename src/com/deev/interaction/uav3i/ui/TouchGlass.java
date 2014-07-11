@@ -1,67 +1,38 @@
 package com.deev.interaction.uav3i.ui;
 
-
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.HeadlessException;
 import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
-import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 
-import com.deev.interaction.touch.Animation;
-import com.deev.interaction.touch.BoundingRectangle;
-import com.deev.interaction.touch.CircleAnim;
-import com.deev.interaction.touch.ComponentLayer;
-import com.deev.interaction.touch.Gesture;
-import com.deev.interaction.touch.Touchable;
-
-import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import TUIO.TuioClient;
 import TUIO.TuioCursor;
 import TUIO.TuioListener;
 import TUIO.TuioObject;
 import TUIO.TuioTime;
 
+import com.deev.interaction.touch.Touchable;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 /**
  * @author legras
  *
  */
-@SuppressWarnings("serial")
 public class TouchGlass extends JComponent implements Touchable, TuioListener, MouseListener, MouseMotionListener
 {		
-	private ArrayList<Touchable> _touchables;
+  private static final long serialVersionUID = 2388147767918679675L;
+  
+  private ArrayList<Touchable> _touchables;
 	private HashMap<Object, Touchable> _touched;
 			
 	ArrayList<Point2D.Double> _hull = null;
@@ -80,7 +51,7 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			TuioClient tuio = new TuioClient();
 			tuio.addTuioListener(this);
 			tuio.connect();
-			LoggerUtil.LOG.log(Level.CONFIG, "TUIO OK");
+      LoggerUtil.LOG.log(Level.CONFIG, "TUIO OK");
 		}
 		
 		if (UAV3iSettings.getFullscreen())
@@ -110,7 +81,6 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 	public void refresh(TuioTime arg0)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -231,4 +201,5 @@ public class TouchGlass extends JComponent implements Touchable, TuioListener, M
 			T.cancelTouch(touchref);
 		}
 	}
+
 }

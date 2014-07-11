@@ -1,12 +1,19 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+
 import javax.swing.SwingUtilities;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.VideoModel;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
-import com.deev.interaction.uav3i.util.UAV3iSettings;
 import fr.dgac.ivy.IvyException;
 
 /**
@@ -77,6 +84,94 @@ public class Launcher
 			default:
 				break;
 		}
-
+		
+    switch (UAV3iSettings.getMode())
+    {
+      case REPLAY:
+      case PAPARAZZI_DIRECT:
+      case PAPARAZZI_REMOTE:
+        if (UAV3iSettings.getTUIO() && System.getProperty("os.name").startsWith("Windows"))
+        {
+          // Lancem
+          startTouch2Tuio();
+          LoggerUtil.LOG.log(Level.CONFIG, "Bridge Windows/TUIO started (Touch2Tuio_x64.exe)");
+        }
+      default:
+        // Does nothing in other cases
+        break;
+    }
 	}
+	
+	private static void startTouch2Tuio()
+	{
+	  // Touch2Tuio assure la transformation des 'touches' Windows en 'touches' TUIO sur
+	  // une fenêtre donnée. Si l'outil est lancé avant l'aparation de la fenêtre (ce qui
+	  // peut être relativement long avec les initialisations diverses), Touch2Tuio
+	  // s'arrête et renvoie l'erreur suivante :
+	  //   - Could not install hook for "uav3i"
+	  // Délai d'une seconde avant le lancement.
+    try { Thread.sleep(1000); } catch (InterruptedException e) {}
+
+	  try
+	  {
+	    //creation du processus
+	    Process p = Runtime.getRuntime().exec("Touch2Tuio_0.2/Touch2Tuio_x64.exe uav3i");
+
+	    // Récupération des flux : utile ici ? Au lancement, Touch2Tuio affiche "Successfully
+	    // installed hook and started TUIO server" qui du coup s'affiche. Aucune erreur
+	    // remontée jusqu'à présent...
+	    new Thread(new AfficheurFlux(p.getErrorStream())).start();
+	    new Thread(new AfficheurFlux(p.getInputStream())).start();
+
+	    // Arrêt du thread courant (bloquage) usqu'à ce que le processus s'arrête : il
+	    // ne s'arrête jamais et c'est tant mieux !
+	    // Le problème de l'arrêt du fonctionnement de Touch2Tuio n'apparait plus.
+	    // Mécanisme derrière ? Voir plus de détails sur :
+	    // http://labs.excilys.com/2012/06/26/runtime-exec-pour-les-nuls-et-processbuilder/
+	    p.waitFor();
+
+	    System.out.println("####### TUIO problem: 'Touch2Tuio_x64' process stopped when it should not have!");
+	  }
+	  catch (Exception e)
+	  {
+	    e.printStackTrace();
+	  }
+	}
+
+  private static class AfficheurFlux implements Runnable
+  {
+
+    private final InputStream inputStream;
+
+    AfficheurFlux(InputStream inputStream)
+    {
+      this.inputStream = inputStream;
+    }
+
+//    private BufferedReader getBufferedReader(InputStream is)
+//    {
+//      return new BufferedReader(new InputStreamReader(is));
+//    }
+
+    @Override
+    public void run()
+    {
+      //BufferedReader br = getBufferedReader(inputStream);
+      BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+      String ligne = "";
+      try
+      {
+        while ((ligne = br.readLine()) != null)
+        {
+          System.out.println("####### Log from Touch2Tuio : " + ligne);
+        }
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
+    }
+  }
+
+	
 }

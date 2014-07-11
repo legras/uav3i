@@ -501,11 +501,13 @@ public class SymbolMap extends Map implements Touchable
 			if (T != null)
 			{
 				T.updateTouch(x, y, touchref);
-				Manoeuver mnvr = (Manoeuver) T;
-		    // Move update on Veto UI
-		    if(mnvr.isShared())
-		      UAVModel.communicateManoeuver(mnvr);
-
+				if(T instanceof Manoeuver)
+				{
+	        Manoeuver mnvr = (Manoeuver) T;
+	        // Move update on Veto UI
+	        if(mnvr.isShared())
+	          UAVModel.communicateManoeuver(mnvr);
+				}
 			}
 		}
 	}
