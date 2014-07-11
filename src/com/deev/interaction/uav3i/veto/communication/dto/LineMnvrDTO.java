@@ -8,8 +8,12 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
+import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
+import sun.applet.Main;
 import uk.me.jstott.jcoord.LatLng;
 
 public class LineMnvrDTO extends ManoeuverDTO
@@ -101,11 +105,29 @@ public class LineMnvrDTO extends ManoeuverDTO
   //-----------------------------------------------------------------------------
   private LatLng getOffsetPoint(LatLng pointLatLng)
   {
-    Point2D.Double pointPixels = Veto.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
-    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
-    Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * Rpx,
-                                                           pointPixels.y + _v.y * Rpx);
-    return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+    Point2D.Double pointPixels;
+    double rpx;
+    Point2D.Double pointOffsetPixels;
+    
+    switch (UAV3iSettings.getMode())
+    {
+      case VETO:
+        pointPixels = Veto.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
+        rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+        pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * rpx,
+                                                              pointPixels.y + _v.y * rpx);
+        return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+      case PAPARAZZI_DIRECT:
+        pointPixels = MainFrame.getSymbolMap().getScreenForLatLng(pointLatLng);
+        rpx = MainFrame.getSymbolMap().getPPM() * _currentRm;
+        pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * rpx,
+                                                              pointPixels.y + _v.y * rpx);
+        return MainFrame.getSymbolMap().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+      default:
+        // No reason to be here in other case...
+        break;
+    }
+    return null;
   }
   //-----------------------------------------------------------------------------
   @Override
