@@ -92,7 +92,7 @@ public class Launcher
       case PAPARAZZI_REMOTE:
         if (UAV3iSettings.getTUIO() && System.getProperty("os.name").startsWith("Windows"))
         {
-          // Lancem
+          // Lancement du bridge Windows/TUIO (Touch2Tuio_x64.exe)
           startTouch2Tuio();
           LoggerUtil.LOG.log(Level.CONFIG, "Bridge Windows/TUIO started (Touch2Tuio_x64.exe)");
         }
@@ -140,23 +140,14 @@ public class Launcher
 
   private static class AfficheurFlux implements Runnable
   {
-
     private final InputStream inputStream;
-
     AfficheurFlux(InputStream inputStream)
     {
       this.inputStream = inputStream;
     }
-
-//    private BufferedReader getBufferedReader(InputStream is)
-//    {
-//      return new BufferedReader(new InputStreamReader(is));
-//    }
-
     @Override
     public void run()
     {
-      //BufferedReader br = getBufferedReader(inputStream);
       BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
       String ligne = "";
       try
