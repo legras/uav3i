@@ -4,11 +4,15 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
+import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import fr.dgac.ivy.Ivy;
@@ -115,8 +119,40 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   @Override
   public void executeManoeuver(ManoeuverDTO mnvrDTO)
   {
-    // Return true because MODE is PAPARAZZI_DIRECT
-    //return true;
+    switch (mnvrDTO.getClass().getSimpleName())
+    {
+      case "CircleMnvrDTO":
+        CircleMnvrDTO circleMnvrDTO = (CircleMnvrDTO) mnvrDTO;
+        // Move way point for circle center.
+        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+        setNavRadius(circleMnvrDTO.getCurrentRadius());
+        jumpToBlock("Circle");
+        break;
+      case "LineMnvrDTO":
+        LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
+        // Move way points to each side of the line.
+        moveWayPoint("L1", lineMnvrDTO.getTrajA());
+        moveWayPoint("L2", lineMnvrDTO.getTrajB());
+        // Circle radius may have previously been modified by a circle
+        // manoeuver, set it to default.
+        setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+        jumpToBlock("Line_L1-L2");
+        break;
+      case "BoxMnvrDTO":
+        BoxMnvrDTO boxMnvr = (BoxMnvrDTO) mnvrDTO;
+        // Move way points to each side of the box.
+        moveWayPoint("S1", boxMnvr.getBoxA());
+        moveWayPoint("S2", boxMnvr.getBoxB());
+        // Circle radius may have previously been modified by a circle
+        // manoeuver, set it to default.
+        setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
+        if (boxMnvr.isNorthSouth())
+          jumpToBlock("Survey_S1-S2_NS");
+        else
+          // West-East
+          jumpToBlock("Survey_S1-S2_WE");
+        break;
+    }
   }
   //-----------------------------------------------------------------------------
   @Override
