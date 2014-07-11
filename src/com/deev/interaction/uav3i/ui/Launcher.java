@@ -85,20 +85,20 @@ public class Launcher
 				break;
 		}
 		
-    switch (UAV3iSettings.getMode())
+    // Lancement éventuel du bridge Windows/TUIO (Touch2Tuio_x64.exe)
+    if (UAV3iSettings.getTUIO() && System.getProperty("os.name").startsWith("Windows"))
     {
-      case REPLAY:
-      case PAPARAZZI_DIRECT:
-      case PAPARAZZI_REMOTE:
-        if (UAV3iSettings.getTUIO() && System.getProperty("os.name").startsWith("Windows"))
-        {
-          // Lancement du bridge Windows/TUIO (Touch2Tuio_x64.exe)
+      switch (UAV3iSettings.getMode())
+      {
+        case REPLAY:
+        case PAPARAZZI_DIRECT:
+        case PAPARAZZI_REMOTE:
           startTouch2Tuio();
           LoggerUtil.LOG.log(Level.CONFIG, "Bridge Windows/TUIO started (Touch2Tuio_x64.exe)");
-        }
-      default:
-        // Does nothing in other cases
-        break;
+        default:
+          // Does nothing in other cases
+          break;
+      }
     }
 	}
 	
