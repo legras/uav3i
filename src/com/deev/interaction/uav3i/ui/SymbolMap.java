@@ -573,18 +573,22 @@ public class SymbolMap extends Map implements Touchable
 		UAVModel.executeManoeuver(mnvr);
 		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 		
-		// On lock les share et les jump pour tous et le delete sur mnvr
-		_areShareAndAskLocked = true;
-		
-		synchronized(this)
+		if(UAV3iSettings.getMode() != Mode.PAPARAZZI_DIRECT)
 		{
-			for (Manoeuver m : _manoeuvers)
-			{
-				m.lockShareAndAsk(true);
-			}
-			
-			mnvr.lockDelete(true);
+	    // On lock les share et les jump pour tous et le delete sur mnvr
+	    _areShareAndAskLocked = true;
+	    
+	    synchronized(this)
+	    {
+	      for (Manoeuver m : _manoeuvers)
+	      {
+	        m.lockShareAndAsk(true);
+	      }
+	      
+	      mnvr.lockDelete(true);
+	    }
 		}
+		
 	}
 	
 	public void answerManoeuver(int id, boolean accepted)
