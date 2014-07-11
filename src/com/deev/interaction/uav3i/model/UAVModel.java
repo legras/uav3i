@@ -285,51 +285,12 @@ public class UAVModel
 
 		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 		paparazziCommunication.executeManoeuver(mnvrDTO);
-		//		
-		//    switch (mnvr.getClass().getSimpleName())
-		//    {
-		//      case "CircleMnvr":
-		//        CircleMnvr circleMnvr = (CircleMnvr) mnvr;
-		//        // Move way point for circle center.
-		//        paparazziCommunication.moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
-		//        paparazziCommunication.setNavRadius(circleMnvr.getCurrentRadius());
-		//        paparazziCommunication.jumpToBlock("Circle");
-		//        break;
-		//      case "LineMnvr":
-		//        LineMnvr lineMnvr = (LineMnvr) mnvr;
-		//        // Move way points to each side of the line.
-		//        paparazziCommunication.moveWayPoint("L1", lineMnvr.getTrajA());
-		//        paparazziCommunication.moveWayPoint("L2", lineMnvr.getTrajB());
-		//        // Circle radius may have previously been modified by a circle
-		//        // manoeuver, set it to default.
-		//        paparazziCommunication.setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
-		//        paparazziCommunication.jumpToBlock("Line_L1-L2");
-		//        break;
-		//      case "BoxMnvr":
-		//        BoxMnvr boxMnvr = (BoxMnvr) mnvr;
-		//        // Move way points to each side of the box.
-		//        paparazziCommunication.moveWayPoint("S1", boxMnvr.getBoxA());
-		//        paparazziCommunication.moveWayPoint("S2", boxMnvr.getBoxB());
-		//        // Circle radius may have previously been modified by a circle
-		//        // manoeuver, set it to default.
-		//        paparazziCommunication.setNavRadius(AirframeFacade.getInstance().getDefaultCircleRadius());
-		//        if (boxMnvr.isNorthSouth())
-		//          paparazziCommunication.jumpToBlock("Survey_S1-S2_NS");
-		//        else
-		//          // West-East
-		//          paparazziCommunication.jumpToBlock("Survey_S1-S2_WE");
-		//        break;
-		//    }
 	}
 
 	public static void clearManoeuver()
 	{
 		paparazziCommunication.clearManoeuver();
 	}
-	//	public static PaparazziCommunication getPaparazziCommunication()
-	//	{
-	//		return paparazziCommunication;
-	//	}
 
 	/**
 	 * @return reference cruise speed (m/s) for ETA calculations
