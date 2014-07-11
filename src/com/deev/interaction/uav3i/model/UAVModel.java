@@ -280,8 +280,9 @@ public class UAVModel
 		
 		ManoeuverDTO mnvrDTO = mnvr.toDTO();
 
+		// TODO A tester : la communication de la manoeuvre a déjà été faite dans SymbolMap.shareManoeuver
 		// Communication de la manoeuvre pour dessin sur l'IHM Veto.
-		paparazziCommunication.communicateManoeuver(mnvrDTO);
+		//paparazziCommunication.communicateManoeuver(mnvrDTO);
 
 		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 		paparazziCommunication.executeManoeuver(mnvrDTO);

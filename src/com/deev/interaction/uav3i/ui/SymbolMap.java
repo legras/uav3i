@@ -572,22 +572,24 @@ public class SymbolMap extends Map implements Touchable
 		shareManoeuver(mnvr);
 		UAVModel.executeManoeuver(mnvr);
 		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
-		
-		if(UAV3iSettings.getMode() != Mode.PAPARAZZI_DIRECT)
-		{
-	    // On lock les share et les jump pour tous et le delete sur mnvr
-	    _areShareAndAskLocked = true;
-	    
-	    synchronized(this)
-	    {
-	      for (Manoeuver m : _manoeuvers)
-	      {
-	        m.lockShareAndAsk(true);
-	      }
-	      
-	      mnvr.lockDelete(true);
-	    }
-		}
+
+    _areShareAndAskLocked = true;
+
+    synchronized (this)
+    {
+      for (Manoeuver m : _manoeuvers)
+      {
+        m.lockShareAndAsk(true);
+      }
+
+      mnvr.lockDelete(true);
+    }
+
+    // En mode PAPARAZZI_DIRECT, on simule l'acceptation de l'opérateur Paparazzi.
+    if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT)
+    {
+      MainFrame.getSymbolMap().answerManoeuver(mnvr.getId(), true);
+    }
 		
 	}
 	

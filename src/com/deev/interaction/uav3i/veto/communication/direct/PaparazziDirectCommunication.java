@@ -154,8 +154,6 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
           jumpToBlock("Survey_S1-S2_WE");
         break;
     }
-    // On simule l'acceptation de l'opérateur Paparazzi. 
-    MainFrame.getSymbolMap().answerManoeuver(mnvrDTO.getId(), true);
   }
   //-----------------------------------------------------------------------------
   @Override
