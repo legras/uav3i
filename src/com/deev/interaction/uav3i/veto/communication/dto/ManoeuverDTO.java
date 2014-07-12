@@ -13,15 +13,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.Serializable;
 
-import javax.imageio.ImageIO;
-
-import com.deev.interaction.touch.Palette;
 import com.deev.interaction.uav3i.ui.Palette3i;
-import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 
 public abstract class ManoeuverDTO implements Serializable
 {

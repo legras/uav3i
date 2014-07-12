@@ -5,10 +5,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.ui.Veto;
-
 import uk.me.jstott.jcoord.LatLng;
+
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
 public class CircleMnvrDTO extends ManoeuverDTO
 {

@@ -2,8 +2,6 @@ package com.deev.interaction.uav3i.veto.communication;
 
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
-import uk.me.jstott.jcoord.LatLng;
-
 public abstract class PaparazziCommunication
 {
   //-----------------------------------------------------------------------------

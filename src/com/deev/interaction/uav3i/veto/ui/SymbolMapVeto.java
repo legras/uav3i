@@ -11,7 +11,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -23,8 +22,6 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
-import com.deev.interaction.uav3i.ui.MainFrame;
-import com.deev.interaction.uav3i.ui.Switcher3Buttons;
 import com.deev.interaction.uav3i.ui.Trajectory;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 

@@ -8,13 +8,11 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
+import uk.me.jstott.jcoord.LatLng;
+
 import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.veto.ui.Veto;
-
-import sun.applet.Main;
-import uk.me.jstott.jcoord.LatLng;
 
 public class LineMnvrDTO extends ManoeuverDTO
 {

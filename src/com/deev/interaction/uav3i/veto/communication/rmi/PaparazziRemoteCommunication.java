@@ -14,15 +14,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JOptionPane;
 
-import com.deev.interaction.uav3i.ui.MainFrame;
-import com.deev.interaction.uav3i.ui.Manoeuver;
-import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-
-import uk.me.jstott.jcoord.LatLng;
-
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 /**
  * Organe de transmission, <i><b>côté uav3i</b></i>, des communications entre <b>uav3i</b> et <b>Paparazzi</b>.

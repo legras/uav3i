@@ -5,8 +5,6 @@ import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
-import uk.me.jstott.jcoord.LatLng;
-
 public interface IPaparazziTransmitter extends Remote
 {
   //-----------------------------------------------------------------------------
