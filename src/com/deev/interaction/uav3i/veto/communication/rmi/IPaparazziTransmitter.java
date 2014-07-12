@@ -11,30 +11,6 @@ public interface IPaparazziTransmitter extends Remote
 {
   //-----------------------------------------------------------------------------
   /**
-   * Mise à jour du rayon (en mètres ?) pour le vol circulaire.
-   * @param radius rayon en mètres.
-   * @throws RemoteException
-   */
-  public void setNavRadius(double radius) throws RemoteException;
-  //-----------------------------------------------------------------------------
-  /**
-   * Déplacement d'un waypoint défini dans le plan de vol.
-   * 
-   * @param waypointName nom du waypoint (attribut <code>name</code> de l'élément <code>&lt;waypoint&gt:</code>).
-   * @param coordinate nouvelles coordonnées en {@link LatLng} du point.
-   * @throws RemoteException
-   */
-  public void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException;
-  //-----------------------------------------------------------------------------
-  /**
-   * Demande d'exécution d'un template défini dans le plan de vol.
-   * 
-   * @param blockName nom du template de vol à exécuter.
-   * @throws RemoteException
-   */
-  public void jumpToBlock(String blockName) throws RemoteException;
-  //-----------------------------------------------------------------------------
-  /**
    * uav3i signale qu'il est prêt : la partie cliente de PaparazziTransmitter va
    * pouvoir se connecter à la partie serveur de uav3i.
    * 
@@ -44,18 +20,28 @@ public interface IPaparazziTransmitter extends Remote
    */
   public void register(String uav3iHostname, int uav3iPort) throws RemoteException;
   //-----------------------------------------------------------------------------
-//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
-  //-----------------------------------------------------------------------------
   /**
-   * Communication de la manoeuvre au Veto : permet son dessin sur l'IHM.
+   * Communication d'une manoeuvre au responsable du vol pour affichage sur
+   * l'interface Veto.
    * 
-   * @param mnvrDTO le DTO de la manoeuvre à afficher.
+   * @param mnvrDTO objet DTO (transfert de données) représentant les données de
+   *                la manoeuvre.
    * @throws RemoteException
    */
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
+  /**
+   * Exécution de la manoeuvre sur Paparazzi.
+   * 
+   * @param mnvrDTO objet DTO (transfert de données) représentant les données de
+   *                la manoeuvre.
+   * @throws RemoteException
+   */
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   //-----------------------------------------------------------------------------
+  /**
+   * Demande d'effacement d'une manoeuvre sur l'interface Veto.
+   */
   public void clearManoeuver() throws RemoteException;
   //-----------------------------------------------------------------------------
 }

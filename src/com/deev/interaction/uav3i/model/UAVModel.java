@@ -248,24 +248,14 @@ public class UAVModel
 			return false;
 	}
 
-	//public static void submitManoeuver(Manoeuver mnvr)
 	public static void communicateManoeuver(Manoeuver mnvr)
 	{
-		// TODO: Philippe traite le cas null
-		if (mnvr == null)
-			return;
-
-		switch (UAV3iSettings.getMode())
-		{
-			case PAPARAZZI_DIRECT:
-				LoggerUtil.LOG.log(Level.INFO, "Manoeuver (" + mnvr.getClass().getSimpleName() + ") automaticaly accepted: mode = PAPARAZZI_DIRECT");
-				break;
-			case PAPARAZZI_REMOTE:
-				paparazziCommunication.communicateManoeuver(mnvr.toDTO());
-				break;
-			default:
-				break;
-		}
+	  // Communication of a manoeuver is only needed in PAPARAZZI_REMOTE mode.
+	  if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
+	  {
+	    LoggerUtil.LOG.log(Level.INFO, "Communication of manoeuver to Veto requested");
+      paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+	  }
 	}
 
 	public static void executeManoeuver(Manoeuver mnvr)

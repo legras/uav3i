@@ -148,60 +148,46 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
                                   UAV3iSettings.getUav3iServerPort());
   }
   //-----------------------------------------------------------------------------
-  @Override
-  public void setNavRadius(double radius)
-  {
-    try
-    {
-      paparazziTransmitter.setNavRadius(radius);
-      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - setNavRadius("+radius+")");
-    }
-    catch (RemoteException e)
-    {
-      e.printStackTrace();
-    }
-  }
-  //-----------------------------------------------------------------------------
-  @Override
-  public void moveWayPoint(String waypointName, LatLng coordinate)
-  {
-    try
-    {
-      paparazziTransmitter.moveWayPoint(waypointName, coordinate);
-      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - moveWayPoint(" + waypointName + ", " + coordinate + ")");
-    }
-    catch (RemoteException e)
-    {
-      e.printStackTrace();
-    }
-  }
-  //-----------------------------------------------------------------------------
-  @Override
-  public void jumpToBlock(String blockName)
-  {
-    try
-    {
-      paparazziTransmitter.jumpToBlock(blockName);
-      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - jumpToBlock(" + blockName + ")");
-    }
-    catch (RemoteException e)
-    {
-      e.printStackTrace();
-    }
-  }
-  //-----------------------------------------------------------------------------
 //  @Override
-//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO)
+//  public void setNavRadius(double radius)
 //  {
 //    try
 //    {
-//      return paparazziTransmitter.submitManoeuver(mnvrDTO);
+//      paparazziTransmitter.setNavRadius(radius);
+//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - setNavRadius("+radius+")");
 //    }
 //    catch (RemoteException e)
 //    {
 //      e.printStackTrace();
 //    }
-//    return false;
+//  }
+  //-----------------------------------------------------------------------------
+//  @Override
+//  public void moveWayPoint(String waypointName, LatLng coordinate)
+//  {
+//    try
+//    {
+//      paparazziTransmitter.moveWayPoint(waypointName, coordinate);
+//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - moveWayPoint(" + waypointName + ", " + coordinate + ")");
+//    }
+//    catch (RemoteException e)
+//    {
+//      e.printStackTrace();
+//    }
+//  }
+  //-----------------------------------------------------------------------------
+//  @Override
+//  public void jumpToBlock(String blockName)
+//  {
+//    try
+//    {
+//      paparazziTransmitter.jumpToBlock(blockName);
+//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - jumpToBlock(" + blockName + ")");
+//    }
+//    catch (RemoteException e)
+//    {
+//      e.printStackTrace();
+//    }
 //  }
   //-----------------------------------------------------------------------------
   @Override

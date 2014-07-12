@@ -45,61 +45,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Initialize the connection to the Ivy bus.
-   * @throws IvyException 
-   */
-  private void initializeIvy() throws IvyException
-  {
-    // initialization, name and ready message
-    bus = new Ivy(applicationName,
-                  applicationName + " Ready",
-                  null);
-    uavPositionListener     = new UAVPositionListener();
-    uavFlightParamsListener = new UAVFlightParamsListener();
-    uavWayPointsListener    = new UAVWayPointsListener();
-    LoggerUtil.LOG.config("Ivy initialized");
-  }
-  //-----------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see eu.telecom_bretagne.uav3i.communication.IPaparazziTransmitter#setNavRadius(double)
-   */
-  @Override
-  public void setNavRadius(double radius) throws RemoteException
-  {
-    // Exemple : dl DL_SETTING 5 6 1000.000000
-    // Que veux dire le 6 ?
-    sendMsg("dl DL_SETTING 5 6 " + radius);
-    LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
-  }
-  //-----------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see eu.telecom_bretagne.uav3i.communication.IPaparazziTransmitter#moveWayPoint(java.lang.String, uk.me.jstott.jcoord.LatLng)
-   */
-  @Override
-  public void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
-  {
-    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
-    LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
-  }
-  //-----------------------------------------------------------------------------
-  /* (non-Javadoc)
-   * @see eu.telecom_bretagne.uav3i.communication.IPaparazziTransmitter#jumpToBlock(java.lang.String)
-   */
-  @Override
-  public void jumpToBlock(String blockName) throws RemoteException
-  {
-    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
-    LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
-  }
-  //-----------------------------------------------------------------------------
-//  @Override
-//  public boolean submitManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
-//  {
-//    LoggerUtil.LOG.info("submitManoeuver("+mnvrDTO+")");
-//    return true;
-//  }
-  //-----------------------------------------------------------------------------
   @Override
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
@@ -112,17 +57,10 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
     new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
-    //return true;
-//    int response = JOptionPane.showConfirmDialog(Veto.frame,
-//                                                 "<html>Execution of this manoeuver?",
-//                                                 "Execution?",
-//                                                 JOptionPane.YES_NO_OPTION,
-//                                                 JOptionPane.WARNING_MESSAGE);
   }
   //-----------------------------------------------------------------------------
   private void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
-    System.out.println("####### PaparazziTransmitterImpl.startManoeuver(" + mnvrDTO + ")");
     switch (mnvrDTO.getClass().getSimpleName())
     {
       case "CircleMnvrDTO":
@@ -165,6 +103,42 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     LoggerUtil.LOG.info("clearManoeuver()");
     Veto.getSymbolMapVeto().clearManoeuver();
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Initialize the connection to the Ivy bus.
+   * @throws IvyException 
+   */
+  private void initializeIvy() throws IvyException
+  {
+    // initialization, name and ready message
+    bus = new Ivy(applicationName,
+                  applicationName + " Ready",
+                  null);
+    uavPositionListener     = new UAVPositionListener();
+    uavFlightParamsListener = new UAVFlightParamsListener();
+    uavWayPointsListener    = new UAVWayPointsListener();
+    LoggerUtil.LOG.config("Ivy initialized");
+  }
+  //-----------------------------------------------------------------------------
+  private void setNavRadius(double radius) throws RemoteException
+  {
+    // Exemple : dl DL_SETTING 5 6 1000.000000
+    // Que veux dire le 6 ?
+    sendMsg("dl DL_SETTING 5 6 " + radius);
+    LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
+  }
+  //-----------------------------------------------------------------------------
+  private void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
+  {
+    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+    LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
+  }
+  //-----------------------------------------------------------------------------
+  private void jumpToBlock(String blockName) throws RemoteException
+  {
+    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
   }
   //-----------------------------------------------------------------------------
   /**
@@ -300,7 +274,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
                                                    JOptionPane.WARNING_MESSAGE);
       try
       {
-        if(response == 0)
+        if(response == JOptionPane.YES_OPTION)
         {
           uav3iTransmitter.resultAskExecution(mnvrDTO, true);
           pt.startManoeuver(mnvrDTO);
