@@ -18,7 +18,6 @@ import fr.dgac.ivy.IvyException;
 
 /**
  * @author legras
- *
  */
 public class Launcher
 {
@@ -102,19 +101,24 @@ public class Launcher
     }
 	}
 	
+	/**
+	 * Touch2Tuio assure la transformation des touchers Windows en touchers TUIO sur
+	 * une fenêtre donnée, identifiée par le nom dans sa barre de titre. 
+	 */
 	private static void startTouch2Tuio()
 	{
-	  // Touch2Tuio assure la transformation des 'touches' Windows en 'touches' TUIO sur
-	  // une fenêtre donnée. Si l'outil est lancé avant l'aparation de la fenêtre (ce qui
-	  // peut être relativement long avec les initialisations diverses), Touch2Tuio
-	  // s'arrête et renvoie l'erreur suivante :
+	  // Si l'outil est lancé avant l'apparation de la fenêtre (ce qui peut être
+	  // relativement long avec les initialisations diverses), Touch2Tuio s'arrête
+	  // et renvoie l'erreur suivante :
 	  //   - Could not install hook for "uav3i"
 	  // Délai d'une seconde avant le lancement.
     try { Thread.sleep(1000); } catch (InterruptedException e) {}
 
 	  try
 	  {
-	    //creation du processus
+	    // Creation du processus : "uav3i" est le titre de la fenêtre sur laquelle
+	    // Touch2Tuio assurera la traduction touchers Windows/touchers TUIO. Le titre
+	    // de la fenêtre est donné dans le contructeur de MainFrame.
 	    Process p = Runtime.getRuntime().exec("Touch2Tuio_0.2/Touch2Tuio_x64.exe uav3i");
 
 	    // Récupération des flux : utile ici ? Au lancement, Touch2Tuio affiche "Successfully
