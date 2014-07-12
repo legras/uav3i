@@ -14,6 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import javax.swing.JOptionPane;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
@@ -143,48 +144,6 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
                                   UAV3iSettings.getUav3iServerPort());
   }
   //-----------------------------------------------------------------------------
-//  @Override
-//  public void setNavRadius(double radius)
-//  {
-//    try
-//    {
-//      paparazziTransmitter.setNavRadius(radius);
-//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - setNavRadius("+radius+")");
-//    }
-//    catch (RemoteException e)
-//    {
-//      e.printStackTrace();
-//    }
-//  }
-  //-----------------------------------------------------------------------------
-//  @Override
-//  public void moveWayPoint(String waypointName, LatLng coordinate)
-//  {
-//    try
-//    {
-//      paparazziTransmitter.moveWayPoint(waypointName, coordinate);
-//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - moveWayPoint(" + waypointName + ", " + coordinate + ")");
-//    }
-//    catch (RemoteException e)
-//    {
-//      e.printStackTrace();
-//    }
-//  }
-  //-----------------------------------------------------------------------------
-//  @Override
-//  public void jumpToBlock(String blockName)
-//  {
-//    try
-//    {
-//      paparazziTransmitter.jumpToBlock(blockName);
-//      LoggerUtil.LOG.info("Message sent to PaparazziTransmitter - jumpToBlock(" + blockName + ")");
-//    }
-//    catch (RemoteException e)
-//    {
-//      e.printStackTrace();
-//    }
-//  }
-  //-----------------------------------------------------------------------------
   @Override
   public void communicateManoeuver(ManoeuverDTO mnvrDTO)
   {
@@ -209,6 +168,12 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void executeManoeuver(Manoeuver mnvr)
+  {
+    // Not used in PAPARAZZI_REMOTE mode.
   }
   //-----------------------------------------------------------------------------
   @Override

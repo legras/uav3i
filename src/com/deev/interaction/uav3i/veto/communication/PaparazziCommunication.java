@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.veto.communication;
 
+import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public abstract class PaparazziCommunication
@@ -15,12 +16,20 @@ public abstract class PaparazziCommunication
   public abstract void communicateManoeuver(ManoeuverDTO mnvrDTO);
   //-----------------------------------------------------------------------------
   /**
-   * Exécution de la manoeuvre sur Paparazzi.
+   * Exécution de la manoeuvre sur Paparazzi dans le mode PAPARAZZI_REMOTE.
    * 
    * @param mnvrDTO objet DTO (transfert de données) représentant les données de
    *                la manoeuvre.
    */
   public abstract void executeManoeuver(ManoeuverDTO mnvrDTO);
+  //-----------------------------------------------------------------------------
+  /**
+   * Exécution de la manoeuvre sur Paparazzi dans le mode PAPARAZZI_DIRECT.
+   * 
+   * @param mnvrDTO objet DTO (transfert de données) représentant les données de
+   *                la manoeuvre.
+   */
+  public abstract void executeManoeuver(Manoeuver mnvr);
   //-----------------------------------------------------------------------------
   /**
    * Demande d'effacement d'une manoeuvre sur l'interface Veto : <i>méthode utile

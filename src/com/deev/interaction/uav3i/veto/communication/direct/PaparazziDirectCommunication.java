@@ -2,6 +2,10 @@ package com.deev.interaction.uav3i.veto.communication.direct;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.BoxMnvr;
+import com.deev.interaction.uav3i.ui.CircleMnvr;
+import com.deev.interaction.uav3i.ui.LineMnvr;
+import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
@@ -10,9 +14,6 @@ import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
-import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 import fr.dgac.ivy.Ivy;
@@ -53,27 +54,33 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   @Override
   public void executeManoeuver(ManoeuverDTO mnvrDTO)
   {
-    switch (mnvrDTO.getClass().getSimpleName())
+    // Not used in PAPARAZZI_DIRECT mode.
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void executeManoeuver(Manoeuver mnvr)
+  {
+    switch (mnvr.getClass().getSimpleName())
     {
-      case "CircleMnvrDTO":
-        CircleMnvrDTO circleMnvrDTO = (CircleMnvrDTO) mnvrDTO;
+      case "CircleMnvr":
+        CircleMnvr circleMnvr = (CircleMnvr) mnvr;
         // Move way point for circle center.
-        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
-        setNavRadius(circleMnvrDTO.getCurrentRadius());
+        moveWayPoint("CIRCLE_CENTER", circleMnvr.getCenter());
+        setNavRadius(circleMnvr.getCurrentRadius());
         jumpToBlock("Circle");
         break;
-      case "LineMnvrDTO":
-        LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
+      case "LineMnvr":
+        LineMnvr lineMnvr = (LineMnvr) mnvr;
         // Move way points to each side of the line.
-        moveWayPoint("L1", lineMnvrDTO.getTrajA());
-        moveWayPoint("L2", lineMnvrDTO.getTrajB());
+        moveWayPoint("L1", lineMnvr.getTrajA());
+        moveWayPoint("L2", lineMnvr.getTrajB());
         // Circle radius may have previously been modified by a circle
         // manoeuver, set it to default.
         setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
         jumpToBlock("Line_L1-L2");
         break;
-      case "BoxMnvrDTO":
-        BoxMnvrDTO boxMnvr = (BoxMnvrDTO) mnvrDTO;
+      case "BoxMnvr":
+        BoxMnvr boxMnvr = (BoxMnvr) mnvr;
         // Move way points to each side of the box.
         moveWayPoint("S1", boxMnvr.getBoxA());
         moveWayPoint("S2", boxMnvr.getBoxB());

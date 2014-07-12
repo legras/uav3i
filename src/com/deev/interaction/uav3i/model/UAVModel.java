@@ -260,22 +260,23 @@ public class UAVModel
 
 	public static void executeManoeuver(Manoeuver mnvr)
 	{
-		if (UAV3iSettings.getMode() == Mode.REPLAY)
-		{
-			LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested... but we are in REPLAY mode, ignored");
-			return;
-		}
-		
-		LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-		
-		ManoeuverDTO mnvrDTO = mnvr.toDTO();
-
-		// TODO A tester : la communication de la manoeuvre a déjà été faite dans SymbolMap.shareManoeuver
-		// Communication de la manoeuvre pour dessin sur l'IHM Veto.
-		//paparazziCommunication.communicateManoeuver(mnvrDTO);
-
-		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
-		paparazziCommunication.executeManoeuver(mnvrDTO);
+    mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+	  switch (UAV3iSettings.getMode())
+    {
+      case REPLAY:
+        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested... but we are in REPLAY mode, ignored");
+        break;
+      case PAPARAZZI_REMOTE:
+        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
+        paparazziCommunication.executeManoeuver(mnvr.toDTO());
+        break;
+      case PAPARAZZI_DIRECT:
+        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
+        paparazziCommunication.executeManoeuver(mnvr);
+        break;
+      default:
+        break;
+    }
 	}
 
 	public static void clearManoeuver()
