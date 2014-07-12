@@ -474,6 +474,8 @@ public class SymbolMap extends Map implements Touchable
 			
 			T.addTouch(x, y, touchref);
 			_touchedSymbols.put(touchref, T);
+			if (T instanceof Manoeuver)
+				_currentMnvr = (Manoeuver) T;
 		}
 	}
 
@@ -569,52 +571,49 @@ public class SymbolMap extends Map implements Touchable
 	
 	public void askManoeuver(Manoeuver mnvr)
 	{
-		shareManoeuver(mnvr);
-		UAVModel.executeManoeuver(mnvr);
-		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+	  shareManoeuver(mnvr);
+	  UAVModel.executeManoeuver(mnvr);
+	  mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 
-    _areShareAndAskLocked = true;
+	  // On lock les share et les jump pour tous et le delete sur mnvr
+	  _areShareAndAskLocked = true;
 
-    synchronized (this)
-    {
-      for (Manoeuver m : _manoeuvers)
-      {
-        m.lockShareAndAsk(true);
-      }
+	  for (Manoeuver m : _manoeuvers)
+	  {
+	    m.lockShareAndAsk(true);
+	  }
 
-      mnvr.lockDelete(true);
-    }
+	  mnvr.lockDelete(true);
+	  mnvr.setAsked(true);
 
-    // En mode PAPARAZZI_DIRECT, on simule l'acceptation de l'opérateur Paparazzi.
+    // En mode PAPARAZZI_DIRECT, on simule l'acceptation de l'opérateur Paparazzi
+	  // pour remettre en état les statuts des manoeuvres.
     if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT)
     {
-      MainFrame.getSymbolMap().answerManoeuver(mnvr.getId(), true);
+      answerManoeuver(mnvr.getId(), true);
     }
-		
 	}
 	
 	public void answerManoeuver(int id, boolean accepted)
 	{
 		Manoeuver mnvr = findManoeuverById(id);
-		
+
 		if (accepted)
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
 		else
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
-		
+
 		// On unlock les share et les jump et le delete
 		_areShareAndAskLocked = false;
-		
-//		synchronized(this)
-//		{
-			for (Manoeuver m : _manoeuvers)
-			{
-				m.lockShareAndAsk(false);
-				m.lockDelete(false);
-			}
-//		}
+
+		for (Manoeuver m : _manoeuvers)
+		{
+			m.lockShareAndAsk(false);
+			m.lockDelete(false);
+			m.setAsked(false);
+		}
 	}
-	
+
 	public boolean areShareAndAskLocked()
 	{
 		return _areShareAndAskLocked;

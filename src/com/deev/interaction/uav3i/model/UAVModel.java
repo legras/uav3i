@@ -281,6 +281,12 @@ public class UAVModel
 
 	public static void clearManoeuver()
 	{
+		if (UAV3iSettings.getMode() == Mode.REPLAY)
+		{
+			LoggerUtil.LOG.log(Level.INFO, "Clear manoeuver requested... but we are in REPLAY mode, ignored");
+			return;
+		}
+		
 		paparazziCommunication.clearManoeuver();
 	}
 
