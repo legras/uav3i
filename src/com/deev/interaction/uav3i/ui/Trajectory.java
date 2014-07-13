@@ -10,7 +10,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.veto.ui.SymbolMapVeto;
-import com.deev.interaction.uav3i.veto.ui.Veto2;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 
 /**
@@ -71,7 +71,7 @@ public class Trajectory
 		  switch (UAV3iSettings.getMode())
       {
         case VETO:
-          mapViewer = Veto2.getMapViewer();
+          mapViewer = Veto.getMapViewer();
           break;
         default:
           mapViewer = MainFrame.OSMMap.getMapViewer();

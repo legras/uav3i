@@ -141,8 +141,7 @@ public class UAVScope implements MapMarker
     g2.fillOval(position.x-5, position.y-5, 10, 10);
 
     // Dessin du cercle
-    //int rayonPixels = (int) (maxDistanceFromHome / Veto.getMapViewer().getMeterPerPixel());
-    int rayonPixels = (int) (maxDistanceFromHome / Veto2.getMapViewer().getMeterPerPixel());
+    int rayonPixels = (int) (maxDistanceFromHome / Veto.getMapViewer().getMeterPerPixel());
     int centerX = position.x - (rayonPixels);
     int centerY = position.y - (rayonPixels);
     g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);

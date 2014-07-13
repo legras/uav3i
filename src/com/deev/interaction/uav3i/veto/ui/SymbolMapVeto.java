@@ -60,7 +60,7 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   public Point2D.Double getScreenForLatLng(LatLng latlng)
   { 
-    Point a = Veto2.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
+    Point a = Veto.getMapViewer().getMapPosition(latlng.getLat(), latlng.getLng(), false);
     Point b = new Point(a.x+1, a.y+1);
     
     LatLng A = getLatLngForScreen(a.x, a.y);
@@ -77,8 +77,8 @@ public class SymbolMapVeto extends JComponent
     int X = (int) x;
     int Y = (int) y;
 
-    Coordinate A = Veto2.getMapViewer().getPosition(X, Y);
-    Coordinate B = Veto2.getMapViewer().getPosition(X+1, Y+1);
+    Coordinate A = Veto.getMapViewer().getPosition(X, Y);
+    Coordinate B = Veto.getMapViewer().getPosition(X+1, Y+1);
 
     double lat = A.getLat() + (y-(double)Y) * (B.getLat()-A.getLat());
     double lon = A.getLon() + (x-(double)X) * (B.getLon()-A.getLon());
@@ -88,7 +88,7 @@ public class SymbolMapVeto extends JComponent
   //-----------------------------------------------------------------------------
   public double getPPM()
   {
-    return 1. / Veto2.getMapViewer().getMeterPerPixel();
+    return 1. / Veto.getMapViewer().getMeterPerPixel();
   }
   //-----------------------------------------------------------------------------
   public void paintComponent(Graphics g)
@@ -131,7 +131,7 @@ public class SymbolMapVeto extends JComponent
       LatLng wayPointPosition = wayPoint.getWayPointPosition();
       if(wayPointPosition != null)
       {
-        Point p = Veto2.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+        Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
         g2.drawImage(waypointImage,
                      p.x - waypointImage.getWidth()/2,
                      p.y - waypointImage.getHeight()/2,

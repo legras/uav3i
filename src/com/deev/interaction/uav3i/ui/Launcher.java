@@ -12,8 +12,8 @@ import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.VideoModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.veto.ui.Veto2;
-import com.deev.interaction.uav3i.veto.ui.Veto2;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
 import fr.dgac.ivy.IvyException;
 
@@ -76,7 +76,7 @@ public class Launcher
 					public void run()
 					{
             //final Veto frame = new Veto();
-            final Veto2 frame = new Veto2();
+            final Veto frame = new Veto();
 						frame.setVisible(true); 
 						frame.requestFocusInWindow();
 					}

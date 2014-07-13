@@ -7,7 +7,7 @@ import java.awt.geom.Point2D;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.veto.ui.Veto2;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
 public class CircleMnvrDTO extends ManoeuverDTO
 {
@@ -32,14 +32,14 @@ public class CircleMnvrDTO extends ManoeuverDTO
   {
     AffineTransform old = g2.getTransform();
 
-    Point2D.Double centerPx = Veto2.getSymbolMapVeto().getScreenForLatLng(_center);
+    Point2D.Double centerPx = Veto.getSymbolMapVeto().getScreenForLatLng(_center);
     g2.translate(centerPx.x, centerPx.y);
     Ellipse2D.Double ell = new Ellipse2D.Double(-RPX, -RPX, 2*RPX, 2*RPX);
 
     paintFootprint(g2, ell);
 
     
-    double Rpx = Veto2.getSymbolMapVeto().getPPM() * _currentRm;
+    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
 
     ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 

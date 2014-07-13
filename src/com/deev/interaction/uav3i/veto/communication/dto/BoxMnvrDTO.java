@@ -7,7 +7,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import com.deev.interaction.uav3i.veto.ui.Veto2;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -139,8 +139,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
         paintAdjustLine(g2, boxhndl.getPath(length, this));
     }
     
-    String widthS = Math.round(box.width/Veto2.getSymbolMapVeto().getPPM())+" m";
-    String heightS = Math.round(box.height/Veto2.getSymbolMapVeto().getPPM())+" m";
+    String widthS = Math.round(box.width/Veto.getSymbolMapVeto().getPPM())+" m";
+    String heightS = Math.round(box.height/Veto.getSymbolMapVeto().getPPM())+" m";
     Point2D.Double TL = new Point2D.Double(box.x, box.y);
     Point2D.Double TR = new Point2D.Double(box.x+box.width, box.y);
     Point2D.Double BL = new Point2D.Double(box.x, box.y+box.height);
@@ -164,8 +164,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
   //-----------------------------------------------------------------------------
   private Rectangle2D.Double getBoxOnScreen()
   {
-    Point2D.Double Apx = Veto2.getSymbolMapVeto().getScreenForLatLng(_A);
-    Point2D.Double Bpx = Veto2.getSymbolMapVeto().getScreenForLatLng(_B);
+    Point2D.Double Apx = Veto.getSymbolMapVeto().getScreenForLatLng(_A);
+    Point2D.Double Bpx = Veto.getSymbolMapVeto().getScreenForLatLng(_B);
     
     Rectangle2D.Double box = new Rectangle2D.Double(Apx.x, Apx.y, 0, 0);
     box.add(Bpx);

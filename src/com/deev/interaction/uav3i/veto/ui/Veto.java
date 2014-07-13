@@ -33,7 +33,7 @@ import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLau
 
 import fr.dgac.ivy.IvyException;
 
-public class Veto2 extends JFrame
+public class Veto extends JFrame
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = 4871323813688143568L;
@@ -46,14 +46,14 @@ public class Veto2 extends JFrame
   private        int               diffWidth, diffHeight;
   private        Dimension         initialDimension = new Dimension(1024, 768);
   public static  StateVeto         state         = StateVeto.IDLE;
-  public static  Veto2             frame;
+  public static  Veto             frame;
   //-----------------------------------------------------------------------------
   public enum StateVeto {IDLE, RECEIVING}
   //-----------------------------------------------------------------------------
   /**
    * Create the frame.
    */
-  public Veto2()
+  public Veto()
   {
     super("uav3i - Veto");
     
@@ -175,9 +175,8 @@ public class Veto2 extends JFrame
     diffHeight = this.getSize().height - initialDimension.height;
   }
   //-----------------------------------------------------------------------------
-  //public static JMapViewer    getMapViewer()     { return osmMapGround.getMapViewer(); }
-  public static JMapViewer    getMapViewer()     { return mapViewer; }
-  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto;               }
+  public static JMapViewer    getMapViewer()     { return mapViewer;     }
+  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto; }
   //-----------------------------------------------------------------------------
   public static void reinit()
   {

@@ -4,8 +4,8 @@ import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
-import com.deev.interaction.uav3i.veto.ui.Veto2;
-import com.deev.interaction.uav3i.veto.ui.Veto2.StateVeto;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
@@ -91,7 +91,7 @@ public class UAVFlightParamsListener implements IvyMessageListener
         break;
       case VETO:
         // On transmet via RMI à l'IHM table tactile la position du drone.
-        if(uav3iTransmitter != null && Veto2.state == StateVeto.RECEIVING)
+        if(uav3iTransmitter != null && Veto.state == StateVeto.RECEIVING)
         {
           try
           {

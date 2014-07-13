@@ -21,8 +21,8 @@ import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.ui.Veto2;
-import com.deev.interaction.uav3i.veto.ui.Veto2.StateVeto;
+import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
@@ -49,7 +49,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
-    Veto2.getSymbolMapVeto().addManoeuver(mnvrDTO);
+    Veto.getSymbolMapVeto().addManoeuver(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -102,7 +102,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void clearManoeuver() throws RemoteException
   {
     LoggerUtil.LOG.info("clearManoeuver()");
-    Veto2.getSymbolMapVeto().clearManoeuver();
+    Veto.getSymbolMapVeto().clearManoeuver();
   }
   //-----------------------------------------------------------------------------
   /**
@@ -154,7 +154,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void register(String uav3iHostname, int uav3iPort)  throws RemoteException
   {
-    Veto2.state = StateVeto.RECEIVING;
+    Veto.state = StateVeto.RECEIVING;
     try
     {
       bus.start(null);
@@ -198,9 +198,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void unRegisterUav3iTransmitter()
   {
     bus.stop();
-    Veto2.state = StateVeto.IDLE;
+    Veto.state = StateVeto.IDLE;
     uav3iTransmitter = null;
-    Veto2.reinit();
+    Veto.reinit();
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");
   }
   //-----------------------------------------------------------------------------
@@ -267,7 +267,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     @Override
     public void run()
     {
-      int response = JOptionPane.showConfirmDialog(Veto2.frame,
+      int response = JOptionPane.showConfirmDialog(Veto.frame,
                                                    "<html>Execution of this manoeuver?",
                                                    "Execution?",
                                                    JOptionPane.YES_NO_OPTION,
