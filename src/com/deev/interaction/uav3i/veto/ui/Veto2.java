@@ -13,8 +13,8 @@ import java.rmi.RemoteException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
@@ -25,6 +25,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.FlightParamsPanel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -39,7 +40,7 @@ public class Veto2 extends JFrame
   
 //  private JPanel contentPane;
   private static JMapViewer        mapViewer;
-  private        SymbolMapVeto     symbolMapVeto;
+  private static SymbolMapVeto     symbolMapVeto;
   private        ComponentLayer    clayer;
   private        FlightParamsPanel flightParamsPanel;
   private        int               diffWidth, diffHeight;
@@ -87,7 +88,6 @@ public class Veto2 extends JFrame
       @Override
       public void componentResized(ComponentEvent e)
       {
-        System.out.println("Veto2.Veto2().new ComponentAdapter() {...}.componentResized()");
         Rectangle bounds = ((Component)e.getSource()).getBounds();
         Rectangle newBounds = new Rectangle(bounds.width - diffWidth, bounds.height - diffHeight);
         
@@ -177,18 +177,23 @@ public class Veto2 extends JFrame
   //-----------------------------------------------------------------------------
   //public static JMapViewer    getMapViewer()     { return osmMapGround.getMapViewer(); }
   public static JMapViewer    getMapViewer()     { return mapViewer; }
+  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto;               }
+  //-----------------------------------------------------------------------------
+  public static void reinit()
+  {
+    symbolMapVeto.reinit();
+    UAVModel.reinit();
+  }
   //-----------------------------------------------------------------------------
   private void askIfReallyQuit()
   {
-//    int response = JOptionPane.showConfirmDialog(this,
-//                                                 "<html><b>Are you sure?</b<br>This will stop the communication between<br>the table screen and Paparazzi!",
-//                                                 "Stop the Veto User Interface",
-//                                                 JOptionPane.YES_NO_OPTION,
-//                                                 JOptionPane.WARNING_MESSAGE);
-//    if(response == 0)
-//      System.exit(0);
-    System.exit(0);
-
+    int response = JOptionPane.showConfirmDialog(this,
+                                                 "<html><b>Are you sure?</b<br>This will stop the communication between<br>the table screen and Paparazzi!",
+                                                 "Stop the Veto User Interface",
+                                                 JOptionPane.YES_NO_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE);
+    if(response == 0)
+      System.exit(0);
   }
   //-----------------------------------------------------------------------------
 }

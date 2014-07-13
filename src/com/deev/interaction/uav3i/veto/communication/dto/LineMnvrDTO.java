@@ -12,7 +12,7 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto2;
 
 public class LineMnvrDTO extends ManoeuverDTO
 {
@@ -49,8 +49,8 @@ public class LineMnvrDTO extends ManoeuverDTO
   {
     AffineTransform old = g2.getTransform();
 
-    Point2D.Double Apx = Veto.getSymbolMapVeto().getScreenForLatLng(_A);
-    Point2D.Double Bpx = Veto.getSymbolMapVeto().getScreenForLatLng(_B);
+    Point2D.Double Apx = Veto2.getSymbolMapVeto().getScreenForLatLng(_A);
+    Point2D.Double Bpx = Veto2.getSymbolMapVeto().getScreenForLatLng(_B);
 
     Area area = new Area();
     BasicStroke stroke = new BasicStroke((float) RPX*2.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
@@ -65,7 +65,7 @@ public class LineMnvrDTO extends ManoeuverDTO
 
     paintFootprint(g2, area);
 
-    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    double Rpx = Veto2.getSymbolMapVeto().getPPM() * _currentRm;
 
     Point2D.Double LApx = new Point2D.Double(Apx.x + _v.x * Rpx, Apx.y + _v.y * Rpx);
 
@@ -76,7 +76,7 @@ public class LineMnvrDTO extends ManoeuverDTO
     //paintAdjustLine(g2, l, isSubmitted(), _adjusting);
     paintAdjustLine(g2, l);
 
-    String distS = Math.round(Apx.distance(Bpx)/Veto.getSymbolMapVeto().getPPM())+" m";
+    String distS = Math.round(Apx.distance(Bpx)/Veto2.getSymbolMapVeto().getPPM())+" m";
     drawLabelledLine(g2, LApx, LBpx, distS, LApx.y > Apx.y);
     
     String largS = Math.round(Math.abs(_currentRm))+" m";
@@ -103,11 +103,11 @@ public class LineMnvrDTO extends ManoeuverDTO
   //-----------------------------------------------------------------------------
   private LatLng getOffsetPoint(LatLng pointLatLng)
   {
-    Point2D.Double pointPixels = Veto.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
-    double rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    Point2D.Double pointPixels = Veto2.getSymbolMapVeto().getScreenForLatLng(pointLatLng);
+    double rpx = Veto2.getSymbolMapVeto().getPPM() * _currentRm;
     Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * rpx,
                                                           pointPixels.y + _v.y * rpx);
-    return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+    return Veto2.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
   }
   //-----------------------------------------------------------------------------
   @Override
