@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.veto.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -14,6 +15,7 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.Palette3i;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 
 public class UAVScope implements MapMarker
@@ -134,16 +136,29 @@ public class UAVScope implements MapMarker
   {
     //System.out.println("####### paint(g, "+position+", "+radio+") : zoom = " + Veto.getMapViewer().getZoom());
     Graphics2D g2 = (Graphics2D) g;
+
+    int rayonPixels = (int) (maxDistanceFromHome / Veto.getMapViewer().getMeterPerPixel());
+    int centerX = position.x - (rayonPixels);
+    int centerY = position.y - (rayonPixels);
     
-    g2.setColor(Color.red);
+    float lineWidth = 2;
+    
+    final BasicStroke fat = new BasicStroke(lineWidth+4.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    g2.setStroke(fat);
+    g2.setPaint(Palette3i.WHITE_BG.getPaint());
+    //g2.setColor(Color.white);
+    g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);
+
+    g2.setColor(Color.blue);
+    final float dash[] = {10.f, 10.f};
+    final BasicStroke dashed = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, dash, 0);
+    g2.setStroke(dashed);
+
 
     // Dessin du centre
     g2.fillOval(position.x-5, position.y-5, 10, 10);
 
     // Dessin du cercle
-    int rayonPixels = (int) (maxDistanceFromHome / Veto.getMapViewer().getMeterPerPixel());
-    int centerX = position.x - (rayonPixels);
-    int centerY = position.y - (rayonPixels);
     g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);
     
   }
