@@ -13,6 +13,7 @@ import com.deev.interaction.uav3i.model.VideoModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.Veto2;
 
 import fr.dgac.ivy.IvyException;
 
@@ -68,15 +69,16 @@ public class Launcher
 				});
 				break;
 			case VETO:
+			  // TODO À tester : l'initialisation d'UAVModel se faisait auparavant dans le contructeur de PaparazziTransmitterImpl. Remis ici pour être conforme au lancement des autres modes.
+        UAVModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()
 				{
 					public void run()
-					{ 
-						final Veto frame = new Veto();
+					{
+            //final Veto frame = new Veto();
+            final Veto2 frame = new Veto2();
 						frame.setVisible(true); 
 						frame.requestFocusInWindow();
-	
-						//UAVModel.initialize();
 					}
 				});
 				break;

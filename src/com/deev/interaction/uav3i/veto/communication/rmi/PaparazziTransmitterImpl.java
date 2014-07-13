@@ -41,7 +41,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     super();
     initializeIvy();
-    UAVModel.initialize();
+    //UAVModel.initialize();
     new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------

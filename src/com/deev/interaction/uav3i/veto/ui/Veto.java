@@ -78,6 +78,7 @@ public class Veto extends JFrame
     
     clayer = new ComponentLayer();
     System.out.println(osmMapGround.getSize());
+    System.out.println("####### getSize().width, getSize().height = " + getSize().width + " - " + getSize().height);
     clayer.setBounds(0, 0, getSize().width, getSize().height);
     lpane.add(clayer, new Integer(20));
 
