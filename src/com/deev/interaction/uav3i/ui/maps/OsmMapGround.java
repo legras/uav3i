@@ -25,21 +25,9 @@ public class OsmMapGround extends Map
     mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
 
     LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
-    switch (UAV3iSettings.getMode())
-    {
-      case VETO:
-        mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
-                                             startPoint.getLng(),
-                                             UAV3iSettings.getTrajectoryZoom() - 3);
-        UAVScope scope = new UAVScope();
-        mapViewer.addMapMarker(scope);
-        break;
-      default:
-        mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
-                                             startPoint.getLng(),
-                                             UAV3iSettings.getTrajectoryZoom());
-        break;
-    }
+    mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
+                                         startPoint.getLng(),
+                                         UAV3iSettings.getTrajectoryZoom() - 3);
     
     switch (UAV3iSettings.getMapType())
     {
@@ -58,6 +46,9 @@ public class OsmMapGround extends Map
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
     
+    UAVScope scope = new UAVScope(mapViewer);
+    mapViewer.addMapMarker(scope);
+
     this.setLayout(new BorderLayout());
     this.add(mapViewer);
   }

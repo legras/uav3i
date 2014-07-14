@@ -125,7 +125,7 @@ public class Veto extends JFrame
                                                          UAV3iSettings.getOffLineMinZoom(), 
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
-    UAVScope scope = new UAVScope();
+    UAVScope scope = new UAVScope(mapViewer);
     mapViewer.addMapMarker(scope);
     mapViewer.setBounds(0, 0, initialDimension.width, initialDimension.height);
 
