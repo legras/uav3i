@@ -47,9 +47,13 @@ public class LineMnvrDTO extends ManoeuverDTO
   @Override
   public LatLng getCenter()
   {
-    double latitude  = (_A.getLat() + _B.getLat()) / 2;
-    double longitude = (_A.getLng() + _B.getLng()) / 2;
-    return new LatLng(latitude, longitude);
+    double lat1 = (_A.getLat() + _B.getLat()) / 2;
+    double lng1 = (_A.getLng() + _B.getLng()) / 2;
+    double lat2 = (getTrajA().getLat() + getTrajB().getLat()) / 2;
+    double lng2 = (getTrajA().getLng() + getTrajB().getLng()) / 2;
+    double lat  = (lat1 + lat2) / 2;
+    double lng  = (lng1 + lng2) / 2;
+    return new LatLng(lat, lng);
   }
   //-----------------------------------------------------------------------------
   @Override

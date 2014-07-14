@@ -117,9 +117,9 @@ public class BoxMnvrDTO extends ManoeuverDTO
   @Override
   public LatLng getCenter()
   {
-    double latitude  = (_A.getLat() + _B.getLat()) / 2;
-    double longitude = (_A.getLng() + _B.getLng()) / 2;
-    return new LatLng(latitude, longitude);
+    double lat = (_A.getLat() + _B.getLat()) / 2;
+    double lng = (_A.getLng() + _B.getLng()) / 2;
+    return new LatLng(lat, lng);
   }
   //-----------------------------------------------------------------------------
   @Override
