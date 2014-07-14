@@ -7,15 +7,10 @@ import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.ui.MainFrame;
-import com.deev.interaction.uav3i.ui.ManoeuverButtons;
-import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.ui.Veto;
-import com.deev.interaction.uav3i.veto.ui.VetoManoeuverButtons;
 
 public class LineMnvrDTO extends ManoeuverDTO
 {
@@ -27,6 +22,8 @@ public class LineMnvrDTO extends ManoeuverDTO
   private double _currentRm = 500.;
   // Codage de l'orientation de la droite dans le plan ?
   private Point2D.Double _u, _v;
+
+  private Point2D.Double oldApx = new Point2D.Double(-1,-1);
   //-----------------------------------------------------------------------------
   public LineMnvrDTO(int id,
                      LatLng A, LatLng B,
@@ -133,10 +130,18 @@ public class LineMnvrDTO extends ManoeuverDTO
     double side = _currentRm > 0 ? 1 : 0;
 
     if (buttons != null)
-      buttons.setPositions(new Point2D.Double((Apx.x+Bpx.x)/2, (Apx.y+Bpx.y)/2),
-                           40+RPX,
-                           Math.atan2(_v.y, _v.x) + side*Math.PI,
-                           false);
+    {
+      // Est-ce que ça vaut le coup de recalculer la position des boutons ?
+      if(!Apx.equals(oldApx))
+      {
+        oldApx = Apx;
+        buttons.setPositions(new Point2D.Double((Apx.x+Bpx.x)/2, (Apx.y+Bpx.y)/2),
+                             40+RPX,
+                             Math.atan2(_v.y, _v.x) + side*Math.PI,
+                             false);
+      }
+
+    }
   }
   //-----------------------------------------------------------------------------
   @Override

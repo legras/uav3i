@@ -65,8 +65,14 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
-    mnvrDTO.addButtons();
-    LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
+    if(Veto.getSymbolMapVeto().getSharedManoeuver() != null)
+    {
+      if(Veto.getSymbolMapVeto().getSharedManoeuver().getId() == mnvrDTO.getId())
+        Veto.getSymbolMapVeto().getSharedManoeuver().addButtons();
+      LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+")");
+    }
+    else
+      LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
 //    new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
     // TODO : branchement sur l'IHM
   }

@@ -19,6 +19,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
   private LatLng _A, _B;
   private boolean _isNorthSouth = true; // else is East-West
   
+  private Rectangle2D.Double oldBox;
+  
   private enum BoxMnvrHandles
   {
     NORTH(.5, .0), 
@@ -128,7 +130,14 @@ public class BoxMnvrDTO extends ManoeuverDTO
     Rectangle2D.Double box = getBoxOnScreen();
 
     if (buttons != null)
-      buttons.setPositions(new Point2D.Double(box.getCenterX(), box.getMaxY()), 50, Math.PI/2, false);
+    {
+      // Est-ce que ça vaut le coup de recalculer la position des boutons ?
+      if(!box.equals(oldBox))
+      {
+        oldBox= box;
+        buttons.setPositions(new Point2D.Double(box.getCenterX(), box.getMaxY()), 50, Math.PI/2, false);
+      }
+    }
   }
   //-----------------------------------------------------------------------------
   @Override

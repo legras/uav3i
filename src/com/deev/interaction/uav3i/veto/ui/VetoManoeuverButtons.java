@@ -163,7 +163,6 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   //-----------------------------------------------------------------------------
   public void setPositions(Point2D.Double ref, double distance, double theta, boolean isArc)
   {
-    System.out.println("####### VetoManoeuverButtons.setPositions("+ref+", "+distance+", "+theta+", "+isArc+") (Point2D.Double ref, double distance, double theta, boolean isArc)");
     if (isArc)
     {
       double delta = (size + PAD) / distance;
@@ -200,13 +199,10 @@ public class VetoManoeuverButtons implements Animation, ActionListener
       posVect[i].y /= positions[i].distance(ref);
     }
     
-    System.out.println("####### positions = " + positions[0] + " - " + positions[1]);
-    System.out.println("####### posVect   = " + posVect[0] + " - " + posVect[1]);
-
     setBounds();
   }
   //-----------------------------------------------------------------------------
-  protected void setBounds()
+  public void setBounds()
   {
     if (positions[0] == null || posVect[0] == null)
       return;

@@ -1,6 +1,7 @@
 package com.deev.interaction.uav3i.veto.communication.dto;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -16,6 +17,8 @@ public class CircleMnvrDTO extends ManoeuverDTO
   //-----------------------------------------------------------------------------
   private LatLng _center;
   private double _currentRm = 500.;
+  private Point2D.Double oldCenterPx = new Point2D.Double(-1,-1);
+  private double oldRpx = -1;
   //-----------------------------------------------------------------------------
   public CircleMnvrDTO(int id, LatLng center, double currentRm)
   {
@@ -32,10 +35,18 @@ public class CircleMnvrDTO extends ManoeuverDTO
   public void positionButtons()
   {
     Point2D.Double centerPx = Veto.getSymbolMapVeto().getScreenForLatLng(_center);
-    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    double rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
     
     if (buttons != null)
-      buttons.setPositions(centerPx, 40+Rpx, Math.PI/2, true);
+    {
+      // Est-ce que ça vaut le coup de recalculer la position des boutons ?
+      if(!centerPx.equals(oldCenterPx) && oldRpx != rpx)
+      {
+        oldCenterPx = centerPx;
+        oldRpx = rpx;
+        buttons.setPositions(centerPx, 40+rpx, Math.PI/2, true);
+      }
+    }
   }
   //-----------------------------------------------------------------------------
   @Override

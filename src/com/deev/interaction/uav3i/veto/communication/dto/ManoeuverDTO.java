@@ -61,7 +61,13 @@ public abstract class ManoeuverDTO implements Serializable
   //-----------------------------------------------------------------------------
   public void removeButtons()
   {
+    buttons.remove();
     buttons = null;
+  }
+  //-----------------------------------------------------------------------------
+  public VetoManoeuverButtons getButtons()
+  {
+    return buttons;
   }
   //-----------------------------------------------------------------------------
   public abstract void positionButtons();

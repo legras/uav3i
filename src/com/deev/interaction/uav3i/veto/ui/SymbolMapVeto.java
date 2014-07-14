@@ -35,7 +35,6 @@ public class SymbolMapVeto extends JComponent
   private   BufferedImage uavImage             = null;
   protected BufferedImage waypointImage        = null;
   private   ManoeuverDTO  sharedManoeuver      = null;
-  //private ArrayList<ManoeuverDTO> manoeuvers    = null;
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -45,7 +44,6 @@ public class SymbolMapVeto extends JComponent
     Color back = new Color(0.f, 0.f, 0.f, .0f);
     setBackground(back);  
     trajectory = new Trajectory();
-    //manoeuvers = new ArrayList<ManoeuverDTO>();
     try
     {
       uavImage      = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
@@ -55,7 +53,6 @@ public class SymbolMapVeto extends JComponent
     {
       e.printStackTrace();
     }
-
   }
   //-----------------------------------------------------------------------------
   public Point2D.Double getScreenForLatLng(LatLng latlng)
@@ -111,6 +108,11 @@ public class SymbolMapVeto extends JComponent
     //manoeuvers.add(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
+  public ManoeuverDTO getSharedManoeuver()
+  {
+    return sharedManoeuver;
+  }
+  //-----------------------------------------------------------------------------
   public void clearManoeuver()
   {
     sharedManoeuver = null;
@@ -120,6 +122,14 @@ public class SymbolMapVeto extends JComponent
   public synchronized void paint(Graphics2D g2)
   {
     long currentTime = System.currentTimeMillis();
+
+    // TODO : pas hyper top... pas ce qui est le plus optimisé !
+    if(sharedManoeuver != null)
+    {
+      sharedManoeuver.positionButtons();
+      if(sharedManoeuver.getButtons() != null)
+        sharedManoeuver.getButtons().setBounds();
+    }
 
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -172,10 +182,6 @@ public class SymbolMapVeto extends JComponent
     {
     	if(sharedManoeuver != null)
     		sharedManoeuver.paint(g2);
-//      for (ManoeuverDTO m : manoeuvers)
-//      {
-//        m.paint(g2);
-//      }
     }
     
     // Dessin UAV
@@ -197,8 +203,6 @@ public class SymbolMapVeto extends JComponent
       g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
     }
     g2.setTransform(old);
-    
-
   }
   //-----------------------------------------------------------------------------
 }
