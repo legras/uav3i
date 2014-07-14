@@ -27,7 +27,6 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.FlightParamsPanel;
-import com.deev.interaction.uav3i.ui.maps.OsmMapGround;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
@@ -40,8 +39,7 @@ public class Veto extends JFrame
   private static final long serialVersionUID = 4871323813688143568L;
   
 //  private JPanel contentPane;
-//  private static JMapViewer        mapViewer;
-  private static OsmMapGround      osmMapGround;
+  private static JMapViewer        mapViewer;
   private static SymbolMapVeto     symbolMapVeto;
   private        ComponentLayer    clayer;
   private        FlightParamsPanel flightParamsPanel;
@@ -93,8 +91,7 @@ public class Veto extends JFrame
         Rectangle bounds = ((Component)e.getSource()).getBounds();
         Rectangle newBounds = new Rectangle(bounds.width - diffWidth, bounds.height - diffHeight);
         
-//        mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
-        osmMapGround.setBounds (0, 0, newBounds.width, newBounds.height);
+        mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
         symbolMapVeto.setBounds(0, 0, newBounds.width, newBounds.height);
         clayer.setBounds       (0, 0, newBounds.width, newBounds.height);
         flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
@@ -105,33 +102,32 @@ public class Veto extends JFrame
       }
     });
 
-    osmMapGround = new OsmMapGround();
-    osmMapGround.setBounds(0, 0, initialDimension.width, initialDimension.height);
-//    // Initialisation de JMapViewer
-//    mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
-//    LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
-//    mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
-//                                         startPoint.getLng(),
-//                                         UAV3iSettings.getTrajectoryZoom() - 3);
-//    switch (UAV3iSettings.getMapType())
-//    {
-//      case MAPNIK:
-//        mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
-//        break;
-//      case BING_AERIAL:
-//        mapViewer.setTileSource(new BingAerialTileSource());
-//        break;
-//      case OSM_CYCLE_MAP:
-//        mapViewer.setTileSource(new OsmTileSource.CycleMap());
-//        break;
-//      case OFF_LINE:
-//        mapViewer.setTileSource(new OfflineOsmTileSource(UAV3iSettings.getOffLinePath(),
-//                                                         UAV3iSettings.getOffLineMinZoom(), 
-//                                                         UAV3iSettings.getOffLineMaxZoom()));
-//    }
-//    mapViewer.setBounds(0, 0, initialDimension.width, initialDimension.height);
-//    UAVScope scope = new UAVScope(mapViewer);
-//    mapViewer.addMapMarker(scope);
+
+    // Initialisation de JMapViewer
+    mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
+    LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
+    mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
+                                         startPoint.getLng(),
+                                         UAV3iSettings.getTrajectoryZoom() - 3);
+    switch (UAV3iSettings.getMapType())
+    {
+      case MAPNIK:
+        mapViewer.setTileSource(new OsmTileSource.Mapnik()); // Default value
+        break;
+      case BING_AERIAL:
+        mapViewer.setTileSource(new BingAerialTileSource());
+        break;
+      case OSM_CYCLE_MAP:
+        mapViewer.setTileSource(new OsmTileSource.CycleMap());
+        break;
+      case OFF_LINE:
+        mapViewer.setTileSource(new OfflineOsmTileSource(UAV3iSettings.getOffLinePath(),
+                                                         UAV3iSettings.getOffLineMinZoom(), 
+                                                         UAV3iSettings.getOffLineMaxZoom()));
+    }
+    UAVScope scope = new UAVScope();
+    mapViewer.addMapMarker(scope);
+    mapViewer.setBounds(0, 0, initialDimension.width, initialDimension.height);
 
     // Initialisation de la couche affichant les données 3i : manoeuvres, drone, etc.
     symbolMapVeto = new SymbolMapVeto();
@@ -150,9 +146,8 @@ public class Veto extends JFrame
     // JLayeredPane accueille les différenches couches de composants
     JLayeredPane lpane = new JLayeredPane();
     lpane.setPreferredSize(initialDimension);
-    lpane.add(symbolMapVeto, 0);
-//    lpane.add(mapViewer,     10);
-    lpane.add(osmMapGround,  10);
+    lpane.add(symbolMapVeto,  0);
+    lpane.add(mapViewer,     10);
     lpane.add(clayer,        new Integer(20));
 
     this.getContentPane().add(lpane);
@@ -180,8 +175,8 @@ public class Veto extends JFrame
     diffHeight = this.getSize().height - initialDimension.height;
   }
   //-----------------------------------------------------------------------------
-  public static JMapViewer    getMapViewer()     { return osmMapGround.getMapViewer(); }
-  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto;               }
+  public static JMapViewer    getMapViewer()     { return mapViewer;     }
+  public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto; }
   //-----------------------------------------------------------------------------
   public static void reinit()
   {
