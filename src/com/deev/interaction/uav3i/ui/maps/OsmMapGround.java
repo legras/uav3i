@@ -31,13 +31,13 @@ public class OsmMapGround extends Map
         mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
                                              startPoint.getLng(),
                                              UAV3iSettings.getTrajectoryZoom() - 3);
-        UAVScope scope = new UAVScope();
-        mapViewer.addMapMarker(scope);
         break;
       default:
         mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
                                              startPoint.getLng(),
                                              UAV3iSettings.getTrajectoryZoom());
+        UAVScope scope = new UAVScope(mapViewer);
+        mapViewer.addMapMarker(scope);
         break;
     }
     
@@ -57,6 +57,7 @@ public class OsmMapGround extends Map
                                                          UAV3iSettings.getOffLineMinZoom(), 
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
+    
     
     this.setLayout(new BorderLayout());
     this.add(mapViewer);

@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.Layer;
 import org.openstreetmap.gui.jmapviewer.Style;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
@@ -21,13 +22,15 @@ import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlan
 public class UAVScope implements MapMarker
 {
   //-----------------------------------------------------------------------------
-  private int    maxDistanceFromHome;
-  private LatLng startPoint;
+  private LatLng     startPoint;
+  private int        maxDistanceFromHome;
+  private JMapViewer mapViewer;
   //-----------------------------------------------------------------------------
-  public UAVScope()
+  public UAVScope(JMapViewer mapViewer)
   {
     this.startPoint          = FlightPlanFacade.getInstance().getStartPoint();
     this.maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+    this.mapViewer           = mapViewer;
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -137,7 +140,7 @@ public class UAVScope implements MapMarker
     //System.out.println("####### paint(g, "+position+", "+radio+") : zoom = " + Veto.getMapViewer().getZoom());
     Graphics2D g2 = (Graphics2D) g;
 
-    int rayonPixels = (int) (maxDistanceFromHome / Veto.getMapViewer().getMeterPerPixel());
+    int rayonPixels = (int) (maxDistanceFromHome / mapViewer.getMeterPerPixel());
     int centerX = position.x - (rayonPixels);
     int centerY = position.y - (rayonPixels);
     
