@@ -141,25 +141,21 @@ public class UAVScope implements MapMarker
     int centerX = position.x - (rayonPixels);
     int centerY = position.y - (rayonPixels);
     
-    float lineWidth = 2;
+    int lineWidth = 2;
+    int fatWidth  = 10;
+    final float dash[] = {10.f, 10.f};
     
-    final BasicStroke fat = new BasicStroke(lineWidth+4.f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    final BasicStroke fat = new BasicStroke(lineWidth+fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     g2.setStroke(fat);
     g2.setPaint(Palette3i.WHITE_BG.getPaint());
-    //g2.setColor(Color.white);
-    g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);
+    g2.fillOval(position.x-fatWidth, position.y-fatWidth, fatWidth*2, fatWidth*2);  // Centre
+    g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);                    // Étendue maxi
 
-    g2.setColor(Color.blue);
-    final float dash[] = {10.f, 10.f};
     final BasicStroke dashed = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, dash, 0);
     g2.setStroke(dashed);
-
-
-    // Dessin du centre
-    g2.fillOval(position.x-5, position.y-5, 10, 10);
-
-    // Dessin du cercle
-    g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);
+    g2.setPaint(Palette3i.UAV_SCOPE.getPaint());
+    g2.fillOval(position.x-lineWidth, position.y-lineWidth,  lineWidth*2,  lineWidth*2);  // Centre
+    g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);                          // Étendue maxi
     
   }
   //-----------------------------------------------------------------------------
