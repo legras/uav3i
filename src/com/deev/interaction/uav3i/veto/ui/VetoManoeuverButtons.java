@@ -55,8 +55,8 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   {
     if (acceptIcon == null)        acceptIcon        = ImageIO.read(this.getClass().getResource("img/acceptIcon.png"));
     if (acceptIconPressed == null) acceptIconPressed = ImageIO.read(this.getClass().getResource("img/acceptIconPressed.png"));
-    if (acceptIcon == null)        refuseIcon        = ImageIO.read(this.getClass().getResource("img/refuseIcon.png"));
-    if (acceptIconPressed == null) refuseIconPressed = ImageIO.read(this.getClass().getResource("img/refuseIconPressed.png"));
+    if (refuseButton == null)      refuseIcon        = ImageIO.read(this.getClass().getResource("img/refuseIcon.png"));
+    if (refuseIconPressed == null) refuseIconPressed = ImageIO.read(this.getClass().getResource("img/refuseIconPressed.png"));
 
     this.mnvrDTO = mnvrDTO;
     this.layer   = layer;
@@ -71,6 +71,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   {
     try
     {
+      mnvrDTO.removeButtons();
       if (e.getSource() == acceptButton)
       {
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
@@ -146,7 +147,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   //-----------------------------------------------------------------------------
   public void hide()
   {
-    state = ManoeuverButtonsStates.SHOWING;
+    state = ManoeuverButtonsStates.HIDING;
   }
   //-----------------------------------------------------------------------------
   public void remove()
@@ -162,11 +163,12 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   //-----------------------------------------------------------------------------
   public void setPositions(Point2D.Double ref, double distance, double theta, boolean isArc)
   {
+    System.out.println("####### VetoManoeuverButtons.setPositions("+ref+", "+distance+", "+theta+", "+isArc+") (Point2D.Double ref, double distance, double theta, boolean isArc)");
     if (isArc)
     {
       double delta = (size + PAD) / distance;
 
-      for (int i=0; i<4; i++)
+      for (int i=0; i<2; i++)
       {
         double a = theta + (-1.5+i)*delta;
         positions[i] = new Point2D.Double(ref.x + distance * Math.cos(a), ref.y + distance * Math.sin(a));
@@ -184,19 +186,22 @@ public class VetoManoeuverButtons implements Animation, ActionListener
 
       double l;
 
-      for (int i=0; i<4; i++)
+      for (int i=0; i<2; i++)
       {
         l = -1.5 + i;
         positions[i] = new Point2D.Double(middle.x+l*u, middle.y+l*v);
       }
     }
 
-    for (int i=0; i<4; i++) 
+    for (int i=0; i<2; i++) 
     {
       posVect[i] = new Point2D.Double(positions[i].x-ref.x, positions[i].y-ref.y);
       posVect[i].x /= positions[i].distance(ref);
       posVect[i].y /= positions[i].distance(ref);
     }
+    
+    System.out.println("####### positions = " + positions[0] + " - " + positions[1]);
+    System.out.println("####### posVect   = " + posVect[0] + " - " + posVect[1]);
 
     setBounds();
   }
@@ -217,7 +222,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
                                (int) positions[0].y-size/2 + (int) (offset * posVect[0].y),
                                size, size);
 
-        acceptButton.setBounds((int) positions[1].x-size/2 + (int) (offset * posVect[1].x),
+        refuseButton.setBounds((int) positions[1].x-size/2 + (int) (offset * posVect[1].x),
                                (int) positions[1].y-size/2 + (int) (offset * posVect[1].y),
                                size, size);
       }

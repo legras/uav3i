@@ -13,11 +13,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.io.Serializable;
 
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.VetoManoeuverButtons;
 
 public abstract class ManoeuverDTO implements Serializable
@@ -42,6 +44,25 @@ public abstract class ManoeuverDTO implements Serializable
   public abstract void paint(Graphics2D g2);
   //-----------------------------------------------------------------------------
   public abstract LatLng getCenter();
+  //-----------------------------------------------------------------------------
+  public void addButtons()
+  {
+    try
+    {
+      buttons = new VetoManoeuverButtons(this, Veto.getComponentLayer());
+    }
+    catch (IOException e1)
+    {
+      e1.printStackTrace();
+      buttons = null;
+    }
+    positionButtons();
+  }
+  //-----------------------------------------------------------------------------
+  public void removeButtons()
+  {
+    buttons = null;
+  }
   //-----------------------------------------------------------------------------
   public abstract void positionButtons();
   //-----------------------------------------------------------------------------

@@ -65,6 +65,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
+    mnvrDTO.addButtons();
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
 //    new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
     // TODO : branchement sur l'IHM

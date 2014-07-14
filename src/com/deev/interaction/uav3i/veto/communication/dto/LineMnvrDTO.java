@@ -39,17 +39,6 @@ public class LineMnvrDTO extends ManoeuverDTO
     _currentRm = currentRm;
     _u         = u;
     _v         = v;
-    
-    try
-    {
-      buttons = new VetoManoeuverButtons(this, Veto.getComponentLayer());
-    }
-    catch (IOException e1)
-    {
-      e1.printStackTrace();
-      buttons = null;
-    }
-    positionButtons();
   }
   //-----------------------------------------------------------------------------
   public LatLng get_A()        { return _A;                 }
