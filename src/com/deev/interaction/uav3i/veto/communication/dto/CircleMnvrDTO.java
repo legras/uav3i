@@ -29,6 +29,16 @@ public class CircleMnvrDTO extends ManoeuverDTO
   public double getCurrentRadius() { return _currentRm; }
   //-----------------------------------------------------------------------------
   @Override
+  public void positionButtons()
+  {
+    Point2D.Double centerPx = Veto.getSymbolMapVeto().getScreenForLatLng(_center);
+    double Rpx = Veto.getSymbolMapVeto().getPPM() * _currentRm;
+    
+    if (buttons != null)
+      buttons.setPositions(centerPx, 40+Rpx, Math.PI/2, true);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
   public void paint(Graphics2D g2)
   {
     AffineTransform old = g2.getTransform();

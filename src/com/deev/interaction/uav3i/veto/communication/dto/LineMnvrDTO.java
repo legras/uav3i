@@ -7,12 +7,15 @@ import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.MainFrame;
+import com.deev.interaction.uav3i.ui.ManoeuverButtons;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.ui.Veto;
+import com.deev.interaction.uav3i.veto.ui.VetoManoeuverButtons;
 
 public class LineMnvrDTO extends ManoeuverDTO
 {
@@ -36,6 +39,17 @@ public class LineMnvrDTO extends ManoeuverDTO
     _currentRm = currentRm;
     _u         = u;
     _v         = v;
+    
+    try
+    {
+      buttons = new VetoManoeuverButtons(this, Veto.getComponentLayer());
+    }
+    catch (IOException e1)
+    {
+      e1.printStackTrace();
+      buttons = null;
+    }
+    positionButtons();
   }
   //-----------------------------------------------------------------------------
   public LatLng get_A()        { return _A;                 }
@@ -116,6 +130,20 @@ public class LineMnvrDTO extends ManoeuverDTO
     Point2D.Double pointOffsetPixels = new Point2D.Double(pointPixels.x + _v.x * rpx,
                                                           pointPixels.y + _v.y * rpx);
     return Veto.getSymbolMapVeto().getLatLngForScreen(pointOffsetPixels.x, pointOffsetPixels.y);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void positionButtons()
+  {
+    Point2D.Double Apx = Veto.getSymbolMapVeto().getScreenForLatLng(_A);
+    Point2D.Double Bpx = Veto.getSymbolMapVeto().getScreenForLatLng(_B);
+    double side = _currentRm > 0 ? 1 : 0;
+
+    if (buttons != null)
+      buttons.setPositions(new Point2D.Double((Apx.x+Bpx.x)/2, (Apx.y+Bpx.y)/2),
+                           40+RPX,
+                           Math.atan2(_v.y, _v.x) + side*Math.PI,
+                           false);
   }
   //-----------------------------------------------------------------------------
   @Override

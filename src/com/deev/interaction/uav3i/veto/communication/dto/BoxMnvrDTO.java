@@ -123,6 +123,15 @@ public class BoxMnvrDTO extends ManoeuverDTO
   }
   //-----------------------------------------------------------------------------
   @Override
+  public void positionButtons()
+  {
+    Rectangle2D.Double box = getBoxOnScreen();
+
+    if (buttons != null)
+      buttons.setPositions(new Point2D.Double(box.getCenterX(), box.getMaxY()), 50, Math.PI/2, false);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
   public void paint(Graphics2D g2)
   {
     AffineTransform old = g2.getTransform();

@@ -18,11 +18,14 @@ import java.io.Serializable;
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
+import com.deev.interaction.uav3i.veto.ui.VetoManoeuverButtons;
 
 public abstract class ManoeuverDTO implements Serializable
 {
   //-----------------------------------------------------------------------------
   private static final long serialVersionUID = -3496424950260659940L;
+  
+  protected VetoManoeuverButtons buttons;
   
   protected static double RPX = 10.;
   protected static double GRIP = 30.;
@@ -39,6 +42,8 @@ public abstract class ManoeuverDTO implements Serializable
   public abstract void paint(Graphics2D g2);
   //-----------------------------------------------------------------------------
   public abstract LatLng getCenter();
+  //-----------------------------------------------------------------------------
+  public abstract void positionButtons();
   //-----------------------------------------------------------------------------
   /**
    * Dessin de la ligne d'ajoustement : choix NS dans la box, éloignement de

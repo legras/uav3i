@@ -32,17 +32,26 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   //-----------------------------------------------------------------------------
   private String                  applicationName = "uav3i (PT)";
   private Ivy                     bus;
-  private IUav3iTransmitter       uav3iTransmitter;
+  private static IUav3iTransmitter       uav3iTransmitter;
   private UAVPositionListener     uavPositionListener     = null;
   private UAVFlightParamsListener uavFlightParamsListener = null;
   private UAVWayPointsListener    uavWayPointsListener    = null;
+  
+  private static PaparazziTransmitterImpl instance;
   //-----------------------------------------------------------------------------
-  public PaparazziTransmitterImpl() throws IvyException, RemoteException
+  private PaparazziTransmitterImpl() throws IvyException, RemoteException
   {
     super();
     initializeIvy();
     //UAVModel.initialize();
     new Thread(new Uav3iSupervizor()).start();
+  }
+  //-----------------------------------------------------------------------------
+  public static PaparazziTransmitterImpl getInstance() throws RemoteException, IvyException
+  {
+    if(instance == null)
+      instance = new PaparazziTransmitterImpl();
+    return instance;
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -57,10 +66,12 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     LoggerUtil.LOG.info("executeManoeuver("+mnvrDTO+")");
-    new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
+//    new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
+    // TODO : branchement sur l'IHM
   }
   //-----------------------------------------------------------------------------
-  private void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  //private void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     switch (mnvrDTO.getClass().getSimpleName())
     {
@@ -205,11 +216,16 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");
   }
   //-----------------------------------------------------------------------------
+  public IUav3iTransmitter getUav3iTransmitter()
+  {
+    return uav3iTransmitter;
+  }
+  //-----------------------------------------------------------------------------
 
+  
+  
+  
 
-  
-  
-  
   
   
   //-----------------------------------------------------------------------------
@@ -255,39 +271,39 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   
   
   
-  //-----------------------------------------------------------------------------
-  private class AskPaparazziGuruForExecution implements Runnable
-  {
-    private ManoeuverDTO mnvrDTO;
-    private PaparazziTransmitterImpl pt;
-    public AskPaparazziGuruForExecution(ManoeuverDTO mnvrDTO, PaparazziTransmitterImpl pt)
-    {
-      this.mnvrDTO = mnvrDTO;
-      this.pt      = pt;
-    }
-    @Override
-    public void run()
-    {
-      int response = JOptionPane.showConfirmDialog(Veto.frame,
-                                                   "<html>Execution of this manoeuver?",
-                                                   "Execution?",
-                                                   JOptionPane.YES_NO_OPTION,
-                                                   JOptionPane.WARNING_MESSAGE);
-      try
-      {
-        if(response == JOptionPane.YES_OPTION)
-        {
-          uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-          pt.startManoeuver(mnvrDTO);
-        }
-        else
-          uav3iTransmitter.resultAskExecution(mnvrDTO, false);
-      }
-      catch (RemoteException e)
-      {
-        e.printStackTrace();
-      }
-    }
-  }
-  //-----------------------------------------------------------------------------
+//  //-----------------------------------------------------------------------------
+//  private class AskPaparazziGuruForExecution implements Runnable
+//  {
+//    private ManoeuverDTO mnvrDTO;
+//    private PaparazziTransmitterImpl pt;
+//    public AskPaparazziGuruForExecution(ManoeuverDTO mnvrDTO, PaparazziTransmitterImpl pt)
+//    {
+//      this.mnvrDTO = mnvrDTO;
+//      this.pt      = pt;
+//    }
+//    @Override
+//    public void run()
+//    {
+//      int response = JOptionPane.showConfirmDialog(Veto.frame,
+//                                                   "<html>Execution of this manoeuver?",
+//                                                   "Execution?",
+//                                                   JOptionPane.YES_NO_OPTION,
+//                                                   JOptionPane.WARNING_MESSAGE);
+//      try
+//      {
+//        if(response == JOptionPane.YES_OPTION)
+//        {
+//          uav3iTransmitter.resultAskExecution(mnvrDTO, true);
+//          pt.startManoeuver(mnvrDTO);
+//        }
+//        else
+//          uav3iTransmitter.resultAskExecution(mnvrDTO, false);
+//      }
+//      catch (RemoteException e)
+//      {
+//        e.printStackTrace();
+//      }
+//    }
+//  }
+//  //-----------------------------------------------------------------------------
 }

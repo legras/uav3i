@@ -43,7 +43,7 @@ public class Veto extends JFrame
 //  private JPanel contentPane;
   private static JMapViewer        mapViewer;
   private static SymbolMapVeto     symbolMapVeto;
-  private        ComponentLayer    clayer;
+  private static ComponentLayer    componentLayer;
   private        FlightParamsPanel flightParamsPanel;
   private        int               diffWidth, diffHeight;
   private        Dimension         initialDimension = new Dimension(1024, 768);
@@ -95,7 +95,7 @@ public class Veto extends JFrame
         
         mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
         symbolMapVeto.setBounds(0, 0, newBounds.width, newBounds.height);
-        clayer.setBounds       (0, 0, newBounds.width, newBounds.height);
+        componentLayer.setBounds       (0, 0, newBounds.width, newBounds.height);
         flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
                                     newBounds.height-(flightParamsPanel.getHeight()+15), 
                                     flightParamsPanel.getWidth(), 
@@ -136,10 +136,10 @@ public class Veto extends JFrame
     symbolMapVeto.setBounds(0, 0, initialDimension.width, initialDimension.height);
 
     // Initialisation de la couche affichant les composants graphiques : boutons, paramètres de vol, etc.
-    clayer = new ComponentLayer();
-    clayer.setBounds(0, 0, initialDimension.width, initialDimension.height);
+    componentLayer = new ComponentLayer();
+    componentLayer.setBounds(0, 0, initialDimension.width, initialDimension.height);
     flightParamsPanel = new FlightParamsPanel();
-    clayer.add(flightParamsPanel);
+    componentLayer.add(flightParamsPanel);
     flightParamsPanel.setBounds(initialDimension.width-(flightParamsPanel.getWidth()+5),
                                 initialDimension.height-(flightParamsPanel.getHeight()+15), 
                                 flightParamsPanel.getWidth(), 
@@ -150,7 +150,7 @@ public class Veto extends JFrame
     lpane.setPreferredSize(initialDimension);
     lpane.add(symbolMapVeto,  0);
     lpane.add(mapViewer,     10);
-    lpane.add(clayer,        new Integer(20));
+    lpane.add(componentLayer,        new Integer(20));
 
     this.getContentPane().add(lpane);
 
@@ -192,6 +192,11 @@ public class Veto extends JFrame
     mapViewer.setDisplayPositionByLatLon(centerMnvr.getLat(),
                                          centerMnvr.getLng(),
                                          mapViewer.getZoom());
+  }
+  //-----------------------------------------------------------------------------
+  public static ComponentLayer getComponentLayer()
+  {
+    return componentLayer;
   }
   //-----------------------------------------------------------------------------
   private void askIfReallyQuit()
