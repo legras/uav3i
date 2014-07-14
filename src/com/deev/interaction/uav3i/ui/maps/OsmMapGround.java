@@ -12,7 +12,6 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.ui.Map;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
-import com.deev.interaction.uav3i.veto.ui.UAVScope;
 
 public class OsmMapGround extends Map
 {

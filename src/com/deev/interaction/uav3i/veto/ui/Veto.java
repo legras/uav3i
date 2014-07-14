@@ -27,6 +27,7 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.FlightParamsPanel;
+import com.deev.interaction.uav3i.ui.maps.UAVScope;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
@@ -108,7 +109,7 @@ public class Veto extends JFrame
     LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
     mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
                                          startPoint.getLng(),
-                                         UAV3iSettings.getTrajectoryZoom() - 3);
+                                         UAV3iSettings.getTrajectoryZoom() - 2);
     switch (UAV3iSettings.getMapType())
     {
       case MAPNIK:

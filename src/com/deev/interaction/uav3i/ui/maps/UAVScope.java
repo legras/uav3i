@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.ui;
+package com.deev.interaction.uav3i.ui.maps;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
