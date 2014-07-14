@@ -30,6 +30,7 @@ import com.deev.interaction.uav3i.ui.FlightParamsPanel;
 import com.deev.interaction.uav3i.ui.maps.UAVScope;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
 
 import fr.dgac.ivy.IvyException;
@@ -183,6 +184,14 @@ public class Veto extends JFrame
   {
     symbolMapVeto.reinit();
     UAVModel.reinit();
+  }
+  //-----------------------------------------------------------------------------
+  public static void centerManoeuverOnMap(ManoeuverDTO mnvrDTO)
+  {
+    LatLng centerMnvr = mnvrDTO.getCenter();
+    mapViewer.setDisplayPositionByLatLon(centerMnvr.getLat(),
+                                         centerMnvr.getLng(),
+                                         mapViewer.getZoom());
   }
   //-----------------------------------------------------------------------------
   private void askIfReallyQuit()

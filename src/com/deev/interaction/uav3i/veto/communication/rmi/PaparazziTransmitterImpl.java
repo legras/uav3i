@@ -50,6 +50,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
     Veto.getSymbolMapVeto().addManoeuver(mnvrDTO);
+    Veto.centerManoeuverOnMap(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
   @Override

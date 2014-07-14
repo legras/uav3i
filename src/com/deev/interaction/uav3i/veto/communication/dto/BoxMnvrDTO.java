@@ -115,6 +115,14 @@ public class BoxMnvrDTO extends ManoeuverDTO
   public boolean isNorthSouth() { return _isNorthSouth; }
   //-----------------------------------------------------------------------------
   @Override
+  public LatLng getCenter()
+  {
+    double latitude  = (_A.getLat() + _B.getLat()) / 2;
+    double longitude = (_A.getLng() + _B.getLng()) / 2;
+    return new LatLng(latitude, longitude);
+  }
+  //-----------------------------------------------------------------------------
+  @Override
   public void paint(Graphics2D g2)
   {
     AffineTransform old = g2.getTransform();

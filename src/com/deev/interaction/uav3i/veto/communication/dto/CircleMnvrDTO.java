@@ -24,6 +24,7 @@ public class CircleMnvrDTO extends ManoeuverDTO
     _currentRm = currentRm;
   }
   //-----------------------------------------------------------------------------
+  @Override
   public LatLng getCenter()        { return _center;    }
   public double getCurrentRadius() { return _currentRm; }
   //-----------------------------------------------------------------------------
