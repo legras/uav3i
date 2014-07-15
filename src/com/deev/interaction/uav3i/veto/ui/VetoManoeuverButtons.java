@@ -66,6 +66,12 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   {
     try
     {
+      // Dans les deux cas de figure, on n'a plus besoin des boutons.
+      // Attention : les boutons doivent être supprimés AVANT la transmission
+      // sur la table (ils ne sont pas 'Serializable') sinon, erreur !
+      mnvrDTO.hidebuttons();
+      isDead = true;
+
       if (e.getSource() == acceptButton)
       {
         // On transmet à la table le résultat de l'évaluation de la manoeuvre
@@ -85,10 +91,6 @@ public class VetoManoeuverButtons implements Animation, ActionListener
         // à jour de l'affichage sur le Veto.
         mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
       }
-      // Dans les deux cas de figure, on n'a plus besoin des boutons.
-      mnvrDTO.hidebuttons();
-      isDead = true;
-
     }
     catch (RemoteException | IvyException e1)
     {
