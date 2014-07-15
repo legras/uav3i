@@ -10,6 +10,7 @@ import java.awt.geom.Point2D;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
 public class LineMnvrDTO extends ManoeuverDTO
@@ -86,7 +87,7 @@ public class LineMnvrDTO extends ManoeuverDTO
     // Trajectoire du drone
     Line2D.Double l = new Line2D.Double(LApx, LBpx);
     //paintAdjustLine(g2, l, isSubmitted(), _adjusting);
-    paintAdjustLine(g2, l);
+    paintAdjustLine(g2, l, mnvrReqStatus == ManoeuverRequestedStatus.ASKED);
 
     String distS = Math.round(Apx.distance(Bpx)/Veto.getSymbolMapVeto().getPPM())+" m";
     drawLabelledLine(g2, LApx, LBpx, distS, LApx.y > Apx.y);

@@ -97,15 +97,12 @@ public class SymbolMapVeto extends JComponent
   public void reinit()
   {
     trajectory.reinit();
-    //manoeuvers = new ArrayList<ManoeuverDTO>();
     sharedManoeuver = null;
   }
   //-----------------------------------------------------------------------------
   public void addManoeuver(ManoeuverDTO manoeuverDTO)
   {
     sharedManoeuver = manoeuverDTO;
-    //manoeuvers = new ArrayList<ManoeuverDTO>();
-    //manoeuvers.add(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
   public ManoeuverDTO getSharedManoeuver()
@@ -116,7 +113,6 @@ public class SymbolMapVeto extends JComponent
   public void clearManoeuver()
   {
     sharedManoeuver = null;
-    //manoeuvers.remove(manoeuverDTO);
   }
   //-----------------------------------------------------------------------------
   public synchronized void paint(Graphics2D g2)

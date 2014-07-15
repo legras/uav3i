@@ -162,7 +162,7 @@ public class BoxMnvrDTO extends ManoeuverDTO
 //      }
       
         //paintAdjustLine(g2, boxhndl.getPath(length, this), isShared(), fat);
-        paintAdjustLine(g2, boxhndl.getPath(length, this));
+        paintAdjustLine(g2, boxhndl.getPath(length, this), mnvrReqStatus == ManoeuverRequestedStatus.ASKED);
     }
     
     String widthS = Math.round(box.width/Veto.getSymbolMapVeto().getPPM())+" m";

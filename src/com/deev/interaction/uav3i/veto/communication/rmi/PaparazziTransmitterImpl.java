@@ -5,11 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import javax.swing.JOptionPane;
-
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
@@ -21,6 +18,7 @@ import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
 
@@ -65,19 +63,26 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
-    if(Veto.getSymbolMapVeto().getSharedManoeuver() != null)
+    // Comme les boutons ne sont pas 'Serializable' (et qu'on n'en a rien à
+    // faire côté table), on les ajoute sur la manoeuvre une fois qu'elle
+    // arrive sur le Veto. Comme cette manoeuvre (même si c'est la même) est une
+    // copie, on récupère celle précédemment transmise lors du 'communicateManoeuver'
+    // pour lui ajouter les boutons.
+    // TODO : il n'est pas utile de transmettre l'intance de la manoeuvre, seul son id est suffisant.
+    ManoeuverDTO mDTO = Veto.getSymbolMapVeto().getSharedManoeuver();  
+    if(mDTO != null)
     {
-      if(Veto.getSymbolMapVeto().getSharedManoeuver().getId() == mnvrDTO.getId())
+      if(mDTO.getId() == mnvrDTO.getId())
+      {
         Veto.getSymbolMapVeto().getSharedManoeuver().addButtons();
+        mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+      }
       LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+")");
     }
     else
       LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
-//    new Thread(new AskPaparazziGuruForExecution(mnvrDTO, this)).start();
-    // TODO : branchement sur l'IHM
   }
   //-----------------------------------------------------------------------------
-  //private void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   public void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   {
     switch (mnvrDTO.getClass().getSimpleName())
@@ -271,46 +276,4 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     }
   }
   //-----------------------------------------------------------------------------
-
-  
-  
-  
-  
-  
-  
-//  //-----------------------------------------------------------------------------
-//  private class AskPaparazziGuruForExecution implements Runnable
-//  {
-//    private ManoeuverDTO mnvrDTO;
-//    private PaparazziTransmitterImpl pt;
-//    public AskPaparazziGuruForExecution(ManoeuverDTO mnvrDTO, PaparazziTransmitterImpl pt)
-//    {
-//      this.mnvrDTO = mnvrDTO;
-//      this.pt      = pt;
-//    }
-//    @Override
-//    public void run()
-//    {
-//      int response = JOptionPane.showConfirmDialog(Veto.frame,
-//                                                   "<html>Execution of this manoeuver?",
-//                                                   "Execution?",
-//                                                   JOptionPane.YES_NO_OPTION,
-//                                                   JOptionPane.WARNING_MESSAGE);
-//      try
-//      {
-//        if(response == JOptionPane.YES_OPTION)
-//        {
-//          uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-//          pt.startManoeuver(mnvrDTO);
-//        }
-//        else
-//          uav3iTransmitter.resultAskExecution(mnvrDTO, false);
-//      }
-//      catch (RemoteException e)
-//      {
-//        e.printStackTrace();
-//      }
-//    }
-//  }
-//  //-----------------------------------------------------------------------------
 }

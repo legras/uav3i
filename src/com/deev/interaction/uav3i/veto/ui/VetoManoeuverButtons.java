@@ -15,6 +15,7 @@ import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.RoundButton;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterImpl;
 
 import fr.dgac.ivy.IvyException;
@@ -65,18 +66,29 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   {
     try
     {
-      mnvrDTO.hidebuttons();
       if (e.getSource() == acceptButton)
       {
+        // On transmet à la table le résultat de l'évaluation de la manoeuvre
+        // par l'opérateur Paparazzi pour mise à jour de l'affichage.
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
+        // On met à jour localement le statut de la manoeuvre pour mise
+        // à jour de l'affichage sur le Veto.
+        mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+        // On lance l'exécution de la manoeuvre.
         PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
-        isDead = true;
       }
       else if(e.getSource() == refuseButton)
       {
+        // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, false);
-        isDead = true;
+        // On met à jour localement le statut de la manoeuvre pour mise
+        // à jour de l'affichage sur le Veto.
+        mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
       }
+      // Dans les deux cas de figure, on n'a plus besoin des boutons.
+      mnvrDTO.hidebuttons();
+      isDead = true;
+
     }
     catch (RemoteException | IvyException e1)
     {

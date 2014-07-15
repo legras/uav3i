@@ -1,13 +1,13 @@
 package com.deev.interaction.uav3i.veto.communication.dto;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
 public class CircleMnvrDTO extends ManoeuverDTO
@@ -65,7 +65,7 @@ public class CircleMnvrDTO extends ManoeuverDTO
 
     ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-    paintAdjustLine(g2, ell);
+    paintAdjustLine(g2, ell, mnvrReqStatus == ManoeuverRequestedStatus.ASKED);
 
     String largS = Math.round(Math.abs(_currentRm))+" m";
     Point2D.Double zero = new Point2D.Double();

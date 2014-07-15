@@ -19,25 +19,25 @@ import java.io.Serializable;
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Palette3i;
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.VetoManoeuverButtons;
 
 public abstract class ManoeuverDTO implements Serializable
 {
   //-----------------------------------------------------------------------------
+  public enum ManoeuverRequestedStatus {NONE, ASKED, REFUSED, ACCEPTED};
+  //-----------------------------------------------------------------------------
   private static final long serialVersionUID = -3496424950260659940L;
   
+  protected ManoeuverRequestedStatus mnvrReqStatus= ManoeuverRequestedStatus.NONE;
   protected VetoManoeuverButtons buttons;
   
   protected static double RPX = 10.;
   protected static double GRIP = 30.;
   
-  private static Color        _GREEN   = new Color(.3f, .7f, 0.f, 1.f);
-  private static Color        _YELLOW  = new Color(1.f, 1.f, 0.f, 1.f);
-  private static Color        _RED     = new Color(.9f, .3f, 0.f, 1.f);
   private static Color        _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
   private static Color        _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
-  private static TexturePaint _hashGW  = null;
   
   protected int id;
   //-----------------------------------------------------------------------------
@@ -79,22 +79,19 @@ public abstract class ManoeuverDTO implements Serializable
    * @param g2
    * @param line
    */
-  public void paintAdjustLine(Graphics2D g2, Shape line)
+  public void paintAdjustLine(Graphics2D g2, Shape line, boolean blink)
   {
+    float phase = blink ? (float) (System.currentTimeMillis() % 200)/10 : 0.f;
+
     //float phase = (float) (System.currentTimeMillis() % 200)/10;
-    float phase = 0.f;
+    //float phase = 0.f;
     float lineWidth = 3.f;
     float fatWidth = 4.f;
 
     final float dash1[] = {10.f, 5.f};
-    final BasicStroke dashed =
-        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
-
-    final BasicStroke plain =
-        new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-
-    final BasicStroke fat =
-        new BasicStroke(lineWidth+4.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    final BasicStroke dashed = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, phase);
+    final BasicStroke plain = new BasicStroke(lineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+    final BasicStroke fat = new BasicStroke(lineWidth+4.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
     g2.setStroke(fat);
     g2.setPaint(Palette3i.WHITE_BG.getPaint());
@@ -103,10 +100,10 @@ public abstract class ManoeuverDTO implements Serializable
     Paint bgPaint = Palette3i.MNVR_BACK_NOT_PINNED.getPaint();
     
     Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
-//    if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
-//      paint = Palette3i.MNVR_REFUSED.getPaint();
-//    if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
-//      paint = Palette3i.MNVR_ACCEPTED.getPaint();
+    if (mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+      paint = Palette3i.MNVR_REFUSED.getPaint();
+    if (mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+      paint = Palette3i.MNVR_ACCEPTED.getPaint();
 
     g2.setPaint(bgPaint);
     g2.setStroke(plain);
@@ -130,12 +127,11 @@ public abstract class ManoeuverDTO implements Serializable
     float lineWidth = 3.f;
     float fatWidth = 10.f;
 
-//    Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
-//    if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
-//      paint = Palette3i.MNVR_REFUSED.getPaint();
-//    if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
-//      paint = Palette3i.MNVR_ACCEPTED.getPaint();
     Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
+    if (mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
+      paint = Palette3i.MNVR_REFUSED.getPaint();
+    if (mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
+      paint = Palette3i.MNVR_ACCEPTED.getPaint();
     
 
     g2.setStroke(new BasicStroke(lineWidth+2.f*fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -148,6 +144,15 @@ public abstract class ManoeuverDTO implements Serializable
     g2.draw(footprint);
   }
   //-----------------------------------------------------------------------------
+  /**
+   * Dessins des cotes (longueur de la manoeuvre, distance de la zone à observer).
+   * 
+   * @param g2
+   * @param A
+   * @param B
+   * @param label
+   * @param below
+   */
   public void drawLabelledLine(Graphics2D g2, Point2D.Double A, Point2D.Double B, String label, boolean below)
   {
     if (A.x > B.x)
@@ -256,16 +261,13 @@ public abstract class ManoeuverDTO implements Serializable
 ////    else
 //      g2.setPaint(_GREEN);
 //    g2.setStroke(dashed);
-//    g2.draw(line);
+//    g2.draw(line);.
 //  }
   //-----------------------------------------------------------------------------
-  /**
-   * @return the id
-   */
-  public int getId() { return id; }
-  /**
-   * @param id the id to set
-   */
+  public int getId()        { return id; }
   public void setId(int id) { this.id = id; }
+  
+  public ManoeuverRequestedStatus getRequestedStatus() { return mnvrReqStatus; }
+  public void setRequestedStatus(ManoeuverRequestedStatus status) { mnvrReqStatus = status; }
   //-----------------------------------------------------------------------------
 }
