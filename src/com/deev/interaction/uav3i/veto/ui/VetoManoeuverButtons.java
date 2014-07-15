@@ -147,6 +147,9 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   //-----------------------------------------------------------------------------
   public void hide()
   {
+    if (offset < 1)
+      offset = 1;
+
     state = ManoeuverButtonsStates.HIDING;
   }
   //-----------------------------------------------------------------------------
