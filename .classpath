@@ -13,5 +13,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/commons-math3-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/Serializable_jcoord-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/vlcj-3.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

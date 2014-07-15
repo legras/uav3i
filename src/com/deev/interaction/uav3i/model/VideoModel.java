@@ -2,6 +2,8 @@ package com.deev.interaction.uav3i.model;
 
 import java.util.ArrayList;
 
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+
 public class VideoModel
 {
 	public static VideoModel video = null;
@@ -10,6 +12,8 @@ public class VideoModel
 	private boolean _isPaused;
 	private long _seqStart;
 	private long _seqEnd;
+	
+	private EmbeddedMediaPlayerComponent _mediaPlayerComponent;
 	
 	// Dummy
 	private long _lastCursorPosition;
@@ -28,6 +32,11 @@ public class VideoModel
 		_segmentList = VideoSegment.makeDummyVSegmentList();
 	}
 	
+	public void setMediaPlayerComponent(EmbeddedMediaPlayerComponent component)
+	{
+		_mediaPlayerComponent = component;
+	}
+	
 	public CameraFootprint getFootprintNow()
 	{
 		return getFootprintAtTime(System.currentTimeMillis());
@@ -38,9 +47,7 @@ public class VideoModel
 		UAVDataPoint data = UAVModel.store.getDataPointAtTime(time);
 		return new CameraFootprint(data.latlng, data.course, time);
 	}
-	
-	
-	
+		
 	public void setPlaySequence(long start, long end)
 	{
 		_seqStart = start;
@@ -78,6 +85,8 @@ public class VideoModel
 		_playStart = System.currentTimeMillis();
 		_isPlaying = true;
 		_isPaused = false;
+	
+        _mediaPlayerComponent.getMediaPlayer().playMedia("/Users/legras/Desktop/1_EO_20140715_103018.ts");
 	}
 	
 	public void pause()

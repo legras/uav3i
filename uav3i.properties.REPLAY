@@ -52,3 +52,6 @@ INTERACTION_MODE = false
 # Title ?
 TUIO       = false
 FULLSCREEN = false
+
+# VLC where is libvlc ?
+VLC_LIB = /Applications/VLC.app/Contents/MacOS/lib

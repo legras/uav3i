@@ -95,5 +95,6 @@ public class UAV3iSettings
   public static int     getUav3iServerPort()        { return Integer.parseInt(props.getProperty("UAV3I_SERVER_PORT"));    }
   public static String  getUav3iServerServiceName() { return props.getProperty("UAV3I_SERVER_SERVICE_NAME");              }
   public static boolean getMultihomedHost()         { return Boolean.parseBoolean(props.getProperty("MULTIHOMED_HOSTS")); }
+  public static String  getVLCLibPath()             { return props.getProperty("VLC_LIB");                        }
   //-----------------------------------------------------------------------------
 }

@@ -1,5 +1,7 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,8 +49,26 @@ public class Launcher
 						final MainFrame frame = new MainFrame();
 						frame.setVisible(true); 
 						frame.requestFocusInWindow();
+					
+						final VideoFrame vframe = new VideoFrame();
+						vframe.setVisible(true);
+						
 						if (UAV3iSettings.getFullscreen())
-							java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+						{
+							GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+							GraphicsDevice[] gs = ge.getScreenDevices();
+							
+							GraphicsDevice primaryGD = ge.getDefaultScreenDevice();
+							primaryGD.setFullScreenWindow(frame);
+
+							if (gs.length > 1)
+							{
+								GraphicsDevice secondaryGD = primaryGD == gs[0] ? gs[1] : gs[0];
+								secondaryGD.setFullScreenWindow(vframe);
+							}
+						}
+					
+						
 					}
 				});
 				break;
