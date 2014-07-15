@@ -61,7 +61,8 @@ public abstract class ManoeuverDTO implements Serializable
   //-----------------------------------------------------------------------------
   public void removeButtons()
   {
-    buttons.remove();
+    //buttons.remove();
+    buttons.hide();
     buttons = null;
   }
   //-----------------------------------------------------------------------------

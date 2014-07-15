@@ -25,8 +25,6 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   private enum ManoeuverButtonsStates {SHOWING, HIDING, IDLE};
   private ManoeuverButtonsStates state = ManoeuverButtonsStates.IDLE;
   private static double RATE = .3;
-  private static long   DELETE_DELAY = 2000;
-
 
   private static BufferedImage acceptIcon        = null;
   private static BufferedImage acceptIconPressed = null;
@@ -44,12 +42,8 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   private Point2D.Double posVect[] = {null, null, null, null};
   private double         offset = 3000;
   private boolean        isDead = false;
-  private long           deleteEnabledTime = -1;
-
-
 
   private static int PAD = 13;
-
   //-----------------------------------------------------------------------------
   public VetoManoeuverButtons(ManoeuverDTO mnvrDTO, JComponent layer) throws IOException
   {
@@ -76,11 +70,12 @@ public class VetoManoeuverButtons implements Animation, ActionListener
       {
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
         PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
-        
+        isDead = true;
       }
       else if(e.getSource() == refuseButton)
       {
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, false);
+        isDead = true;
       }
     }
     catch (RemoteException | IvyException e1)
@@ -106,6 +101,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
 
       case HIDING:
         offset /= RATE;
+        System.out.println("####### offset (HIDING) = " + offset);
         if (offset > 3000)
         {
           state = ManoeuverButtonsStates.IDLE;
