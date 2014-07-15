@@ -40,8 +40,8 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   private JComponent   layer;
   private int          size;
 
-  private Point2D.Double positions[] = {null, null};
-  private Point2D.Double posVect[] = {null, null};
+  private Point2D.Double positions[] = {null, null, null, null};
+  private Point2D.Double posVect[] = {null, null, null, null};
   private double         offset = 3000;
   private boolean        isDead = false;
   private long           deleteEnabledTime = -1;
@@ -167,7 +167,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
     {
       double delta = (size + PAD) / distance;
 
-      for (int i=0; i<2; i++)
+      for (int i=0; i<4; i++)
       {
         double a = theta + (-1.5+i)*delta;
         positions[i] = new Point2D.Double(ref.x + distance * Math.cos(a), ref.y + distance * Math.sin(a));
@@ -185,14 +185,14 @@ public class VetoManoeuverButtons implements Animation, ActionListener
 
       double l;
 
-      for (int i=0; i<2; i++)
+      for (int i=0; i<4; i++)
       {
         l = -1.5 + i;
         positions[i] = new Point2D.Double(middle.x+l*u, middle.y+l*v);
       }
     }
 
-    for (int i=0; i<2; i++) 
+    for (int i=0; i<4; i++) 
     {
       posVect[i] = new Point2D.Double(positions[i].x-ref.x, positions[i].y-ref.y);
       posVect[i].x /= positions[i].distance(ref);
@@ -214,12 +214,12 @@ public class VetoManoeuverButtons implements Animation, ActionListener
     {
       public void run()
       { 
-        acceptButton.setBounds((int) positions[0].x-size/2 + (int) (offset * posVect[0].x),
-                               (int) positions[0].y-size/2 + (int) (offset * posVect[0].y),
+        acceptButton.setBounds((int) positions[1].x-size/2 + (int) (offset * posVect[1].x),
+                               (int) positions[1].y-size/2 + (int) (offset * posVect[1].y),
                                size, size);
 
-        refuseButton.setBounds((int) positions[1].x-size/2 + (int) (offset * posVect[1].x),
-                               (int) positions[1].y-size/2 + (int) (offset * posVect[1].y),
+        refuseButton.setBounds((int) positions[2].x-size/2 + (int) (offset * posVect[2].x),
+                               (int) positions[2].y-size/2 + (int) (offset * posVect[2].y),
                                size, size);
       }
     });
