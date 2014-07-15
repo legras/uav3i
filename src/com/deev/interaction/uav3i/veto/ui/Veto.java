@@ -44,7 +44,7 @@ public class Veto extends JFrame
   private static JMapViewer        mapViewer;
   private static SymbolMapVeto     symbolMapVeto;
   private static ComponentLayer    componentLayer;
-  private        FlightParamsPanel flightParamsPanel;
+//  private        FlightParamsPanel flightParamsPanel;
   private        int               diffWidth, diffHeight;
   private        Dimension         initialDimension = new Dimension(1024, 768);
   public static  StateVeto         state         = StateVeto.IDLE;
@@ -96,10 +96,10 @@ public class Veto extends JFrame
         mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
         symbolMapVeto.setBounds(0, 0, newBounds.width, newBounds.height);
         componentLayer.setBounds       (0, 0, newBounds.width, newBounds.height);
-        flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
-                                    newBounds.height-(flightParamsPanel.getHeight()+15), 
-                                    flightParamsPanel.getWidth(), 
-                                    flightParamsPanel.getHeight());
+//        flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
+//                                    newBounds.height-(flightParamsPanel.getHeight()+15), 
+//                                    flightParamsPanel.getWidth(), 
+//                                    flightParamsPanel.getHeight());
 
       }
     });
@@ -138,12 +138,12 @@ public class Veto extends JFrame
     // Initialisation de la couche affichant les composants graphiques : boutons, paramètres de vol, etc.
     componentLayer = new ComponentLayer();
     componentLayer.setBounds(0, 0, initialDimension.width, initialDimension.height);
-    flightParamsPanel = new FlightParamsPanel();
-    componentLayer.add(flightParamsPanel);
-    flightParamsPanel.setBounds(initialDimension.width-(flightParamsPanel.getWidth()+5),
-                                initialDimension.height-(flightParamsPanel.getHeight()+15), 
-                                flightParamsPanel.getWidth(), 
-                                flightParamsPanel.getHeight());
+//    flightParamsPanel = new FlightParamsPanel();
+//    componentLayer.add(flightParamsPanel);
+//    flightParamsPanel.setBounds(initialDimension.width-(flightParamsPanel.getWidth()+5),
+//                                initialDimension.height-(flightParamsPanel.getHeight()+15), 
+//                                flightParamsPanel.getWidth(), 
+//                                flightParamsPanel.getHeight());
     
     // JLayeredPane accueille les différenches couches de composants
     JLayeredPane lpane = new JLayeredPane();
