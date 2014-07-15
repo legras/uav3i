@@ -65,7 +65,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   {
     try
     {
-      mnvrDTO.removeButtons();
+      mnvrDTO.hidebuttons();
       if (e.getSource() == acceptButton)
       {
         PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
@@ -101,7 +101,6 @@ public class VetoManoeuverButtons implements Animation, ActionListener
 
       case HIDING:
         offset /= RATE;
-        System.out.println("####### offset (HIDING) = " + offset);
         if (offset > 3000)
         {
           state = ManoeuverButtonsStates.IDLE;

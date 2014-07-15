@@ -59,9 +59,8 @@ public abstract class ManoeuverDTO implements Serializable
     positionButtons();
   }
   //-----------------------------------------------------------------------------
-  public void removeButtons()
+  public void hidebuttons()
   {
-    //buttons.remove();
     buttons.hide();
     buttons = null;
   }
