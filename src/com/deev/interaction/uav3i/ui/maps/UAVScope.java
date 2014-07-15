@@ -22,15 +22,22 @@ import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlan
 public class UAVScope implements MapMarker
 {
   //-----------------------------------------------------------------------------
-  private LatLng     startPoint;
-  private int        maxDistanceFromHome;
-  private JMapViewer mapViewer;
+  private       LatLng      startPoint;
+  private       int         maxDistanceFromHome;
+  private       JMapViewer  mapViewer;
+  private final BasicStroke fat, dashed;
+  private       int lineWidth = 2;
+  private       int fatWidth  = 10;
+  private final float dash[] = {10.f, 10.f};
   //-----------------------------------------------------------------------------
   public UAVScope(JMapViewer mapViewer)
   {
     this.startPoint          = FlightPlanFacade.getInstance().getStartPoint();
     this.maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
     this.mapViewer           = mapViewer;
+    
+    fat = new BasicStroke(lineWidth+fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    dashed = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, dash, 0);
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -137,24 +144,17 @@ public class UAVScope implements MapMarker
   @Override
   public void paint(Graphics g, Point position, int radio)
   {
-    //System.out.println("####### paint(g, "+position+", "+radio+") : zoom = " + Veto.getMapViewer().getZoom());
     Graphics2D g2 = (Graphics2D) g;
 
     int rayonPixels = (int) (maxDistanceFromHome / mapViewer.getMeterPerPixel());
     int centerX = position.x - (rayonPixels);
     int centerY = position.y - (rayonPixels);
-    
-    int lineWidth = 2;
-    int fatWidth  = 10;
-    final float dash[] = {10.f, 10.f};
-    
-    final BasicStroke fat = new BasicStroke(lineWidth+fatWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+
     g2.setStroke(fat);
     g2.setPaint(Palette3i.WHITE_BG.getPaint());
     g2.fillOval(position.x-fatWidth, position.y-fatWidth, fatWidth*2, fatWidth*2);  // Centre
     g2.drawOval(centerX, centerY, rayonPixels*2, rayonPixels*2);                    // Étendue maxi
 
-    final BasicStroke dashed = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, dash, 0);
     g2.setStroke(dashed);
     g2.setPaint(Palette3i.UAV_SCOPE.getPaint());
     g2.fillOval(position.x-lineWidth, position.y-lineWidth,  lineWidth*2,  lineWidth*2);  // Centre
