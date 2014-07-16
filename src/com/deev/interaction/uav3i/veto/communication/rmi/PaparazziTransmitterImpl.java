@@ -20,7 +20,7 @@ import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
-import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
+import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
@@ -178,7 +178,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   @Override
   public void register(String uav3iHostname, int uav3iPort)  throws RemoteException
   {
-    Veto.state = StateVeto.RECEIVING;
     try
     {
       bus.start(null);
@@ -217,12 +216,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       LoggerUtil.LOG.severe(e.getMessage());
       e.printStackTrace();
     }
+    Veto.setVetoState(VetoState.RECEIVING);
   }
   //-----------------------------------------------------------------------------
   public void unRegisterUav3iTransmitter()
   {
     bus.stop();
-    Veto.state = StateVeto.IDLE;
+    Veto.setVetoState(VetoState.IDLE);
     uav3iTransmitter = null;
     Veto.reinit();
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");

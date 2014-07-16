@@ -45,12 +45,13 @@ public class Veto extends JFrame
   private static SymbolMapVeto     symbolMapVeto;
   private static ComponentLayer    componentLayer;
 //  private        FlightParamsPanel flightParamsPanel;
+  private        VetoStateUI       vetoStateUI;
   private        int               diffWidth, diffHeight;
   private        Dimension         initialDimension = new Dimension(1024, 768);
-  public static  StateVeto         state         = StateVeto.IDLE;
-  public static  Veto             frame;
+  private static VetoState         state         = VetoState.IDLE;
+  public  static Veto              frame;
   //-----------------------------------------------------------------------------
-  public enum StateVeto {IDLE, RECEIVING}
+  public enum VetoState {IDLE, RECEIVING}
   //-----------------------------------------------------------------------------
   /**
    * Create the frame.
@@ -96,6 +97,10 @@ public class Veto extends JFrame
         mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
         symbolMapVeto.setBounds(0, 0, newBounds.width, newBounds.height);
         componentLayer.setBounds       (0, 0, newBounds.width, newBounds.height);
+        vetoStateUI.setBounds(initialDimension.width-(vetoStateUI.getWidth()+5), 
+                                                      5,
+                                                      vetoStateUI.getWidth(),
+                                                      vetoStateUI.getHeight());
 //        flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
 //                                    newBounds.height-(flightParamsPanel.getHeight()+15), 
 //                                    flightParamsPanel.getWidth(), 
@@ -138,12 +143,20 @@ public class Veto extends JFrame
     // Initialisation de la couche affichant les composants graphiques : boutons, paramètres de vol, etc.
     componentLayer = new ComponentLayer();
     componentLayer.setBounds(0, 0, initialDimension.width, initialDimension.height);
+    
 //    flightParamsPanel = new FlightParamsPanel();
 //    componentLayer.add(flightParamsPanel);
 //    flightParamsPanel.setBounds(initialDimension.width-(flightParamsPanel.getWidth()+5),
 //                                initialDimension.height-(flightParamsPanel.getHeight()+15), 
 //                                flightParamsPanel.getWidth(), 
 //                                flightParamsPanel.getHeight());
+    
+    vetoStateUI = new VetoStateUI();
+    vetoStateUI.setBounds(initialDimension.width-(vetoStateUI.getWidth()+5), 
+                          5, 
+                          vetoStateUI.getWidth(), 
+                          vetoStateUI.getHeight());
+    componentLayer.add(vetoStateUI);
     
     // JLayeredPane accueille les différenches couches de composants
     JLayeredPane lpane = new JLayeredPane();
@@ -179,6 +192,8 @@ public class Veto extends JFrame
   //-----------------------------------------------------------------------------
   public static JMapViewer    getMapViewer()     { return mapViewer;     }
   public static SymbolMapVeto getSymbolMapVeto() { return symbolMapVeto; }
+  public static VetoState     getVetoState()     { return state;         }
+  public static void setVetoState(VetoState state) { Veto.state = state; }
   //-----------------------------------------------------------------------------
   public static void reinit()
   {

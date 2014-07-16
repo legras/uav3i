@@ -8,7 +8,7 @@ import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
 import com.deev.interaction.uav3i.veto.ui.Veto;
-import com.deev.interaction.uav3i.veto.ui.Veto.StateVeto;
+import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
 import fr.dgac.ivy.IvyClient;
 import fr.dgac.ivy.IvyMessageListener;
@@ -77,7 +77,7 @@ public class UAVWayPointsListener implements IvyMessageListener
       case VETO:
         if(UAVModel.getWayPoints().updateWayPoint(wayPoint))  // Mise à jour côté Veto lors du test
         {
-          if(uav3iTransmitter != null && Veto.state == StateVeto.RECEIVING)
+          if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
           {
             try
             {
