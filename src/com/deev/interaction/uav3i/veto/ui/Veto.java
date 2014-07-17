@@ -47,7 +47,7 @@ public class Veto extends JFrame
 //  private        FlightParamsPanel flightParamsPanel;
   private        VetoStateUI       vetoStateUI;
   private        int               diffWidth, diffHeight;
-  private        Dimension         initialDimension = new Dimension(1024, 768);
+  private        Dimension         initialDimension;
   private static VetoState         state         = VetoState.IDLE;
   public  static Veto              frame;
   //-----------------------------------------------------------------------------
@@ -60,6 +60,10 @@ public class Veto extends JFrame
   {
     super("uav3i - Veto");
     
+    Dimension screenDimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    initialDimension = new Dimension((int) (screenDimension.getWidth() * 3/4),
+                                     (int) (screenDimension.getHeight() * 3/4));
+
     // Affichage du dialogue de confirmation de fermeture
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.addWindowListener(new WindowAdapter()
