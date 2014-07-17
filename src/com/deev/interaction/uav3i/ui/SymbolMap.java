@@ -138,7 +138,8 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-		int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+		// Qu'est-ce que ça fout là ???
+		//int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
 		
 		// Command Grid ?
 		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.COMMAND)
@@ -409,6 +410,10 @@ public class SymbolMap extends Map implements Touchable
 		_currentMnvr.positionButtons();
 		_currentMnvr.stopAdjusting();
 		//_adjustingMnvr = null;
+		
+    // TODO : François, vérifie que la mise à null de cette variable est correcte. 
+    _adjustingTouch = null;
+
 	}
 
 	@Override
