@@ -97,10 +97,10 @@ public class Veto extends JFrame
         mapViewer.setBounds    (0, 0, newBounds.width, newBounds.height);
         symbolMapVeto.setBounds(0, 0, newBounds.width, newBounds.height);
         componentLayer.setBounds       (0, 0, newBounds.width, newBounds.height);
-        vetoStateUI.setBounds(initialDimension.width-(vetoStateUI.getWidth()+5), 
-                                                      5,
-                                                      vetoStateUI.getWidth(),
-                                                      vetoStateUI.getHeight());
+        vetoStateUI.setBounds(newBounds.width-(vetoStateUI.getWidth()+5), 
+                              5,
+                              vetoStateUI.getWidth(),
+                              vetoStateUI.getHeight());
 //        flightParamsPanel.setBounds(newBounds.width-(flightParamsPanel.getWidth()+5),
 //                                    newBounds.height-(flightParamsPanel.getHeight()+15), 
 //                                    flightParamsPanel.getWidth(), 
