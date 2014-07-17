@@ -19,13 +19,15 @@ public class VideoFrame extends JFrame
 	{
 		super("VLC");
 		
-		//NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), UAV3iSettings.getVLCLibPath());
-		//Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), UAV3iSettings.getVLCLibPath());
+		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
 		
 		_mediaPlayerComponent = new EmbeddedMediaPlayerComponent();
 
         this.setContentPane(_mediaPlayerComponent);
+        this.setSize(1024, 768);
         
         VideoModel.video.setMediaPlayerComponent(_mediaPlayerComponent);
+        _mediaPlayerComponent.getMediaPlayer().prepareMedia("/Users/legras/Desktop/1_EO_20140715_103018.ts");
 	}
 }

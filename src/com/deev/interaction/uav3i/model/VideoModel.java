@@ -86,7 +86,8 @@ public class VideoModel
 		_isPlaying = true;
 		_isPaused = false;
 	
-        _mediaPlayerComponent.getMediaPlayer().playMedia("/Users/legras/Desktop/1_EO_20140715_103018.ts");
+		_mediaPlayerComponent.getMediaPlayer().attachVideoSurface();
+        _mediaPlayerComponent.getMediaPlayer().play();
 	}
 	
 	public void pause()

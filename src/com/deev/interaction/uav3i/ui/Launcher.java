@@ -66,9 +66,7 @@ public class Launcher
 								GraphicsDevice secondaryGD = primaryGD == gs[0] ? gs[1] : gs[0];
 								secondaryGD.setFullScreenWindow(vframe);
 							}
-						}
-					
-						
+						}						
 					}
 				});
 				break;
