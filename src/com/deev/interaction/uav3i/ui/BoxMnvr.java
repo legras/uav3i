@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
@@ -201,7 +202,7 @@ public class BoxMnvr extends Manoeuver
 					length = max/2;
 			}
 			
-			paintAdjustLine(g2, boxhndl.getPath(length, this), getRequestedStatus() != ManoeuverRequestedStatus.NONE, fat);
+			paintAdjustLine(g2, boxhndl.getPath(length, this), getRequestedStatus() == ManoeuverRequestedStatus.ASKED, fat);
 		}
 		
 		if (isSelected())
@@ -233,6 +234,7 @@ public class BoxMnvr extends Manoeuver
 	public boolean adjustAtPx(double x, double y)
 	{
 		_buttons.show();
+		setRequestedStatus(ManoeuverRequestedStatus.NONE);
 		
 		Rectangle2D.Double box = getBoxOnScreen();
 		

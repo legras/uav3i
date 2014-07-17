@@ -69,7 +69,7 @@ public class CircleMnvr extends Manoeuver
 
 		ell = new Ellipse2D.Double(-Rpx, -Rpx, 2*Rpx, 2*Rpx);
 
-		paintAdjustLine(g2, ell, getRequestedStatus() != ManoeuverRequestedStatus.NONE, _adjusting);
+		paintAdjustLine(g2, ell, getRequestedStatus() == ManoeuverRequestedStatus.ASKED, _adjusting);
 		
 		if (isSelected())
 		{
@@ -89,6 +89,7 @@ public class CircleMnvr extends Manoeuver
 		double Rm = centerPx.distance(new Point2D.Double(x, y))/_smap.getPPM();
 		
 		_buttons.show();
+		setRequestedStatus(ManoeuverRequestedStatus.NONE);
 
 		if (_adjusting)
 		{

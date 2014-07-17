@@ -482,7 +482,10 @@ public class SymbolMap extends Map implements Touchable
 			T.addTouch(x, y, touchref);
 			_touchedSymbols.put(touchref, T);
 			if (T instanceof Manoeuver)
+			{
 				_currentMnvr = (Manoeuver) T;
+				_currentMnvr.setRequestedStatus(ManoeuverRequestedStatus.NONE);
+			}
 		}
 	}
 
