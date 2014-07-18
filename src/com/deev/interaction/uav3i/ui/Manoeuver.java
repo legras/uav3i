@@ -309,6 +309,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	public void addTouch(float x, float y, Object touchref)
 	{		
 		_buttons.show();
+		setRequestedStatus(ManoeuverRequestedStatus.NONE);
 	}
 
 	public void updateTouch(float x, float y, Object touchref)

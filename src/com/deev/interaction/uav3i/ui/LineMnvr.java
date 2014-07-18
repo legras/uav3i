@@ -128,7 +128,7 @@ public class LineMnvr extends Manoeuver
 
 		// Trajectoire du drone
 		Line2D.Double l = new Line2D.Double(LApx, LBpx);
-		paintAdjustLine(g2, l, getRequestedStatus() != ManoeuverRequestedStatus.NONE, _adjusting);
+		paintAdjustLine(g2, l, getRequestedStatus() == ManoeuverRequestedStatus.ASKED, _adjusting);
 
 		if (isSelected())
 		{
@@ -159,6 +159,7 @@ public class LineMnvr extends Manoeuver
 	public boolean adjustAtPx(double x, double y)
 	{
 		_buttons.show();
+		setRequestedStatus(ManoeuverRequestedStatus.NONE);
 
 		// Parallélisme avec la zone à regarder
 		Point2D.Double p = getUVforPx(x, y);

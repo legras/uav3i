@@ -26,6 +26,8 @@ import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
+import TUIO.TuioCursor;
+
 import com.deev.interaction.touch.Touchable;
 import com.deev.interaction.uav3i.model.CameraFootprint;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
@@ -258,17 +260,17 @@ public class SymbolMap extends Map implements Touchable
 		// On la catche pour le moment...
 		try
 		{
-	    GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
-	    g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
-	    g2.fill(foot);
-	    g2.setStroke(new BasicStroke(2.f));
-	    g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
-	    g2.draw(foot);
+			GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
+			g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
+			g2.fill(foot);
+			g2.setStroke(new BasicStroke(2.f));
+			g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
+			g2.draw(foot);
 		}
 		catch(NullPointerException npe)
 		{
 		}
-		
+
 		// Dessin UAV
 		AffineTransform old = g2.getTransform();	
 		BufferedImage uavImg;
@@ -406,14 +408,14 @@ public class SymbolMap extends Map implements Touchable
 	{
 		if (_currentMnvr == null)
 			return;
-		
+
 		_currentMnvr.positionButtons();
 		_currentMnvr.stopAdjusting();
 		//_adjustingMnvr = null;
-		
-    // TODO : François, vérifie que la mise à null de cette variable est correcte. 
-    _adjustingTouch = null;
 
+		// TODO : François, vérifie que la mise à null de cette variable est correcte. 
+		if (!(_adjustingTouch instanceof TuioCursor))
+			_adjustingTouch = null;
 	}
 
 	@Override
@@ -480,7 +482,10 @@ public class SymbolMap extends Map implements Touchable
 			T.addTouch(x, y, touchref);
 			_touchedSymbols.put(touchref, T);
 			if (T instanceof Manoeuver)
+			{
 				_currentMnvr = (Manoeuver) T;
+				_currentMnvr.setRequestedStatus(ManoeuverRequestedStatus.NONE);
+			}
 		}
 	}
 
