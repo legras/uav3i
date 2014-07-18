@@ -35,7 +35,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
       _x = x;
       _y = y;
     }
-    
+
+    @SuppressWarnings("unused")
     public double distance(double x, double y, BoxMnvrDTO bmnvr)
     {
       Rectangle2D.Double box = bmnvr.getBoxOnScreen();
@@ -44,6 +45,7 @@ public class BoxMnvrDTO extends ManoeuverDTO
       return h.distance(x, y);
     }
     
+    @SuppressWarnings("unused")
     public BoxMnvrHandles getOpposite()
     {
       switch (this)
@@ -149,8 +151,8 @@ public class BoxMnvrDTO extends ManoeuverDTO
 
     for (BoxMnvrHandles boxhndl : BoxMnvrHandles.values())
     {
-      boolean fat = true;
-      double al = 10;
+//      boolean fat = true;
+//      double al = 10;
       double length = 0;
       double max = _isNorthSouth ? box.height : box.width;
 
@@ -159,7 +161,6 @@ public class BoxMnvrDTO extends ManoeuverDTO
 
         if (!_isNorthSouth && !boxhndl.isNorthsouth())
           length = max/2;
-//      }
       
         //paintAdjustLine(g2, boxhndl.getPath(length, this), isShared(), fat);
         paintAdjustLine(g2, boxhndl.getPath(length, this), mnvrReqStatus == ManoeuverRequestedStatus.ASKED);

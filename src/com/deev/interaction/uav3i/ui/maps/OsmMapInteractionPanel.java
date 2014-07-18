@@ -76,6 +76,7 @@ public class OsmMapInteractionPanel extends JComponent implements Touchable
   {
     Graphics2D g2 = (Graphics2D) g;
 
+    @SuppressWarnings("unused")
     Animation animToBeRemoved = null;
     for(Animation anim : anims)
     {

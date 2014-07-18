@@ -7,7 +7,6 @@ import java.awt.geom.Point2D;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 
 public class CircleMnvrDTO extends ManoeuverDTO

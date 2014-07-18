@@ -26,7 +26,6 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
-import com.deev.interaction.uav3i.ui.FlightParamsPanel;
 import com.deev.interaction.uav3i.ui.maps.UAVScope;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
