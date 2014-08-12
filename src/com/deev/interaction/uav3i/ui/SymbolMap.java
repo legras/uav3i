@@ -4,13 +4,17 @@ package com.deev.interaction.uav3i.ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
@@ -202,6 +206,11 @@ public class SymbolMap extends Map implements Touchable
 		}
 		
 		// WayPoints
+		FontRenderContext frc = g2.getFontRenderContext();
+		Font f = new Font("Futura", Font.PLAIN, 12);
+		g2.setStroke(new BasicStroke(3.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+		TextLayout textTl;
+		Shape outline;
 		synchronized (this)
 		{
 			for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
@@ -214,10 +223,18 @@ public class SymbolMap extends Map implements Touchable
 							p.x - _waypointImage.getWidth()/2,
 							p.y - _waypointImage.getHeight()/2,
 							null);
-					g2.setColor(Color.blue);
-					g2.drawString(wayPoint.getWayPointName(),
-							p.x + _waypointImage.getWidth()/2 + 3, 
-							p.y - _waypointImage.getHeight()/2);
+
+					
+					textTl = new TextLayout(wayPoint.getWayPointName(), f, frc);
+					outline = textTl.getOutline(null);
+					
+					AffineTransform old = g2.getTransform();
+					g2.translate(p.x+_waypointImage.getWidth()/2, p.y+_waypointImage.getHeight()/2);
+					g2.setPaint(Palette3i.getPaint(Palette3i.WHITE_BG));
+					g2.draw(outline);
+					g2.setPaint(Color.GRAY);
+					g2.fill(outline);
+					g2.setTransform(old);
 				}
 			}
 		}
