@@ -5,7 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RadialGradientPaint;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -22,7 +25,9 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.ui.Palette3i;
 import com.deev.interaction.uav3i.ui.Trajectory;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class SymbolMapVeto extends JComponent
@@ -35,6 +40,9 @@ public class SymbolMapVeto extends JComponent
   private   BufferedImage uavImage             = null;
   protected BufferedImage waypointImage        = null;
   private   ManoeuverDTO  sharedManoeuver      = null;
+
+	private LatLng _startPoint;
+	private int _maxDistanceFromHome;
   //-----------------------------------------------------------------------------
   public SymbolMapVeto()
   {
@@ -53,6 +61,9 @@ public class SymbolMapVeto extends JComponent
     {
       e.printStackTrace();
     }
+	
+    _startPoint          = FlightPlanFacade.getInstance().getStartPoint();
+    _maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
   }
   //-----------------------------------------------------------------------------
   public Point2D.Double getScreenForLatLng(LatLng latlng)
@@ -130,6 +141,22 @@ public class SymbolMapVeto extends JComponent
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    
+    // Zone d'opérations
+ 	float radius = (float) (_maxDistanceFromHome * getPPM());
+ 	float THICK = 40.f;
+	
+	Point2D.Double center = getScreenForLatLng(_startPoint);
+	float[] dist = {0.f, radius/(radius+THICK), radius/(radius+THICK)+.000001f, 1.f};
+	Color[] colors = {
+			(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR),
+			(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR),
+			(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE),
+			(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR)};
+	RadialGradientPaint gradPaint = new RadialGradientPaint(center, radius + THICK, dist, colors);
+
+	g2.setPaint(gradPaint);
+	g2.fill(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
     
     // WayPoints
     for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())

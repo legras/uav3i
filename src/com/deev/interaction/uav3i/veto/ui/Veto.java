@@ -135,8 +135,7 @@ public class Veto extends JFrame
                                                          UAV3iSettings.getOffLineMinZoom(), 
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
-    UAVScope scope = new UAVScope(mapViewer);
-    mapViewer.addMapMarker(scope);
+
     mapViewer.setBounds(0, 0, initialDimension.width, initialDimension.height);
 
     // Initialisation de la couche affichant les données 3i : manoeuvres, drone, etc.
