@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RadialGradientPaint;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
@@ -60,6 +62,9 @@ public class SymbolMap extends Map implements Touchable
 	
 	private Ruler _ruler = null;
 
+	private LatLng _startPoint;
+	private int _maxDistanceFromHome;
+
 	protected static BufferedImage _uavImage      = null;
 	protected static BufferedImage _uavGrayImage  = null;
 	protected static BufferedImage _waypointImage = null;
@@ -81,6 +86,10 @@ public class SymbolMap extends Map implements Touchable
 		
 		_ruler = new Ruler(this);
 		addTouchSymbol(_ruler);
+		
+	    _startPoint          = FlightPlanFacade.getInstance().getStartPoint();
+	    _maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+
 
 		// Dessin UAV + way points
 		try
@@ -140,8 +149,21 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-		// Qu'est-ce que ça fout là ???
-		//int maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+		// Zone d'opérations
+		float radius = (float) (_maxDistanceFromHome * getPPM());
+		float THICK = 40.f;
+		
+		Point2D.Double center = getScreenForLatLng(_startPoint);
+		float[] dist = {0.f, radius/(radius+THICK), radius/(radius+THICK)+.000001f, 1.f};
+		Color[] colors = {
+				(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR),
+				(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR),
+				(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE),
+				(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR)};
+		RadialGradientPaint gradPaint = new RadialGradientPaint(center, radius + THICK, dist, colors);
+
+		g2.setPaint(gradPaint);
+		g2.fill(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 		
 		// Command Grid ?
 		if (MainFrame.SWITCHER.getMode() == Switcher3Buttons.Switcher3ButtonsMode.COMMAND)
@@ -181,24 +203,24 @@ public class SymbolMap extends Map implements Touchable
 		
 		// WayPoints
 		synchronized (this)
-    {
-	    for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
-	    {
-	      LatLng wayPointPosition = wayPoint.getWayPointPosition();
-	      if(wayPointPosition != null)
-	      {
-	        Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
-	        g2.drawImage(_waypointImage,
-	                     p.x - _waypointImage.getWidth()/2,
-	                     p.y - _waypointImage.getHeight()/2,
-	                     null);
-	        g2.setColor(Color.blue);
-	        g2.drawString(wayPoint.getWayPointName(),
-	                      p.x + _waypointImage.getWidth()/2 + 3, 
-	                      p.y - _waypointImage.getHeight()/2);
-	      }
-	    }
-    }
+		{
+			for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+			{
+				LatLng wayPointPosition = wayPoint.getWayPointPosition();
+				if(wayPointPosition != null)
+				{
+					Point p = MainFrame.OSMMap.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+					g2.drawImage(_waypointImage,
+							p.x - _waypointImage.getWidth()/2,
+							p.y - _waypointImage.getHeight()/2,
+							null);
+					g2.setColor(Color.blue);
+					g2.drawString(wayPoint.getWayPointName(),
+							p.x + _waypointImage.getWidth()/2 + 3, 
+							p.y - _waypointImage.getHeight()/2);
+				}
+			}
+		}
 		
 		// Update de trajectoire
 		if (currentTime - _lastTrajectoryUpdate > 500)

@@ -32,7 +32,8 @@ public enum Palette3i
 	MNVR_REFUSED(254, 95, 51),
 	MNVR_ACCEPTED(73, 178, 0),
 	MNVR_FOOT_BGRND("img/sqBW.png", 32),
-	UAV_SCOPE(255, 63, 111);
+	UAV_SCOPE(255, 0, 128, 64),
+	UAV_SCOPE_CLEAR(255, 0, 128, 0);
 	
 	
 	private Paint _paint;

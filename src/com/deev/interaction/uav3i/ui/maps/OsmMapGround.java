@@ -45,8 +45,8 @@ public class OsmMapGround extends Map
                                                          UAV3iSettings.getOffLineMaxZoom()));
     }
     
-    UAVScope scope = new UAVScope(mapViewer);
-    mapViewer.addMapMarker(scope);
+    //UAVScope scope = new UAVScope(mapViewer);
+    //mapViewer.addMapMarker(scope);
 
     this.setLayout(new BorderLayout());
     this.add(mapViewer);
