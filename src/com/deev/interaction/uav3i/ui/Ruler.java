@@ -80,7 +80,7 @@ public class Ruler implements Touchable
 			timeSegmentIndex++;
 		}
 		
-		final double distSegmentsLengths[] = {5., 10., 25., 50., 100., 200., 500., 1000.};
+		final double distSegmentsLengths[] = {5., 10., 25., 50., 100., 200., 500., 1000., 5000., 10000., 50000., 100000.};
 		int distSegmentIndex = 0;
 		
 		while (distSegmentIndex < distSegmentsLengths.length-1 && distSegmentsLengths[distSegmentIndex] * _smap.getPPM() < _MIN_SEG_WIDTH)
@@ -93,9 +93,9 @@ public class Ruler implements Touchable
 		
 		double maxL = _A.distance(_B);
 		
-		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), " m");
+		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), "m");
 		g2.translate(0, -_HALFW);
-		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), " s");
+		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), "s");
 		g2.translate(0, _HALFW);
 
 		BasicStroke stroke;
@@ -123,7 +123,7 @@ public class Ruler implements Touchable
 		int color = 0;
 		
 		FontRenderContext frc = g2.getFontRenderContext();
-		Font f = new Font("Futura", Font.PLAIN, 18);
+		Font f = new Font("Futura", Font.PLAIN, 14);
 		TextLayout textTl;
 		Shape outline;
 		
@@ -132,7 +132,16 @@ public class Ruler implements Touchable
 			g2.setPaint(color%2==0 ? white : black);
 			g2.fill(new Rectangle2D.Double(x, 0., segmentLengthPx, _HALFW));
 			
-			textTl = new TextLayout(Math.round((x+segmentLengthPx)/pixelsPerUnit)+suffix, f, frc);
+			int n = (int) Math.round((x+segmentLengthPx)/pixelsPerUnit);
+			
+			String text;
+			
+			if (n%1000 == 0)
+				text = n/1000+"k"+suffix;
+			else
+				text = n+suffix;
+			
+			textTl = new TextLayout(text, f, frc);
 			outline = textTl.getOutline(null);
 			
 			AffineTransform old = g2.getTransform();
