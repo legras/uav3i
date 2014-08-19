@@ -93,28 +93,28 @@ public class Ruler implements Touchable
 		
 		double maxL = _A.distance(_B);
 		
-		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), "m");
+		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), true);
 		g2.translate(0, -_HALFW);
-		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), "s");
+		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), false);
 		g2.translate(0, _HALFW);
 
-		BasicStroke stroke;
-		Line2D.Double line = new Line2D.Double(0, 0, L1>L2?L1:L2, 0);
-		stroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-		g2.setStroke(stroke);
-		g2.setPaint(Color.WHITE);
-		g2.draw(line);
-		stroke = new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-		g2.setStroke(stroke);
-		g2.setPaint(Color.BLACK);
-		g2.draw(line);
+//		BasicStroke stroke;
+//		Line2D.Double line = new Line2D.Double(0, 0, L1>L2?L1:L2, 0);
+//		stroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+//		g2.setStroke(stroke);
+//		g2.setPaint(Color.WHITE);
+//		g2.draw(line);
+//		stroke = new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
+//		g2.setStroke(stroke);
+//		g2.setPaint(Color.BLACK);
+//		g2.draw(line);
 		
 		g2.setTransform(old);
 		
 		_smallestDistancePx = distSegmentsLengths[distSegmentIndex]*_smap.getPPM();
 	}
 	
-	private double paintRuler(Graphics2D g2, double length, double segmentLengthPx, double pixelsPerUnit, String suffix)
+	private double paintRuler(Graphics2D g2, double length, double segmentLengthPx, double pixelsPerUnit, boolean meters)
 	{
 		final Color white = new Color(1.f, 1.f, 1.f, .8f);
 		final Color black = new Color(0.f, 0.f, 0.f, .5f);
@@ -134,12 +134,24 @@ public class Ruler implements Touchable
 			
 			int n = (int) Math.round((x+segmentLengthPx)/pixelsPerUnit);
 			
-			String text;
+			String text = "";
 			
-			if (n%1000 == 0)
-				text = n/1000+"k"+suffix;
+			if (meters)
+			{
+				if (n%1000 == 0)
+					text = n/1000+"km";
+				else
+					text = n+"m";
+			}
 			else
-				text = n+suffix;
+			{
+				if (n%3600 == 0)
+					text = n/3600+"h";
+				else if (n%60 == 0)
+					text = n/60+"min";
+				else
+					text = n+"s";
+			}
 			
 			textTl = new TextLayout(text, f, frc);
 			outline = textTl.getOutline(null);
