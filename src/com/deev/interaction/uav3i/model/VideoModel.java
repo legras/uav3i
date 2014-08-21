@@ -2,7 +2,8 @@ package com.deev.interaction.uav3i.model;
 
 import java.util.ArrayList;
 
-import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import com.deev.interaction.uav3i.ui.VideoFrame;
+
 
 public class VideoModel
 {
@@ -12,9 +13,7 @@ public class VideoModel
 	private boolean _isPaused;
 	private long _seqStart;
 	private long _seqEnd;
-	
-	private EmbeddedMediaPlayerComponent _mediaPlayerComponent;
-	
+		
 	// Dummy
 	private long _lastCursorPosition;
 	private long _cursorPosition;
@@ -32,10 +31,6 @@ public class VideoModel
 		_segmentList = VideoSegment.makeDummyVSegmentList();
 	}
 	
-	public void setMediaPlayerComponent(EmbeddedMediaPlayerComponent component)
-	{
-		_mediaPlayerComponent = component;
-	}
 	
 	public CameraFootprint getFootprintNow()
 	{
@@ -85,15 +80,16 @@ public class VideoModel
 		_playStart = System.currentTimeMillis();
 		_isPlaying = true;
 		_isPaused = false;
-	
-		_mediaPlayerComponent.getMediaPlayer().attachVideoSurface();
-        _mediaPlayerComponent.getMediaPlayer().play();
+		
+		VideoFrame.mediaPlayer.play();
 	}
 	
 	public void pause()
 	{
 		_lastCursorPosition = getCursorPosition();
 		_isPaused = true;
+		
+		VideoFrame.mediaPlayer.pause();
 	}
 	
 	public ArrayList<VideoSegment> getVideoSegments()
