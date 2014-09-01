@@ -14,6 +14,8 @@ import javax.swing.SwingUtilities;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.RoundButton;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterImpl;
@@ -59,6 +61,25 @@ public class VetoManoeuverButtons implements Animation, ActionListener
     
     SwingUtilities.invokeLater(new VetoManoeuverButtonsSwingBuilder(this, layer));
     Animator.addAnimation(this);
+    
+    if(UAV3iSettings.getMode() == Mode.VETO_NO_HMI)
+    {
+      try
+      {
+        // On transmet à la table le résultat de l'évaluation de la manoeuvre
+        // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
+        // On met à jour localement le statut de la manoeuvre pour mise
+        // à jour de l'affichage sur le Veto.
+        mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+        // On lance l'exécution de la manoeuvre.
+        PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
+      }
+      catch (IvyException e)
+      {
+        e.printStackTrace();
+      }
+    }
   }
   //-----------------------------------------------------------------------------
   @Override

@@ -9,7 +9,7 @@ public class UAV3iSettings
   //-----------------------------------------------------------------------------
   private static Properties props;
   //public static enum Mode    { REPLAY, IVY }
-  public  static enum Mode    { REPLAY, PAPARAZZI_DIRECT, PAPARAZZI_REMOTE, VETO }
+  public  static enum Mode    { REPLAY, PAPARAZZI_DIRECT, PAPARAZZI_REMOTE, VETO, VETO_NO_HMI }
   public  static enum MapType { MAPNIK, BING_AERIAL, OSM_CYCLE_MAP, OFF_LINE }
   // Attributs fréquemment lu : pour éviter la lecture du fichier à chaque fois...
   private static Mode    mode           = null;
@@ -36,6 +36,8 @@ public class UAV3iSettings
         mode = Mode.PAPARAZZI_REMOTE;
       else if (type.equalsIgnoreCase("veto"))
         mode = Mode.VETO;
+      else if (type.equalsIgnoreCase("veto_no_hmi"))
+        mode = Mode.VETO_NO_HMI;
 
       else
         mode = null;
