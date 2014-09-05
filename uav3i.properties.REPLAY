@@ -1,5 +1,4 @@
-# Old possible values: REPLAY | IVY
-# Possible values: REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO
+# Possible values: REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO | VETO_AUTO
 MODE = REPLAY
 
 # RMI communication between uav3i and Veto Server. Only taken into account when MODE is PAPARAZZI_REMOTE.

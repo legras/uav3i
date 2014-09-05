@@ -14,8 +14,6 @@ import javax.swing.SwingUtilities;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.RoundButton;
-import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterImpl;

@@ -1,5 +1,4 @@
-# Old possible values: REPLAY | IVY
-# Possible values: REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO
+# Possible values: REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO | VETO_AUTO
 MODE = PAPARAZZI_REMOTE
 
 # RMI communication between uav3i and Veto Server. Only taken into account when MODE is PAPARAZZI_REMOTE.
@@ -11,8 +10,8 @@ VETO_SERVER_SERVICE_NAME  = PaparazziTransmitter
 UAV3I_SERVER_IP           = 10.29.224.26
 UAV3I_SERVER_PORT         = 30001
 UAV3I_SERVER_SERVICE_NAME = Uav3iTransmitter
-# Utile unique dans le contexte des développements avec une machine virtuelle
-# VMware (Paparazzi + Veto Server) --> Problème de récupération des adresses IP
+# Utile unique dans le contexte des dï¿½veloppements avec une machine virtuelle
+# VMware (Paparazzi + Veto Server) --> Problï¿½me de rï¿½cupï¿½ration des adresses IP
 # avec RMI.
 # Voir : http://www.chipkillmar.net/2011/06/22/multihomed-hosts-and-java-rmi/
 MULTIHOMED_HOSTS = true

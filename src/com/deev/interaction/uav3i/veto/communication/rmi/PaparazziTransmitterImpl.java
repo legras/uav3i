@@ -29,12 +29,12 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterImpl implements IPaparazziTransmitter
 {
   //-----------------------------------------------------------------------------
-  private String                  applicationName = "uav3i (PT)";
-  private Ivy                     bus;
+  private        String                  applicationName = "uav3i (PT)";
+  private        Ivy                     bus;
   private static IUav3iTransmitter       uav3iTransmitter;
-  private UAVPositionListener     uavPositionListener     = null;
-  private UAVFlightParamsListener uavFlightParamsListener = null;
-  private UAVWayPointsListener    uavWayPointsListener    = null;
+  private        UAVPositionListener     uavPositionListener     = null;
+  private        UAVFlightParamsListener uavFlightParamsListener = null;
+  private        UAVWayPointsListener    uavWayPointsListener    = null;
   
   private static PaparazziTransmitterImpl instance;
   //-----------------------------------------------------------------------------
@@ -81,28 +81,21 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
           mDTO.addButtons();
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
         }
-        else if(UAV3iSettings.getMode() == Mode.VETO_NO_HMI)
+        else if(UAV3iSettings.getMode() == Mode.VETO_AUTO)
         {
           // Sans le délai d'une seconde, problème d'harmonisation des états entre
           // le Veto et l'IHM...
           try { Thread.sleep(1000); } catch (InterruptedException e1) {}
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
-//          try
-//          {
-            // On transmet à la table le résultat de l'évaluation de la manoeuvre
-            // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-            //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-            instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
-            // On met à jour localement le statut de la manoeuvre pour mise
-            // à jour de l'affichage sur le Veto.
-            mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
-            // On lance l'exécution de la manoeuvre.
-            instance.startManoeuver(mDTO);
-//          }
-//          catch (IvyException e)
-//          {
-//            e.printStackTrace();
-//          }
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre
+          // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+          //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
+          instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
+          // On met à jour localement le statut de la manoeuvre pour mise
+          // à jour de l'affichage sur le Veto.
+          mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+          // On lance l'exécution de la manoeuvre.
+          instance.startManoeuver(mDTO);
         }
       }
     }
