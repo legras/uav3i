@@ -71,6 +71,7 @@ public class Trajectory
 		  switch (UAV3iSettings.getMode())
       {
         case VETO:
+        case VETO_NO_HMI:
           mapViewer = Veto.getMapViewer();
           break;
         default:

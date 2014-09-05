@@ -83,6 +83,7 @@ public class UAVPositionListener implements IvyMessageListener
                                  Long.parseLong(message[9]));   // t
         break;
       case VETO:
+      case VETO_NO_HMI:
         // On transmet via RMI à l'IHM table tactile la position du drone.
         if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
         {

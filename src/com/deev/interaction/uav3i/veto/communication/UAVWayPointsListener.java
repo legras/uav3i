@@ -75,6 +75,7 @@ public class UAVWayPointsListener implements IvyMessageListener
         UAVModel.getWayPoints().updateWayPoint(wayPoint);
         break;
       case VETO:
+      case VETO_NO_HMI:
         if(UAVModel.getWayPoints().updateWayPoint(wayPoint))  // Mise à jour côté Veto lors du test
         {
           if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)

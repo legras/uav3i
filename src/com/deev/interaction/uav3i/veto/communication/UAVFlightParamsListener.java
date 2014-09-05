@@ -90,6 +90,7 @@ public class UAVFlightParamsListener implements IvyMessageListener
         LoggerUtil.LOG.info("Flight params : altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
         break;
       case VETO:
+      case VETO_NO_HMI:
         // On transmet via RMI à l'IHM table tactile la position du drone.
         if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
         {
