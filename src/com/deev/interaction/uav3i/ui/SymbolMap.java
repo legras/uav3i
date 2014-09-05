@@ -618,20 +618,11 @@ public class SymbolMap extends Map implements Touchable
 		}
 	}
 	
-	public void askManoeuver(Manoeuver mnvr)
+	public void askExecutionManoeuver(Manoeuver mnvr)
 	{
 	  shareManoeuver(mnvr);
-	  try
-    {
-      Thread.sleep(500);
-    }
-    catch (InterruptedException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-	  UAVModel.executeManoeuver(mnvr);
-	  mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+	  //mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+	  // TODO: voir avec Fanfan mais ça me parait inutil
 
 	  // On lock les share et les jump pour tous et le delete sur mnvr
 	  _areShareAndAskLocked = true;
@@ -644,6 +635,8 @@ public class SymbolMap extends Map implements Touchable
 	  mnvr.lockDelete(true);
 	  mnvr.setAsked(true);
 
+	  UAVModel.executeManoeuver(mnvr);
+
     // En mode PAPARAZZI_DIRECT, on simule l'acceptation de l'opérateur Paparazzi
 	  // pour remettre en état les statuts des manoeuvres.
     if(UAV3iSettings.getMode() == Mode.PAPARAZZI_DIRECT)
@@ -655,7 +648,7 @@ public class SymbolMap extends Map implements Touchable
 	public void answerManoeuver(int id, boolean accepted)
 	{
 		Manoeuver mnvr = findManoeuverById(id);
-
+		
 		if (accepted)
 			mnvr.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
 		else
@@ -666,9 +659,9 @@ public class SymbolMap extends Map implements Touchable
 
 		for (Manoeuver m : _manoeuvers)
 		{
-			m.lockShareAndAsk(false);
-			m.lockDelete(false);
-			m.setAsked(false);
+		  m.lockShareAndAsk(false);
+		  m.lockDelete(false);
+		  m.setAsked(false);
 		}
 	}
 

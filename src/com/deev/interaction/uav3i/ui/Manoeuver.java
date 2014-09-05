@@ -72,6 +72,7 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public void setAsked(boolean asked)
 	{
+    System.out.println("Manoeuver.setAsked(" + asked + ") - " + this);
 		_buttons.jumpButton.setSelected(asked);
 	}
 	
@@ -82,11 +83,13 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
+	  System.out.println("Manoeuver.setRequestedStatus(" + status + ") - " + this);
 	  _mnvrReqStatus = status;
 	}
 	
 	public void lockShareAndAsk(boolean lock)
 	{
+	  System.out.println("Manoeuver.lockShareAndAsk(" + lock + ") - " + this);
 		_buttons.submitButton.setEnabled(!lock);
 		_buttons.jumpButton.setEnabled(!lock);
 	}
@@ -169,9 +172,9 @@ public abstract class Manoeuver implements Touchable, Animation
 		
 		Paint paint = Palette3i.MNVR_DEFAULT.getPaint();
 		if (_mnvrReqStatus == ManoeuverRequestedStatus.REFUSED)
-			paint = Palette3i.MNVR_REFUSED.getPaint();
+      paint = Palette3i.MNVR_REFUSED.getPaint();
 		if (_mnvrReqStatus == ManoeuverRequestedStatus.ACCEPTED)
-			paint = Palette3i.MNVR_ACCEPTED.getPaint();
+      paint = Palette3i.MNVR_ACCEPTED.getPaint();
 
 		g2.setPaint(bgPaint);
 		g2.setStroke(plain);

@@ -18,10 +18,8 @@ public abstract class PaparazziCommunication
   /**
    * Exécution de la manoeuvre sur Paparazzi dans le mode PAPARAZZI_REMOTE.
    * 
-   * @param mnvrDTO objet DTO (transfert de données) représentant les données de
-   *                la manoeuvre.
+   * @param idMnvr id de la maneuvre dont on demande l'exécution.
    */
-  //public abstract void executeManoeuver(ManoeuverDTO mnvrDTO);
   public abstract void executeManoeuver(int idMnvr);
   //-----------------------------------------------------------------------------
   /**

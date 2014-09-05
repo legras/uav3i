@@ -266,7 +266,6 @@ public class UAVModel
         break;
       case PAPARAZZI_REMOTE:
         LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-        //paparazziCommunication.executeManoeuver(mnvr.toDTO());
         paparazziCommunication.executeManoeuver(mnvr.getId());
         break;
       case PAPARAZZI_DIRECT:

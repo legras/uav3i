@@ -31,11 +31,9 @@ public interface IPaparazziTransmitter extends Remote
   /**
    * Exécution de la manoeuvre sur Paparazzi.
    * 
-   * @param mnvrDTO objet DTO (transfert de données) représentant les données de
-   *                la manoeuvre.
+   * @param idMnvr id de la manoeuvre à exécuter.
    * @throws RemoteException
    */
-  //public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
   public void executeManoeuver(int idMnvr) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**

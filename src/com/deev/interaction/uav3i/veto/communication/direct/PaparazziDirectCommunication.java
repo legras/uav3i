@@ -52,7 +52,6 @@ public class PaparazziDirectCommunication extends PaparazziCommunication
   }
   //-----------------------------------------------------------------------------
   @Override
-  //public void executeManoeuver(ManoeuverDTO mnvrDTO)
   public void executeManoeuver(int idMnvr)
   {
     // Not used in PAPARAZZI_DIRECT mode.

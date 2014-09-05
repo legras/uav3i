@@ -62,7 +62,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  //public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
   public void executeManoeuver(int idMnvr) throws RemoteException
   {
     // Comme les boutons ne sont pas 'Serializable' (et qu'on n'en a rien à
@@ -74,7 +73,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     ManoeuverDTO mDTO = Veto.getSymbolMapVeto().getSharedManoeuver();  
     if(mDTO != null)
     {
-      //if(mDTO.getId() == mnvrDTO.getId())
       if(mDTO.getId() == idMnvr)
       {
         if(UAV3iSettings.getMode() == Mode.VETO)
@@ -85,14 +83,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
         }
         else if(UAV3iSettings.getMode() == Mode.VETO_AUTO)
         {
-          // Sans le délai d'une seconde, problème d'harmonisation des états entre
-          // le Veto et l'IHM...
-          try { Thread.sleep(1000); } catch (InterruptedException e1) {}
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-          //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-          //instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
           instance.getUav3iTransmitter().resultAskExecution(idMnvr, true);
           // On met à jour localement le statut de la manoeuvre pour mise
           // à jour de l'affichage sur le Veto.
@@ -103,7 +96,6 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       }
     }
     else
-      //LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
       LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + idMnvr));
   }
   //-----------------------------------------------------------------------------

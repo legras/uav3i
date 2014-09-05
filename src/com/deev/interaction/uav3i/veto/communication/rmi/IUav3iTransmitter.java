@@ -53,11 +53,10 @@ public interface IUav3iTransmitter extends Remote
    * Transmission du résultat de la demande de la demande d'exécution
    * d'une manoeuvre.
    * 
-   * @param mnvrDTO
+   * @param idMnvr
    * @param result
    * @throws RemoteException
    */
-  //public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException;
   public void resultAskExecution(int idMnvr, boolean result) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**

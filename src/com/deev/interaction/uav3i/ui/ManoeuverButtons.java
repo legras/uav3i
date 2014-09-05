@@ -131,7 +131,7 @@ public class ManoeuverButtons implements Animation, ActionListener
 		if (e.getSource() == jumpButton)
 		{			
 			if (jumpButton.isSelected())
-				MainFrame.getSymbolMap().askManoeuver(_manoeuver);
+				MainFrame.getSymbolMap().askExecutionManoeuver(_manoeuver);
 		}
 		else if (e.getSource() == submitButton)
 		{			
