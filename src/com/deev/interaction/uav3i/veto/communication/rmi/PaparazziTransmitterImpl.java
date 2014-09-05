@@ -84,14 +84,22 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
         else if(UAV3iSettings.getMode() == Mode.VETO_NO_HMI)
         {
           LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+") automaticaly accepted");
-          // On transmet à la table le résultat de l'évaluation de la manoeuvre
-          // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-          uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-          // On met à jour localement le statut de la manoeuvre pour mise
-          // à jour de l'affichage sur le Veto.
-          mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
-          // On lance l'exécution de la manoeuvre.
-          startManoeuver(mnvrDTO);
+          try
+          {
+            // On transmet à la table le résultat de l'évaluation de la manoeuvre
+            // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+            //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
+            PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
+            // On met à jour localement le statut de la manoeuvre pour mise
+            // à jour de l'affichage sur le Veto.
+            mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+            // On lance l'exécution de la manoeuvre.
+            PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
+          }
+          catch (IvyException e)
+          {
+            e.printStackTrace();
+          }
         }
       }
     }
