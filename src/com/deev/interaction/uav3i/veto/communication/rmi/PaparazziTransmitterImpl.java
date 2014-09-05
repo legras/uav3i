@@ -77,29 +77,32 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       {
         if(UAV3iSettings.getMode() == Mode.VETO)
         {
-          LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+") asked");
-          Veto.getSymbolMapVeto().getSharedManoeuver().addButtons();
+          LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
+          mDTO.addButtons();
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
         }
         else if(UAV3iSettings.getMode() == Mode.VETO_NO_HMI)
         {
-          LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+") automaticaly accepted");
-          try
-          {
+          // Sans le délai d'une seconde, problème d'harmonisation des états entre
+          // le Veto et l'IHM...
+          try { Thread.sleep(1000); } catch (InterruptedException e1) {}
+          LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
+//          try
+//          {
             // On transmet à la table le résultat de l'évaluation de la manoeuvre
             // par l'opérateur Paparazzi pour mise à jour de l'affichage.
             //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-            PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
+            instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
             // On met à jour localement le statut de la manoeuvre pour mise
             // à jour de l'affichage sur le Veto.
-            mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+            mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
             // On lance l'exécution de la manoeuvre.
-            PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
-          }
-          catch (IvyException e)
-          {
-            e.printStackTrace();
-          }
+            instance.startManoeuver(mDTO);
+//          }
+//          catch (IvyException e)
+//          {
+//            e.printStackTrace();
+//          }
         }
       }
     }
