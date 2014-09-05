@@ -72,7 +72,6 @@ public abstract class Manoeuver implements Touchable, Animation
 	
 	public void setAsked(boolean asked)
 	{
-    System.out.println("Manoeuver.setAsked(" + asked + ") - " + this);
 		_buttons.jumpButton.setSelected(asked);
 	}
 	
@@ -83,13 +82,11 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	public void setRequestedStatus(ManoeuverRequestedStatus status)
 	{
-	  System.out.println("Manoeuver.setRequestedStatus(" + status + ") - " + this);
 	  _mnvrReqStatus = status;
 	}
 	
 	public void lockShareAndAsk(boolean lock)
 	{
-	  System.out.println("Manoeuver.lockShareAndAsk(" + lock + ") - " + this);
 		_buttons.submitButton.setEnabled(!lock);
 		_buttons.jumpButton.setEnabled(!lock);
 	}
