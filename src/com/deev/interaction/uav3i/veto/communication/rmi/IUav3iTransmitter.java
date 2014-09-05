@@ -57,7 +57,8 @@ public interface IUav3iTransmitter extends Remote
    * @param result
    * @throws RemoteException
    */
-  public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException;
+  //public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException;
+  public void resultAskExecution(int idMnvr, boolean result) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Appelé par l'appli côté Paparazzi pour savoir si le client est en vie. La méthode

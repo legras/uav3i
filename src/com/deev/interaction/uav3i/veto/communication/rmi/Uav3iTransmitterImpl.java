@@ -43,10 +43,13 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
+  //public void resultAskExecution(ManoeuverDTO mnvrDTO, boolean result) throws RemoteException
+  public void resultAskExecution(int idMnvr, boolean result) throws RemoteException
   {
-    MainFrame.getSymbolMap().answerManoeuver(mnvrDTO.getId(), result);
-    LoggerUtil.LOG.info("Result for execution: " + result + " on " + mnvrDTO);
+    //MainFrame.getSymbolMap().answerManoeuver(mnvrDTO.getId(), result);
+    MainFrame.getSymbolMap().answerManoeuver(idMnvr, result);
+    //LoggerUtil.LOG.info("Result for execution: " + result + " on " + mnvrDTO);
+    LoggerUtil.LOG.info("Result for execution: " + result + " on " + idMnvr);
   }
   //-----------------------------------------------------------------------------
   @Override

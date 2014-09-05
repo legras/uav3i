@@ -92,7 +92,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
           //uav3iTransmitter.resultAskExecution(mnvrDTO, true);
-          instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
+          //instance.getUav3iTransmitter().resultAskExecution(mDTO, true);
+          instance.getUav3iTransmitter().resultAskExecution(idMnvr, true);
           // On met à jour localement le statut de la manoeuvre pour mise
           // à jour de l'affichage sur le Veto.
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);

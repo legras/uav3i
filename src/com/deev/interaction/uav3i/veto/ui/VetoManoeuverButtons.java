@@ -76,7 +76,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
       {
         // On transmet à la table le résultat de l'évaluation de la manoeuvre
         // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, true);
+        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), true);
         // On met à jour localement le statut de la manoeuvre pour mise
         // à jour de l'affichage sur le Veto.
         mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
@@ -86,7 +86,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
       else if(e.getSource() == refuseButton)
       {
         // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
-        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO, false);
+        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), false);
         // On met à jour localement le statut de la manoeuvre pour mise
         // à jour de l'affichage sur le Veto.
         mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);
