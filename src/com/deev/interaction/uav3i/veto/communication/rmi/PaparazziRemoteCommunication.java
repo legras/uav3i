@@ -158,11 +158,13 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void executeManoeuver(ManoeuverDTO mnvrDTO)
+  //public void executeManoeuver(ManoeuverDTO mnvrDTO)
+  public void executeManoeuver(int idMnvr)
   {
     try
     {
-      paparazziTransmitter.executeManoeuver(mnvrDTO);
+      //paparazziTransmitter.executeManoeuver(mnvrDTO);
+      paparazziTransmitter.executeManoeuver(idMnvr);
     }
     catch (RemoteException e)
     {

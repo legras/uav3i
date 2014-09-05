@@ -62,7 +62,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
-  public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  //public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void executeManoeuver(int idMnvr) throws RemoteException
   {
     // Comme les boutons ne sont pas 'Serializable' (et qu'on n'en a rien à
     // faire côté table), on les ajoute sur la manoeuvre une fois qu'elle
@@ -73,7 +74,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     ManoeuverDTO mDTO = Veto.getSymbolMapVeto().getSharedManoeuver();  
     if(mDTO != null)
     {
-      if(mDTO.getId() == mnvrDTO.getId())
+      //if(mDTO.getId() == mnvrDTO.getId())
+      if(mDTO.getId() == idMnvr)
       {
         if(UAV3iSettings.getMode() == Mode.VETO)
         {
@@ -100,7 +102,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       }
     }
     else
-      LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
+      //LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
+      LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + idMnvr));
   }
   //-----------------------------------------------------------------------------
   public void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException

@@ -21,7 +21,8 @@ public abstract class PaparazziCommunication
    * @param mnvrDTO objet DTO (transfert de données) représentant les données de
    *                la manoeuvre.
    */
-  public abstract void executeManoeuver(ManoeuverDTO mnvrDTO);
+  //public abstract void executeManoeuver(ManoeuverDTO mnvrDTO);
+  public abstract void executeManoeuver(int idMnvr);
   //-----------------------------------------------------------------------------
   /**
    * Exécution de la manoeuvre sur Paparazzi dans le mode PAPARAZZI_DIRECT.

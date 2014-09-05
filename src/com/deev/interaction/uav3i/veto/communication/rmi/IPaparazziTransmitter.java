@@ -35,7 +35,8 @@ public interface IPaparazziTransmitter extends Remote
    *                la manoeuvre.
    * @throws RemoteException
    */
-  public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  //public void executeManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException;
+  public void executeManoeuver(int idMnvr) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Demande d'effacement d'une manoeuvre sur l'interface Veto.

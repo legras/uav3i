@@ -621,6 +621,15 @@ public class SymbolMap extends Map implements Touchable
 	public void askManoeuver(Manoeuver mnvr)
 	{
 	  shareManoeuver(mnvr);
+	  try
+    {
+      Thread.sleep(500);
+    }
+    catch (InterruptedException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 	  UAVModel.executeManoeuver(mnvr);
 	  mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
 
