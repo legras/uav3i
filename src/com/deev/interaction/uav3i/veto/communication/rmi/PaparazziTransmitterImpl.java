@@ -75,10 +75,25 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     {
       if(mDTO.getId() == mnvrDTO.getId())
       {
-        Veto.getSymbolMapVeto().getSharedManoeuver().addButtons();
-        mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+        if(UAV3iSettings.getMode() == Mode.VETO)
+        {
+          LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+") asked");
+          Veto.getSymbolMapVeto().getSharedManoeuver().addButtons();
+          mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+        }
+        else if(UAV3iSettings.getMode() == Mode.VETO_NO_HMI)
+        {
+          LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+") automaticaly accepted");
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre
+          // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+          uav3iTransmitter.resultAskExecution(mnvrDTO, true);
+          // On met à jour localement le statut de la manoeuvre pour mise
+          // à jour de l'affichage sur le Veto.
+          mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+          // On lance l'exécution de la manoeuvre.
+          startManoeuver(mnvrDTO);
+        }
       }
-      LoggerUtil.LOG.info("executeManoeuver("+Veto.getSymbolMapVeto().getSharedManoeuver()+")");
     }
     else
       LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + mnvrDTO));
