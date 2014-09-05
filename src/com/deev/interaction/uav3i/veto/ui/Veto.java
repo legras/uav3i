@@ -28,6 +28,7 @@ import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.maps.UAVScope;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
@@ -57,7 +58,12 @@ public class Veto extends JFrame
    */
   public Veto()
   {
-    super("uav3i - Veto");
+    super();
+    
+    if(UAV3iSettings.getMode() == Mode.VETO)
+      this.setTitle("uav3i - Veto");
+    else
+      this.setTitle("uav3i - Veto (automatic mode)");
     
     Dimension screenDimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     initialDimension = new Dimension((int) (screenDimension.getWidth() * 3/4),
