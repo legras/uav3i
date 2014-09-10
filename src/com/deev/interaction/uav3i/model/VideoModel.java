@@ -35,7 +35,7 @@ public class VideoModel
 	
 	public CameraFootprint getFootprintAtTime(long time)
 	{
-		UAVDataPoint data = UAVModel.store.getDataPointAtTime(time);
+		UAVDataPoint data = UAVModel.getDataPointAtTime(time);
 		return new CameraFootprint(data.latlng, data.course, time);
 	}
 	
