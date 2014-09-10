@@ -250,33 +250,33 @@ public class UAVModel
 
 	public static void communicateManoeuver(Manoeuver mnvr)
 	{
-	  // Communication of a manoeuver is only needed in PAPARAZZI_REMOTE mode.
-	  if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
-	  {
-	    LoggerUtil.LOG.log(Level.INFO, "Communication of manoeuver to Veto requested");
-      paparazziCommunication.communicateManoeuver(mnvr.toDTO());
-	  }
+		// Communication of a manoeuver is only needed in PAPARAZZI_REMOTE mode.
+		if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
+		{
+			LoggerUtil.LOG.log(Level.INFO, "Communication of manoeuver to Veto requested");
+			paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+		}
 	}
 
 	public static void executeManoeuver(Manoeuver mnvr)
 	{
-    mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
-	  switch (UAV3iSettings.getMode())
-    {
-      case REPLAY:
-        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested... but we are in REPLAY mode, ignored");
-        break;
-      case PAPARAZZI_REMOTE:
-        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-        paparazziCommunication.executeManoeuver(mnvr.toDTO());
-        break;
-      case PAPARAZZI_DIRECT:
-        LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-        paparazziCommunication.executeManoeuver(mnvr);
-        break;
-      default:
-        break;
-    }
+		mnvr.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+		switch (UAV3iSettings.getMode())
+		{
+		case REPLAY:
+			LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested... but we are in REPLAY mode, ignored");
+			break;
+		case PAPARAZZI_REMOTE:
+			LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
+			paparazziCommunication.executeManoeuver(mnvr.toDTO());
+			break;
+		case PAPARAZZI_DIRECT:
+			LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
+			paparazziCommunication.executeManoeuver(mnvr);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public static void clearManoeuver()
@@ -286,7 +286,7 @@ public class UAVModel
 			LoggerUtil.LOG.log(Level.INFO, "Clear manoeuver requested... but we are in REPLAY mode, ignored");
 			return;
 		}
-		
+
 		paparazziCommunication.clearManoeuver();
 	}
 

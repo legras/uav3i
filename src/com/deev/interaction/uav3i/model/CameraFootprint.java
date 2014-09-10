@@ -8,6 +8,7 @@ public class CameraFootprint extends ArrayList<LatLng>
 {
 
 	public long time;
+	public LatLng center;
 	
 	/**
 	 * Dummy footprint generated from the position of the UAV and some basic stuff.
