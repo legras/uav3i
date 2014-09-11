@@ -25,7 +25,7 @@ public class LineMnvr extends Manoeuver
 	private LatLng _A, _B;
 
 	// Distance entre la zone à regarder et la trajectoire
-	private double _currentRm = 500.;
+	private double _currentRm = 100.;
 	private double _lastRm;
 
 	// Codage de l'orientation de la droite dans le plan ?
