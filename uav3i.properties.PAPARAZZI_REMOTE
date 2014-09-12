@@ -25,8 +25,8 @@ IVY_DOMAIN_BUS = null
 
 # Paparazzi settings.
 # Note: must be the same as the files used by Paparazzi.
-PAPARAZZI_FLIGHT_PLAN = Parametrage Paparazzi/Plans de vol/uav3i_france.xml
-PAPARAZZI_AIRFRAME    = Parametrage Paparazzi/Airframes/microjet_v5.0.2_stable.xml
+PAPARAZZI_FLIGHT_PLAN = Paparazzi_params/flight_plans/uav3i_france.xml
+PAPARAZZI_AIRFRAME    = Paparazzi_params/airframes/microjet_v5.0.2_stable.xml
 
 
 # Possible values: MAPNIK | BING_AERIAL | OSM_CYCLE_MAP | OFF_LINE
