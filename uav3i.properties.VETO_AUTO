@@ -80,7 +80,7 @@ TRAJECTORY_ZOOM = 15
 # Interaction mode for the JMapViewer component:
 #   true:  mouse interaction mode (left clic for pan, wheel mouse for zoom)
 #   false: touch table interaction
-# For the main HMI side, INTERACTION_MODE parameter must be setted to 'false'
+# For the main HMI side, INTERACTION_MODE parameter must be settled to 'false'
 # and 'true' for the Veto side.
 
 INTERACTION_MODE = true
@@ -90,7 +90,7 @@ INTERACTION_MODE = true
 
 TUIO = false
 
-# If FULLSCREEN is setted to 'true', the mouse pointer, the dock (Mac OS X)
+# If FULLSCREEN is settled to 'true', the mouse pointer, the dock (Mac OS X)
 # and graphical animations (Windows) are hidden.
 
 FULLSCREEN = false

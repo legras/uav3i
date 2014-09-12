@@ -7,7 +7,7 @@
              name="SaintNic_Pentrez"
              security_height="25">
   <!--
-    Parameter "max_dist_from_home" should be 1000 m but setted to 5000 for tests.
+    Parameter "max_dist_from_home" should be 1000 m but settled to 5000 for tests.
   -->
 
   <header>
