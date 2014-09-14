@@ -2,13 +2,17 @@ package com.deev.interaction.uav3i.veto.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -25,6 +29,7 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
+import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Palette3i;
 import com.deev.interaction.uav3i.ui.Trajectory;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -159,23 +164,35 @@ public class SymbolMapVeto extends JComponent
 	g2.fill(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
     
     // WayPoints
-    for(UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+    FontRenderContext frc = g2.getFontRenderContext();
+    Font f = new Font("Futura", Font.PLAIN, 12);
+    g2.setStroke(new BasicStroke(3.f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+    TextLayout textTl;
+    Shape outline;
+    synchronized (this)
     {
-      LatLng wayPointPosition = wayPoint.getWayPointPosition();
-      if(wayPointPosition != null)
+      for (UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
       {
-        Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
-        g2.drawImage(waypointImage,
-                     p.x - waypointImage.getWidth()/2,
-                     p.y - waypointImage.getHeight()/2,
-                     null);
-        g2.setColor(Color.blue);
-        g2.drawString(wayPoint.getWayPointName(),
-                      p.x + waypointImage.getWidth()/2 + 3, 
-                      p.y - waypointImage.getHeight()/2);
+        LatLng wayPointPosition = wayPoint.getWayPointPosition();
+        if (wayPointPosition != null)
+        {
+          Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+          g2.drawImage(waypointImage, p.x - waypointImage.getWidth() / 2, p.y - waypointImage.getHeight() / 2, null);
+
+          textTl = new TextLayout(wayPoint.getWayPointName(), f, frc);
+          outline = textTl.getOutline(null);
+
+          AffineTransform old = g2.getTransform();
+          g2.translate(p.x + waypointImage.getWidth() / 2, p.y + waypointImage.getHeight() / 2);
+          g2.setPaint(Palette3i.getPaint(Palette3i.WHITE_BG));
+          g2.draw(outline);
+          g2.setPaint(Color.GRAY);
+          g2.fill(outline);
+          g2.setTransform(old);
+        }
       }
     }
-
+	
     // Update de trajectoire
     if (currentTime - lastTrajectoryUpdate > 500)
     {
