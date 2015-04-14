@@ -118,7 +118,7 @@ public class UAVModel
 			{
 				paparazziCommunication = new PaparazziRemoteCommunication();
 			}
-			catch (RemoteException | NotBoundException e)
+			catch (RemoteException e)
 			{
 				e.printStackTrace();
 			}
