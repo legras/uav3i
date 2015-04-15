@@ -1,2 +1,13 @@
-/bin
 uav3i.properties
+
+# Eclipse
+.project
+.classpath
+.settings
+
+# Gradle
+.gradle
+build/
+cache/
+gradle-app.setting
+!gradle-wrapper.jar
