@@ -59,8 +59,8 @@ public class SymbolMapVeto extends JComponent
     trajectory = new Trajectory();
     try
     {
-      uavImage      = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/uav.png"));
-      waypointImage = ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/waypoint.png"));
+      uavImage      = ImageIO.read(this.getClass().getResource("/img/uav.png"));
+      waypointImage = ImageIO.read(this.getClass().getResource("/img/waypoint.png"));
     }
     catch (IOException e)
     {

@@ -60,7 +60,7 @@ public class MainFrame extends JFrame implements ActionListener
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try
 		{
-			setIconImage(ImageIO.read(this.getClass().getResource("img/3i_icon_small.png")));
+			setIconImage(ImageIO.read(this.getClass().getResource("/img/3i_icon_small.png")));
 		}
 		catch (IOException e1)
 		{
@@ -136,7 +136,7 @@ public class MainFrame extends JFrame implements ActionListener
 		// ********** 3i button ************
 		try
 		{
-			BufferedImage icon3i = ImageIO.read(this.getClass().getResource("img/3iButton.png"));
+			BufferedImage icon3i = ImageIO.read(this.getClass().getResource("/img/3iButton.png"));
 			RoundToggleButton button3i = new RoundToggleButton(
 					new TintedBufferedImage(icon3i, new Color(.74f, .80f, .03f, 1.f)),
 					new TintedBufferedImage(icon3i, gray3i));
@@ -152,10 +152,10 @@ public class MainFrame extends JFrame implements ActionListener
 		// ********** Zoom control ************
 		try
 		{
-			BufferedImage zoomPlus  = ImageIO.read(this.getClass().getResource("img/zoom_plus.png"));
-			BufferedImage zoomMinus = ImageIO.read(this.getClass().getResource("img/zoom_minus.png"));
-			BufferedImage zoomPlusPressed  = ImageIO.read(this.getClass().getResource("img/zoom_plus_pressed.png"));
-			BufferedImage zoomMinusPressed = ImageIO.read(this.getClass().getResource("img/zoom_minus_pressed.png"));
+			BufferedImage zoomPlus  = ImageIO.read(this.getClass().getResource("/img/zoom_plus.png"));
+			BufferedImage zoomMinus = ImageIO.read(this.getClass().getResource("/img/zoom_minus.png"));
+			BufferedImage zoomPlusPressed  = ImageIO.read(this.getClass().getResource("/img/zoom_plus_pressed.png"));
+			BufferedImage zoomMinusPressed = ImageIO.read(this.getClass().getResource("/img/zoom_minus_pressed.png"));
 			final RoundButton buttonZoomPlus  = new RoundButton(
 					new TintedBufferedImage(zoomPlus, gray3i),
 					new TintedBufferedImage(zoomPlusPressed, gray3i));

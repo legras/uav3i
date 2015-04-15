@@ -52,13 +52,13 @@ public class Switcher3Buttons extends ZeroPanel implements ActionListener
 		
 		try
 		{
-			command_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/command_on.png")), blue);
-			command_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/command_off.png")), gray);
-			map_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/map_on.png")), blue);
-			map_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/map_off.png")), gray);
-			replay_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_on.png")), blue);
-			replay_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_off.png")), gray);
-			replay_alt = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("img/replay_pause.png")), blue);
+			command_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/command_on.png")), blue);
+			command_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/command_off.png")), gray);
+			map_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/map_on.png")), blue);
+			map_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/map_off.png")), gray);
+			replay_on = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/replay_on.png")), blue);
+			replay_off = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/replay_off.png")), gray);
+			replay_alt = new TintedBufferedImage(ImageIO.read(this.getClass().getResource("/img/replay_pause.png")), blue);
 		}
 		catch (IOException e)
 		{

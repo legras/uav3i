@@ -4,6 +4,7 @@ uav3i.properties
 .project
 .classpath
 .settings
+bin/
 
 # Gradle
 .gradle
