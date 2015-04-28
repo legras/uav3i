@@ -25,7 +25,7 @@ public class VetoStateUI extends JComponent
     {
       try
       {
-        idleIcon = ImageIO.read(this.getClass().getResource("img/red.png"));
+        idleIcon = ImageIO.read(this.getClass().getResource("/img/red.png"));
       }
       catch (IOException e)
       {
@@ -36,7 +36,7 @@ public class VetoStateUI extends JComponent
     {
       try
       {
-        receivingIcon = ImageIO.read(this.getClass().getResource("img/green.png"));
+        receivingIcon = ImageIO.read(this.getClass().getResource("/img/green.png"));
       }
       catch (IOException e)
       {

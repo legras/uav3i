@@ -76,11 +76,17 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
         private int timeout = 1000;
         public Socket createSocket(String host, int port) throws IOException
         {
-          Socket socket = new Socket();
-          socket.setSoTimeout(timeout);
-          socket.setSoLinger(false, 0);
-          socket.connect(new InetSocketAddress(host, port), timeout);
-          return socket;
+          while(true) {
+        	  try{
+        		  Socket socket = new Socket();
+                  socket.setSoTimeout(timeout);
+                  socket.setSoLinger(false, 0);
+        		  socket.connect(new InetSocketAddress(host, port), timeout);
+        		  return socket;
+        	  } catch(Exception e) {
+        		  //LoggerUtil.LOG.info("retry connection...");
+        	  }
+          }
         }
 
         public ServerSocket createServerSocket(int port) throws IOException
@@ -95,7 +101,7 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     }
   }
   //-----------------------------------------------------------------------------
-  public PaparazziRemoteCommunication() throws RemoteException, NotBoundException
+  public PaparazziRemoteCommunication() throws RemoteException
   {
     if(UAV3iSettings.getMultihomedHost())
     {
@@ -126,17 +132,24 @@ public class PaparazziRemoteCommunication extends PaparazziCommunication
     // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
     Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
                                                          UAV3iSettings.getVetoServerPort());
-    try
-    {
-      paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
-    }
-    catch (ConnectIOException cioe)
-    {
-      JOptionPane.showMessageDialog(null,
-                                    "<html>The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort()+"<br><br><i>"+cioe.getMessage(),
-                                    "Impossible to connect to Veto",
-                                    JOptionPane.ERROR_MESSAGE);
-      System.exit(-1);
+    
+    while(true) {
+	    try
+	    {
+	      paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
+	      break;
+	    }
+	    catch (ConnectIOException cioe)
+	    {
+	      JOptionPane.showMessageDialog(null,
+	                                    "<html>The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort()+"<br><br><i>"+cioe.getMessage(),
+	                                    "Impossible to connect to Veto",
+	                                    JOptionPane.ERROR_MESSAGE);
+	      System.exit(-1);
+	    }
+	    catch (NotBoundException e) {
+	    	
+	    }
     }
     // On signale à PaparazziTansmitter qu'il peut maintenant se connecter à uav3i :
     // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.

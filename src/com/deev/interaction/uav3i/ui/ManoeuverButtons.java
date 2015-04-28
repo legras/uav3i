@@ -61,14 +61,14 @@ public class ManoeuverButtons implements Animation, ActionListener
 		Color blue = new Color(0.f, .5f, 1.f, 1.f);
 		Color gray = new Color(.3f, .3f, .3f, 1.f);
 
-		if (_uavIconOn == null) 		_uavIconOn 		= getImage("img/uavIconOn.png", blue);
-		if (_uavIconOff == null) 		_uavIconOff 	= getImage("img/uavIconOff.png", gray);
-		if (_submitIconOn == null) 		_submitIconOn 	= getImage("img/submitIconOn.png", blue);
-		if (_submitIconOff == null) 	_submitIconOff 	= getImage("img/submitIconOff.png", gray);
-		if (_pinIconOn == null) 		_pinIconOn 		= getImage("img/pinIconOn.png", blue);
-		if (_pinIconOff == null) 		_pinIconOff 	= getImage("img/pinIconOff.png", gray);
-		if (_deleteIcon == null) 		_deleteIcon 	= getImage("img/deleteIcon.png", Color.RED);
-		if (_deleteIconWait == null) 	_deleteIconWait = getImage("img/deleteIcon.png", gray);
+		if (_uavIconOn == null) 		_uavIconOn 		= getImage("/img/uavIconOn.png", blue);
+		if (_uavIconOff == null) 		_uavIconOff 	= getImage("/img/uavIconOff.png", gray);
+		if (_submitIconOn == null) 		_submitIconOn 	= getImage("/img/submitIconOn.png", blue);
+		if (_submitIconOff == null) 	_submitIconOff 	= getImage("/img/submitIconOff.png", gray);
+		if (_pinIconOn == null) 		_pinIconOn 		= getImage("/img/pinIconOn.png", blue);
+		if (_pinIconOff == null) 		_pinIconOff 	= getImage("/img/pinIconOff.png", gray);
+		if (_deleteIcon == null) 		_deleteIcon 	= getImage("/img/deleteIcon.png", Color.RED);
+		if (_deleteIconWait == null) 	_deleteIconWait = getImage("/img/deleteIcon.png", gray);
 
 		_manoeuver = mnvr;
 		_home = layer;

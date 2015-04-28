@@ -15,7 +15,7 @@ public enum Palette3i
 	FOOTPRINT_DRAW(1.f, 1.f, 1.f),
 	FOOTPRINT_FILL(0.f, 0.f, 0.f, .2f),
 	WHITE_BG(1.f, 1.f, 1.f, .5f),
-	BUTTON_DISABLED_BG("img/stripesGray32.png", 16),
+	BUTTON_DISABLED_BG("/img/stripesGray32.png", 16),
 	BUTTON_DELAY_BG(0.f, 0.f, 0.f, .1f),
 	TIME_LIGHT(.75f, .75f, .75f, .7f),
 	TIME_LIGHTER(.80f, .80f, .80f, .7f),
@@ -31,7 +31,7 @@ public enum Palette3i
 	MNVR_DEFAULT(17, 173, 255),
 	MNVR_REFUSED(254, 95, 51),
 	MNVR_ACCEPTED(73, 178, 0),
-	MNVR_FOOT_BGRND("img/sqBW.png", 32),
+	MNVR_FOOT_BGRND("/img/sqBW.png", 32),
 	UAV_SCOPE(255, 0, 128, 64),
 	UAV_SCOPE_CLEAR(255, 0, 128, 0);
 	

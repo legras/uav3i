@@ -1,2 +1,15 @@
-/bin
 uav3i.properties
+.DS_Store
+
+# Eclipse
+.project
+.classpath
+.settings
+bin/
+
+# Gradle
+.gradle
+build/
+cache/
+gradle-app.setting
+!gradle-wrapper.jar

@@ -30,7 +30,7 @@ public class Splash3i extends JComponent implements Animation, ActionListener
 	public Splash3i(JComponent layer) throws IOException
 	{
 		if (_splashImage == null)	
-			_splashImage = ImageIO.read(this.getClass().getResource("img/splash.png"));
+			_splashImage = ImageIO.read(this.getClass().getResource("/img/splash.png"));
 				
 		class Splash3iSwingBuilder implements Runnable
 		{

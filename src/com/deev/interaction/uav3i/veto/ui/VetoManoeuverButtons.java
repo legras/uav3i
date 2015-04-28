@@ -48,10 +48,10 @@ public class VetoManoeuverButtons implements Animation, ActionListener
   //-----------------------------------------------------------------------------
   public VetoManoeuverButtons(ManoeuverDTO mnvrDTO, JComponent layer) throws IOException
   {
-    if (acceptIcon == null)        acceptIcon        = ImageIO.read(this.getClass().getResource("img/acceptIcon.png"));
-    if (acceptIconPressed == null) acceptIconPressed = ImageIO.read(this.getClass().getResource("img/acceptIconPressed.png"));
-    if (refuseButton == null)      refuseIcon        = ImageIO.read(this.getClass().getResource("img/refuseIcon.png"));
-    if (refuseIconPressed == null) refuseIconPressed = ImageIO.read(this.getClass().getResource("img/refuseIconPressed.png"));
+    if (acceptIcon == null)        acceptIcon        = ImageIO.read(this.getClass().getResource("/img/acceptIcon.png"));
+    if (acceptIconPressed == null) acceptIconPressed = ImageIO.read(this.getClass().getResource("/img/acceptIconPressed.png"));
+    if (refuseButton == null)      refuseIcon        = ImageIO.read(this.getClass().getResource("/img/refuseIcon.png"));
+    if (refuseIconPressed == null) refuseIconPressed = ImageIO.read(this.getClass().getResource("/img/refuseIconPressed.png"));
 
     this.mnvrDTO = mnvrDTO;
     this.layer   = layer;

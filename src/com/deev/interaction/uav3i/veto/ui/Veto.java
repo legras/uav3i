@@ -87,7 +87,7 @@ public class Veto extends JFrame
     // Icone
     try
     {
-      setIconImage(ImageIO.read(this.getClass().getResource("/com/deev/interaction/uav3i/ui/img/3i_icon_small.png")));
+      setIconImage(ImageIO.read(this.getClass().getResource("/img/3i_icon_small.png")));
     }
     catch (IOException e1)
     {
