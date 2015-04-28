@@ -1,1 +1,1 @@
-gradlew eclispe
+gradlew eclipse
