@@ -11,16 +11,22 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {
   //-----------------------------------------------------------------------------
+//  @Override
+//  public void addUAVDataPoint(int  utm_east,
+//                              int  utm_north, 
+//                              int  utm_zone, 
+//                              int  course, 
+//                              int  alt, 
+//                              long t) throws RemoteException
+//  {
+//      UAVModel.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
+//  }
   @Override
-  public void addUAVDataPoint(int  utm_east,
-                              int  utm_north, 
-                              int  utm_zone, 
-                              int  course, 
-                              int  alt, 
-                              long t) throws RemoteException
+  public void addUAVDataPoint(int lat, int lon, int c, int alt, long t) throws RemoteException
   {
-      UAVModel.addUAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t);
+      UAVModel.addUAVDataPoint(lat, lon, c, alt, t);
   }
+
   //-----------------------------------------------------------------------------
   @Override
   public void addFlightParams(double altitude,

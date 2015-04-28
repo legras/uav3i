@@ -20,12 +20,13 @@ public interface IUav3iTransmitter extends Remote
    * @param t temps
    * @throws RemoteException
    */
-  public void addUAVDataPoint(int  utm_east,
-                              int  utm_north,
-                              int  utm_zone,
-                              int  course,
-                              int  alt,
-                              long t) throws RemoteException;
+//  public void addUAVDataPoint(int  utm_east,
+//                              int  utm_north,
+//                              int  utm_zone,
+//                              int  course,
+//                              int  alt,
+//                              long t) throws RemoteException;
+  public void addUAVDataPoint(int lat, int lon, int c, int alt, long t) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
    * Transmission au logiciel côté table des paramètres de vol du drone.

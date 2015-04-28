@@ -218,8 +218,10 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
       // Mise en écoute des messages GPS
-      // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-      bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
+//      // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
+//      bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
+      bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListener);
+
       
       // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
       bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
