@@ -101,7 +101,7 @@ public class Trajectory
     if (_points.size() < 2)
       return  null;
     
-    for(int i=_points.size()-50; i<_points.size()-1; i++)
+    for(int i=_points.size()-500; i<_points.size()-1; i++)
     {
       if(i<0)
         continue;
