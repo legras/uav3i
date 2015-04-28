@@ -84,6 +84,13 @@ public class Trajectory
 		}
 	}
 
+  /**
+   * Retrieve the last points (500...) of the trajectory instead
+   * of obtaining the entire trajectory.
+   * 
+   * @param symbolMap
+   * @return
+   */
   public GeneralPath getRecentPath(SymbolMap symbolMap)
   {
     GeneralPath line;
@@ -94,9 +101,7 @@ public class Trajectory
     if (_points.size() < 2)
       return  null;
     
-//    int size = _points.size();
-    
-    for(int i=_points.size()-500; i<_points.size()-1; i++)
+    for(int i=_points.size()-50; i<_points.size()-1; i++)
     {
       if(i<0)
         continue;
