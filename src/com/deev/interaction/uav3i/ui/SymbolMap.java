@@ -247,7 +247,8 @@ public class SymbolMap extends Map implements Touchable
 		}
 
 		// Tracé de trajectoire
-		GeneralPath fullTrajectory = _trajectory.getFullPath(this);	
+//    GeneralPath fullTrajectory = _trajectory.getFullPath(this); 
+    GeneralPath fullTrajectory = _trajectory.getRecentPath(this); 
 
 		final float dash1[] = {8.f, 4.f};
 	    final BasicStroke dashed =

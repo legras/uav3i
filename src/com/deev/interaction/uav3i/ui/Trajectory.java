@@ -84,6 +84,38 @@ public class Trajectory
 		}
 	}
 
+  public GeneralPath getRecentPath(SymbolMap symbolMap)
+  {
+    GeneralPath line;
+    line = new GeneralPath();
+    boolean start = true;
+    Point2D.Double p;
+
+    if (_points.size() < 2)
+      return  null;
+    
+//    int size = _points.size();
+    
+    for(int i=_points.size()-500; i<_points.size()-1; i++)
+    {
+      if(i<0)
+        continue;
+      
+      p = symbolMap.getScreenForLatLng(_points.get(i).latlng);
+
+      if (start)
+      {
+        line.moveTo(p.x, p.y);
+        start = false;
+      }
+      else
+        line.lineTo(p.x, p.y);
+    }
+    
+    return line;
+  }
+  
+
 	public GeneralPath getFullPath(SymbolMap symbolMap)
 	{
 		GeneralPath line;
