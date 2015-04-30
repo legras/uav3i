@@ -72,7 +72,7 @@ public class UAVPositionListener implements IvyMessageListener
     //for(int i=0; i<message.length; i++)
     //  System.out.print("["+i+" = " + message[i] + "] ");
     //System.out.println();
-
+    //  5 GPS 3 72344664 532066912 932 75826 1443 447 0 127047240 30 8
     // ---------------> [0 = ] [1 = 3] [2 = 72344664] [3 = 532066912] [4 = 932] [5 = 75826] [6 = 1443] [7 = 447] [8 = 0] [9 = 127047240] [10 = 30] [11 = 8]
   
     switch (UAV3iSettings.getMode())

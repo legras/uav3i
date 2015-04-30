@@ -21,6 +21,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
 {
   //-----------------------------------------------------------------------------
   private IUav3iTransmitter uav3iTransmitter = null;
+  private UAVFlightParamsListener uavFlightParamsListener;
   //-----------------------------------------------------------------------------
   /**
    * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
@@ -33,35 +34,37 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
     this.uav3iTransmitter = uav3iTransmitter;
   }
   //-----------------------------------------------------------------------------
+  
+  //-----------------------------------------------------------------------------
   @Override
   public void receive(IvyClient client, String[] args)
   {
 //    System.out.println("Longueur du tableau args = " + args.length);
 //    for(int i=0; i<args.length; i++)
 //      System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") ["+i+"]= " + args[i]);
-    System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") [1]= " + args[1]);
+//    System.out.println("---------------> Message IVY (client="+client.getApplicationName()+") [1]= " + args[1]);
     
     String tokens = args[1];
 
     // Definition of messages in paparazzi_v5.5_devel-559-g6656ca7-dirty in conf/messages.xml
     //
     // <message name="GPS_INT" id="155">
-    //   <field name="ecef_x"  type="int32" unit="cm"   alt_unit="m"/>
-    //   <field name="ecef_y"  type="int32" unit="cm"   alt_unit="m"/>
-    //   <field name="ecef_z"  type="int32" unit="cm"   alt_unit="m"/>
-    //   <field name="lat"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
-    //   <field name="lon"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
-    //   <field name="alt"     type="int32" unit="mm"   alt_unit="m">altitude above WGS84 reference ellipsoid</field>
-    //   <field name="hmsl"    type="int32" unit="mm"   alt_unit="m">height above mean sea level (geoid)</field>
-    //   <field name="ecef_xd" type="int32" unit="cm/s" alt_unit="m/s"/>
-    //   <field name="ecef_yd" type="int32" unit="cm/s" alt_unit="m/s"/>
-    //   <field name="ecef_zd" type="int32" unit="cm/s" alt_unit="m/s"/>
-    //   <field name="pacc"    type="uint32" unit="cm"   alt_unit="m"/>
-    //   <field name="sacc"    type="uint32" unit="cm/s" alt_unit="m/s"/>
-    //   <field name="tow"     type="uint32"/>
-    //   <field name="pdop"    type="uint16"/>
-    //   <field name="numsv"   type="uint8"/>
-    //   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>
+    //   <field name="ecef_x"  type="int32" unit="cm"   alt_unit="m"/>                                                //
+    //   <field name="ecef_y"  type="int32" unit="cm"   alt_unit="m"/>                                                //
+    //   <field name="ecef_z"  type="int32" unit="cm"   alt_unit="m"/>                                                //
+    //   <field name="lat"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>                  // 4
+    //   <field name="lon"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>                  // 5
+    //   <field name="alt"     type="int32" unit="mm"   alt_unit="m">altitude above WGS84 reference ellipsoid</field> //
+    //   <field name="hmsl"    type="int32" unit="mm"   alt_unit="m">height above mean sea level (geoid)</field>      // 7
+    //   <field name="ecef_xd" type="int32" unit="cm/s" alt_unit="m/s"/>                                              //
+    //   <field name="ecef_yd" type="int32" unit="cm/s" alt_unit="m/s"/>                                              //
+    //   <field name="ecef_zd" type="int32" unit="cm/s" alt_unit="m/s"/>                                              //
+    //   <field name="pacc"    type="uint32" unit="cm"   alt_unit="m"/>                                               //
+    //   <field name="sacc"    type="uint32" unit="cm/s" alt_unit="m/s"/>                                             //
+    //   <field name="tow"     type="uint32"/>                                                                        // 13
+    //   <field name="pdop"    type="uint16"/>                                                                        //
+    //   <field name="numsv"   type="uint8"/>                                                                         //
+    //   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>                                              //
     // </message>
     
     // bebop_NPS           | 202 GPS_INT 462759583 11966883 437325680 435639942 14813288 203708 153907 -2 5 2 0 0 145000 0 0 3
@@ -85,6 +88,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
 //        ---------------> 14 = 0
 //        ---------------> 15 = 0
 //        ---------------> 16 = 3
+//    System.out.println("---------------> message[8, 9 et 10] = " + message[8] + " " + message[9] + " " + message[10] + " ---> " + (Integer.parseInt(message[8])+Integer.parseInt(message[9])+Integer.parseInt(message[10])));
 
 
 //    UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
@@ -104,9 +108,9 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
 //                                 Long.parseLong(message[9]));   // t
         UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
                                  Integer.parseInt(message[5]),
-                                 0,
-                                 Integer.parseInt(message[6]),
-                                 System.currentTimeMillis());
+                                 uavFlightParamsListener.getLastCourseValue(),
+                                 Integer.parseInt(message[7]),
+                                 Integer.parseInt(message[13]));
         break;
       case VETO:
       case VETO_AUTO:
@@ -117,9 +121,9 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
           {
             uav3iTransmitter.addUAVDataPoint(Integer.parseInt(message[4]),
                                              Integer.parseInt(message[5]),
-                                             0,
-                                             Integer.parseInt(message[6]),
-                                             System.currentTimeMillis());
+                                             uavFlightParamsListener.getLastCourseValue(),
+                                             Integer.parseInt(message[7]),
+                                             Integer.parseInt(message[13]));
           }
           catch (RemoteException e)
           {
@@ -129,9 +133,9 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
           // On transmet aussi la position du drone à l'IHM Veto pour l'affichage local.
           UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
                                    Integer.parseInt(message[5]),
-                                   0,
-                                   Integer.parseInt(message[6]),
-                                   System.currentTimeMillis());
+                                   uavFlightParamsListener.getLastCourseValue(),
+                                   Integer.parseInt(message[7]),
+                                   Integer.parseInt(message[13]));
         }
         else
           LoggerUtil.LOG.warning("Je suis en écoute du bus Ivy mais uav3iTransmitter est null et je ne peux rien transmettre..." + this);
@@ -144,4 +148,12 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
     
   }
   //-----------------------------------------------------------------------------
+
+  /**
+   * @param uavFlightParamsListener the uavFlightParamsListener to set
+   */
+  public void setUavFlightParamsListener(UAVFlightParamsListener uavFlightParamsListener)
+  {
+    this.uavFlightParamsListener = uavFlightParamsListener;
+  }
 }

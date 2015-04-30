@@ -217,8 +217,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       // Mise à jour du proxy dans les listeners. En cas de déconnexion/reconnexion d'uav3i,
       // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
-      uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
+      uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
+      uavPositionListenerRotorcraft.setUavFlightParamsListener(uavFlightParamsListener);
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
       // Mise en écoute des messages GPS (version 3i)

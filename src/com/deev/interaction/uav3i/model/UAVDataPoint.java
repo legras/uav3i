@@ -72,9 +72,10 @@ public class UAVDataPoint
 	 */
   public UAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
+    System.out.println("UAVDataPoint.UAVDataPoint("+lat+", "+lon+", "+c+", "+alt+", "+t+")");
     latlng = new LatLng(lat / 10.e6, lon / 10.e6);
     altitude = (double) alt / 100.;
-    course = (double) c / 10.;
+    course = (double) c;
     time = t;
   }
 
