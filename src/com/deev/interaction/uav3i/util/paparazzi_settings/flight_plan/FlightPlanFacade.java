@@ -11,6 +11,7 @@ import javax.xml.bind.JAXB;
 
 import uk.me.jstott.jcoord.LatLng;
 import uk.me.jstott.jcoord.UTMRef;
+
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.jaxb.Block;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.jaxb.FlightPlan;
@@ -234,8 +235,16 @@ public class FlightPlanFacade
   //-----------------------------------------------------------------------------
   private void processStartPoint()
   {
-    startPoint = new LatLng(Double.parseDouble(flightPlan.getLat0()),
-                            Double.parseDouble(flightPlan.getLon0()));
+    try
+    {
+      startPoint = new LatLng(Double.parseDouble(flightPlan.getLat0()),
+                              Double.parseDouble(flightPlan.getLon0()));
+    }
+    catch (NumberFormatException e)
+    {
+      System.err.println("---------------------> flightPlan.getLat0() = " + flightPlan.getLat0());
+      System.err.println("---------------------> flightPlan.getLon0() = " + flightPlan.getLon0());
+    }
     //utmLatitudeZoneLetter = UTMRef.getUTMLatitudeZoneLetter(startPoint.getLat());
     UTMRef utm = startPoint.toUTMRef();
     utmLatitudeZoneLetter  = utm.getLatZone();

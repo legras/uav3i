@@ -14,6 +14,7 @@ import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacad
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.UAVPositionListenerRotorcraft;
 import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
@@ -32,9 +33,10 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   private        String                  applicationName = "uav3i (PT)";
   private        Ivy                     bus;
   private static IUav3iTransmitter       uav3iTransmitter;
-  private        UAVPositionListener     uavPositionListener     = null;
-  private        UAVFlightParamsListener uavFlightParamsListener = null;
-  private        UAVWayPointsListener    uavWayPointsListener    = null;
+  private        UAVPositionListener           uavPositionListener           = null;
+  private        UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
+  private        UAVFlightParamsListener       uavFlightParamsListener       = null;
+  private        UAVWayPointsListener          uavWayPointsListener          = null;
   
   private static PaparazziTransmitterImpl instance;
   //-----------------------------------------------------------------------------
@@ -155,9 +157,10 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    uavPositionListener     = new UAVPositionListener();
-    uavFlightParamsListener = new UAVFlightParamsListener();
-    uavWayPointsListener    = new UAVWayPointsListener();
+    uavPositionListener           = new UAVPositionListener();
+    uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
+    uavFlightParamsListener       = new UAVFlightParamsListener();
+    uavWayPointsListener          = new UAVWayPointsListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -217,12 +220,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
-      // Mise en écoute des messages GPS
+      // Mise en écoute des messages GPS (version 3i)
 //      // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
-//      bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
-      bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListener);
-
+      bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
       
+      // Mise en écoute des messages GPS (version Rotorcraft)
+      bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListenerRotorcraft);
+
       // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
       bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
 

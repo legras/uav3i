@@ -12,20 +12,19 @@ public class UAVDataPoint
 	public long time;
 	
 	/**
-	 *  <message name="GPS" id="8">
-	 *  <ul>
-	 *	<li><field name="mode"       type="uint8"  unit="byte_mask"/></li>
-	 *	<li><field name="utm_east"   type="int32"  unit="cm" alt_unit="m"/></li>
-	 *	<li><field name="utm_north"  type="int32"  unit="cm" alt_unit="m"/></li>
-	 *	<li><field name="course"     type="int16"  unit="decideg" alt_unit="deg"/></li>
-	 *	<li><field name="alt"        type="int32"  unit="mm" alt_unit="m"/></li>
-	 *	<li><field name="speed"      type="uint16" unit="cm/s" alt_unit="m/s"/></li>
-	 *	<li><field name="climb"      type="int16"  unit="cm/s" alt_unit="m/s"/></li>
-	 *	<li><field name="week"       type="uint16" unit="weeks"/></li>
-	 *	<li><field name="itow"       type="uint32" unit="ms"/></li>
-	 *	<li><field name="utm_zone"   type="uint8"/></li>
-	 *	<li><field name="gps_nb_err" type="uint8"/></li>
-	 *	</ul>
+	 * <message name="GPS" id="8">
+	 *   <field name="mode"       type="uint8"  unit="byte_mask"/>
+	 *   <field name="utm_east"   type="int32"  unit="cm" alt_unit="m"/>
+	 *   <field name="utm_north"  type="int32"  unit="cm" alt_unit="m"/>
+	 *   <field name="course"     type="int16"  unit="decideg" alt_unit="deg"/>
+	 *   <field name="alt"        type="int32"  unit="mm" alt_unit="m"/>
+	 *   <field name="speed"      type="uint16" unit="cm/s" alt_unit="m/s"/>
+	 *   <field name="climb"      type="int16"  unit="cm/s" alt_unit="m/s"/>
+	 *   <field name="week"       type="uint16" unit="weeks"/>
+	 *   <field name="itow"       type="uint32" unit="ms"/>
+	 *   <field name="utm_zone"   type="uint8"/>
+	 *   <field name="gps_nb_err" type="uint8"/>
+	 * </message>
 	 */
 	public UAVDataPoint(int utm_east, int utm_north, int utm_zone, int c, int alt, long t)
 	{
@@ -50,6 +49,27 @@ public class UAVDataPoint
 		time = t;
 	}
 	
+	/**
+	 * 
+   * <message name="GPS_INT" id="155">
+   *   <field name="ecef_x"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="ecef_y"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="ecef_z"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="lat"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
+   *   <field name="lon"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
+   *   <field name="alt"     type="int32" unit="mm"   alt_unit="m">altitude above WGS84 reference ellipsoid</field>
+   *   <field name="hmsl"    type="int32" unit="mm"   alt_unit="m">height above mean sea level (geoid)</field>
+   *   <field name="ecef_xd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="ecef_yd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="ecef_zd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="pacc"    type="uint32" unit="cm"   alt_unit="m"/>
+   *   <field name="sacc"    type="uint32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="tow"     type="uint32"/>
+   *   <field name="pdop"    type="uint16"/>
+   *   <field name="numsv"   type="uint8"/>
+   *   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>
+   * </message>
+	 */
   public UAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
     latlng = new LatLng(lat / 10.e7, lon / 10.e7);

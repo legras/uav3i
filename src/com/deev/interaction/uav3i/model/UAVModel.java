@@ -137,13 +137,13 @@ public class UAVModel
 		}
 	}
 
-//	public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
-//	{
-//		if(store != null)
-//		{
-//			store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t));
-//		}
-//	}
+  public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
+  {
+    if (store != null)
+    {
+      store._dataPoints.add(new UAVDataPoint(utm_east, utm_north, utm_zone, course, alt, t));
+    }
+  }
 
   public static void addUAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
