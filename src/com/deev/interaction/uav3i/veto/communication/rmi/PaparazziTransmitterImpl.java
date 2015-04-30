@@ -217,11 +217,12 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       // Mise à jour du proxy dans les listeners. En cas de déconnexion/reconnexion d'uav3i,
       // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
+      uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
       // Mise en écoute des messages GPS (version 3i)
-//      // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
+//      // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
       
       // Mise en écoute des messages GPS (version Rotorcraft)
