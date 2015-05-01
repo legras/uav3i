@@ -110,9 +110,11 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       case "CircleMnvrDTO":
         CircleMnvrDTO circleMnvrDTO = (CircleMnvrDTO) mnvrDTO;
         // Move way point for circle center.
-        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+//        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+        moveWayPoint("CAM", circleMnvrDTO.getCenter());
         setNavRadius(circleMnvrDTO.getCurrentRadius());
-        jumpToBlock("Circle");
+//        jumpToBlock("Circle");
+        jumpToBlock("circle CAM");
         break;
       case "LineMnvrDTO":
         LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
