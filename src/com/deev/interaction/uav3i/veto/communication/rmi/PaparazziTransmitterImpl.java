@@ -173,19 +173,27 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     // Exemple : dl DL_SETTING 5 6 1000.000000
     // Que veux dire le 6 ?
-    sendMsg("dl DL_SETTING 5 6 " + radius);
+//    sendMsg("dl DL_SETTING 5 6 " + radius);
+    
+    // Exemple (rotorcraft) : dl DL_SETTING 202 26 34.500000
+    sendMsg("dl DL_SETTING 202 26 " + radius);
     LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
   }
   //-----------------------------------------------------------------------------
   private void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
   {
-    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+//    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+
+    // Exemple (rotorcraft) : gcs MOVE_WAYPOINT 202 6 48.3591789 -4.5730567 152.000071
+    sendMsg("gcs MOVE_WAYPOINT 202 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 150.000000");
     LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
   }
   //-----------------------------------------------------------------------------
   private void jumpToBlock(String blockName) throws RemoteException
   {
-    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+//    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    // Exemple (rotorcraft) : gcs JUMP_TO_BLOCK 202 8
+    sendMsg("gcs JUMP_TO_BLOCK 202 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
     LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
   }
   //-----------------------------------------------------------------------------
