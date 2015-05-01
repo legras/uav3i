@@ -98,7 +98,8 @@ public class SymbolMap extends Map implements Touchable
 		// Dessin UAV + way points
 		try
 		{
-			_uavImage      = ImageIO.read(this.getClass().getResource("/img/uav.png"));
+//      _uavImage      = ImageIO.read(this.getClass().getResource("/img/uav.png"));
+      _uavImage      = ImageIO.read(this.getClass().getResource("/img/rotorcraft.png"));
 			_uavGrayImage  = ImageIO.read(this.getClass().getResource("/img/uavGray.png"));
 			_waypointImage = ImageIO.read(this.getClass().getResource("/img/waypoint.png"));
 		}
