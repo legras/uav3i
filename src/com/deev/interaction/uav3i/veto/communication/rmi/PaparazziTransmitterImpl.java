@@ -13,6 +13,7 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.UAVNavStatusListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListenerRotorcraft;
 import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
@@ -37,6 +38,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   private        UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
   private        UAVFlightParamsListener       uavFlightParamsListener       = null;
   private        UAVWayPointsListener          uavWayPointsListener          = null;
+  private        UAVNavStatusListener          uavNavStatusListener          = null;
   
   private static PaparazziTransmitterImpl instance;
   //-----------------------------------------------------------------------------
@@ -158,6 +160,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
                   applicationName + " Ready",
                   null);
     uavPositionListener           = new UAVPositionListener();
+    uavNavStatusListener          = new UAVNavStatusListener();
     uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
     uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
@@ -218,8 +221,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
+      uavNavStatusListener.setUav3iTransmitter(uav3iTransmitter);
       uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
-      uavPositionListenerRotorcraft.setUavFlightParamsListener(uavFlightParamsListener);
+      uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
       // Mise en écoute des messages GPS (version 3i)
@@ -228,6 +232,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       
       // Mise en écoute des messages GPS (version Rotorcraft)
       bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListenerRotorcraft);
+
+      // Mise en écoute des messages NAV_STATUS
+      bus.bindMsg("(.*) NAV_STATUS(.*)", uavNavStatusListener);
 
       // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
       bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);

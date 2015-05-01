@@ -22,8 +22,6 @@ public class UAVFlightParamsListener implements IvyMessageListener
   //-----------------------------------------------------------------------------
   private IUav3iTransmitter uav3iTransmitter = null;
   private int cpt = 0;
-  private int lastCourseValue = 0;
-
   //-----------------------------------------------------------------------------
   /**
    * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
@@ -40,11 +38,11 @@ public class UAVFlightParamsListener implements IvyMessageListener
   public void receive(IvyClient client, String[] args)
   {
     // On n'envoie les infos qu'une fois sur 10...
-//    cpt++;
-//    if(cpt%10 != 0)
-//      return;
-//    else
-//      cpt = 0;
+    cpt++;
+    if(cpt%10 != 0)
+      return;
+    else
+      cpt = 0;
 
     // Definition of messages in paparazzi_v5.0.3_stable/conf/messages.xml
     //
@@ -78,9 +76,6 @@ public class UAVFlightParamsListener implements IvyMessageListener
 //    System.out.println();
     // ---------------> [0 = ] [1 = 5] [2 = 11.883718] [3 = 1.340206] [4 = 54.695411] [5 = 48.186651] [6 = -4.305033] [7 = 12.660000] [8 = 59.8] [9 = 100.000000] [10 = -0.000703] [11 = 100.000000] [12 = 1398065619.114756] [13 = 113635999]
 
-    lastCourseValue = (int) Double.parseDouble(message[8]);
-    System.out.println(message[8] + " ---> " + lastCourseValue);
-    
     double altitude       = Double.parseDouble(message[9]);
     double verticalSpeed  = Double.parseDouble(message[10]);
     double groundAltitude = Double.parseDouble(message[11]);
@@ -124,11 +119,4 @@ public class UAVFlightParamsListener implements IvyMessageListener
     }
   }
   //-----------------------------------------------------------------------------
-  /**
-   * @return the lastCourseValue
-   */
-  public int getLastCourseValue()
-  {
-    return lastCourseValue;
-  }
 }

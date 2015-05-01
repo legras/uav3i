@@ -21,7 +21,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
 {
   //-----------------------------------------------------------------------------
   private IUav3iTransmitter uav3iTransmitter = null;
-  private UAVFlightParamsListener uavFlightParamsListener;
+  private UAVNavStatusListener uavNavStatusListener;
   //-----------------------------------------------------------------------------
   /**
    * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
@@ -33,8 +33,6 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
   {
     this.uav3iTransmitter = uav3iTransmitter;
   }
-  //-----------------------------------------------------------------------------
-  
   //-----------------------------------------------------------------------------
   @Override
   public void receive(IvyClient client, String[] args)
@@ -66,7 +64,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
     //   <field name="numsv"   type="uint8"/>                                                                         //
     //   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>                                              //
     // </message>
-    
+    //
     // bebop_NPS           | 202 GPS_INT 462759583 11966883 437325680 435639942 14813288 203708 153907 -2 5 2 0 0 145000 0 0 3
     String[] message = tokens.split(" ");
 //    for(int i=0; i<message.length; i++)
@@ -88,27 +86,13 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
 //        ---------------> 14 = 0
 //        ---------------> 15 = 0
 //        ---------------> 16 = 3
-//    System.out.println("---------------> message[8, 9 et 10] = " + message[8] + " " + message[9] + " " + message[10] + " ---> " + (Integer.parseInt(message[8])+Integer.parseInt(message[9])+Integer.parseInt(message[10])));
-
-
-//    UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
-//        Integer.parseInt(message[5]),
-//        0,
-//        Integer.parseInt(message[6]),
-//        System.currentTimeMillis());
 
     switch (UAV3iSettings.getMode())
     {
       case PAPARAZZI_DIRECT:
-//        UAVModel.addUAVDataPoint(Integer.parseInt(message[2]),  // utmEast
-//                                 Integer.parseInt(message[3]),  // utmNorth
-//                                 Integer.parseInt(message[10]), // utm_zone
-//                                 Integer.parseInt(message[4]),  // course
-//                                 Integer.parseInt(message[5]),  // alt
-//                                 Long.parseLong(message[9]));   // t
         UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
                                  Integer.parseInt(message[5]),
-                                 uavFlightParamsListener.getLastCourseValue(),
+                                 uavNavStatusListener.getLastCourseValue(),
                                  Integer.parseInt(message[7]),
                                  Integer.parseInt(message[13]));
         break;
@@ -121,7 +105,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
           {
             uav3iTransmitter.addUAVDataPoint(Integer.parseInt(message[4]),
                                              Integer.parseInt(message[5]),
-                                             uavFlightParamsListener.getLastCourseValue(),
+                                             uavNavStatusListener.getLastCourseValue(),
                                              Integer.parseInt(message[7]),
                                              Integer.parseInt(message[13]));
           }
@@ -133,7 +117,7 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
           // On transmet aussi la position du drone à l'IHM Veto pour l'affichage local.
           UAVModel.addUAVDataPoint(Integer.parseInt(message[4]),
                                    Integer.parseInt(message[5]),
-                                   uavFlightParamsListener.getLastCourseValue(),
+                                   uavNavStatusListener.getLastCourseValue(),
                                    Integer.parseInt(message[7]),
                                    Integer.parseInt(message[13]));
         }
@@ -144,16 +128,14 @@ public class UAVPositionListenerRotorcraft implements IvyMessageListener
       default:
         break;
     }
-
-    
   }
   //-----------------------------------------------------------------------------
-
   /**
-   * @param uavFlightParamsListener the uavFlightParamsListener to set
+   * @param uavNavStatusListener the uavNavStatusListener to set
    */
-  public void setUavFlightParamsListener(UAVFlightParamsListener uavFlightParamsListener)
+  public void setUavNavStatusListener(UAVNavStatusListener uavNavStatusListener)
   {
-    this.uavFlightParamsListener = uavFlightParamsListener;
+    this.uavNavStatusListener = uavNavStatusListener;
   }
+  //-----------------------------------------------------------------------------
 }
