@@ -11,10 +11,11 @@ public abstract class UAVListener implements IvyMessageListener
   protected IUav3iTransmitter uav3iTransmitter = null;
   //-----------------------------------------------------------------------------
   /**
-   * Mise à jour du stub : utilisé dans le cas d'une communication RMI :<br/>
+   * <code>uav3iTransmitter</code> is the RMI stub used to transmit  informations
+   * when a RMI communication is needed:<br/>
    * <code>uav3i</code> &lt;---&gt; <code>Paparazzi Tranmitter</code> &lt;---&gt; <code>Paparazzi</code>.
    * 
-   * @param uav3iTransmitter stub RMI utilisé pour la transmission.
+   * @param uav3iTransmitter RMI stub used for the transmission.
    */
   public void setUav3iTransmitter(IUav3iTransmitter uav3iTransmitter)
   {
@@ -27,9 +28,9 @@ public abstract class UAVListener implements IvyMessageListener
    * @param client
    * @param args
    */
-  public void displayArgs(IvyClient client, String[] args)
+  public void displayArgs(String from, IvyClient client, String[] args)
   {
-    System.out.println("args.length = " + args.length);
+    System.out.println("From '" + from + "': args.length = " + args.length);
     for (int i = 0; i < args.length; i++)
       System.out.println("---------------> IVY message (client=" + client.getApplicationName() + ") [" + i + "]= " + args[i]);
   }

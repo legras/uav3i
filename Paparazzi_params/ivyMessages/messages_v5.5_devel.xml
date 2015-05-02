@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
-<!DOCTYPE protocol SYSTEM "messages.dtd">
+
+<!-- 
+  <!DOCTYPE protocol SYSTEM "messages.dtd">
+  
+  Reference to the DTD MUST be commented.
+-->
+
 <protocol>
  <!-- messages from modem or sim to server -->
  <msg_class name="telemetry">

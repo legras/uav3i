@@ -11,10 +11,10 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
-import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVWayPointsListener;
 
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
