@@ -13,15 +13,15 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.UAVNavStatusListener;
 import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.UAVPositionListenerRotorcraft;
 import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVNavStatusListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListenerRotorcraft;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
