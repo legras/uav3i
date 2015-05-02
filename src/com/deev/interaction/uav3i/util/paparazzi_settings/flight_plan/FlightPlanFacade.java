@@ -220,11 +220,6 @@ public class FlightPlanFacade
     waypoints = flightPlan.getWaypoints().getWaypoint();
     for(int i=0; i<waypoints.size(); i++)
       wayPointsIndex.put(waypoints.get(i).getName(), i);
-    
-    for(String wayPointString : wayPointsIndex.keySet())
-    {
-      System.out.println("Waypoints : " + wayPointString + " ---> " + wayPointsIndex.get(wayPointString));
-    }
   }
   //-----------------------------------------------------------------------------
   /**
@@ -236,11 +231,6 @@ public class FlightPlanFacade
     blocks = flightPlan.getBlocks().getBlock();
     for(int i=0; i<blocks.size(); i++)
       blocksIndex.put(blocks.get(i).getName(), i);
-    
-    for(String blockString : blocksIndex.keySet())
-    {
-      System.out.println("Blocks : " + blockString + " ---> " + blocksIndex.get(blockString));
-    }
   }
   //-----------------------------------------------------------------------------
   private void processStartPoint()
