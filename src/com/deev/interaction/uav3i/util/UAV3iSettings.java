@@ -88,6 +88,7 @@ public class UAV3iSettings
   public static boolean getInteractionMode()        { return Boolean.parseBoolean(props.getProperty("INTERACTION_MODE")); }
   public static String  getPaparazziFlightPlan()    { return props.getProperty("PAPARAZZI_FLIGHT_PLAN");                  }
   public static String  getPaparazziAirframe()      { return props.getProperty("PAPARAZZI_AIRFRAME");                     }
+  public static String  getPaparazziIvyMessages()   { return props.getProperty("PAPARAZZI_IVY_MESSAGES");                 }
   public static String  getVetoServerIP()           { return props.getProperty("VETO_SERVER_IP");                         }
   public static int     getVetoServerPort()         { return Integer.parseInt(props.getProperty("VETO_SERVER_PORT"));     }
   public static String  getVetoServerServiceName()  { return props.getProperty("VETO_SERVER_SERVICE_NAME");               }
