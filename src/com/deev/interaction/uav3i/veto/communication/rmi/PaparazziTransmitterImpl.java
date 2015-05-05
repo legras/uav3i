@@ -120,7 +120,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
         LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
         // Circle radius may have previously been modified by a circle
         // manoeuver, set it to default.
-        setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+//        setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+        // TODO: ther is no default circle radius with the BeBop airframe file (bebop.xml). To see with Christophe.
+        setNavRadius(5);
         // Move way points to each side of the line.
 //        moveWayPoint("L1", lineMnvrDTO.getTrajA());
 //        moveWayPoint("L2", lineMnvrDTO.getTrajB());
