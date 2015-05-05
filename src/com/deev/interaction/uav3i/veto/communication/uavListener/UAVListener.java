@@ -11,7 +11,7 @@ public abstract class UAVListener implements IvyMessageListener
   protected IUav3iTransmitter uav3iTransmitter = null;
   //-----------------------------------------------------------------------------
   /**
-   * <code>uav3iTransmitter</code> is the RMI stub used to transmit  informations
+   * <code>uav3iTransmitter</code> is the RMI stub used to transmit informations
    * when a RMI communication is needed:<br/>
    * <code>uav3i</code> &lt;---&gt; <code>Paparazzi Tranmitter</code> &lt;---&gt; <code>Paparazzi</code>.
    * 
@@ -23,7 +23,7 @@ public abstract class UAVListener implements IvyMessageListener
   }
   //-----------------------------------------------------------------------------
   /**
-   * Display args received from the Ivy message. Used only for debug purpose.
+   * Display args received from the Ivy message. To be used for debug purpose.
    * 
    * @param client
    * @param args

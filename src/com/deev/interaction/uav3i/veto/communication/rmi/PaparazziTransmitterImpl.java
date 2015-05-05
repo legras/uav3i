@@ -111,20 +111,23 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
         CircleMnvrDTO circleMnvrDTO = (CircleMnvrDTO) mnvrDTO;
         // Move way point for circle center.
 //        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+//      jumpToBlock("Circle");
         moveWayPoint("CAM", circleMnvrDTO.getCenter());
         setNavRadius(circleMnvrDTO.getCurrentRadius());
-//        jumpToBlock("Circle");
         jumpToBlock("circle CAM");
         break;
       case "LineMnvrDTO":
         LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
-        // Move way points to each side of the line.
-        moveWayPoint("L1", lineMnvrDTO.getTrajA());
-        moveWayPoint("L2", lineMnvrDTO.getTrajB());
         // Circle radius may have previously been modified by a circle
         // manoeuver, set it to default.
         setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
-        jumpToBlock("Line_L1-L2");
+        // Move way points to each side of the line.
+//        moveWayPoint("L1", lineMnvrDTO.getTrajA());
+//        moveWayPoint("L2", lineMnvrDTO.getTrajB());
+//        jumpToBlock("Line_L1-L2");
+        moveWayPoint("p1", lineMnvrDTO.getTrajA());
+        moveWayPoint("p2", lineMnvrDTO.getTrajB());
+        jumpToBlock("line_p1_p2");
         break;
       case "BoxMnvrDTO":
         BoxMnvrDTO boxMnvr = (BoxMnvrDTO) mnvrDTO;
