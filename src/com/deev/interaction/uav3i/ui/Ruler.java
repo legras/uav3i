@@ -9,6 +9,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -30,7 +31,7 @@ public class Ruler implements Touchable
 	private static double _HALFW = 20.;
 	private static double _MIN_SEG_WIDTH = 100;
 	
-	private enum RulerMoveStates {NONE, TRANSLATE, FULL};
+	private enum RulerMoveStates {NONE, TRANSLATE, MOVE_A, MOVE_B, MOVE_AB};
 	private RulerMoveStates _moveState = RulerMoveStates.NONE;
 
 	private Object _touchOne;
@@ -41,14 +42,6 @@ public class Ruler implements Touchable
 	// TRANSLATE
 	private Point2D.Double _offsetA;
 	private Point2D.Double _offsetB;
-	
-	// FULL
-	private Point2D.Double _startA;
-	private Point2D.Double _startB;
-	private Point2D.Double _startPosOne;
-	private Point2D.Double _startPosTwo;
-	private Point2D.Double _currentPosOne;
-	private Point2D.Double _currentPosTwo;
 
 	private Point2D.Double _u, _v;
 	
@@ -87,6 +80,9 @@ public class Ruler implements Touchable
 		{
 			distSegmentIndex++;
 		}
+		
+		g2.fill(new Ellipse2D.Double(_A.x-_HALFW, _A.y-_HALFW, 2*_HALFW, 2*_HALFW));
+		g2.fill(new Ellipse2D.Double(_B.x-_HALFW, _B.y-_HALFW, 2*_HALFW, 2*_HALFW));
 		
 		g2.translate(_A.x, _A.y);
 		g2.rotate(Math.atan2(_B.y-_A.y, _B.x-_A.x));
@@ -171,7 +167,7 @@ public class Ruler implements Touchable
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		if (_moveState == RulerMoveStates.FULL)
+		if (_moveState == RulerMoveStates.MOVE_AB)
 			return -1.f;
 
 		double X = x-_A.x;
@@ -186,31 +182,64 @@ public class Ruler implements Touchable
 			return -1.f;
 	}
 
+	public boolean isNearA(float x, float y)
+	{
+		return _A.distance(x, y) < 2*_HALFW;
+	}
+
+	public boolean isNearB(float x, float y)
+	{
+		return _B.distance(x, y) < 2*_HALFW;
+	}
+	
 	@Override
 	public void addTouch(float x, float y, Object touchref)
 	{
 		switch (_moveState)
 		{
-			case FULL:
-				return;
-			case TRANSLATE:
-				_touchTwo = touchref;
-				_startA = _A;
-				_startB = _B;
-				_startPosTwo = new Point2D.Double(x, y);
-				_currentPosOne = _startPosOne;
-				_currentPosTwo = _startPosTwo;
-				_moveState = RulerMoveStates.FULL;
-				return;
 			case NONE:
-				_touchOne = touchref;
-				_startPosOne = new Point2D.Double(x, y);
-				_offsetA = new Point2D.Double(x-_A.x, y-_A.y);
-				_offsetB = new Point2D.Double(x-_B.x, y-_B.y);
-				_moveState = RulerMoveStates.TRANSLATE;
-				return;
+				if (isNearA(x, y))
+				{
+					_touchOne = touchref;
+					_offsetA = new Point2D.Double(x-_A.x, y-_A.y);
+					_moveState = RulerMoveStates.MOVE_A;
+				}
+				else if (isNearB(x, y))
+				{
+					_touchTwo = touchref;
+					_offsetB = new Point2D.Double(x-_B.x, y-_B.y);
+					_moveState = RulerMoveStates.MOVE_B;
+				}
+				else
+				{
+					_touchOne = touchref;
+					_offsetA = new Point2D.Double(x-_A.x, y-_A.y);
+					_offsetB = new Point2D.Double(x-_B.x, y-_B.y);
+					_moveState = RulerMoveStates.TRANSLATE;
+				}
+				break;
+				
+			case MOVE_A:
+				if (isNearB(x, y))
+				{
+					_touchTwo = touchref;
+					_offsetB = new Point2D.Double(x-_B.x, y-_B.y);
+					_moveState = RulerMoveStates.MOVE_AB;
+				}
+				break;
+				
+			case MOVE_B:
+				if (isNearA(x, y))
+				{
+					_touchOne = touchref;
+					_offsetA = new Point2D.Double(x-_A.x, y-_A.y);
+					_moveState = RulerMoveStates.MOVE_AB;
+				}
+				break;
+			
+			case TRANSLATE:	
 			default:
-				return;
+				break;
 		}
 	}
 
@@ -222,22 +251,74 @@ public class Ruler implements Touchable
 		
 		switch (_moveState)
 		{
-			case FULL:				
-				if (touchref == _touchOne)
-					_currentPosOne = new Point2D.Double(x, y);
-				else
-					_currentPosTwo = new Point2D.Double(x, y);
-				updateGeometry();
-				break;
-				
 			case TRANSLATE:
 				if (touchref == _touchOne)
 				{
 					_A = new Point2D.Double(x-_offsetA.x, y-_offsetA.y);
 					_B = new Point2D.Double(x-_offsetB.x, y-_offsetB.y);
-					_startPosOne = new Point2D.Double(x, y);
 				}
 				break;
+				
+			case MOVE_A:
+			case MOVE_B:
+			case MOVE_AB:
+					if (touchref == _touchOne)
+					{
+						_A = new Point2D.Double(x-_offsetA.x, y-_offsetA.y);
+					}
+					
+					if (touchref == _touchTwo)
+					{
+						_B = new Point2D.Double(x-_offsetB.x, y-_offsetB.y);
+					}
+					
+					break;
+				
+			case NONE:
+			default:
+				break;
+		}
+		
+		double d = _A.distance(_B);
+		_u = new Point2D.Double((_B.x-_A.x)/d, (_B.y-_A.y)/d);
+		_v = new Point2D.Double(-_u.y, _u.x);
+	}
+
+	@Override
+	public void removeTouch(float x, float y, Object touchref)
+	{
+		switch (_moveState)
+		{
+			case TRANSLATE:
+				_touchOne = null;
+				_moveState = RulerMoveStates.NONE;
+				break;
+				
+			case MOVE_A:
+				_touchOne = null;
+				_moveState = RulerMoveStates.NONE;
+				break;
+				
+			case MOVE_B:
+				_touchTwo = null;
+				_moveState = RulerMoveStates.NONE;
+				break;
+				
+			case MOVE_AB:
+				
+					if (touchref == _touchOne)
+					{
+						_touchOne = null;
+						_moveState = RulerMoveStates.MOVE_B;
+					}
+					
+					if (touchref == _touchTwo)
+					{
+						_touchTwo = null;
+						_moveState = RulerMoveStates.MOVE_A;
+					}
+					
+					break;
 				
 			case NONE:
 			default:
@@ -246,52 +327,9 @@ public class Ruler implements Touchable
 	}
 
 	@Override
-	public void removeTouch(float x, float y, Object touchref)
-	{
-		_moveState = RulerMoveStates.NONE;
-	}
-
-	@Override
 	public void cancelTouch(Object touchref)
 	{
 		_moveState = RulerMoveStates.NONE;
-	}
-
-	private void updateGeometry()
-	{
-		Array2DRowRealMatrix x = new Array2DRowRealMatrix(new double[][]
-				{
-					{ 0, _startPosOne.getX(), _startPosTwo.getX() },
-					{ 0, _startPosOne.getY(), _startPosTwo.getY() },
-					{ 1, 1, 1 }
-				});
-
-		Array2DRowRealMatrix y = new Array2DRowRealMatrix(new double[][]
-				{
-					{ 0, _currentPosOne.getX(), _currentPosTwo.getX() },
-					{ 0, _currentPosOne.getY(), _currentPosTwo.getY() },
-					{ 0, 0, 0 }
-				});
-		
-		DecompositionSolver solver = new LUDecomposition(x).getSolver();
-		if (!solver.isNonSingular())
-			return;
-		double[][] data = y.multiply(solver.getInverse()).getData();
-		
-		AffineTransform t = new AffineTransform(new double[] { data[0][0], data[1][0], data[0][1], data[1][1], data[0][2], data[1][2] });
-	
-		Point2D.Double Apx = new Point2D.Double(_startA.x, _startA.y);
-		Point2D.Double Bpx = new Point2D.Double(_startB.x, _startB.y);
-		
-		t.transform(Apx, Apx);
-		t.transform(Bpx, Bpx);
-
-		_A = Apx;
-		_B = Bpx;		
-		
-		double d = _A.distance(_B);
-		_u = new Point2D.Double((_B.x-_A.x)/d, (_B.y-_A.y)/d);
-		_v = new Point2D.Double(-_u.y, _u.x);
 	}
 
 	public double getSmallestPxStep()
