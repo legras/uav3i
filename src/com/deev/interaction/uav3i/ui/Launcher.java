@@ -37,7 +37,7 @@ public class Launcher
 		switch (UAV3iSettings.getMode())
 		{
 			case REPLAY: // Lancement avec replay (infos dans le fichier).
-				UAVModel.initialize(UAVModel.class.getResourceAsStream("pentrez.data"));
+				UAVModel.initialize(UAVModel.class.getResourceAsStream("/pentrez.data"));
 				VideoModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()
 				{
