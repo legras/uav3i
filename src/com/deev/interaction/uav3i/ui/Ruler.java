@@ -84,8 +84,18 @@ public class Ruler implements Touchable
 		g2.fill(new Ellipse2D.Double(_A.x-_HALFW, _A.y-_HALFW, 2*_HALFW, 2*_HALFW));
 		g2.fill(new Ellipse2D.Double(_B.x-_HALFW, _B.y-_HALFW, 2*_HALFW, 2*_HALFW));
 		
-		g2.translate(_A.x, _A.y);
-		g2.rotate(Math.atan2(_B.y-_A.y, _B.x-_A.x));
+		double angle = Math.atan2(_B.y-_A.y, _B.x-_A.x);
+		
+		if (Math.cos(angle) > 0)
+		{
+			g2.translate(_A.x, _A.y);
+			g2.rotate(angle);
+		}
+		else
+		{
+			g2.translate(_B.x, _B.y);
+			g2.rotate(angle+Math.PI);
+		}
 		
 		double maxL = _A.distance(_B);
 		
