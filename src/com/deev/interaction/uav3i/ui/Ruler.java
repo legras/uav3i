@@ -80,10 +80,7 @@ public class Ruler implements Touchable
 		{
 			distSegmentIndex++;
 		}
-		
-		g2.fill(new Ellipse2D.Double(_A.x-_HALFW, _A.y-_HALFW, 2*_HALFW, 2*_HALFW));
-		g2.fill(new Ellipse2D.Double(_B.x-_HALFW, _B.y-_HALFW, 2*_HALFW, 2*_HALFW));
-		
+				
 		double angle = Math.atan2(_B.y-_A.y, _B.x-_A.x);
 		
 		if (Math.cos(angle) > 0)
@@ -96,24 +93,31 @@ public class Ruler implements Touchable
 			g2.translate(_B.x, _B.y);
 			g2.rotate(angle+Math.PI);
 		}
-		
+
 		double maxL = _A.distance(_B);
 		
-		double L1 = paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), true);
+		Rectangle2D.Double rect = new Rectangle2D.Double(-_HALFW, -_HALFW, maxL+_HALFW, 2*_HALFW);
+		Ellipse2D.Double e1 = new Ellipse2D.Double(-_HALFW, -_HALFW, 2*_HALFW, 2*_HALFW);
+		Ellipse2D.Double e2 = new Ellipse2D.Double(maxL-_HALFW, -_HALFW, 2*_HALFW, 2*_HALFW);
+		Area outside = new Area(rect);
+		outside.subtract(new Area(e1));
+		outside.subtract(new Area(e2));
+		g2.setClip(outside);
+		
+		paintRuler(g2, maxL, distSegmentsLengths[distSegmentIndex]*_smap.getPPM(), _smap.getPPM(), true);
 		g2.translate(0, -_HALFW);
-		double L2 = paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), false);
+		paintRuler(g2, maxL, timeSegmentsDurations[timeSegmentIndex] * _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), _smap.getPPM() * UAVModel.getReferenceCruiseSpeed(), false);
 		g2.translate(0, _HALFW);
+		
+		g2.setClip(null);
 
-//		BasicStroke stroke;
-//		Line2D.Double line = new Line2D.Double(0, 0, L1>L2?L1:L2, 0);
-//		stroke = new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-//		g2.setStroke(stroke);
-//		g2.setPaint(Color.WHITE);
-//		g2.draw(line);
-//		stroke = new BasicStroke(.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
-//		g2.setStroke(stroke);
-//		g2.setPaint(Color.BLACK);
-//		g2.draw(line);
+		double thick = 2.;
+		e1 = new Ellipse2D.Double(-_HALFW+thick, -_HALFW+thick, 2*_HALFW-2*thick, 2*_HALFW-2*thick);
+		e2 = new Ellipse2D.Double(maxL-_HALFW+thick, -_HALFW+thick, 2*_HALFW-2*thick, 2*_HALFW-2*thick);
+		g2.setPaint(new Color(1.f, 1.f, 1.f, .5f));
+		g2.setStroke(new BasicStroke((float) (2*thick)));
+		g2.draw(e1);
+		g2.draw(e2);
 		
 		g2.setTransform(old);
 		
@@ -122,8 +126,8 @@ public class Ruler implements Touchable
 	
 	private double paintRuler(Graphics2D g2, double length, double segmentLengthPx, double pixelsPerUnit, boolean meters)
 	{
-		final Color white = new Color(1.f, 1.f, 1.f, .8f);
-		final Color black = new Color(0.f, 0.f, 0.f, .5f);
+		final Color white = new Color(1.f, 1.f, 1.f, .5f);
+		final Color black = new Color(0.f, 0.f, 0.f, .3f);
 		
 		double x;
 		int color = 0;
@@ -164,7 +168,7 @@ public class Ruler implements Touchable
 			
 			AffineTransform old = g2.getTransform();
 			g2.translate(x+segmentLengthPx-outline.getBounds().width-2, _HALFW-4);
-			g2.setPaint(color%2==0 ? Color.BLACK : Color.WHITE);
+			g2.setPaint(color%2==0 ? new Color(0.f, 0.f, 0.f, .4f) : new Color(1.f, 1.f, 1.f, .6f));
 			g2.fill(outline);
 			g2.setTransform(old);
 			
