@@ -15,7 +15,8 @@ public class CircleMnvrDTO extends ManoeuverDTO
   private static final long serialVersionUID = 8781703792280948005L;
   //-----------------------------------------------------------------------------
   private LatLng _center;
-  private double _currentRm = 500.;
+//  private double _currentRm = 500.;
+  private double _currentRm = 30.;
   private Point2D.Double oldCenterPx = new Point2D.Double(-1,-1);
   private double oldRpx = -1;
   //-----------------------------------------------------------------------------

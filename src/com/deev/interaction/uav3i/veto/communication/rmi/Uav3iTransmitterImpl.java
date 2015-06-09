@@ -23,6 +23,13 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
   }
   //-----------------------------------------------------------------------------
   @Override
+  public void addUAVDataPoint(int lat, int lon, int c, int alt, long t) throws RemoteException
+  {
+      UAVModel.addUAVDataPoint(lat, lon, c, alt, t);
+  }
+
+  //-----------------------------------------------------------------------------
+  @Override
   public void addFlightParams(double altitude,
                               double verticalSpeed,
                               double groundAltitude,
@@ -32,7 +39,7 @@ public class Uav3iTransmitterImpl implements IUav3iTransmitter
     UAVModel.setVerticalSpeed(verticalSpeed);
     UAVModel.setGroundSpeed(groundSpeed);
     UAVModel.setGroundAltitude(groundAltitude);
-    //LoggerUtil.LOG.info("Flight params: altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
+    LoggerUtil.LOG.info("Flight params: altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
   }
   //-----------------------------------------------------------------------------
   @Override

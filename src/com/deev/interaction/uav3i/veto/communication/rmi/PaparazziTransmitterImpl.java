@@ -12,14 +12,16 @@ import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
-import com.deev.interaction.uav3i.veto.communication.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVNavStatusListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListenerRotorcraft;
+import com.deev.interaction.uav3i.veto.communication.uavListener.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
@@ -32,9 +34,11 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   private        String                  applicationName = "uav3i (PT)";
   private        Ivy                     bus;
   private static IUav3iTransmitter       uav3iTransmitter;
-  private        UAVPositionListener     uavPositionListener     = null;
-  private        UAVFlightParamsListener uavFlightParamsListener = null;
-  private        UAVWayPointsListener    uavWayPointsListener    = null;
+  private        UAVPositionListener           uavPositionListener           = null;
+  private        UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
+  private        UAVFlightParamsListener       uavFlightParamsListener       = null;
+  private        UAVWayPointsListener          uavWayPointsListener          = null;
+  private        UAVNavStatusListener          uavNavStatusListener          = null;
   
   private static PaparazziTransmitterImpl instance;
   //-----------------------------------------------------------------------------
@@ -106,19 +110,26 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       case "CircleMnvrDTO":
         CircleMnvrDTO circleMnvrDTO = (CircleMnvrDTO) mnvrDTO;
         // Move way point for circle center.
-        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+//        moveWayPoint("CIRCLE_CENTER", circleMnvrDTO.getCenter());
+//      jumpToBlock("Circle");
+        moveWayPoint("CAM", circleMnvrDTO.getCenter());
         setNavRadius(circleMnvrDTO.getCurrentRadius());
-        jumpToBlock("Circle");
+        jumpToBlock("circle CAM");
         break;
       case "LineMnvrDTO":
         LineMnvrDTO lineMnvrDTO = (LineMnvrDTO) mnvrDTO;
-        // Move way points to each side of the line.
-        moveWayPoint("L1", lineMnvrDTO.getTrajA());
-        moveWayPoint("L2", lineMnvrDTO.getTrajB());
         // Circle radius may have previously been modified by a circle
         // manoeuver, set it to default.
-        setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
-        jumpToBlock("Line_L1-L2");
+//        setNavRadius(AirframeFacade.getInstance() .getDefaultCircleRadius());
+        // TODO: ther is no default circle radius with the BeBop airframe file (bebop.xml). To see with Christophe.
+        setNavRadius(5);
+        // Move way points to each side of the line.
+//        moveWayPoint("L1", lineMnvrDTO.getTrajA());
+//        moveWayPoint("L2", lineMnvrDTO.getTrajB());
+//        jumpToBlock("Line_L1-L2");
+        moveWayPoint("p1", lineMnvrDTO.getTrajA());
+        moveWayPoint("p2", lineMnvrDTO.getTrajB());
+        jumpToBlock("line_p1_p2");
         break;
       case "BoxMnvrDTO":
         BoxMnvrDTO boxMnvr = (BoxMnvrDTO) mnvrDTO;
@@ -155,9 +166,11 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     bus = new Ivy(applicationName,
                   applicationName + " Ready",
                   null);
-    uavPositionListener     = new UAVPositionListener();
-    uavFlightParamsListener = new UAVFlightParamsListener();
-    uavWayPointsListener    = new UAVWayPointsListener();
+    uavPositionListener           = new UAVPositionListener();
+    uavNavStatusListener          = new UAVNavStatusListener();
+    uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
+    uavFlightParamsListener       = new UAVFlightParamsListener();
+    uavWayPointsListener          = new UAVWayPointsListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -165,19 +178,27 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     // Exemple : dl DL_SETTING 5 6 1000.000000
     // Que veux dire le 6 ?
-    sendMsg("dl DL_SETTING 5 6 " + radius);
+//    sendMsg("dl DL_SETTING 5 6 " + radius);
+    
+    // Exemple (rotorcraft) : dl DL_SETTING 202 26 34.500000
+    sendMsg("dl DL_SETTING 202 26 " + radius);
     LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
   }
   //-----------------------------------------------------------------------------
   private void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
   {
-    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+//    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+
+    // Exemple (rotorcraft) : gcs MOVE_WAYPOINT 202 6 48.3591789 -4.5730567 152.000071
+    sendMsg("gcs MOVE_WAYPOINT 202 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 150.000000");
     LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
   }
   //-----------------------------------------------------------------------------
   private void jumpToBlock(String blockName) throws RemoteException
   {
-    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+//    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    // Exemple (rotorcraft) : gcs JUMP_TO_BLOCK 202 8
+    sendMsg("gcs JUMP_TO_BLOCK 202 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
     LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
   }
   //-----------------------------------------------------------------------------
@@ -215,12 +236,21 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
+      uavNavStatusListener.setUav3iTransmitter(uav3iTransmitter);
+      uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
+      uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
       uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
       
-      // Mise en écoute des messages GPS
-      // TODO Attention, les message de type GPS_SOL sont aussi filtrés par le pattern !
+      // Mise en écoute des messages GPS (version 3i)
+//      // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
       
+      // Mise en écoute des messages GPS (version Rotorcraft)
+      bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListenerRotorcraft);
+
+      // Mise en écoute des messages NAV_STATUS
+      bus.bindMsg("(.*) NAV_STATUS(.*)", uavNavStatusListener);
+
       // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
       bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
 

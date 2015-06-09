@@ -28,6 +28,18 @@ public interface IUav3iTransmitter extends Remote
                               long t) throws RemoteException;
   //-----------------------------------------------------------------------------
   /**
+   * Ajout d'une nouvelle position pour le drone (version Rotocraft).
+   * 
+   * @param lat
+   * @param lon
+   * @param c
+   * @param alt
+   * @param t
+   * @throws RemoteException
+   */
+  public void addUAVDataPoint(int lat, int lon, int c, int alt, long t) throws RemoteException;
+  //-----------------------------------------------------------------------------
+  /**
    * Transmission au logiciel côté table des paramètres de vol du drone.
    * 
    * @param altitude
