@@ -12,7 +12,6 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
@@ -22,7 +21,6 @@ import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndp
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.PaparazziTransmitterClearServerEndpoint;
 
 public class PaparazziWebsocketCommunication extends PaparazziCommunication
 {
@@ -34,6 +32,7 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
   //-----------------------------------------------------------------------------
   public PaparazziWebsocketCommunication() throws DeploymentException, IOException, URISyntaxException
   {
+    // Connection to server.
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";
     config = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
     paparazziTransmitterCommunicate = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
@@ -45,7 +44,7 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
     config.getConfig("airframe");
     // TODO le fichier XML des messages Ivy ne doit être utilsé que côté serveur... à confirmer !
     config.getConfig("ivy_messages");
-    
+
     CircleMnvrDTO c = new CircleMnvrDTO(7, new LatLng(0, 0), 12);
     LineMnvrDTO   l = new LineMnvrDTO(12, new LatLng(10, 10), new LatLng(20, 20), 14, new Point2D.Double(-1,-1), new Point2D.Double(-7,-7));
     BoxMnvrDTO    b = new BoxMnvrDTO(21, new LatLng(30, 30), new LatLng(40, 40), true);

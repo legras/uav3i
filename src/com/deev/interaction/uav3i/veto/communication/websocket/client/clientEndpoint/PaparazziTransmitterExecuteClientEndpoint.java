@@ -6,20 +6,17 @@ import java.util.logging.Level;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.CloseReason.CloseCodes;
 
 import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
 
 @ClientEndpoint()
 public class PaparazziTransmitterExecuteClientEndpoint

@@ -18,11 +18,11 @@ import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder2;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder2;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
 
-@ClientEndpoint(decoders = ManoeuverDTODecoder2.class,
-                encoders = ManoeuverDTOEncoder2.class)
+@ClientEndpoint(decoders = ManoeuverDTODecoder.class,
+                encoders = ManoeuverDTOEncoder.class)
 public class PaparazziTransmitterCommunicateClientEndpoint
 {
   //-----------------------------------------------------------------------------

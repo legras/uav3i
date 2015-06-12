@@ -1,28 +1,22 @@
 package com.deev.interaction.uav3i.veto.communication.dto;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class ManoeuverDTOEncoder implements Encoder.Text<ManoeuverDTO>
+public class ManoeuverDTOEncoder implements Encoder.BinaryStream<ManoeuverDTO>
 {
   //-----------------------------------------------------------------------------
   @Override
-  public String encode(ManoeuverDTO instance) throws EncodeException
+  public void encode(ManoeuverDTO instance, OutputStream serializedInstance) throws EncodeException, IOException
   {
-    ObjectMapper mapper = new ObjectMapper();
-    try
-    {
-      return mapper.writeValueAsString(instance);
-    }
-    catch (JsonProcessingException e)
-    {
-      e.printStackTrace();
-    }
-    return null;
+    ObjectOutputStream oos = new ObjectOutputStream(serializedInstance);
+    oos.writeObject(instance);
+    oos.flush();
   }
   //-----------------------------------------------------------------------------
   @Override
