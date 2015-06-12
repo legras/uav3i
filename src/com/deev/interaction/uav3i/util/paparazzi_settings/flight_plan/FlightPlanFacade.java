@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,8 @@ public class FlightPlanFacade
   private FlightPlanFacade(String flightPlanXML)
   {
     // Désérialisation dans l'arborescence de classes JAXB
-    flightPlan = JAXB.unmarshal(flightPlanXML, FlightPlan.class);
+    StringReader reader = new StringReader(flightPlanXML);
+    flightPlan = JAXB.unmarshal(reader, FlightPlan.class);
     
     LoggerUtil.LOG.config("Flight plan: " + flightPlan.getName());
     wayPointsIndex = new HashMap<>();
