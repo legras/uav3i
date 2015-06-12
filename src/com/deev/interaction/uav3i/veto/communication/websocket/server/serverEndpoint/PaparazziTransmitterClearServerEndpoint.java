@@ -10,6 +10,7 @@ public class PaparazziTransmitterClearServerEndpoint
   @OnMessage
   public void receive(String emptyValue)
   {
+    System.out.println("####### PaparazziTransmitterClearServerEndpoint.receive()");
   }
   //-----------------------------------------------------------------------------
 }

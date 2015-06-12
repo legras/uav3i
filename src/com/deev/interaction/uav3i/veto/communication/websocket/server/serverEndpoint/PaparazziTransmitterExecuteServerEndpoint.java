@@ -10,6 +10,7 @@ public class PaparazziTransmitterExecuteServerEndpoint
   @OnMessage
   public void receive(String idManoeuver)
   {
+    System.out.println("####### PaparazziTransmitterExecuteServerEndpoint.receive("+idManoeuver+")");
   }
   //-----------------------------------------------------------------------------
 }
