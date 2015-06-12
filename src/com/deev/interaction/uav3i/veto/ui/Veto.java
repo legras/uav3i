@@ -18,7 +18,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.websocket.DeploymentException;
 
-import org.glassfish.tyrus.server.Server;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
@@ -33,8 +32,6 @@ import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
-import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.ConfigServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 
@@ -69,7 +66,6 @@ public class Veto extends JFrame
         this.setTitle("uav3i - Veto");
         break;
       case VETO_WEBSOCKET:
-        startWebSocketsServer();
         this.setTitle("uav3i - Veto WebSocket");
         break;
       default:
@@ -192,15 +188,36 @@ public class Veto extends JFrame
     Animator.go();
 
     this.setLocationRelativeTo(null);
+
+    switch (UAV3iSettings.getMode())
+    {
+      case VETO:
+      case VETO_AUTO:
+        try
+        {
+          new com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher();
+        }
+        catch (RemoteException | IvyException | NotBoundException e)
+        {
+          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+          //e.printStackTrace();
+        }
+        break;
+      case VETO_WEBSOCKET:
+        try
+        {
+          new com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterLauncher();
+        }
+        catch (DeploymentException e)
+        {
+          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+          //e.printStackTrace();
+        }
+      default:
+        break;
+    }
+
     
-    try
-    {
-      new PaparazziTransmitterLauncher();
-    }
-    catch (RemoteException | IvyException | NotBoundException e)
-    {
-      e.printStackTrace();
-    }
     this.setLocationRelativeTo(null);
 
     frame = this;
@@ -242,29 +259,6 @@ public class Veto extends JFrame
                                                  JOptionPane.WARNING_MESSAGE);
     if(response == 0)
       System.exit(0);
-  }
-  //-----------------------------------------------------------------------------
-  public void startWebSocketsServer()
-  {
-    Class<?>[] endpoints =
-    {
-      ConfigServerEndpoint.class
-    };
-    
-    Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address
-                               UAV3iSettings.getVetoServerPort(), // port
-                               "/berisuas",                       // context path
-                               null,                              // properties
-                               endpoints);                        // endpoint(s)
-    try
-    {
-      server.start();
-    }
-    catch (DeploymentException e)
-    {
-      LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-      e.printStackTrace();
-    }
   }
   //-----------------------------------------------------------------------------
 }
