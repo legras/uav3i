@@ -43,26 +43,11 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
     // TODO le fichier XML des messages Ivy ne doit être utilsé que côté serveur... à confirmer !
     config.getConfig("ivy_messages");
     
-//    CircleMnvrDTO c = new CircleMnvrDTO(7, new LatLng(0, 0), 12);
-//    try
-//    {
-//      paparazziTransmitterCommunicate.communicateManoeuver(c);
-//    }
-//    catch (EncodeException e)
-//    {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    }
+    CircleMnvrDTO c = new CircleMnvrDTO(7, new LatLng(0, 0), 12);
+    communicateManoeuver(c);
+//    executeManoeuver(7);
+//    clearManoeuver();
     
-    try
-    {
-      paparazziTransmitterExecute.executeManoeuver(7);
-    }
-    catch (EncodeException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -83,6 +68,14 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
   @Override
   public void executeManoeuver(int idMnvr)
   {
+    try
+    {
+      paparazziTransmitterExecute.executeManoeuver(idMnvr);
+    }
+    catch (IOException | EncodeException e)
+    {
+      e.printStackTrace();
+    }
     
     //LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
   }
@@ -96,6 +89,14 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
   @Override
   public void clearManoeuver()
   {
+    try
+    {
+      paparazziTransmitterClear.clearManoeuver();
+    }
+    catch (IOException | EncodeException e)
+    {
+      e.printStackTrace();
+    }
   }
   //-----------------------------------------------------------------------------
 }

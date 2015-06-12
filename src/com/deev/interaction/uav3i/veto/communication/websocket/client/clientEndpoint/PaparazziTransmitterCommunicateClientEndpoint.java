@@ -18,11 +18,11 @@ import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder2;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder2;
 
-@ClientEndpoint(decoders = ManoeuverDTODecoder.class,
-                encoders = ManoeuverDTOEncoder.class)
+@ClientEndpoint(decoders = ManoeuverDTODecoder2.class,
+                encoders = ManoeuverDTOEncoder2.class)
 public class PaparazziTransmitterCommunicateClientEndpoint
 {
   //-----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ public class PaparazziTransmitterCommunicateClientEndpoint
   //-----------------------------------------------------------------------------
   public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws IOException, EncodeException
   {
-    session.getBasicRemote().sendObject(mnvrDTO);;
+    session.getBasicRemote().sendObject(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
   @OnClose

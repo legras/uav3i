@@ -4,12 +4,12 @@ import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
 
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder2;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder2;
 
 @ServerEndpoint(value    = "/PaparazziTransmitterCommunicate",
-                decoders = ManoeuverDTODecoder.class,
-                encoders = ManoeuverDTOEncoder.class)
+                decoders = ManoeuverDTODecoder2.class,
+                encoders = ManoeuverDTOEncoder2.class)
 public class PaparazziTransmitterCommunicateServerEndpoint
 {
   //-----------------------------------------------------------------------------

@@ -42,7 +42,7 @@ public class PaparazziTransmitterClearClientEndpoint
     this.session = session;
   }
   //-----------------------------------------------------------------------------
-  public void clear() throws IOException, EncodeException
+  public void clearManoeuver() throws IOException, EncodeException
   {
     session.getBasicRemote().sendText("");
   }
