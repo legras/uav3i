@@ -12,7 +12,7 @@ import javax.xml.bind.JAXB;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.Field;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.Message;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.MsgClass;
