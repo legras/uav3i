@@ -17,6 +17,7 @@ public class PaparazziTransmitterCommunicateServerEndpoint
   public void receive(ManoeuverDTO mnvrDTO)
   {
     System.out.println("####### PaparazziTransmitterServerEndpoint.receive(" + mnvrDTO + ")");
+    System.out.println("          ---> manoeuver is a " + mnvrDTO.getClass().getSimpleName());
   }
   //-----------------------------------------------------------------------------
 }
