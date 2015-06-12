@@ -251,11 +251,11 @@ public class Veto extends JFrame
       ConfigServerEndpoint.class
     };
     
-    Server server = new Server("localhost", // hostname
-                               8000,          // port
-                               "/berisuas", // context path
-                               null,        // properties
-                               endpoints);  // endpoint(s)
+    Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address
+                               UAV3iSettings.getVetoServerPort(), // port
+                               "/berisuas",                       // context path
+                               null,                              // properties
+                               endpoints);                        // endpoint(s)
     try
     {
       server.start();
