@@ -53,6 +53,7 @@ public class Launcher
 				break;
 			case PAPARAZZI_DIRECT:
 			case PAPARAZZI_REMOTE:
+			case PAPARAZZI_WEBSOCKET:
 				UAVModel.initialize();
 				VideoModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()

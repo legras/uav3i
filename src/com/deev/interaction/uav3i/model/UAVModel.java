@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+
+import javax.websocket.DeploymentException;
 
 import uk.me.jstott.jcoord.LatLng;
 
@@ -24,6 +27,7 @@ import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.direct.PaparazziDirectCommunication;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziRemoteCommunication;
+import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziWebsocketCommunication;
 
 public class UAVModel
 {
@@ -120,9 +124,20 @@ public class UAVModel
 			}
 			catch (RemoteException e)
 			{
-				e.printStackTrace();
+			  LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+				//e.printStackTrace();
 			}
 			break;
+		case PAPARAZZI_WEBSOCKET:
+        try
+        {
+          paparazziCommunication = new PaparazziWebsocketCommunication();
+        }
+        catch (DeploymentException | IOException | URISyntaxException e)
+        {
+          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+          //e.printStackTrace();
+        }
 		default:
 			break;
 		}

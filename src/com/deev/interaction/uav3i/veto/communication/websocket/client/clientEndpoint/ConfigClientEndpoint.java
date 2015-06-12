@@ -39,9 +39,16 @@ public class ConfigClientEndpoint
     this.session = session;
   }
   //-----------------------------------------------------------------------------
+  public void getConfig(String which) throws IOException
+  {
+    session.getBasicRemote().sendText(which);
+    LoggerUtil.LOG.log(Level.INFO, "config: " + which + "asked.");
+  }
+  //-----------------------------------------------------------------------------
   @OnMessage
   public void onMessage(String receivedConfig) throws IOException
   {
+    System.out.println(receivedConfig);
   }
   //-----------------------------------------------------------------------------
   @OnClose
