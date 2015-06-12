@@ -1,5 +1,6 @@
 package com.deev.interaction.uav3i.veto.communication.websocket;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,7 +14,9 @@ import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.ConfigClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
@@ -44,7 +47,11 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
     config.getConfig("ivy_messages");
     
     CircleMnvrDTO c = new CircleMnvrDTO(7, new LatLng(0, 0), 12);
+    LineMnvrDTO   l = new LineMnvrDTO(12, new LatLng(10, 10), new LatLng(20, 20), 14, new Point2D.Double(-1,-1), new Point2D.Double(-7,-7));
+    BoxMnvrDTO    b = new BoxMnvrDTO(21, new LatLng(30, 30), new LatLng(40, 40), true);
     communicateManoeuver(c);
+    communicateManoeuver(l);
+    communicateManoeuver(b);
 //    executeManoeuver(7);
 //    clearManoeuver();
     
