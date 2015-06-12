@@ -10,12 +10,15 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.websocket.DeploymentException;
 
+import org.glassfish.tyrus.server.Server;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
@@ -26,12 +29,12 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
-import com.deev.interaction.uav3i.ui.maps.UAVScope;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher;
+import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.ConfigServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 
@@ -60,10 +63,18 @@ public class Veto extends JFrame
   {
     super();
     
-    if(UAV3iSettings.getMode() == Mode.VETO)
-      this.setTitle("uav3i - Veto");
-    else
-      this.setTitle("uav3i - Veto (automatic mode)");
+    switch (UAV3iSettings.getMode())
+    {
+      case VETO:
+        this.setTitle("uav3i - Veto");
+        break;
+      case VETO_WEBSOCKET:
+        startWebSocketsServer();
+        this.setTitle("uav3i - Veto WebSocket");
+        break;
+      default:
+        this.setTitle("uav3i - Veto (automatic mode)");
+    }
     
     Dimension screenDimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     initialDimension = new Dimension((int) (screenDimension.getWidth() * 3/4),
@@ -231,6 +242,28 @@ public class Veto extends JFrame
                                                  JOptionPane.WARNING_MESSAGE);
     if(response == 0)
       System.exit(0);
+  }
+  //-----------------------------------------------------------------------------
+  public void startWebSocketsServer()
+  {
+    Class<?>[] endpoints =
+    {
+      ConfigServerEndpoint.class
+    };
+    
+    Server server = new Server("localhost", // hostname
+                               80,          // port
+                               "/berisuas", // context path
+                               null,        // properties
+                               endpoints);  // endpoint(s)
+    try
+    {
+      server.start();
+    }
+    catch (DeploymentException e)
+    {
+      LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+    }
   }
   //-----------------------------------------------------------------------------
 }

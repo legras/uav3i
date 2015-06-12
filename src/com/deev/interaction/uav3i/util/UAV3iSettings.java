@@ -9,8 +9,17 @@ public class UAV3iSettings
   //-----------------------------------------------------------------------------
   private static Properties props;
   //public static enum Mode    { REPLAY, IVY }
-  public  static enum Mode    { REPLAY, PAPARAZZI_DIRECT, PAPARAZZI_REMOTE, VETO, VETO_AUTO }
-  public  static enum MapType { MAPNIK, BING_AERIAL, OSM_CYCLE_MAP, OFF_LINE }
+  public  static enum Mode    { REPLAY,
+                                PAPARAZZI_DIRECT, 
+                                PAPARAZZI_REMOTE, 
+                                PAPARAZZI_WEBSOCKET, 
+                                VETO, 
+                                VETO_AUTO, 
+                                VETO_WEBSOCKET }
+  public  static enum MapType { MAPNIK, 
+                                BING_AERIAL, 
+                                OSM_CYCLE_MAP, 
+                                OFF_LINE }
   // Attributs fréquemment lu : pour éviter la lecture du fichier à chaque fois...
   private static Mode    mode           = null;
   private static MapType mapType        = null;
@@ -34,10 +43,14 @@ public class UAV3iSettings
         mode = Mode.PAPARAZZI_DIRECT;
       else if (type.equalsIgnoreCase("paparazzi_remote"))
         mode = Mode.PAPARAZZI_REMOTE;
+      else if (type.equalsIgnoreCase("paparazzi_websocket"))
+        mode = Mode.PAPARAZZI_WEBSOCKET;
       else if (type.equalsIgnoreCase("veto"))
         mode = Mode.VETO;
       else if (type.equalsIgnoreCase("veto_auto"))
         mode = Mode.VETO_AUTO;
+      else if (type.equalsIgnoreCase("veto_websocket"))
+        mode = Mode.VETO_WEBSOCKET;
 
       else
         mode = null;
