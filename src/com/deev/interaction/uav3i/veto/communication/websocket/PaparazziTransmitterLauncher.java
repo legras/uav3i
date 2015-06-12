@@ -6,7 +6,7 @@ import org.glassfish.tyrus.server.Server;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.ConfigServerEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.PaparazziTransmitterServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.PaparazziTransmitterCommunicateServerEndpoint;
 
 public class PaparazziTransmitterLauncher
 {
@@ -16,7 +16,7 @@ public class PaparazziTransmitterLauncher
     Class<?>[] endpoints =
     {
       ConfigServerEndpoint.class,
-      PaparazziTransmitterServerEndpoint.class
+      PaparazziTransmitterCommunicateServerEndpoint.class
     };
     
     Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address
