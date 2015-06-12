@@ -252,7 +252,7 @@ public class Veto extends JFrame
     };
     
     Server server = new Server("localhost", // hostname
-                               80,          // port
+                               8000,          // port
                                "/berisuas", // context path
                                null,        // properties
                                endpoints);  // endpoint(s)
@@ -263,6 +263,7 @@ public class Veto extends JFrame
     catch (DeploymentException e)
     {
       LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+      e.printStackTrace();
     }
   }
   //-----------------------------------------------------------------------------
