@@ -66,15 +66,6 @@ public class FlightPlanFacade
      processBlocks();
      LoggerUtil.LOG.config("Flight plan: blocks recovered");
      processStartPoint();
-     
-//     // Affichage des waypoints
-//     for(int i=0;i<waypoints.size(); i++)
-//       System.out.println("Waypoint [" + i + "] : " + waypoints.get(i).getName());
-//
-//     // Affichage des blocks
-//     for(int i=0;i<blocks.size(); i++)
-//       System.out.println("Block [" + i + "] : " + blocks.get(i).getName());
-//     System.out.println();
     }
     catch (FileNotFoundException e)
     {

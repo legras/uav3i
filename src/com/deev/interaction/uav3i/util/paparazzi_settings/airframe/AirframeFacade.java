@@ -3,14 +3,13 @@ package com.deev.interaction.uav3i.util.paparazzi_settings.airframe;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.bind.JAXB;
 
-
-
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.jaxb.Airframe;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.jaxb.Define;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.jaxb.Section;
@@ -32,16 +31,26 @@ public class AirframeFacade
      
      // Désérialisation dans l'arborescence de classes JAXB
      airframe = JAXB.unmarshal(xmlStream, Airframe.class);
-     
-//     wayPointsIndex = new HashMap<>();
-//     processWaypoints();
-//     blocksIndex = new HashMap<>();
-//     processBlocks();
+     LoggerUtil.LOG.config("Airframe: fields recovered");
     }
     catch (FileNotFoundException e)
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  private AirframeFacade(String airframeXML)
+  {
+    StringReader reader = new StringReader(airframeXML);
+    // Désérialisation dans l'arborescence de classes JAXB
+    airframe = JAXB.unmarshal(reader, Airframe.class);
+    LoggerUtil.LOG.config("Airframe: fields recovered");
+  }
+  //-----------------------------------------------------------------------------
+  public static void init(String airframeXML)
+  {
+    instance = new AirframeFacade(airframeXML);
+    System.out.println("AirframeFacade.init() : instance de AirframeFacade OK" );
   }
   //-----------------------------------------------------------------------------
   public double getDefaultCircleRadius()

@@ -18,7 +18,9 @@ import javax.websocket.Session;
 import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
+import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
 
 @ClientEndpoint
 public class ConfigClientEndpoint
@@ -59,6 +61,12 @@ public class ConfigClientEndpoint
       {
         case "flight_plan":
           FlightPlanFacade.init(config);
+          break;
+        case "airframe":
+          AirframeFacade.init(config);
+          break;
+        case "ivy_messages":
+          IvyMessagesFacade.init(config);
           break;
         default:
           break;

@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.xml.bind.JAXB;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.Field;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.Message;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.jaxb.MsgClass;
@@ -40,12 +42,34 @@ public class IvyMessagesFacade
       protocol = JAXB.unmarshal(xmlStream, Protocol.class);
       fieldsIndexByMessage = new HashMap<>();
       processMessages();
-      LoggerUtil.LOG.config("Messages: fields recovered");
+      LoggerUtil.LOG.config("Ivy Messages: fields recovered");
     }
     catch (FileNotFoundException e)
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  private IvyMessagesFacade(String ivyMessagesXML)
+  {
+    try
+    {
+      StringReader reader = new StringReader(ivyMessagesXML);
+      // Désérialisation dans l'arborescence de classes JAXB
+      protocol = JAXB.unmarshal(reader, Protocol.class);
+      fieldsIndexByMessage = new HashMap<>();
+      processMessages();
+      LoggerUtil.LOG.config("Ivy Messages: fields recovered");
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  public static void init(String ivyMessagesXML)
+  {
+    instance = new IvyMessagesFacade(ivyMessagesXML);
   }
   //-----------------------------------------------------------------------------
   /**
