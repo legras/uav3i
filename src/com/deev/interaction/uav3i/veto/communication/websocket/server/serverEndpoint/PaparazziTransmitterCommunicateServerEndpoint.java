@@ -3,9 +3,11 @@ package com.deev.interaction.uav3i.veto.communication.websocket.server.serverEnd
 import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
 
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
+import com.deev.interaction.uav3i.veto.ui.Veto;
 
 @ServerEndpoint(value    = "/PaparazziTransmitterCommunicate",
                 decoders = ManoeuverDTODecoder.class,
@@ -16,8 +18,9 @@ public class PaparazziTransmitterCommunicateServerEndpoint
   @OnMessage
   public void receive(ManoeuverDTO mnvrDTO)
   {
-    System.out.println("####### PaparazziTransmitterServerEndpoint.receive(" + mnvrDTO + ")");
-    System.out.println("          ---> manoeuver is a " + mnvrDTO.getClass().getSimpleName());
+    LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
+    Veto.getSymbolMapVeto().addManoeuver(mnvrDTO);
+    Veto.centerManoeuverOnMap(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
 }
