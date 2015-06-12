@@ -29,7 +29,7 @@ public class ConfigServerEndpoint
         filename = UAV3iSettings.getPaparazziIvyMessages();
         break;
     }
-    String content = "";
+    String content = which + "|";
     Scanner scanner = new Scanner(new File(filename));
     while(scanner.hasNext())
       content += scanner.nextLine();

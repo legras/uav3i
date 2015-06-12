@@ -2,21 +2,23 @@ package com.deev.interaction.uav3i.veto.communication.websocket.client.clientEnd
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.CloseReason.CloseCodes;
 
 import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 
 @ClientEndpoint
 public class ConfigClientEndpoint
@@ -48,6 +50,21 @@ public class ConfigClientEndpoint
   @OnMessage
   public void onMessage(String receivedConfig) throws IOException
   {
+    StringTokenizer st = new StringTokenizer(receivedConfig,"|");
+    String which = st.nextToken();
+    if(st.hasMoreTokens())
+    {
+      String config = st.nextToken();
+      switch (which)
+      {
+        case "flight_plan":
+          FlightPlanFacade.init(config);
+          break;
+        default:
+          break;
+      }
+    }
+
     System.out.println(receivedConfig);
   }
   //-----------------------------------------------------------------------------

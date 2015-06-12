@@ -81,6 +81,26 @@ public class FlightPlanFacade
     }
   }
   //-----------------------------------------------------------------------------
+  private FlightPlanFacade(String flightPlanXML)
+  {
+    // Désérialisation dans l'arborescence de classes JAXB
+    flightPlan = JAXB.unmarshal(flightPlanXML, FlightPlan.class);
+    
+    LoggerUtil.LOG.config("Flight plan: " + flightPlan.getName());
+    wayPointsIndex = new HashMap<>();
+    processWaypoints();
+    LoggerUtil.LOG.config("Flight plan: waypoints recovered");
+    blocksIndex = new HashMap<>();
+    processBlocks();
+    LoggerUtil.LOG.config("Flight plan: blocks recovered");
+    processStartPoint();
+  }
+  //-----------------------------------------------------------------------------
+  public static void init(String flightPlanXML)
+  {
+    instance = new FlightPlanFacade(flightPlanXML);
+  }
+  //-----------------------------------------------------------------------------
   /**
    * Pattern Singleton : la méthode renvoie l'unique instance de {@link FlightPlanFacade}.
    * @return l'instance de <code>FlightPlanFacade</code>.

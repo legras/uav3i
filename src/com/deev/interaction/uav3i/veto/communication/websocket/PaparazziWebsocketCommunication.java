@@ -19,7 +19,9 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
   {
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";
     ConfigClientEndpoint config = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
-    config.getConfig("flight_plan");
+//    config.getConfig("flight_plan");
+//    config.getConfig("airframe");
+    config.getConfig("ivy_messages");
   }
   //-----------------------------------------------------------------------------
   @Override
