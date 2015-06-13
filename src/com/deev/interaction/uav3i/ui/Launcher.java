@@ -53,7 +53,6 @@ public class Launcher
 				break;
 			case PAPARAZZI_DIRECT:
 			case PAPARAZZI_REMOTE:
-			case PAPARAZZI_WEBSOCKET:
 				UAVModel.initialize();
 				VideoModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()
@@ -69,8 +68,6 @@ public class Launcher
 				});
 				break;
 			case VETO:
-			case VETO_AUTO:
-			case VETO_WEBSOCKET:
 			  // TODO À tester : l'initialisation d'UAVModel se faisait auparavant dans le contructeur de PaparazziTransmitterImpl. Remis ici pour être conforme au lancement des autres modes.
         UAVModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()

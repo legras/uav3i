@@ -8,7 +8,7 @@ import java.rmi.registry.Registry;
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
+import com.deev.interaction.uav3i.util.UAV3iSettings.VetoMode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -79,13 +79,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     {
       if(mDTO.getId() == idMnvr)
       {
-        if(UAV3iSettings.getMode() == Mode.VETO)
+        if(UAV3iSettings.getVetoMode() == VetoMode.MANUEL)
         {
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
           mDTO.addButtons();
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
         }
-        else if(UAV3iSettings.getMode() == Mode.VETO_AUTO)
+        else if(UAV3iSettings.getVetoMode() == VetoMode.AUTOMATIC)
         {
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
           // On transmet à la table le résultat de l'évaluation de la manoeuvre

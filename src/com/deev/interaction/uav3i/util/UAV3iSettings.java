@@ -8,22 +8,19 @@ public class UAV3iSettings
 {
   //-----------------------------------------------------------------------------
   private static Properties props;
-  //public static enum Mode    { REPLAY, IVY }
-  public  static enum Mode    { REPLAY,
-                                PAPARAZZI_DIRECT, 
-                                PAPARAZZI_REMOTE, 
-                                PAPARAZZI_WEBSOCKET, 
-                                VETO, 
-                                VETO_AUTO, 
-                                VETO_WEBSOCKET }
-  public  static enum MapType { MAPNIK, 
-                                BING_AERIAL, 
-                                OSM_CYCLE_MAP, 
-                                OFF_LINE }
+
+  //public  static enum Mode       { REPLAY, PAPARAZZI_DIRECT,  PAPARAZZI_REMOTE,  PAPARAZZI_WEBSOCKET,  VETO,  VETO_AUTO,  VETO_WEBSOCKET }
+  public  static enum Mode       { REPLAY, PAPARAZZI_DIRECT,  PAPARAZZI_REMOTE,  VETO }
+  public  static enum RemoteType { RMI, WEBSOCKET }
+  public  static enum VetoMode   { MANUEL, AUTOMATIC }
+  public  static enum MapType    { MAPNIK, BING_AERIAL,  OSM_CYCLE_MAP,  OFF_LINE }
+  
   // Attributs fréquemment lu : pour éviter la lecture du fichier à chaque fois...
-  private static Mode    mode           = null;
-  private static MapType mapType        = null;
-  private static Integer trajectoryZoom = null;
+  private static Mode       mode           = null;
+  private static RemoteType remoteType     = null;
+  private static VetoMode   vetoMode       = null;
+  private static MapType    mapType        = null;
+  private static Integer    trajectoryZoom = null;
   //-----------------------------------------------------------------------------
   static
   {
@@ -36,40 +33,63 @@ public class UAV3iSettings
   {
     if(mode == null)
     {
-      String type = props.getProperty("MODE");
-      if (type.equalsIgnoreCase("replay"))
+      String value = props.getProperty("MODE");
+      if (value.equalsIgnoreCase("replay"))
         mode = Mode.REPLAY;
-      else if (type.equalsIgnoreCase("paparazzi_direct"))
+      else if (value.equalsIgnoreCase("paparazzi_direct"))
         mode = Mode.PAPARAZZI_DIRECT;
-      else if (type.equalsIgnoreCase("paparazzi_remote"))
+      else if (value.equalsIgnoreCase("paparazzi_remote"))
         mode = Mode.PAPARAZZI_REMOTE;
-      else if (type.equalsIgnoreCase("paparazzi_websocket"))
-        mode = Mode.PAPARAZZI_WEBSOCKET;
-      else if (type.equalsIgnoreCase("veto"))
+      else if (value.equalsIgnoreCase("veto"))
         mode = Mode.VETO;
-      else if (type.equalsIgnoreCase("veto_auto"))
-        mode = Mode.VETO_AUTO;
-      else if (type.equalsIgnoreCase("veto_websocket"))
-        mode = Mode.VETO_WEBSOCKET;
-
       else
         mode = null;
     }
     return mode;
   }
   //-----------------------------------------------------------------------------
+  public static RemoteType getRemoteType()
+  {
+    if(remoteType == null)
+    {
+      String value = props.getProperty("REMOTE_TYPE");
+      if(value.equalsIgnoreCase("rmi"))
+        remoteType = RemoteType.RMI;
+      else if(value.equalsIgnoreCase("websocket"))
+        remoteType = RemoteType.WEBSOCKET;
+      else
+        remoteType = null;
+    }
+    return remoteType;
+  }
+  //-----------------------------------------------------------------------------
+  public static VetoMode getVetoMode()
+  {
+    if(vetoMode == null)
+    {
+      String value = props.getProperty("VETO_MODE");
+      if (value.equalsIgnoreCase("manuel"))
+        vetoMode = VetoMode.MANUEL;
+      else if (value.equalsIgnoreCase("automatic"))
+        vetoMode = VetoMode.AUTOMATIC;
+      else
+        vetoMode = null;
+    }
+    return vetoMode;
+  }
+  //-----------------------------------------------------------------------------
   public static MapType getMapType()
   {
     if(mapType == null)
     {
-      String type = props.getProperty("MAP_TYPE");
-      if (type.equalsIgnoreCase("mapnik"))
+      String value = props.getProperty("MAP_TYPE");
+      if (value.equalsIgnoreCase("mapnik"))
         mapType = MapType.MAPNIK;
-      else if (type.equalsIgnoreCase("bing_aerial"))
+      else if (value.equalsIgnoreCase("bing_aerial"))
         mapType = MapType.BING_AERIAL;
-      else if (type.equalsIgnoreCase("osm_cycle_map"))
+      else if (value.equalsIgnoreCase("osm_cycle_map"))
         mapType = MapType.OSM_CYCLE_MAP;
-      else if (type.equalsIgnoreCase("off_line"))
+      else if (value.equalsIgnoreCase("off_line"))
         mapType = MapType.OFF_LINE;
       else
         return null;
@@ -85,6 +105,7 @@ public class UAV3iSettings
     else
       return domainBus;
   }
+  //-----------------------------------------------------------------------------
   public static int getTrajectoryZoom()
   {
     if(trajectoryZoom == null)

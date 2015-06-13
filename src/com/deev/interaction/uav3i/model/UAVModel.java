@@ -21,6 +21,7 @@ import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
+import com.deev.interaction.uav3i.util.UAV3iSettings.RemoteType;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
@@ -118,17 +119,20 @@ public class UAVModel
 			paparazziCommunication = new PaparazziDirectCommunication();
 			break;
 		case PAPARAZZI_REMOTE:
-			try
-			{
-				paparazziCommunication = new PaparazziRemoteCommunication();
-			}
-			catch (RemoteException e)
-			{
-			  LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-				//e.printStackTrace();
-			}
-			break;
-		case PAPARAZZI_WEBSOCKET:
+		  if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+		  {
+	      try
+	      {
+	        paparazziCommunication = new PaparazziRemoteCommunication();
+	      }
+	      catch (RemoteException e)
+	      {
+	        LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+	        //e.printStackTrace();
+	      }
+		  }
+		  else if(UAV3iSettings.getRemoteType() == RemoteType.WEBSOCKET)
+		  {
         try
         {
           paparazziCommunication = new PaparazziWebsocketCommunication();
@@ -138,6 +142,8 @@ public class UAVModel
           LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
           //e.printStackTrace();
         }
+		  }
+			break;
 		default:
 			break;
 		}

@@ -82,7 +82,6 @@ public class UAVFlightParamsListener extends UAVListener
         LoggerUtil.LOG.info("Flight params : altitude = " + altitude + " / ground altitude = " + groundAltitude + " / vertical speed = " + verticalSpeed + " / ground speed = " + groundSpeed);
         break;
       case VETO:
-      case VETO_AUTO:
         // On transmet via RMI à l'IHM table tactile la position du drone.
         if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
         {

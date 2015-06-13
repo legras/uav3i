@@ -6,7 +6,6 @@ import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class Uav3iTransmitterImpl implements IUav3iTransmitter
 {

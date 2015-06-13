@@ -63,7 +63,6 @@ public class UAVWayPointsListener extends UAVListener
         UAVModel.getWayPoints().updateWayPoint(wayPoint);
         break;
       case VETO:
-      case VETO_AUTO:
         if(UAVModel.getWayPoints().updateWayPoint(wayPoint))  // Mise à jour côté Veto lors du test
         {
           if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)

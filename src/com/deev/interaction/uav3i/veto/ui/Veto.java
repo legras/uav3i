@@ -29,6 +29,8 @@ import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.ComponentLayer;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.RemoteType;
+import com.deev.interaction.uav3i.util.UAV3iSettings.VetoMode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
@@ -59,19 +61,12 @@ public class Veto extends JFrame
   public Veto()
   {
     super();
-    
-    switch (UAV3iSettings.getMode())
-    {
-      case VETO:
-        this.setTitle("uav3i - Veto");
-        break;
-      case VETO_WEBSOCKET:
-        this.setTitle("uav3i - Veto WebSocket");
-        break;
-      default:
-        this.setTitle("uav3i - Veto (automatic mode)");
-    }
-    
+
+    if(UAV3iSettings.getVetoMode() == VetoMode.MANUEL)
+      this.setTitle("uav3i - Veto");
+    else if(UAV3iSettings.getVetoMode() == VetoMode.AUTOMATIC)
+      this.setTitle("uav3i - Veto (automatic mode)");
+      
     Dimension screenDimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     initialDimension = new Dimension((int) (screenDimension.getWidth() * 3/4),
                                      (int) (screenDimension.getHeight() * 3/4));
@@ -192,27 +187,31 @@ public class Veto extends JFrame
     switch (UAV3iSettings.getMode())
     {
       case VETO:
-      case VETO_AUTO:
-        try
+        if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
         {
-          new com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher();
+          try
+          {
+            new com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher();
+          }
+          catch (RemoteException | IvyException | NotBoundException e)
+          {
+            LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+            //e.printStackTrace();
+          }
         }
-        catch (RemoteException | IvyException | NotBoundException e)
+        else if(UAV3iSettings.getRemoteType() == RemoteType.WEBSOCKET)
         {
-          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-          //e.printStackTrace();
+          try
+          {
+            new com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterLauncher();
+          }
+          catch (DeploymentException e)
+          {
+            LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+            //e.printStackTrace();
+          }
         }
         break;
-      case VETO_WEBSOCKET:
-        try
-        {
-          new com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterLauncher();
-        }
-        catch (DeploymentException e)
-        {
-          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-          //e.printStackTrace();
-        }
       default:
         break;
     }

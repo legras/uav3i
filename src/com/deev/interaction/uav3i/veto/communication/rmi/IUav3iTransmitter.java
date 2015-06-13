@@ -4,7 +4,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import com.deev.interaction.uav3i.model.UAVWayPoint;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public interface IUav3iTransmitter extends Remote
 {
