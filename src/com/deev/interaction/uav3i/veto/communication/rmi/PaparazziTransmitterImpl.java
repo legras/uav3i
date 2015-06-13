@@ -17,11 +17,11 @@ import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVNavStatusListener;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListenerRotorcraft;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVWayPointsListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVNavStatusListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListenerRotorcraft;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 

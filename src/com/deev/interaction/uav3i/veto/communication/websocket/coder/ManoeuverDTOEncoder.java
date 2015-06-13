@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.communication.dto;
+package com.deev.interaction.uav3i.veto.communication.websocket.coder;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
+
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 public class ManoeuverDTOEncoder implements Encoder.BinaryStream<ManoeuverDTO>
 {

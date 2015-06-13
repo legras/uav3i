@@ -18,8 +18,8 @@ import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTODecoder;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTOEncoder;
+import com.deev.interaction.uav3i.veto.communication.websocket.coder.ManoeuverDTODecoder;
+import com.deev.interaction.uav3i.veto.communication.websocket.coder.ManoeuverDTOEncoder;;
 
 @ClientEndpoint(decoders = ManoeuverDTODecoder.class,
                 encoders = ManoeuverDTOEncoder.class)

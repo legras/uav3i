@@ -12,9 +12,9 @@ import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacad
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.uavListener.UAVWayPointsListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVWayPointsListener;
 
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;

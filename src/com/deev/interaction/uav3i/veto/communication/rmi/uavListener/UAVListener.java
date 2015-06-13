@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.communication.uavListener;
+package com.deev.interaction.uav3i.veto.communication.rmi.uavListener;
 
 import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
 
