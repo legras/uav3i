@@ -10,11 +10,23 @@ import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndp
 import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.PaparazziTransmitterCommunicateServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.PaparazziTransmitterExecuteServerEndpoint;
 
+import fr.dgac.ivy.IvyException;
+
+/**
+ * Classe instanciée côté serveur dans le cas d'une communication websocket :<br/>
+ * Elle instancie les endpoints serveurs qui se mettent en écoute de leur équivalents
+ * côté clients.
+ * 
+ * @author Philippe TANGUY (Télécom Bretagne)
+ */
 public class PaparazziTransmitterLauncher
 {
   //-----------------------------------------------------------------------------
-  public PaparazziTransmitterLauncher() throws DeploymentException
+  public PaparazziTransmitterLauncher() throws DeploymentException, IvyException
   {
+    // Lecture du fichier de configuration pour le système de logs.
+    System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
+    
     Class<?>[] endpoints =
     {
       ConfigServerEndpoint.class,
@@ -29,6 +41,8 @@ public class PaparazziTransmitterLauncher
                                null,                              // properties
                                endpoints);                        // endpoint(s)
     server.start();
+    
+    new PaparazziTransmitterWebsocket();
   }
   //-----------------------------------------------------------------------------
 }

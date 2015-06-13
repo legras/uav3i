@@ -22,6 +22,13 @@ import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndp
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
 
+/**
+ * Classe instanciée côté client dans le cas d'une communication websocket :<br/>
+ * Elle instancie les endpoints clients qui se connecteront sur leur équivalents
+ * côté serveur.
+ * 
+ * @author Philippe TANGUY (Télécom Bretagne)
+ */
 public class PaparazziWebsocketCommunication extends PaparazziCommunication
 {
   //-----------------------------------------------------------------------------

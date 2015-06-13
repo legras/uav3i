@@ -14,9 +14,13 @@ import javax.swing.SwingUtilities;
 import com.deev.interaction.touch.Animation;
 import com.deev.interaction.touch.Animator;
 import com.deev.interaction.touch.RoundButton;
+import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.UAV3iSettings.RemoteType;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterImpl;
+import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterRMIImpl;
+import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
+import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.Uav3iTransmitterServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 
@@ -74,19 +78,41 @@ public class VetoManoeuverButtons implements Animation, ActionListener
 
       if (e.getSource() == acceptButton)
       {
-        // On transmet à la table le résultat de l'évaluation de la manoeuvre
-        // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), true);
-        // On met à jour localement le statut de la manoeuvre pour mise
-        // à jour de l'affichage sur le Veto.
-        mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
-        // On lance l'exécution de la manoeuvre.
-        PaparazziTransmitterImpl.getInstance().startManoeuver(mnvrDTO);
+        if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+        {
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre
+          // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+          PaparazziTransmitterRMIImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), true);
+          // On met à jour localement le statut de la manoeuvre pour mise
+          // à jour de l'affichage sur le Veto.
+          mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+          // On lance l'exécution de la manoeuvre.
+          PaparazziTransmitterRMIImpl.getInstance().startManoeuver(mnvrDTO);
+        }
+        else if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+        {
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre
+          // par l'opérateur Paparazzi pour mise à jour de l'affichage.
+          Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), true);
+          // On met à jour localement le statut de la manoeuvre pour mise
+          // à jour de l'affichage sur le Veto.
+          mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
+          // On lance l'exécution de la manoeuvre.
+          PaparazziTransmitterWebsocket.getInstance().startManoeuver(mnvrDTO);
+        }
       }
       else if(e.getSource() == refuseButton)
       {
-        // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
-        PaparazziTransmitterImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), false);
+        if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+        {
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
+          PaparazziTransmitterRMIImpl.getInstance().getUav3iTransmitter().resultAskExecution(mnvrDTO.getId(), false);
+        }
+        else if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+        {
+          // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
+          Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), false);
+        }
         // On met à jour localement le statut de la manoeuvre pour mise
         // à jour de l'affichage sur le Veto.
         mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.REFUSED);

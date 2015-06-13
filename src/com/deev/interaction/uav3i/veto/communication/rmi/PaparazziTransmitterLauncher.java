@@ -114,7 +114,7 @@ public class PaparazziTransmitterLauncher
     // Enregistrement de la partie serveur : uav3i pourra se connecter à PaparazziTransmitter
     int portNumber = UAV3iSettings.getVetoServerPort();
     Registry localRegistry = LocateRegistry.createRegistry(portNumber);
-    IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(PaparazziTransmitterImpl.getInstance(),
+    IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(PaparazziTransmitterRMIImpl.getInstance(),
                                                                                               portNumber);
     localRegistry.rebind(UAV3iSettings.getVetoServerServiceName(), skeleton);
     LoggerUtil.LOG.info(UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");

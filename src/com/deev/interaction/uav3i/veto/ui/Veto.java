@@ -205,7 +205,7 @@ public class Veto extends JFrame
           {
             new com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterLauncher();
           }
-          catch (DeploymentException e)
+          catch (DeploymentException | IvyException e)
           {
             LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
             //e.printStackTrace();

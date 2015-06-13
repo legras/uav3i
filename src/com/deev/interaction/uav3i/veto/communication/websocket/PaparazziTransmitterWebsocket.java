@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.communication.rmi;
+package com.deev.interaction.uav3i.veto.communication.websocket;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,56 +17,78 @@ import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVFlightParamsListener;
-import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVNavStatusListener;
-import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListener;
-import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListenerRotorcraft;
-import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVWayPointsListener;
+import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
+import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.Uav3iTransmitterServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVFlightParamsListener;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVNavStatusListener;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListener;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListenerRotorcraft;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVWayPointsListener;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
 import fr.dgac.ivy.Ivy;
 import fr.dgac.ivy.IvyException;
 
-public class PaparazziTransmitterImpl implements IPaparazziTransmitter
+/**
+ * Classe instanciée côté serveur dans le cas d'une communication websocket :<br/>
+ * Elle reçoit les demandes en prevenance du client (uav3i/table tactile) et les
+ * relaie sur le bus Ivy afin d'être prises en comptes par Paparazzi.
+ * 
+ * @author Philippe TANGUY (Télécom Bretagne)
+ */
+public class PaparazziTransmitterWebsocket
 {
   //-----------------------------------------------------------------------------
   private        String                  applicationName = "uav3i (PT)";
   private        Ivy                     bus;
-  private static IUav3iTransmitter       uav3iTransmitter;
   private        UAVPositionListener           uavPositionListener           = null;
   private        UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
   private        UAVFlightParamsListener       uavFlightParamsListener       = null;
   private        UAVWayPointsListener          uavWayPointsListener          = null;
   private        UAVNavStatusListener          uavNavStatusListener          = null;
   
-  private static PaparazziTransmitterImpl instance;
+  private static PaparazziTransmitterWebsocket instance;
   //-----------------------------------------------------------------------------
-  private PaparazziTransmitterImpl() throws IvyException, RemoteException
+  public PaparazziTransmitterWebsocket() throws IvyException
   {
-    super();
     initializeIvy();
-    //UAVModel.initialize();
     new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------
-  public static PaparazziTransmitterImpl getInstance() throws RemoteException, IvyException
+  public static PaparazziTransmitterWebsocket getInstance() throws IvyException
   {
     if(instance == null)
-      instance = new PaparazziTransmitterImpl();
+      instance = new PaparazziTransmitterWebsocket();
     return instance;
   }
   //-----------------------------------------------------------------------------
-  @Override
-  public void communicateManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  /**
+   * Initialize the connection to the Ivy bus.
+   * @throws IvyException 
+   */
+  private void initializeIvy() throws IvyException
+  {
+    // initialization, name and ready message
+    bus = new Ivy(applicationName,
+                  applicationName + " Ready",
+                  null);
+    uavPositionListener           = new UAVPositionListener();
+    uavNavStatusListener          = new UAVNavStatusListener();
+    uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
+    uavFlightParamsListener       = new UAVFlightParamsListener();
+    uavWayPointsListener          = new UAVWayPointsListener();
+    LoggerUtil.LOG.config("Ivy initialized");
+  }
+  //-----------------------------------------------------------------------------
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO)
   {
     LoggerUtil.LOG.info("communicateManoeuver("+mnvrDTO+")");
     Veto.getSymbolMapVeto().addManoeuver(mnvrDTO);
     Veto.centerManoeuverOnMap(mnvrDTO);
   }
   //-----------------------------------------------------------------------------
-  @Override
-  public void executeManoeuver(int idMnvr) throws RemoteException
+  public void executeManoeuver(int idMnvr)
   {
     // Comme les boutons ne sont pas 'Serializable' (et qu'on n'en a rien à
     // faire côté table), on les ajoute sur la manoeuvre une fois qu'elle
@@ -90,7 +112,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-          instance.getUav3iTransmitter().resultAskExecution(idMnvr, true);
+          Uav3iTransmitterServerEndpoint.resultAskExecution(idMnvr, true);
           // On met à jour localement le statut de la manoeuvre pour mise
           // à jour de l'affichage sur le Veto.
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
@@ -103,7 +125,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + idMnvr));
   }
   //-----------------------------------------------------------------------------
-  public void startManoeuver(ManoeuverDTO mnvrDTO) throws RemoteException
+  public void startManoeuver(ManoeuverDTO mnvrDTO)
   {
     switch (mnvrDTO.getClass().getSimpleName())
     {
@@ -149,71 +171,13 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
     
   }
   //-----------------------------------------------------------------------------
-  @Override
-  public void clearManoeuver() throws RemoteException
+  public void clearManoeuver()
   {
     LoggerUtil.LOG.info("clearManoeuver()");
     Veto.getSymbolMapVeto().clearManoeuver();
   }
   //-----------------------------------------------------------------------------
-  /**
-   * Initialize the connection to the Ivy bus.
-   * @throws IvyException 
-   */
-  private void initializeIvy() throws IvyException
-  {
-    // initialization, name and ready message
-    bus = new Ivy(applicationName,
-                  applicationName + " Ready",
-                  null);
-    uavPositionListener           = new UAVPositionListener();
-    uavNavStatusListener          = new UAVNavStatusListener();
-    uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
-    uavFlightParamsListener       = new UAVFlightParamsListener();
-    uavWayPointsListener          = new UAVWayPointsListener();
-    LoggerUtil.LOG.config("Ivy initialized");
-  }
-  //-----------------------------------------------------------------------------
-  private void setNavRadius(double radius) throws RemoteException
-  {
-    // Exemple : dl DL_SETTING 5 6 1000.000000
-    // Que veux dire le 6 ?
-//    sendMsg("dl DL_SETTING 5 6 " + radius);
-    
-    // Exemple (rotorcraft) : dl DL_SETTING 202 26 34.500000
-    sendMsg("dl DL_SETTING 202 26 " + radius);
-    LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
-  }
-  //-----------------------------------------------------------------------------
-  private void moveWayPoint(String waypointName, LatLng coordinate) throws RemoteException
-  {
-//    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
-
-    // Exemple (rotorcraft) : gcs MOVE_WAYPOINT 202 6 48.3591789 -4.5730567 152.000071
-    sendMsg("gcs MOVE_WAYPOINT 202 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 150.000000");
-    LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
-  }
-  //-----------------------------------------------------------------------------
-  private void jumpToBlock(String blockName) throws RemoteException
-  {
-//    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
-    // Exemple (rotorcraft) : gcs JUMP_TO_BLOCK 202 8
-    sendMsg("gcs JUMP_TO_BLOCK 202 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
-    LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
-  }
-  //-----------------------------------------------------------------------------
-  /**
-   * Envoi du message sur le bus Ivy.
-   * @param message message à envoyer.
-   */
-  private void sendMsg(String message)
-  {
-    try { bus.sendMsg(message); }
-    catch (IvyException e) { e.printStackTrace(); }
-  }
-  //-----------------------------------------------------------------------------
-  @Override
-  public void register(String uav3iHostname, int uav3iPort)  throws RemoteException
+  public void register()
   {
     try
     {
@@ -225,22 +189,8 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       e1.printStackTrace();
     }
 
-    LoggerUtil.LOG.info("Demande d'enregistrement de " + uav3iHostname + ":" + uav3iPort);
     try
     {
-      // Connexion en tant que client : PaparazziTransmitter se connecte à uav3i.
-      Registry remoteRegistry = LocateRegistry.getRegistry(uav3iHostname, uav3iPort);
-      uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
-
-      // Mise à jour du proxy dans les listeners. En cas de déconnexion/reconnexion d'uav3i,
-      // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
-      uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
-      uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
-      uavNavStatusListener.setUav3iTransmitter(uav3iTransmitter);
-      uavPositionListenerRotorcraft.setUav3iTransmitter(uav3iTransmitter);
-      uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
-      uavWayPointsListener.setUav3iTransmitter(uav3iTransmitter);
-      
       // Mise en écoute des messages GPS (version 3i)
 //      // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
@@ -257,7 +207,7 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       // Mise en écoute des messages concernant les waypoints
       bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", uavWayPointsListener);
     }
-    catch (NotBoundException | IvyException e)
+    catch (IvyException e)
     {
       LoggerUtil.LOG.severe(e.getMessage());
       e.printStackTrace();
@@ -269,14 +219,46 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
   {
     bus.stop();
     Veto.setVetoState(VetoState.IDLE);
-    uav3iTransmitter = null;
     Veto.reinit();
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");
   }
   //-----------------------------------------------------------------------------
-  public IUav3iTransmitter getUav3iTransmitter()
+  private void setNavRadius(double radius)
   {
-    return uav3iTransmitter;
+    // Exemple : dl DL_SETTING 5 6 1000.000000
+    // Que veux dire le 6 ?
+//    sendMsg("dl DL_SETTING 5 6 " + radius);
+    
+    // Exemple (rotorcraft) : dl DL_SETTING 202 26 34.500000
+    sendMsg("dl DL_SETTING 202 26 " + radius);
+    LoggerUtil.LOG.info("Message sent to Ivy bus - setNavRadius(" + radius + ")");
+  }
+  //-----------------------------------------------------------------------------
+  private void moveWayPoint(String waypointName, LatLng coordinate)
+  {
+//    sendMsg("gcs MOVE_WAYPOINT 5 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 100.000000");
+
+    // Exemple (rotorcraft) : gcs MOVE_WAYPOINT 202 6 48.3591789 -4.5730567 152.000071
+    sendMsg("gcs MOVE_WAYPOINT 202 " + FlightPlanFacade.getInstance().getWaypointsIndex(waypointName) + " " + coordinate.getLat() + " " + coordinate.getLng() + " 150.000000");
+    LoggerUtil.LOG.info("Message sent to Ivy bus - moveWayPoint(" + waypointName + ", " + coordinate + ")");
+  }
+  //-----------------------------------------------------------------------------
+  private void jumpToBlock(String blockName)
+  {
+//    sendMsg("gcs JUMP_TO_BLOCK 5 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    // Exemple (rotorcraft) : gcs JUMP_TO_BLOCK 202 8
+    sendMsg("gcs JUMP_TO_BLOCK 202 " + FlightPlanFacade.getInstance().getBlockIndex(blockName));
+    LoggerUtil.LOG.info("Message sent to Ivy bus - jumpToBlock(" + blockName + ")");
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * Envoi du message sur le bus Ivy.
+   * @param message message à envoyer.
+   */
+  private void sendMsg(String message)
+  {
+    try { bus.sendMsg(message); }
+    catch (IvyException e) { e.printStackTrace(); }
   }
   //-----------------------------------------------------------------------------
 
@@ -305,12 +287,9 @@ public class PaparazziTransmitterImpl implements IPaparazziTransmitter
       {
         try
         {
-          if(uav3iTransmitter != null)
-          {
-            uav3iTransmitter.ping();
-          }
+          Uav3iTransmitterServerEndpoint.ping();
         }
-        catch (RemoteException e)
+        catch (Exception e)
         {
           //System.out.println("####### Ping a échoué sur uav3iTransmitter");
           unRegisterUav3iTransmitter();
