@@ -12,15 +12,15 @@ import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.ConfigClientEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.ConfigClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
 
 /**
  * Classe instanciée côté client dans le cas d'une communication websocket :<br/>
@@ -29,7 +29,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndp
  * 
  * @author Philippe TANGUY (Télécom Bretagne)
  */
-public class PaparazziWebsocketCommunication extends PaparazziCommunication
+public class Client2VetoWebsocketFacade extends Client2VetoFacade
 {
   //-----------------------------------------------------------------------------
   private ConfigClientEndpoint               config;
@@ -37,7 +37,7 @@ public class PaparazziWebsocketCommunication extends PaparazziCommunication
   private PaparazziTransmitterExecuteClientEndpoint     paparazziTransmitterExecute;
   private PaparazziTransmitterClearClientEndpoint       paparazziTransmitterClear;
   //-----------------------------------------------------------------------------
-  public PaparazziWebsocketCommunication() throws DeploymentException, IOException, URISyntaxException
+  public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   {
     // Connection to server.
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";

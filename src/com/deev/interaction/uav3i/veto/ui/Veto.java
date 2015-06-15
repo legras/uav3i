@@ -191,7 +191,7 @@ public class Veto extends JFrame
         {
           try
           {
-            new com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterLauncher();
+            new com.deev.interaction.uav3i.veto.communication.rmi.Veto2ClientRMIFacade();
           }
           catch (RemoteException | IvyException | NotBoundException e)
           {
@@ -203,7 +203,7 @@ public class Veto extends JFrame
         {
           try
           {
-            new com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterLauncher();
+            new com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade();
           }
           catch (DeploymentException | IvyException e)
           {

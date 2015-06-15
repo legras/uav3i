@@ -3,7 +3,7 @@ package com.deev.interaction.uav3i.veto.communication;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
-public abstract class PaparazziCommunication
+public abstract class Client2VetoFacade
 {
   //-----------------------------------------------------------------------------
   /**

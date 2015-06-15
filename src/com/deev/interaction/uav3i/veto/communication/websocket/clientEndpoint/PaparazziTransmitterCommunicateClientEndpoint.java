@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.communication.websocket.client.clientEndpoint;
+package com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint;
 
 import java.io.IOException;
 import java.net.URI;

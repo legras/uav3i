@@ -20,7 +20,7 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterRMIImpl;
 import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
-import com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint.Uav3iTransmitterServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 

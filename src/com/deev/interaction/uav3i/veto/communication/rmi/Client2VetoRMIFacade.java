@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,12 +12,16 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.swing.JOptionPane;
+
+import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import fr.dgac.ivy.IvyException;
+import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
+import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
 /**
- * Organe de transmission, <i><b>côté Paparazzi</b></i>, des communications entre <b>uav3i</b> et <b>Paparazzi</b>.
+ * Organe de transmission, <i><b>côté uav3i</b></i>, des communications entre <b>uav3i</b> et <b>Paparazzi</b>.
  * <pre>
  * +-------+ +-----------------------+                      +--------------------------+ +--------------+     +-----------+
  * |       |-| Uav3iTransmitterImpl  |<-30001---------------|     IUav3iTransmitter    |-|              |     |           |
@@ -49,8 +54,10 @@ import fr.dgac.ivy.IvyException;
  * 
  * @author Philippe TANGUY (Télécom Bretagne)
  */
-public class PaparazziTransmitterLauncher
+public class Client2VetoRMIFacade extends Client2VetoFacade
 {
+  //-----------------------------------------------------------------------------
+  IPaparazziTransmitter paparazziTransmitter;
   //-----------------------------------------------------------------------------
   static
   {
@@ -69,11 +76,17 @@ public class PaparazziTransmitterLauncher
         private int timeout = 1000;
         public Socket createSocket(String host, int port) throws IOException
         {
-          Socket socket = new Socket();
-          socket.setSoTimeout(timeout);
-          socket.setSoLinger(false, 0);
-          socket.connect(new InetSocketAddress(host, port), timeout);
-          return socket;
+          while(true) {
+        	  try{
+        		  Socket socket = new Socket();
+                  socket.setSoTimeout(timeout);
+                  socket.setSoLinger(false, 0);
+        		  socket.connect(new InetSocketAddress(host, port), timeout);
+        		  return socket;
+        	  } catch(Exception e) {
+        		  //LoggerUtil.LOG.info("retry connection...");
+        	  }
+          }
         }
 
         public ServerSocket createServerSocket(int port) throws IOException
@@ -88,11 +101,8 @@ public class PaparazziTransmitterLauncher
     }
   }
   //-----------------------------------------------------------------------------
-  public PaparazziTransmitterLauncher() throws IvyException, RemoteException, NotBoundException
+  public Client2VetoRMIFacade() throws RemoteException
   {
-    // Lecture du fichier de configuration pour le système de logs.
-    System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
-    
     if(UAV3iSettings.getMultihomedHost())
     {
       // Pour une utilisation avec VMware...
@@ -100,24 +110,96 @@ public class PaparazziTransmitterLauncher
       // adresses IP (cas d'un ordinateur hébergeant une machine virtuelle) :
       // l'adresse IP utilisée pour les stubs RMI n'est alors pas la bonne.
       // Voir : http://www.chipkillmar.net/2011/06/22/multihomed-hosts-and-java-rmi/
-      // Il faut alors, côté serveur, renseigner les propriétés système
+      // Il faut alors, côté serveur, renseigner les propiétés système
       // "java.rmi.server.hostname" et "java.rmi.server.useLocalHostName".
       // Deux options sont possibles :
-      //   - Définir les propriétés de manière programmatique (choix opéré ici) : System.setProperty(...).
+      //   - Définir les propriétés de manière programmatique : System.setProperty(...).
       //   - Lancer le serveur avec les oprions -Djava.rmi.server.hostname=<adresse IP serveur>
       //     et -Djava.rmi.server.useLocalHostName=true.
-      System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getVetoServerIP());
+      System.setProperty("java.rmi.server.hostname",         UAV3iSettings.getUav3iServerIP());
       System.setProperty("java.rmi.server.useLocalHostName", "true");
-      LoggerUtil.LOG.config("PaparazziTransmitterLauncher -> configuration multihomed host");
+      LoggerUtil.LOG.config("Client2VetoRMICommunication -> configuration multihomed host");
     }
 
-    // Enregistrement de la partie serveur : uav3i pourra se connecter à PaparazziTransmitter
-    int portNumber = UAV3iSettings.getVetoServerPort();
+    // Enregistrement de la partie serveur : PaparazziTransmitter pourra se connecter à uav3i.
+    int portNumber = UAV3iSettings.getUav3iServerPort(); 
     Registry localRegistry = LocateRegistry.createRegistry(portNumber);
-    IPaparazziTransmitter skeleton = (IPaparazziTransmitter) UnicastRemoteObject.exportObject(PaparazziTransmitterRMIImpl.getInstance(),
-                                                                                              portNumber);
-    localRegistry.rebind(UAV3iSettings.getVetoServerServiceName(), skeleton);
-    LoggerUtil.LOG.info(UAV3iSettings.getVetoServerServiceName() + " started on port " + portNumber + ".");
+    IUav3iTransmitter skeleton = (IUav3iTransmitter) UnicastRemoteObject.exportObject(new Uav3iTransmitterImpl(),
+                                                                                      portNumber);
+    localRegistry.rebind(UAV3iSettings.getUav3iServerServiceName(), skeleton);
+    LoggerUtil.LOG.info(UAV3iSettings.getUav3iServerServiceName() + " started on port " + portNumber + ".");
+
+    // Connexion en tant que client : uav3i se connecte à PaparazziTransmitter.
+    Registry remoteRegistry = LocateRegistry.getRegistry(UAV3iSettings.getVetoServerIP(),
+                                                         UAV3iSettings.getVetoServerPort());
+    
+    while(true) {
+	    try
+	    {
+	      paparazziTransmitter  = (IPaparazziTransmitter) remoteRegistry.lookup(UAV3iSettings.getVetoServerServiceName());
+	      break;
+	    }
+	    catch (ConnectIOException cioe)
+	    {
+	      JOptionPane.showMessageDialog(null,
+	                                    "<html>The veto must be running on "+UAV3iSettings.getVetoServerIP()+" : "+UAV3iSettings.getVetoServerPort()+"<br><br><i>"+cioe.getMessage(),
+	                                    "Impossible to connect to Veto",
+	                                    JOptionPane.ERROR_MESSAGE);
+	      System.exit(-1);
+	    }
+	    catch (NotBoundException e) {
+	    	
+	    }
+    }
+    // On signale à PaparazziTansmitter qu'il peut maintenant se connecter à uav3i :
+    // on lui transmet l'@ IP d'uav3i et le numéro de port où il écoute.
+    paparazziTransmitter.register(UAV3iSettings.getUav3iServerIP(),
+                                  UAV3iSettings.getUav3iServerPort());
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void communicateManoeuver(ManoeuverDTO mnvrDTO)
+  {
+    try
+    {
+      paparazziTransmitter.communicateManoeuver(mnvrDTO);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void executeManoeuver(int idMnvr)
+  {
+    try
+    {
+      paparazziTransmitter.executeManoeuver(idMnvr);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void executeManoeuver(Manoeuver mnvr)
+  {
+    // Not used in PAPARAZZI_REMOTE mode.
+  }
+  //-----------------------------------------------------------------------------
+  @Override
+  public void clearManoeuver()
+  {
+    try
+    {
+      paparazziTransmitter.clearManoeuver();
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
   }
   //-----------------------------------------------------------------------------
 }

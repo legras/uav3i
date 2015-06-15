@@ -1,4 +1,4 @@
-package com.deev.interaction.uav3i.veto.communication.websocket.server.serverEndpoint;
+package com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint;
 
 import javax.websocket.server.ServerEndpoint;
 

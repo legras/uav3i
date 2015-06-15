@@ -24,17 +24,17 @@ import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.UAV3iSettings.RemoteType;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
-import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
-import com.deev.interaction.uav3i.veto.communication.direct.PaparazziDirectCommunication;
+import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
+import com.deev.interaction.uav3i.veto.communication.direct.Client2VetoDirectCommunication;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziRemoteCommunication;
-import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziWebsocketCommunication;
+import com.deev.interaction.uav3i.veto.communication.rmi.Client2VetoRMIFacade;
+import com.deev.interaction.uav3i.veto.communication.websocket.Client2VetoWebsocketFacade;
 
 public class UAVModel
 {
-	public  static UAVModel                store = null;
-	private static PaparazziCommunication paparazziCommunication;
-	private        ArrayList<UAVDataPoint>       _dataPoints = new ArrayList<UAVDataPoint>();
+	public  static UAVModel                 store = null;
+	private static Client2VetoFacade client2VetoCommunication;
+	private        ArrayList<UAVDataPoint>  _dataPoints = new ArrayList<UAVDataPoint>();
 	private double altitude;
 	private double verticalSpeed;
 	private double groundAltitude;
@@ -116,14 +116,14 @@ public class UAVModel
 		switch (UAV3iSettings.getMode())
 		{
 		case PAPARAZZI_DIRECT:
-			paparazziCommunication = new PaparazziDirectCommunication();
+			client2VetoCommunication = new Client2VetoDirectCommunication();
 			break;
 		case PAPARAZZI_REMOTE:
 		  if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
 		  {
 	      try
 	      {
-	        paparazziCommunication = new PaparazziRemoteCommunication();
+	        client2VetoCommunication = new Client2VetoRMIFacade();
 	      }
 	      catch (RemoteException e)
 	      {
@@ -135,7 +135,7 @@ public class UAVModel
 		  {
         try
         {
-          paparazziCommunication = new PaparazziWebsocketCommunication();
+          client2VetoCommunication = new Client2VetoWebsocketFacade();
         }
         catch (DeploymentException | IOException | URISyntaxException e)
         {
@@ -289,7 +289,7 @@ public class UAVModel
 		if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
 		{
 			LoggerUtil.LOG.log(Level.INFO, "Communication of manoeuver to Veto requested");
-			paparazziCommunication.communicateManoeuver(mnvr.toDTO());
+			client2VetoCommunication.communicateManoeuver(mnvr.toDTO());
 		}
 	}
 
@@ -303,11 +303,11 @@ public class UAVModel
 				break;
 			case PAPARAZZI_REMOTE:
 				LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-				paparazziCommunication.executeManoeuver(mnvr.getId());
+				client2VetoCommunication.executeManoeuver(mnvr.getId());
 				break;
 			case PAPARAZZI_DIRECT:
 				LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-				paparazziCommunication.executeManoeuver(mnvr);
+				client2VetoCommunication.executeManoeuver(mnvr);
 				break;
 			default:
 				break;
@@ -322,7 +322,7 @@ public class UAVModel
 			return;
 		}
 
-		paparazziCommunication.clearManoeuver();
+		client2VetoCommunication.clearManoeuver();
 	}
 
 	/**

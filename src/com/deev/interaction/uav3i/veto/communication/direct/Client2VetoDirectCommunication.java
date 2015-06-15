@@ -10,7 +10,7 @@ import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
-import com.deev.interaction.uav3i.veto.communication.PaparazziCommunication;
+import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.rmi.uavListener.UAVPositionListener;
@@ -26,13 +26,13 @@ import fr.dgac.ivy.IvyException;
  * 
  * @author Philippe TANGUY (Télécom Bretagne)
  */
-public class PaparazziDirectCommunication extends PaparazziCommunication
+public class Client2VetoDirectCommunication extends Client2VetoFacade
 {
   //-----------------------------------------------------------------------------
   private String applicationName = "uav3i";
   private Ivy    bus;
   //-----------------------------------------------------------------------------
-  public PaparazziDirectCommunication()
+  public Client2VetoDirectCommunication()
   {
     try
     {
