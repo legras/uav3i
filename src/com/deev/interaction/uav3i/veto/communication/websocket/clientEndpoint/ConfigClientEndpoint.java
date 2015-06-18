@@ -46,7 +46,7 @@ public class ConfigClientEndpoint
   public void getConfig(String which) throws IOException
   {
     session.getBasicRemote().sendText(which);
-    LoggerUtil.LOG.log(Level.INFO, "config: " + which + "asked.");
+    LoggerUtil.LOG.log(Level.INFO, "config: " + which + " asked.");
   }
   //-----------------------------------------------------------------------------
   @OnMessage
@@ -73,7 +73,7 @@ public class ConfigClientEndpoint
       }
     }
 
-    System.out.println(receivedConfig);
+    //System.out.println(receivedConfig);
   }
   //-----------------------------------------------------------------------------
   @OnClose
