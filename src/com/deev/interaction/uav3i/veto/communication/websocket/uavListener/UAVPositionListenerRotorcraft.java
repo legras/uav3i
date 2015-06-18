@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
-import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
 import com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddUavDataPointServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
@@ -68,7 +67,7 @@ public class UAVPositionListenerRotorcraft extends UAVListener
   @Override
   public void receive(IvyClient client, String[] args)
   {
-    displayArgs(this.getClass().getSimpleName(), client, args);
+    //displayArgs(this.getClass().getSimpleName(), client, args);
     
     String tokens = args[1];
   
