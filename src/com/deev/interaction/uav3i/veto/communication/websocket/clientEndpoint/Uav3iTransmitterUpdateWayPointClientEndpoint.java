@@ -19,8 +19,11 @@ import org.glassfish.tyrus.client.ClientManager;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.websocket.coder.UAVWayPointDecoder;
+import com.deev.interaction.uav3i.veto.communication.websocket.coder.UAVWayPointEncoder;
 
-@ClientEndpoint
+@ClientEndpoint(decoders = UAVWayPointDecoder.class,
+                encoders = UAVWayPointEncoder.class)
 public class Uav3iTransmitterUpdateWayPointClientEndpoint
 {
   //-----------------------------------------------------------------------------

@@ -64,7 +64,6 @@ public class UAVWayPointsListener extends UAVListener
     {
       if(Veto2ClientWebsocketFacade.isConnected() && Veto.getVetoState() == VetoState.RECEIVING)
       {
-        // ******* Uav3iTransmitterServerEndpoint.updateWayPoint(wayPoint);
         try
         {
           Uav3iTransmitterUpdateWayPointServerEndpoint.updateWayPoint(wayPoint);
