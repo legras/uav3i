@@ -52,6 +52,7 @@ public class ConfigClientEndpoint
   @OnMessage
   public void onMessage(String receivedConfig) throws IOException
   {
+    System.out.println(receivedConfig);
     StringTokenizer st = new StringTokenizer(receivedConfig,"|");
     String which = st.nextToken();
     if(st.hasMoreTokens())
@@ -72,8 +73,6 @@ public class ConfigClientEndpoint
           break;
       }
     }
-
-    //System.out.println(receivedConfig);
   }
   //-----------------------------------------------------------------------------
   @OnClose
