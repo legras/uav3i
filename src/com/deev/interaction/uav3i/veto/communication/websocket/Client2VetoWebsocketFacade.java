@@ -23,6 +23,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Pa
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.RegisterClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddUavDataPointClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterUpdateWayPointClientEndpoint;
 
 /**
  * Classe instanciée côté client dans le cas d'une communication websocket :<br/>
@@ -40,6 +41,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private PaparazziTransmitterExecuteClientEndpoint     paparazziTransmitterExecute;
   private PaparazziTransmitterClearClientEndpoint       paparazziTransmitterClear;
   private Uav3iTransmitterAddUavDataPointClientEndpoint uav3iTransmitterAddUavDataPoint;
+  private Uav3iTransmitterUpdateWayPointClientEndpoint  uav3iTransmitterUpdateWayPoint;
   //-----------------------------------------------------------------------------
   public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   {
@@ -52,6 +54,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     paparazziTransmitterExecute     = new PaparazziTransmitterExecuteClientEndpoint(new URI(baseURI + "/PaparazziTransmitterExecute"));
     paparazziTransmitterClear       = new PaparazziTransmitterClearClientEndpoint(new URI(baseURI + "/PaparazziTransmitterClear"));
     uav3iTransmitterAddUavDataPoint = new Uav3iTransmitterAddUavDataPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddUavDataPoint"));
+    uav3iTransmitterUpdateWayPoint  = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
 
     register.register();
     
