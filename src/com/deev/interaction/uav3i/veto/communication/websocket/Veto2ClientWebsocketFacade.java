@@ -47,6 +47,8 @@ public class Veto2ClientWebsocketFacade
                                null,                              // properties
                                endpoints);                        // endpoint(s)
     server.start();
+    
+    PaparazziTransmitterWebsocket.getInstance();
 
     //new PaparazziTransmitterWebsocket();
   }
@@ -65,6 +67,19 @@ public class Veto2ClientWebsocketFacade
   public static void setConnected(boolean connected)
   {
     Veto2ClientWebsocketFacade.connected = connected;
+  }
+  //-----------------------------------------------------------------------------
+  public static void register()
+  {
+    try
+    {
+      PaparazziTransmitterWebsocket.getInstance().register();
+    }
+    catch (IvyException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
   //-----------------------------------------------------------------------------
 }

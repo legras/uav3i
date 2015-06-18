@@ -68,7 +68,7 @@ public class UAVPositionListenerRotorcraft extends UAVListener
   @Override
   public void receive(IvyClient client, String[] args)
   {
-    //displayArgs(this.getClass().getSimpleName(), client, args);
+    displayArgs(this.getClass().getSimpleName(), client, args);
     
     String tokens = args[1];
   

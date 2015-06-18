@@ -50,7 +50,6 @@ public class AirframeFacade
   public static void init(String airframeXML)
   {
     instance = new AirframeFacade(airframeXML);
-    System.out.println("AirframeFacade.init() : instance de AirframeFacade OK" );
   }
   //-----------------------------------------------------------------------------
   public double getDefaultCircleRadius()

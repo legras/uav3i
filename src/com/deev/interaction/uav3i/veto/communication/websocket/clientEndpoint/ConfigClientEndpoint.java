@@ -52,12 +52,12 @@ public class ConfigClientEndpoint
   @OnMessage
   public void onMessage(String receivedConfig) throws IOException
   {
-    System.out.println(receivedConfig);
     StringTokenizer st = new StringTokenizer(receivedConfig,"|");
     String which = st.nextToken();
     if(st.hasMoreTokens())
     {
       String config = st.nextToken();
+      //System.out.println(config);
       switch (which)
       {
         case "flight_plan":

@@ -8,6 +8,7 @@ import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.log.LoggerUtil;
 
 @ServerEndpoint(value = "/Config")
 public class ConfigServerEndpoint
@@ -16,6 +17,7 @@ public class ConfigServerEndpoint
   @OnMessage
   public String getConfig(String which) throws FileNotFoundException
   {
+    LoggerUtil.LOG.info("Client wants to get config -> " + which);
     String filename = null;
     switch (which.toLowerCase())
     {

@@ -27,6 +27,7 @@ public class Uav3iTransmitterAddUavDataPointServerEndpoint
   //-----------------------------------------------------------------------------
   public static void addUAVDataPoint(String what, String message) throws IOException
   {
+    System.out.println("Uav3iTransmitterAddUavDataPointServerEndpoint.addUAVDataPoint("+what+"|"+message+")");
     session.getBasicRemote().sendText(what + "|" + message);
   }
   //-----------------------------------------------------------------------------

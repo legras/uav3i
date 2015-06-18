@@ -558,7 +558,7 @@
     <field name="AltOffset" type="float" unit="m"></field>
     <field name="aktuell" type="float" unit="m"></field>
     <field name="Over_Ground" type="float" unit="m"></field>
-    <field name="tempBaro" type="float" unit="°C"></field>
+    <field name="tempBaro" type="float" unit="ï¿½C"></field>
   </message>
 
   <message name="AMSYS_AIRSPEED" id="66">
@@ -566,7 +566,7 @@
     <field name="asPresure" type="float" unit="Pa"></field>
     <field name="asAirspeed" type="float" unit="m/s"></field>
     <field name="asAirsFilt" type="float" unit="m/s"></field>
-    <field name="asTemp" type="float" unit="°C"></field>
+    <field name="asTemp" type="float" unit="ï¿½C"></field>
   </message>
 
   <message name="FLIGHT_BENCHMARK" id="67">
