@@ -1,8 +1,11 @@
 package com.deev.interaction.uav3i.veto.communication.websocket.uavListener;
 
+import java.io.IOException;
+
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddUavDataPointServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
@@ -75,12 +78,21 @@ public class UAVPositionListenerRotorcraft extends UAVListener
     int  course    = uavNavStatusListener.getLastCourseValue();
     int  altitude  = Integer.parseInt(message[indexHMSL]);
     long time      = Long.parseLong(message[indexTOW]);
+    String message2Client = latitude + "*" + longitude + "*" + course + "*" + time;
   
     // On transmet via RMI à l'IHM table tactile la position du drone.
     //if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
     if(Veto.getVetoState() == VetoState.RECEIVING)
     {
-      Uav3iTransmitterServerEndpoint.addUAVDataPoint(latitude, longitude, course, altitude, time);
+      //Uav3iTransmitterServerEndpoint.addUAVDataPoint(latitude, longitude, course, altitude, time);
+      try
+      {
+        Uav3iTransmitterAddUavDataPointServerEndpoint.addUAVDataPoint("latlon", message2Client);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
 
       // On transmet aussi la position du drone à l'IHM Veto pour l'affichage local.
       UAVModel.addUAVDataPoint(latitude, longitude, course, altitude, time);
