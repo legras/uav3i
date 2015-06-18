@@ -4,6 +4,8 @@ import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
+import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
+import com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
@@ -57,7 +59,7 @@ public class UAVWayPointsListener extends UAVListener
 
     if(UAVModel.getWayPoints().updateWayPoint(wayPoint))  // Mise à jour côté Veto lors du test
     {
-      if(Veto.getVetoState() == VetoState.RECEIVING)
+      if(Veto2ClientWebsocketFacade.isConnected() && Veto.getVetoState() == VetoState.RECEIVING)
       {
         Uav3iTransmitterServerEndpoint.updateWayPoint(wayPoint);
       }

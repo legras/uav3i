@@ -14,19 +14,14 @@ import javax.websocket.DeploymentException;
 
 import uk.me.jstott.jcoord.LatLng;
 
-import com.deev.interaction.uav3i.ui.BoxMnvr;
-import com.deev.interaction.uav3i.ui.CircleMnvr;
-import com.deev.interaction.uav3i.ui.LineMnvr;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.UAV3iSettings.RemoteType;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.util.paparazzi_settings.airframe.AirframeFacade;
 import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
 import com.deev.interaction.uav3i.veto.communication.direct.Client2VetoDirectCommunication;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.rmi.Client2VetoRMIFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.Client2VetoWebsocketFacade;
 

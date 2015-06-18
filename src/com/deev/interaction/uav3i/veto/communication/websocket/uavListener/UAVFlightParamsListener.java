@@ -3,6 +3,8 @@ package com.deev.interaction.uav3i.veto.communication.websocket.uavListener;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
+import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
+import com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
@@ -71,7 +73,7 @@ public class UAVFlightParamsListener extends UAVListener
     double groundSpeed    = Double.parseDouble(message[indexSPEED]);
 
     // On transmet via RMI à l'IHM table tactile la position du drone.
-    if(Veto.getVetoState() == VetoState.RECEIVING)
+    if(Veto2ClientWebsocketFacade.isConnected() && Veto.getVetoState() == VetoState.RECEIVING)
     {
       Uav3iTransmitterServerEndpoint.addFlightParams(altitude, verticalSpeed, groundAltitude, groundSpeed);
 

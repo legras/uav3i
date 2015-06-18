@@ -240,7 +240,7 @@ public class PaparazziTransmitterRMIImpl implements IPaparazziTransmitter
       uav3iTransmitter  = (IUav3iTransmitter) remoteRegistry.lookup(UAV3iSettings.getUav3iServerServiceName());
 
       // Mise à jour du proxy dans les listeners. En cas de déconnexion/reconnexion d'uav3i,
-      // le proxy change, on ne peut donc pas l'initialiser une fois pour toute.
+      // l'instance du proxy change, on ne peut donc pas l'initialiser une fois pour toute.
       uavPositionListener.setUav3iTransmitter(uav3iTransmitter);
       uavFlightParamsListener.setUav3iTransmitter(uav3iTransmitter);
       uavNavStatusListener.setUav3iTransmitter(uav3iTransmitter);

@@ -23,6 +23,8 @@ import fr.dgac.ivy.IvyException;
 public class Veto2ClientWebsocketFacade
 {
   //-----------------------------------------------------------------------------
+  private static boolean connected = false;
+  //-----------------------------------------------------------------------------
   public Veto2ClientWebsocketFacade() throws DeploymentException, IvyException
   {
     // Lecture du fichier de configuration pour le système de logs.
@@ -43,10 +45,24 @@ public class Veto2ClientWebsocketFacade
                                null,                              // properties
                                endpoints);                        // endpoint(s)
     server.start();
-    
-//    PaparazziTransmitterWebsocket paparazziTransmitter = new PaparazziTransmitterWebsocket();
-//    paparazziTransmitter.register();
-    new PaparazziTransmitterWebsocket().register();
+
+    //new PaparazziTransmitterWebsocket();
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * @return the connected
+   */
+  public static boolean isConnected()
+  {
+    return connected;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * @param connected the connected to set
+   */
+  public static void setConnected(boolean connected)
+  {
+    Veto2ClientWebsocketFacade.connected = connected;
   }
   //-----------------------------------------------------------------------------
 }

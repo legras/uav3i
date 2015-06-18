@@ -34,17 +34,17 @@ import fr.dgac.ivy.IvyException;
 public class PaparazziTransmitterWebsocket
 {
   //-----------------------------------------------------------------------------
-  private        String                  applicationName = "uav3i (PT)";
-  private        Ivy                     bus;
-  private        UAVPositionListener           uavPositionListener           = null;
-  private        UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
-  private        UAVFlightParamsListener       uavFlightParamsListener       = null;
-  private        UAVWayPointsListener          uavWayPointsListener          = null;
-  private        UAVNavStatusListener          uavNavStatusListener          = null;
-  
+  private          String                        applicationName = "uav3i (PT)";
+  private          Ivy                           bus;
+  private          UAVPositionListener           uavPositionListener           = null;
+  private          UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
+  private          UAVFlightParamsListener       uavFlightParamsListener       = null;
+  private          UAVWayPointsListener          uavWayPointsListener          = null;
+  private          UAVNavStatusListener          uavNavStatusListener          = null;
+
   private static PaparazziTransmitterWebsocket instance;
   //-----------------------------------------------------------------------------
-  public PaparazziTransmitterWebsocket() throws IvyException
+  private PaparazziTransmitterWebsocket() throws IvyException
   {
     initializeIvy();
     new Thread(new Uav3iSupervizor()).start();
@@ -72,6 +72,7 @@ public class PaparazziTransmitterWebsocket
     uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
     uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
+    uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -185,6 +186,7 @@ public class PaparazziTransmitterWebsocket
 
     try
     {
+      Veto2ClientWebsocketFacade.setConnected(true);
       // Mise en écoute des messages GPS (version 3i)
 //      // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
@@ -213,6 +215,7 @@ public class PaparazziTransmitterWebsocket
   {
     bus.stop();
     Veto.setVetoState(VetoState.IDLE);
+    Veto2ClientWebsocketFacade.setConnected(false);
     Veto.reinit();
     LoggerUtil.LOG.info("unRegisterUav3iTransmitter()");
   }

@@ -21,6 +21,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Co
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.RegisterClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddUavDataPointClientEndpoint;
 
 /**
@@ -33,7 +34,8 @@ import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Ua
 public class Client2VetoWebsocketFacade extends Client2VetoFacade
 {
   //-----------------------------------------------------------------------------
-  private ConfigClientEndpoint               config;
+  private RegisterClientEndpoint                        register;
+  private ConfigClientEndpoint                          config;
   private PaparazziTransmitterCommunicateClientEndpoint paparazziTransmitterCommunicate;
   private PaparazziTransmitterExecuteClientEndpoint     paparazziTransmitterExecute;
   private PaparazziTransmitterClearClientEndpoint       paparazziTransmitterClear;
@@ -43,12 +45,16 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   {
     // Connection to server.
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";
+    
+    register                        = new RegisterClientEndpoint(new URI(baseURI + "/Register"));
     config                          = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
     paparazziTransmitterCommunicate = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
     paparazziTransmitterExecute     = new PaparazziTransmitterExecuteClientEndpoint(new URI(baseURI + "/PaparazziTransmitterExecute"));
     paparazziTransmitterClear       = new PaparazziTransmitterClearClientEndpoint(new URI(baseURI + "/PaparazziTransmitterClear"));
     uav3iTransmitterAddUavDataPoint = new Uav3iTransmitterAddUavDataPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddUavDataPoint"));
 
+    register.register();
+    
     config.getConfig("flight_plan");
     // TODO le fichier XML airframe est utile uniquement pour trouver le "default circle radius" : absent dans le cas d'un rotorcraft... 
     config.getConfig("airframe");
