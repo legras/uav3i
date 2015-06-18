@@ -12,7 +12,6 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.UAV3iSettings.VetoMode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
@@ -29,6 +28,9 @@ public class PaparazziTransmitterExecuteServerEndpoint
   @OnMessage
   public void receive(String idManoeuver)
   {
+    // To be sure that the maneuver was previously transmitted.
+    try { Thread.sleep(500); } catch (InterruptedException e1) {}
+    
     System.out.println("####### PaparazziTransmitterExecuteServerEndpoint.receive("+idManoeuver+")");
     int idMnvr = Integer.parseInt(idManoeuver);
     // Comme les boutons ne sont pas 'Serializable' (et qu'on n'en a rien à
@@ -69,6 +71,8 @@ public class PaparazziTransmitterExecuteServerEndpoint
           }
         }
       }
+      else
+        LoggerUtil.LOG.severe(("Y'ss passe kek chose ! : " + idMnvr));
     }
     else
       LoggerUtil.LOG.severe(("Exection of a manoeuver that is not shared : " + idMnvr));
