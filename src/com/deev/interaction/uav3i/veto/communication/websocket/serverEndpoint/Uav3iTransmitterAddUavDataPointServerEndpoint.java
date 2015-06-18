@@ -22,12 +22,11 @@ public class Uav3iTransmitterAddUavDataPointServerEndpoint
   @OnOpen
   public void onOpen(Session session)
   {
-    this.session = session;
+    Uav3iTransmitterAddUavDataPointServerEndpoint.session = session;
   }
   //-----------------------------------------------------------------------------
   public static void addUAVDataPoint(String what, String message) throws IOException
   {
-    System.out.println("Uav3iTransmitterAddUavDataPointServerEndpoint.addUAVDataPoint("+what+"|"+message+")");
     session.getBasicRemote().sendText(what + "|" + message);
   }
   //-----------------------------------------------------------------------------
