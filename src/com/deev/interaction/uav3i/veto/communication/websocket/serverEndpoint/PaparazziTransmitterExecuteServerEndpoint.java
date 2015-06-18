@@ -44,6 +44,12 @@ public class PaparazziTransmitterExecuteServerEndpoint
       {
         if(UAV3iSettings.getVetoMode() == VetoMode.MANUEL)
         {
+          LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
+          mDTO.addButtons();
+          mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
+        }
+        else if(UAV3iSettings.getVetoMode() == VetoMode.AUTOMATIC)
+        {
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
@@ -61,12 +67,6 @@ public class PaparazziTransmitterExecuteServerEndpoint
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-        }
-        else if(UAV3iSettings.getVetoMode() == VetoMode.AUTOMATIC)
-        {
-          LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
-          mDTO.addButtons();
-          mDTO.setRequestedStatus(ManoeuverRequestedStatus.ASKED);
         }
       }
     }
