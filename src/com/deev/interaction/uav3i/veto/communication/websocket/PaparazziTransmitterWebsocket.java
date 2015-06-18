@@ -12,7 +12,6 @@ import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVNavStatusListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListener;
@@ -106,7 +105,7 @@ public class PaparazziTransmitterWebsocket
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") automaticaly accepted");
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-          Uav3iTransmitterServerEndpoint.resultAskExecution(idMnvr, true);
+          // ******* Uav3iTransmitterServerEndpoint.resultAskExecution(idMnvr, true);
           // On met à jour localement le statut de la manoeuvre pour mise
           // à jour de l'affichage sur le Veto.
           mDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);

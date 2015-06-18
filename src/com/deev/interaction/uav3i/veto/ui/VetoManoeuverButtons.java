@@ -20,7 +20,6 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.rmi.PaparazziTransmitterRMIImpl;
 import com.deev.interaction.uav3i.veto.communication.websocket.PaparazziTransmitterWebsocket;
-import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 
@@ -93,7 +92,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
         {
           // On transmet à la table le résultat de l'évaluation de la manoeuvre
           // par l'opérateur Paparazzi pour mise à jour de l'affichage.
-          Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), true);
+          // ******* Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), true);
           // On met à jour localement le statut de la manoeuvre pour mise
           // à jour de l'affichage sur le Veto.
           mnvrDTO.setRequestedStatus(ManoeuverRequestedStatus.ACCEPTED);
@@ -111,7 +110,7 @@ public class VetoManoeuverButtons implements Animation, ActionListener
         else if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
         {
           // On transmet à la table le résultat de l'évaluation de la manoeuvre par l'opérateur Paparazzi.
-          Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), false);
+          // ******* Uav3iTransmitterServerEndpoint.resultAskExecution(mnvrDTO.getId(), false);
         }
         // On met à jour localement le statut de la manoeuvre pour mise
         // à jour de l'affichage sur le Veto.
