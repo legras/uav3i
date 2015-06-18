@@ -69,16 +69,6 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     config.getConfig("airframe");
     // TODO le fichier XML des messages Ivy ne doit être utilsé que côté serveur... à confirmer !
     //config.getConfig("ivy_messages");
-
-    CircleMnvrDTO c = new CircleMnvrDTO(7, new LatLng(0, 0), 12);
-    LineMnvrDTO   l = new LineMnvrDTO(12, new LatLng(10, 10), new LatLng(20, 20), 14, new Point2D.Double(-1,-1), new Point2D.Double(-7,-7));
-    BoxMnvrDTO    b = new BoxMnvrDTO(21, new LatLng(30, 30), new LatLng(40, 40), true);
-    communicateManoeuver(c);
-    communicateManoeuver(l);
-    communicateManoeuver(b);
-//    executeManoeuver(7);
-//    clearManoeuver();
-    
   }
   //-----------------------------------------------------------------------------
   @Override
