@@ -9,6 +9,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Co
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterClearServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterCommunicateServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterExecuteServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddUavDataPointServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
 
@@ -32,7 +33,8 @@ public class Veto2ClientWebsocketFacade
       ConfigServerEndpoint.class,
       PaparazziTransmitterCommunicateServerEndpoint.class,
       PaparazziTransmitterExecuteServerEndpoint.class,
-      PaparazziTransmitterClearServerEndpoint.class
+      PaparazziTransmitterClearServerEndpoint.class,
+      Uav3iTransmitterAddUavDataPointServerEndpoint.class
     };
     
     Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address

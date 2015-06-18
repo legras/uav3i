@@ -38,7 +38,7 @@ public class PaparazziTransmitterCommunicateClientEndpoint
   }
   //-----------------------------------------------------------------------------
   @OnOpen
-  public void onOpen(Session session) throws IOException
+  public void onOpen(Session session)
   {
     this.session = session;
   }
@@ -51,13 +51,8 @@ public class PaparazziTransmitterCommunicateClientEndpoint
   @OnClose
   public void onClose(Session session, CloseReason reason) throws IOException
   {
-    Level level;
-    if(reason.getCloseCode() != CloseCodes.NORMAL_CLOSURE)
-      level = Level.INFO;
-    else
-      level = Level.WARNING;
-
-    LoggerUtil.LOG.log(level, reason.getCloseCode() + " - " + reason.getReasonPhrase());
+    LoggerUtil.LOG.log(reason.getCloseCode() != CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
+                       reason.getCloseCode() + " - " + reason.getReasonPhrase());
   }
   //-----------------------------------------------------------------------------
   @OnError

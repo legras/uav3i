@@ -1,10 +1,5 @@
 package com.deev.interaction.uav3i.veto.communication.websocket;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
 import uk.me.jstott.jcoord.LatLng;
 
 import com.deev.interaction.uav3i.util.UAV3iSettings;
@@ -17,7 +12,6 @@ import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.communication.rmi.IUav3iTransmitter;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVNavStatusListener;

@@ -6,23 +6,28 @@ import java.util.logging.Level;
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
-import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.server.ServerEndpoint;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.veto.ui.Veto;
 
-@ServerEndpoint(value = "/PaparazziTransmitterClear")
-public class PaparazziTransmitterClearServerEndpoint
+@ServerEndpoint(value="/Uav3iTransmitterAddUavDataPoint")
+public class Uav3iTransmitterAddUavDataPointServerEndpoint
 {
   //-----------------------------------------------------------------------------
-  @OnMessage
-  public void receive(String emptyValue)
+  private static Session session = null;
+  //-----------------------------------------------------------------------------
+  @OnOpen
+  public void onOpen(Session session)
   {
-    LoggerUtil.LOG.info("clearManoeuver()");
-    Veto.getSymbolMapVeto().clearManoeuver();
+    this.session = session;
+  }
+  //-----------------------------------------------------------------------------
+  public static void addUAVDataPoint(String what, String message) throws IOException
+  {
+    session.getBasicRemote().sendText(what + "|" + message);
   }
   //-----------------------------------------------------------------------------
   @OnClose
