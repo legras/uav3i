@@ -44,7 +44,6 @@ public class Uav3iTransmitterAddUavDataPointClientEndpoint
   @OnMessage
   public void addUAVDataPoint(String messageFromServer)
   {
-    System.out.println("####### Uav3iTransmitterAddUavDataPointClientEndpoint.addUAVDataPoint("+messageFromServer+")");
     StringTokenizer st1 = new StringTokenizer(messageFromServer,"|");
     String what = st1.nextToken();
     if(st1.hasMoreTokens())

@@ -47,7 +47,6 @@ public class PaparazziTransmitterWebsocket
   private PaparazziTransmitterWebsocket() throws IvyException
   {
     initializeIvy();
-    new Thread(new Uav3iSupervizor()).start();
   }
   //-----------------------------------------------------------------------------
   public static PaparazziTransmitterWebsocket getInstance() throws IvyException
@@ -211,7 +210,7 @@ public class PaparazziTransmitterWebsocket
     Veto.setVetoState(VetoState.RECEIVING);
   }
   //-----------------------------------------------------------------------------
-  public void unRegisterUav3iTransmitter()
+  public void unRegister()
   {
     bus.stop();
     Veto.setVetoState(VetoState.IDLE);
@@ -256,46 +255,6 @@ public class PaparazziTransmitterWebsocket
   {
     try { bus.sendMsg(message); }
     catch (IvyException e) { e.printStackTrace(); }
-  }
-  //-----------------------------------------------------------------------------
-
-  
-  
-  
-
-  
-  
-  //-----------------------------------------------------------------------------
-  /**
-   * The Supervisor class (a Runnable class) monitors the remote client reference
-   * in order to know if it is alive (by the remote call of the "ping" method on
-   * the client side). If not, the client is unregistered (value of remoteClient
-   * becomes null).
-   * 
-   * @author Philippe TANGUY (Télécom Bretagne)
-   */
-  private class Uav3iSupervizor implements Runnable
-  {
-    private long delay = 1000;
-    @Override
-    public void run()
-    {
-      while (true)
-      {
-        try
-        {
-          Uav3iTransmitterServerEndpoint.ping();
-        }
-        catch (Exception e)
-        {
-          //System.out.println("####### Ping a échoué sur uav3iTransmitter");
-          unRegisterUav3iTransmitter();
-        }
-        //System.out.println("####### Uav3iSupervizor is alive!");
-
-        try { Thread.sleep(delay); } catch (InterruptedException e) { e.printStackTrace(); }
-      }
-    }
   }
   //-----------------------------------------------------------------------------
 }

@@ -77,7 +77,18 @@ public class Veto2ClientWebsocketFacade
     }
     catch (IvyException e)
     {
-      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  //-----------------------------------------------------------------------------
+  public static void unRegister()
+  {
+    try
+    {
+      PaparazziTransmitterWebsocket.getInstance().unRegister();
+    }
+    catch (IvyException e)
+    {
       e.printStackTrace();
     }
   }
