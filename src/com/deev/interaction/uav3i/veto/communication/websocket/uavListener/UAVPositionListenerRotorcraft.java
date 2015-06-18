@@ -79,7 +79,7 @@ public class UAVPositionListenerRotorcraft extends UAVListener
     int  course    = uavNavStatusListener.getLastCourseValue();
     int  altitude  = Integer.parseInt(message[indexHMSL]);
     long time      = Long.parseLong(message[indexTOW]);
-    String message2Client = latitude + "*" + longitude + "*" + course + "*" + time;
+    String message2Client = latitude + "*" + longitude + "*" + course + "*" + altitude + "*" + time;
   
     // On transmet via RMI à l'IHM table tactile la position du drone.
     //if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
