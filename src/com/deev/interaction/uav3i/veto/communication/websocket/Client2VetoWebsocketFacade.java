@@ -26,7 +26,6 @@ import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Ua
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddUavDataPointClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterResultAskExecutionClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterUpdateWayPointClientEndpoint;
-import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddFlightParamsServerEndpoint;
 
 /**
  * Classe instanciée côté client dans le cas d'une communication websocket :<br/>

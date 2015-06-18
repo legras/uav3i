@@ -27,6 +27,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.coder.UAVWayPoint
 public class Uav3iTransmitterUpdateWayPointClientEndpoint
 {
   //-----------------------------------------------------------------------------
+  @SuppressWarnings("unused")
   private Session   session   = null;
   //-----------------------------------------------------------------------------
   public Uav3iTransmitterUpdateWayPointClientEndpoint(URI uriServerEndpoint) throws DeploymentException, IOException

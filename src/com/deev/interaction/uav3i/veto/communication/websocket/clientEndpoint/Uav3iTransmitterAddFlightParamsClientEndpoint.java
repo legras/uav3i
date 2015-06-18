@@ -24,6 +24,7 @@ import com.deev.interaction.uav3i.util.log.LoggerUtil;
 public class Uav3iTransmitterAddFlightParamsClientEndpoint
 {
   //-----------------------------------------------------------------------------
+  @SuppressWarnings("unused")
   private Session   session   = null;
   //-----------------------------------------------------------------------------
   public Uav3iTransmitterAddFlightParamsClientEndpoint(URI uriServerEndpoint) throws DeploymentException, IOException

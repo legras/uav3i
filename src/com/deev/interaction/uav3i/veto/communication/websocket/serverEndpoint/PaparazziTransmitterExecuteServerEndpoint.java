@@ -4,19 +4,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.Session;
-import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.server.ServerEndpoint;
 
-import com.deev.interaction.uav3i.util.UAV3iSettings;
-import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
-import com.deev.interaction.uav3i.veto.ui.Veto;
 
 @ServerEndpoint(value = "/PaparazziTransmitterExecute")
 public class PaparazziTransmitterExecuteServerEndpoint

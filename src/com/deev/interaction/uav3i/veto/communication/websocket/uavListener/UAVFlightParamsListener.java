@@ -2,13 +2,10 @@ package com.deev.interaction.uav3i.veto.communication.websocket.uavListener;
 
 import java.io.IOException;
 
-import javax.websocket.EncodeException;
-
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade;
-import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddFlightParamsClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddFlightParamsServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;

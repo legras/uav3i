@@ -25,10 +25,17 @@ public class Uav3iTransmitterResultAskExecutionServerEndpoint
     Uav3iTransmitterResultAskExecutionServerEndpoint.session = session;
   }
   //-----------------------------------------------------------------------------
-  public static void resultAskExecution(int idMnvr, boolean result) throws IOException
+  public static void resultAskExecution(int idMnvr, boolean result)
   {
-    if(session.isOpen())
-      session.getBasicRemote().sendText(idMnvr + "*" + result);
+    try
+    {
+      if(session.isOpen())
+        session.getBasicRemote().sendText(idMnvr + "*" + result);
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
   }
   //-----------------------------------------------------------------------------
   @OnClose
