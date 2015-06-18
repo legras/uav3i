@@ -9,6 +9,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Co
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterClearServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterCommunicateServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterExecuteServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.RegisterServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddUavDataPointServerEndpoint;
 
 import fr.dgac.ivy.IvyException;
@@ -32,6 +33,7 @@ public class Veto2ClientWebsocketFacade
     
     Class<?>[] endpoints =
     {
+      RegisterServerEndpoint.class,
       ConfigServerEndpoint.class,
       PaparazziTransmitterCommunicateServerEndpoint.class,
       PaparazziTransmitterExecuteServerEndpoint.class,
