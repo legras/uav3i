@@ -1,9 +1,15 @@
 package com.deev.interaction.uav3i.veto.communication.websocket.uavListener;
 
+import java.io.IOException;
+
+import javax.websocket.EncodeException;
+
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.ivyMessages.IvyMessagesFacade;
 import com.deev.interaction.uav3i.veto.communication.websocket.Veto2ClientWebsocketFacade;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddFlightParamsClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddFlightParamsServerEndpoint;
 import com.deev.interaction.uav3i.veto.ui.Veto;
 import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
@@ -69,11 +75,19 @@ public class UAVFlightParamsListener extends UAVListener
     double verticalSpeed  = Double.parseDouble(message[indexCLIMB]);
     double groundAltitude = Double.parseDouble(message[indexAGL]);
     double groundSpeed    = Double.parseDouble(message[indexSPEED]);
+    String message2Client = altitude + "*" + verticalSpeed + "*" + groundAltitude + "*" + groundSpeed;
 
     // On transmet via RMI à l'IHM table tactile la position du drone.
     if(Veto2ClientWebsocketFacade.isConnected() && Veto.getVetoState() == VetoState.RECEIVING)
     {
-      // ******* Uav3iTransmitterServerEndpoint.addFlightParams(altitude, verticalSpeed, groundAltitude, groundSpeed);
+      try
+      {
+        Uav3iTransmitterAddFlightParamsServerEndpoint.addFlightParams(message2Client);
+      }
+      catch (IOException e)
+      {
+        e.printStackTrace();
+      }
 
       // On transmet aussi les infos à l'IHM Veto pour l'affichage local.
       UAVModel.setAltitude(altitude);
