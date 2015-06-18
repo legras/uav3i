@@ -24,6 +24,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Pa
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.RegisterClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddFlightParamsClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddUavDataPointClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterResultAskExecutionClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterUpdateWayPointClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddFlightParamsServerEndpoint;
 
@@ -37,28 +38,30 @@ import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Ua
 public class Client2VetoWebsocketFacade extends Client2VetoFacade
 {
   //-----------------------------------------------------------------------------
-  private RegisterClientEndpoint                        register;
-  private ConfigClientEndpoint                          config;
-  private PaparazziTransmitterCommunicateClientEndpoint paparazziTransmitterCommunicate;
-  private PaparazziTransmitterExecuteClientEndpoint     paparazziTransmitterExecute;
-  private PaparazziTransmitterClearClientEndpoint       paparazziTransmitterClear;
-  private Uav3iTransmitterAddUavDataPointClientEndpoint uav3iTransmitterAddUavDataPoint;
-  private Uav3iTransmitterUpdateWayPointClientEndpoint  uav3iTransmitterUpdateWayPoint;
-  private Uav3iTransmitterAddFlightParamsClientEndpoint uav3iTransmitterAddFlightParams;
+  private RegisterClientEndpoint                           register;
+  private ConfigClientEndpoint                             config;
+  private PaparazziTransmitterCommunicateClientEndpoint    paparazziTransmitterCommunicate;
+  private PaparazziTransmitterExecuteClientEndpoint        paparazziTransmitterExecute;
+  private PaparazziTransmitterClearClientEndpoint          paparazziTransmitterClear;
+  private Uav3iTransmitterAddUavDataPointClientEndpoint    uav3iTransmitterAddUavDataPoint;
+  private Uav3iTransmitterUpdateWayPointClientEndpoint     uav3iTransmitterUpdateWayPoint;
+  private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
+  private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
   //-----------------------------------------------------------------------------
   public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   {
     // Connection to server.
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";
     
-    register                        = new RegisterClientEndpoint(new URI(baseURI + "/Register"));
-    config                          = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
-    paparazziTransmitterCommunicate = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
-    paparazziTransmitterExecute     = new PaparazziTransmitterExecuteClientEndpoint(new URI(baseURI + "/PaparazziTransmitterExecute"));
-    paparazziTransmitterClear       = new PaparazziTransmitterClearClientEndpoint(new URI(baseURI + "/PaparazziTransmitterClear"));
-    uav3iTransmitterAddUavDataPoint = new Uav3iTransmitterAddUavDataPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddUavDataPoint"));
-    uav3iTransmitterUpdateWayPoint  = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
-    uav3iTransmitterAddFlightParams = new Uav3iTransmitterAddFlightParamsClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddFlightParams"));
+    register                           = new RegisterClientEndpoint(new URI(baseURI + "/Register"));
+    config                             = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
+    paparazziTransmitterCommunicate    = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
+    paparazziTransmitterExecute        = new PaparazziTransmitterExecuteClientEndpoint(new URI(baseURI + "/PaparazziTransmitterExecute"));
+    paparazziTransmitterClear          = new PaparazziTransmitterClearClientEndpoint(new URI(baseURI + "/PaparazziTransmitterClear"));
+    uav3iTransmitterAddUavDataPoint    = new Uav3iTransmitterAddUavDataPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddUavDataPoint"));
+    uav3iTransmitterUpdateWayPoint     = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
+    uav3iTransmitterAddFlightParams    = new Uav3iTransmitterAddFlightParamsClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddFlightParams"));
+    uav3iTransmitterResultAskExecution = new Uav3iTransmitterResultAskExecutionClientEndpoint(new URI(baseURI + "/Uav3iTransmitterResultAskExecution"));
 
     register.register();
     

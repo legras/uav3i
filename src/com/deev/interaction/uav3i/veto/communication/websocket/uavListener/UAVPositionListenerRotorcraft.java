@@ -84,7 +84,6 @@ public class UAVPositionListenerRotorcraft extends UAVListener
     //if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
     if(Veto2ClientWebsocketFacade.isConnected() && Veto.getVetoState() == VetoState.RECEIVING)
     {
-      //Uav3iTransmitterServerEndpoint.addUAVDataPoint(latitude, longitude, course, altitude, time);
       try
       {
         Uav3iTransmitterAddUavDataPointServerEndpoint.addUAVDataPoint("latlon", message2Client);
