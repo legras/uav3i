@@ -3,9 +3,13 @@
 # +---------------------------------------------------------------------------+
 
 # Possible values:
-# REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO | VETO_AUTO
+# MODE        ---> REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO
+# REMOTE_TYPE ---> RMI | WEBSOCKET
+# VETO_MODE   ---> MANUEL | AUTOMATIC
 
-MODE = PAPARAZZI_DIRECT
+MODE        = PAPARAZZI_DIRECT
+#REMOTE_TYPE = WEBSOCKET
+#VETO_MODE   = AUTOMATIC
 
 
 
