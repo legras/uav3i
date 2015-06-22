@@ -69,7 +69,7 @@ public class PaparazziTransmitterWebsocket
     uavPositionListener           = new UAVPositionListener();
     uavNavStatusListener          = new UAVNavStatusListener();
     uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
-    uavFlightParamsListener       = new UAVFlightParamsListener();
+    //uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
     uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
     LoggerUtil.LOG.config("Ivy initialized");
@@ -196,8 +196,8 @@ public class PaparazziTransmitterWebsocket
       // Mise en écoute des messages NAV_STATUS
       bus.bindMsg("(.*) NAV_STATUS(.*)", uavNavStatusListener);
 
-      // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
-      bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
+//      // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
+//      bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
 
       // Mise en écoute des messages concernant les waypoints
       bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", uavWayPointsListener);
