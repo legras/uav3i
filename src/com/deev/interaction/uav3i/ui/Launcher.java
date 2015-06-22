@@ -84,7 +84,7 @@ public class Launcher
 			default:
 				break;
 		}
-		
+
     // Lancement éventuel du bridge Windows/TUIO (Touch2Tuio_x64.exe)
     if (UAV3iSettings.getTUIO() && System.getProperty("os.name").startsWith("Windows"))
     {
@@ -93,8 +93,15 @@ public class Launcher
         case REPLAY:
         case PAPARAZZI_DIRECT:
         case PAPARAZZI_REMOTE:
-          startTouch2Tuio();
-          LoggerUtil.LOG.log(Level.CONFIG, "Bridge Windows/TUIO started (Touch2Tuio_x64.exe)");
+          try
+          {
+            startTouch2Tuio();
+            LoggerUtil.LOG.log(Level.CONFIG, "Bridge Windows/TUIO started (Touch2Tuio_x64.exe)");
+          }
+          catch (TuioException e)
+          {
+            LoggerUtil.LOG.log(Level.SEVERE, "Bridge Windows/TUIO not started: TUIO problem: process stopped when it should not have!");
+          }
         default:
           // Does nothing in other cases
           break;
@@ -105,15 +112,16 @@ public class Launcher
 	/**
 	 * Touch2Tuio assure la transformation des touchers Windows en touchers TUIO sur
 	 * une fenêtre donnée, identifiée par le nom dans sa barre de titre. 
+	 * @throws TuioException 
 	 */
-	private static void startTouch2Tuio()
+	private static void startTouch2Tuio() throws TuioException
 	{
 	  // Si l'outil est lancé avant l'apparation de la fenêtre (ce qui peut être
 	  // relativement long avec les initialisations diverses), Touch2Tuio s'arrête
 	  // et renvoie l'erreur suivante :
 	  //   - Could not install hook for "uav3i"
 	  // Délai d'une seconde avant le lancement.
-    try { Thread.sleep(1000); } catch (InterruptedException e) {}
+    try { Thread.sleep(3000); } catch (InterruptedException e) {}
 
 	  try
 	  {
@@ -134,13 +142,22 @@ public class Launcher
 	    // Mécanisme derrière ? Voir plus de détails sur :
 	    // http://labs.excilys.com/2012/06/26/runtime-exec-pour-les-nuls-et-processbuilder/
 	    p.waitFor();
-
-	    System.out.println("####### TUIO problem: 'Touch2Tuio_x64' process stopped when it should not have!");
+	    
+	    throw new TuioException("TUIO problem: 'Touch2Tuio_x64' process stopped when it should not have!");
 	  }
-	  catch (Exception e)
+	  catch (InterruptedException | IOException e)
 	  {
 	    e.printStackTrace();
 	  }
+	}
+	
+	private static class TuioException extends Exception
+	{
+    private static final long serialVersionUID = 2241338346335124717L;
+    public TuioException(String message)
+    {
+      super(message);
+    }
 	}
 
   private static class AfficheurFlux implements Runnable
