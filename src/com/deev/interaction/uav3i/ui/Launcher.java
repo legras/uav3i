@@ -100,7 +100,7 @@ public class Launcher
           }
           catch (TuioException e)
           {
-            LoggerUtil.LOG.log(Level.SEVERE, "Bridge Windows/TUIO not started: TUIO problem: process stopped when it should not have!");
+            LoggerUtil.LOG.log(Level.SEVERE, "Bridge Windows/TUIO not started: TUIO problem, process stopped when it should not have!");
           }
         default:
           // Does nothing in other cases
