@@ -69,10 +69,18 @@ public class FingerPane extends JComponent implements Touchable
 		{
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
 		
-			CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
-			_smap.addManoeuver(circleMnvr);
-			Animator.addAnimation(circleMnvr);
-
+			if (gesture.getDuration() > 1500)
+			{
+				SurfaceObjectMnvr surfoMnvr = new SurfaceObjectMnvr(_smap, p);
+				_smap.addManoeuver(surfoMnvr);
+				Animator.addAnimation(surfoMnvr);
+			}
+			else
+			{
+				CircleMnvr circleMnvr = new CircleMnvr(_smap, p);
+				_smap.addManoeuver(circleMnvr);
+				Animator.addAnimation(circleMnvr);
+			}
 			MainFrame.SWITCHER.resetToMap();
 			
 			return;
