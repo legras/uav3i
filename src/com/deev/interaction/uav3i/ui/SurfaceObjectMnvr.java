@@ -1,8 +1,14 @@
 package com.deev.interaction.uav3i.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -106,17 +112,111 @@ public class SurfaceObjectMnvr extends Manoeuver
 			g2.drawImage(_imgDataBig, 384-_imgDataBig.getWidth(), (int) (-_imgDataBig.getHeight()/2.), null);
 			g2.rotate(_course);
 			g2.drawImage(_imgObjectBig, (int) (-_imgObjectBig.getWidth()/2.), (int) (-_imgObjectBig.getHeight()/2.), null);
+			g2.rotate(-_course);
+			g2.translate(_imgObjectBig.getWidth()/2., 0);
+			drawData(g2);
 		}
 		else
 		{
 			g2.drawImage(_imgDataSmall, 192-_imgDataSmall.getWidth(), (int) (-_imgDataSmall.getHeight()/2.), null);
 			g2.rotate(_course);
 			g2.drawImage(_imgObjectSmall, (int) (-_imgObjectSmall.getWidth()/2.), (int) (-_imgObjectSmall.getHeight()/2.), null);
+			g2.rotate(-_course);
+			g2.translate(_imgObjectSmall.getWidth()/2., 0);
+			drawData(g2);
 		}
 
 		g2.setTransform(old);
 	}
 
+	public void drawData(Graphics2D g2)
+	{
+		String LAT, LON, COURSE;
+		
+		if (_center.getLat() < 0.)
+		{
+			LAT = String.format("S%.4f", -_center.getLat());
+		}
+		else
+		{
+			LAT = String.format("N%.4f", _center.getLat());
+		}
+		
+		if (_center.getLng() < 0.)
+		{
+			LON = String.format("W%.4f", -_center.getLng());
+		}
+		else
+		{
+			LON = String.format("E%.4f", _center.getLng());
+		}
+		
+		while (_course > 2*Math.PI)
+		{
+			_course -= 2*Math.PI;
+		}
+		
+		int course = (int) Math.floor(16. * (_course+Math.PI/16.) / (2.*Math.PI));
+		final String courses[] = {	"N", "NNW", "NW", "WNW",
+									"W", "WSW", "SW", "SSW",
+									"S", "SSE", "SE", "ESE",
+									"E", "ENE", "NE", "NNE"};
+		
+		COURSE = courses[course];
+		
+		// Label
+		FontRenderContext frc = g2.getFontRenderContext();
+		Font f = new Font("Futura", Font.PLAIN, 24);
+		TextLayout textTl;
+		Shape outline;
+
+		double lineH = 32.;
+		
+		AffineTransform old = g2.getTransform();
+		
+		g2.translate(-2., -1.5*lineH+24);
+		
+		textTl = new TextLayout(LAT, f, frc);
+		outline = textTl.getOutline(null);
+		//Rectangle2D b = outline.getBounds2D();
+		
+		g2.setPaint(_M_WHITE);
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+		g2.draw(outline);
+
+		g2.setPaint(_M_GREY);
+		g2.fill(outline);
+		
+		g2.translate(0., lineH);
+		
+		textTl = new TextLayout(LON, f, frc);
+		outline = textTl.getOutline(null);
+		//Rectangle2D b = outline.getBounds2D();
+		
+		g2.setPaint(_M_WHITE);
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+		g2.draw(outline);
+
+		g2.setPaint(_M_GREY);
+		g2.fill(outline);
+		
+		g2.translate(0., lineH);
+		
+		textTl = new TextLayout(COURSE, f, frc);
+		outline = textTl.getOutline(null);
+		//Rectangle2D b = outline.getBounds2D();
+		
+		g2.setPaint(_M_WHITE);
+		g2.setStroke(new BasicStroke(5.f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL));
+		g2.draw(outline);
+
+		g2.setPaint(_M_GREY);
+		g2.fill(outline);
+		
+		g2.setTransform(old);
+	}
+	
+	
 	@Override
 	public ManoeuverDTO toDTO()
 	{
