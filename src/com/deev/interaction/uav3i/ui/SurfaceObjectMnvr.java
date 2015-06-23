@@ -23,10 +23,12 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 public class SurfaceObjectMnvr extends Manoeuver
 {
 	private LatLng _center;
-	private double _course;
+	private double _angle = 0.1;
 	
 	private enum SurfaceObjectMnvrStates {NONE, TRANSLATE, ROTATE};
 	private SurfaceObjectMnvrStates _moveState = SurfaceObjectMnvrStates.NONE;
+	private boolean _isMoving = false;
+	private Point2D.Double _offCenter;
 
 	private static BufferedImage _imgObjectBig= null;
 	private static BufferedImage _imgDataBig= null;
@@ -75,28 +77,96 @@ public class SurfaceObjectMnvr extends Manoeuver
 	
 	public boolean isBigOnScreen()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
 	public float getInterestForPoint(float x, float y)
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		if (_moveState != SurfaceObjectMnvrStates.NONE)
+			return -1.f;
+				
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+		
+		if (centerPx.distance(x, y) < getRadius())
+			return getMoveInterest();
+
+		Rectangle2D.Double box;
+		
+		if (isBigOnScreen())
+			box = new Rectangle2D.Double(centerPx.x, centerPx.y-64., 384., 128.);
+		else
+			box = new Rectangle2D.Double(centerPx.x, centerPx.y-64., 256., 128.);
+		
+		if (box.contains(x, y))
+			return getMoveInterest();
+		else
+			return -1.f;
+	}
+
+
+
+	@Override
+	public void addTouch(float x, float y, Object touchref)
+	{
+		if (_isMoving)
+			return;
+
+		super.addTouch(x, y, touchref);
+		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
+		if (!isModifiable())
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
+		_isMoving = true;
+		
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+		_offCenter = new Point2D.Double(x-centerPx.x, y-centerPx.y);
 	}
 
 	@Override
+	public void updateTouch(float x, float y, Object touchref)
+	{
+		super.updateTouch(x, y, touchref);
+		
+		if (_offCenter == null)
+		{
+			cancelTouch(touchref);
+			return;
+		}
+		
+		Point2D.Double centerPx = new Point2D.Double(x-_offCenter.x, y-_offCenter.y);
+		
+		_center = _smap.getLatLngForScreen(centerPx.x, centerPx.y);
+		
+		positionButtons();
+	}
+	
+	
+	@Override
 	public void removeTouch(float x, float y, Object touchref)
 	{
-		// TODO Auto-generated method stub
-
+		_isMoving = false;
+		_offCenter = null;
+		
+		positionButtons();
 	}
 
 	@Override
 	public void cancelTouch(Object touchref)
 	{
-		// TODO Auto-generated method stub
-
+		_isMoving = false;
+		_offCenter = null;
+		
+		positionButtons();
 	}
 
 	@Override
@@ -110,18 +180,18 @@ public class SurfaceObjectMnvr extends Manoeuver
 		if (isBigOnScreen())
 		{
 			g2.drawImage(_imgDataBig, 384-_imgDataBig.getWidth(), (int) (-_imgDataBig.getHeight()/2.), null);
-			g2.rotate(_course);
+			g2.rotate(_angle);
 			g2.drawImage(_imgObjectBig, (int) (-_imgObjectBig.getWidth()/2.), (int) (-_imgObjectBig.getHeight()/2.), null);
-			g2.rotate(-_course);
+			g2.rotate(-_angle);
 			g2.translate(_imgObjectBig.getWidth()/2., 0);
 			drawData(g2);
 		}
 		else
 		{
 			g2.drawImage(_imgDataSmall, 192-_imgDataSmall.getWidth(), (int) (-_imgDataSmall.getHeight()/2.), null);
-			g2.rotate(_course);
+			g2.rotate(_angle);
 			g2.drawImage(_imgObjectSmall, (int) (-_imgObjectSmall.getWidth()/2.), (int) (-_imgObjectSmall.getHeight()/2.), null);
-			g2.rotate(-_course);
+			g2.rotate(-_angle);
 			g2.translate(_imgObjectSmall.getWidth()/2., 0);
 			drawData(g2);
 		}
@@ -151,12 +221,12 @@ public class SurfaceObjectMnvr extends Manoeuver
 			LON = String.format("E%.4f", _center.getLng());
 		}
 		
-		while (_course > 2*Math.PI)
+		while (_angle > 2*Math.PI)
 		{
-			_course -= 2*Math.PI;
+			_angle -= 2*Math.PI;
 		}
 		
-		int course = (int) Math.floor(16. * (_course+Math.PI/16.) / (2.*Math.PI));
+		int course = (int) Math.floor(1/16. + 16.*_angle/(2.*Math.PI));
 		final String courses[] = {	"N", "NNW", "NW", "WNW",
 									"W", "WSW", "SW", "SSW",
 									"S", "SSE", "SE", "ESE",
@@ -202,7 +272,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 		
 		g2.translate(0., lineH);
 		
-		textTl = new TextLayout(COURSE, f, frc);
+		textTl = new TextLayout("⎈ "+COURSE, f, frc);
 		outline = textTl.getOutline(null);
 		//Rectangle2D b = outline.getBounds2D();
 		
