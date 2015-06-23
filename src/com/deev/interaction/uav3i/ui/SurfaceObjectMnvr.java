@@ -29,6 +29,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	private SurfaceObjectMnvrStates _moveState = SurfaceObjectMnvrStates.NONE;
 	private boolean _isMoving = false;
 	private Point2D.Double _offCenter;
+	private double _lastTouchAngle;
 
 	private static BufferedImage _imgObjectBig= null;
 	private static BufferedImage _imgDataBig= null;
@@ -129,7 +130,17 @@ public class SurfaceObjectMnvr extends Manoeuver
 		_isMoving = true;
 		
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
-		_offCenter = new Point2D.Double(x-centerPx.x, y-centerPx.y);
+		
+		if (centerPx.distance(x, y) > getRadius()-80. && centerPx.distance(x, y) < getRadius())
+		{
+			_moveState = SurfaceObjectMnvrStates.ROTATE;
+			_lastTouchAngle = Math.atan2(y-centerPx.y, x-centerPx.x);
+		}
+		else
+		{
+			_moveState = SurfaceObjectMnvrStates.TRANSLATE;
+			_offCenter = new Point2D.Double(x-centerPx.x, y-centerPx.y);
+		}
 	}
 
 	@Override
@@ -137,15 +148,32 @@ public class SurfaceObjectMnvr extends Manoeuver
 	{
 		super.updateTouch(x, y, touchref);
 		
-		if (_offCenter == null)
+		switch (_moveState)
 		{
-			cancelTouch(touchref);
-			return;
+			case ROTATE:
+				Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+				double touchAngle = Math.atan2(y-centerPx.y, x-centerPx.x);
+				
+				while (touchAngle < 0.) touchAngle += 2*Math.PI;
+				while (touchAngle > 2*Math.PI) touchAngle -= 2*Math.PI;
+				
+				_angle += touchAngle - _lastTouchAngle;
+				
+				while (_angle < 0.) _angle += 2*Math.PI;
+				while (_angle > 2*Math.PI) _angle -= 2*Math.PI;
+				
+				_lastTouchAngle = touchAngle;
+				break;
+		
+			case TRANSLATE:
+				Point2D.Double newCenterPx = new Point2D.Double(x-_offCenter.x, y-_offCenter.y);
+				_center = _smap.getLatLngForScreen(newCenterPx.x, newCenterPx.y);
+				break;
+				
+			default:
+				cancelTouch(touchref);
+				return;	
 		}
-		
-		Point2D.Double centerPx = new Point2D.Double(x-_offCenter.x, y-_offCenter.y);
-		
-		_center = _smap.getLatLngForScreen(centerPx.x, centerPx.y);
 		
 		positionButtons();
 	}
@@ -156,6 +184,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	{
 		_isMoving = false;
 		_offCenter = null;
+		_moveState = SurfaceObjectMnvrStates.NONE;
 		
 		positionButtons();
 	}
@@ -165,6 +194,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	{
 		_isMoving = false;
 		_offCenter = null;
+		_moveState = SurfaceObjectMnvrStates.NONE;
 		
 		positionButtons();
 	}
@@ -226,13 +256,13 @@ public class SurfaceObjectMnvr extends Manoeuver
 			_angle -= 2*Math.PI;
 		}
 		
-		int course = (int) Math.floor(1/16. + 16.*_angle/(2.*Math.PI));
+		int course = (int) Math.floor(.5 + 16.*_angle/(2.*Math.PI));
 		final String courses[] = {	"N", "NNW", "NW", "WNW",
 									"W", "WSW", "SW", "SSW",
 									"S", "SSE", "SE", "ESE",
 									"E", "ENE", "NE", "NNE"};
 		
-		COURSE = courses[course];
+		COURSE = courses[(16-course)%16];
 		
 		// Label
 		FontRenderContext frc = g2.getFontRenderContext();
