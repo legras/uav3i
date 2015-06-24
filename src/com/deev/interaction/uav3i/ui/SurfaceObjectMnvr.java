@@ -78,7 +78,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	
 	public boolean isBigOnScreen()
 	{
-		return true;
+		return _smap.getPPM() > 1.;
 	}
 	
 	@Override
@@ -327,11 +327,15 @@ public class SurfaceObjectMnvr extends Manoeuver
 	@Override
 	public void positionButtons()
 	{
-		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
-		double Rpx = _smap.getPPM() * getRadius();
+		if (_buttons == null)
+			return;
 		
-		if (_buttons != null)
-			_buttons.setPositions(centerPx, 40+Rpx, Math.PI/2, true);
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+		
+		if (isBigOnScreen())		
+			_buttons.setPositions(centerPx, 292, Math.PI, true);
+		else
+			_buttons.setPositions(centerPx, 104, Math.PI, true);
 	}
 
 	@Override
