@@ -7,6 +7,7 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -17,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 
@@ -24,6 +26,9 @@ public class SurfaceObjectMnvr extends Manoeuver
 {
 	private LatLng _center;
 	private double _angle = 0.1;
+	private Point2D.Double _lookAt;
+	private Point2D.Double _lastLookAt;
+	static double LOOK_RADIUS = 32.;
 	
 	private enum SurfaceObjectMnvrStates {NONE, TRANSLATE, ROTATE};
 	private SurfaceObjectMnvrStates _moveState = SurfaceObjectMnvrStates.NONE;
@@ -40,6 +45,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	{
 		_center = c;
 		_smap = map;
+		_lookAt = new Point2D.Double(0.5, 0);
 			
 		try
 		{
@@ -69,6 +75,34 @@ public class SurfaceObjectMnvr extends Manoeuver
 		}
 
 		positionButtons();
+	}
+	
+	public Point2D.Double lookRelativeFromPx(Point2D.Double px)
+	{
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+		
+		Point2D.Double pr = px;
+
+		pr.x -= centerPx.x;
+		pr.y -= centerPx.y;
+		
+		pr.x /= 256.;
+		pr.y /= 256.;
+		
+		return new Point2D.Double(Math.cos(-_angle)*pr.x - Math.sin(-_angle)*pr.y,
+								  Math.sin(-_angle)*pr.x + Math.cos(-_angle)*pr.y);
+	}
+	
+	public Point2D.Double lookPxFromRelative(Point2D.Double pr)
+	{
+		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
+		
+		Point2D.Double px = new Point2D.Double();
+		
+		px.x = centerPx.x + 256 * (Math.cos(_angle)*pr.x - Math.sin(_angle)*pr.y);
+		px.y = centerPx.y + 256 * (Math.sin(_angle)*pr.x + Math.cos(_angle)*pr.y);
+		
+		return px;
 	}
 	
 	public double getRadius()
@@ -227,6 +261,13 @@ public class SurfaceObjectMnvr extends Manoeuver
 		}
 
 		g2.setTransform(old);
+		
+		if (isBigOnScreen())
+		{
+			Point2D.Double c = lookPxFromRelative(_lookAt);
+			Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
+			paintFootprint(g2, ell, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
+		}
 	}
 
 	public void drawData(Graphics2D g2)
@@ -341,15 +382,38 @@ public class SurfaceObjectMnvr extends Manoeuver
 	@Override
 	public boolean adjustAtPx(double x, double y)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Point2D.Double pr = lookRelativeFromPx(new Point2D.Double(x, y));
+		
+		_buttons.show();
+		setRequestedStatus(ManoeuverRequestedStatus.NONE);
+
+		if (_adjusting)
+		{
+			_lookAt.x += pr.x - _lastLookAt.x;
+			_lookAt.y += pr.y - _lastLookAt.y;
+			
+			_lastLookAt = pr;
+
+			// TODO: contraindre au cercle ?
+
+			return true;
+		}
+
+		if (isAdjustmentInterestedAtPx(x, y))
+		{
+			_lastLookAt = pr;
+			_adjusting = true;
+		}
+
+		return _adjusting;
 	}
 
 	@Override
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Point2D.Double L = lookPxFromRelative(_lookAt);
+		
+		return L.distance(x, y) < LOOK_RADIUS;
 	}
 
 }
