@@ -21,6 +21,7 @@ import uk.me.jstott.jcoord.LatLng;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
+import com.deev.interaction.uav3i.veto.communication.dto.SurfaceObjectMnvrDTO;
 
 public class SurfaceObjectMnvr extends Manoeuver
 {
@@ -361,8 +362,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	@Override
 	public ManoeuverDTO toDTO()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new SurfaceObjectMnvrDTO(id, _center, _angle, _lookAt.x, _lookAt.y);
 	}
 
 	@Override
