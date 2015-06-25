@@ -45,8 +45,8 @@ public abstract class Manoeuver implements Touchable, Animation
 
 	private static long _DEATH_LENGTH = 1000;
 	
-	private static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
-	private static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
+	protected static Color _M_GREY = new Color(.3f, .3f, .3f, 1.f);
+	protected static Color _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
 	
 	protected int id;
 	
@@ -236,7 +236,7 @@ public abstract class Manoeuver implements Touchable, Animation
 
 		// Label
 		FontRenderContext frc = g2.getFontRenderContext();
-		Font f = new Font("HelveticaNeue-UltraLight", Font.PLAIN, 24);
+		Font f = new Font("Futura", Font.PLAIN, 20);
 		TextLayout textTl;
 		Shape outline;
 

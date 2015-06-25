@@ -34,8 +34,8 @@ public abstract class ManoeuverDTO implements Serializable
   protected static double RPX = 10.;
   protected static double GRIP = 30.;
   
-  private static Color        _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
-  private static Color        _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
+  protected static Color        _M_GREY  = new Color(.3f, .3f, .3f, 1.f);
+  protected static Color        _M_WHITE = new Color(1.f, 1.f, 1.f, .4f);
   
   protected int id;
   //-----------------------------------------------------------------------------

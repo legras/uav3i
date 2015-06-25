@@ -18,7 +18,7 @@ public class CircleMnvr extends Manoeuver
 {
 	private LatLng _center;
 //  private double _currentRm = 200.;
-  private double _currentRm = 30.;
+	private double _currentRm = 30.;
 	private double _lastRm;
 	private boolean _isMoving = false;
 	private Point2D.Double _offCenter;
