@@ -184,7 +184,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 		
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		
-		if (!isBigOnScreen() && centerPx.distance(x, y) > getRadius()-80. && centerPx.distance(x, y) < getRadius())
+		if (isBigOnScreen() && centerPx.distance(x, y) > getRadius()-80. && centerPx.distance(x, y) < getRadius())
 		{
 			_moveState = SurfaceObjectMnvrStates.ROTATE;
 			_lastTouchAngle = Math.atan2(y-centerPx.y, x-centerPx.x);
