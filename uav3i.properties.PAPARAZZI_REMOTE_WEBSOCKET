@@ -63,9 +63,9 @@ INTERACTION_MODE = false
 # The use of the TUIO protocol is mandatory in order to take in account the
 # multi-touch functionalities.
 
-TUIO = false
+TUIO = true
 
 # If FULLSCREEN is settled to 'true', the mouse pointer, the dock (Mac OS X)
 # and graphical animations (Windows) are hidden.
 
-FULLSCREEN = false
+FULLSCREEN = true
