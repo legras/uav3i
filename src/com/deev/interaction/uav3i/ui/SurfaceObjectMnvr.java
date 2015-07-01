@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.touch.Gesture;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
@@ -42,6 +43,23 @@ public class SurfaceObjectMnvr extends Manoeuver
 	private static BufferedImage _imgObjectSmall= null;
 	private static BufferedImage _imgDataSmall= null;
 	
+	/**
+	 * SurfaceObjectMnvr est un type particulier de manoeuvre qui n'a pas pour vocation d'injecter des actions 
+	 * dans le système de contrôle du drone, mais d'indiquer visuellement à un pilote les zones d'intérêt sur 
+	 * un objet à la mer. Le end user peut mettre à jour manuellement le cap et la position de l'objet, et 
+	 * déplacer la zone d'intérêt dans le repère local de l'objet.
+	 * 
+	 * L'insertion d'une SurfaceObjectMnvr se fait suite à un appui long sur la carte (interpétation des gestes 
+	 * dans FingerPane.interpret(Gesture gesture)).
+	 * 
+	 * Pour le end user, à grande échelle, il est possible de déplacer l'objet.
+	 * A petite échelle, la rotation de l'objet est possible pour ajuster le cap perçu, ainsi que le déplacement 
+	 * de la zone d'intérêt, qui indique où l'opérateur de drone doit pointer la caméra.
+	 * 
+	 * @param map
+	 * @param c
+	 * @see FingerPane.interpret(Gesture gesture)
+	 */
 	public SurfaceObjectMnvr(SymbolMap map, LatLng c)
 	{
 		_center = c;
@@ -166,7 +184,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 		
 		Point2D.Double centerPx = _smap.getScreenForLatLng(_center);
 		
-		if (centerPx.distance(x, y) > getRadius()-80. && centerPx.distance(x, y) < getRadius())
+		if (isBigOnScreen() && centerPx.distance(x, y) > getRadius()-80. && centerPx.distance(x, y) < getRadius())
 		{
 			_moveState = SurfaceObjectMnvrStates.ROTATE;
 			_lastTouchAngle = Math.atan2(y-centerPx.y, x-centerPx.x);
