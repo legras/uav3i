@@ -56,12 +56,11 @@ public class Uav3iTransmitterAddCamStatusClientEndPoint
 
     LatLng camCoord       = new LatLng(camLat, camLong);
     LatLng camTargetCoord = new LatLng(camTargetLat, camTargetLong);
+    
+    UAVModel.setCamCoord(camCoord);
+    UAVModel.setCamTargetCoord(camTargetCoord);
 
-//    UAVModel.setAltitude(altitude);
-//    UAVModel.setVerticalSpeed(verticalSpeed);
-//    UAVModel.setGroundSpeed(groundSpeed);
-//    UAVModel.setGroundAltitude(groundAltitude);
-    LoggerUtil.LOG.info("Cam status: camCoord = " + camCoord + " - camTargetCoord = " + camTargetCoord);
+     LoggerUtil.LOG.info("Cam status: camCoord = " + camCoord + " - camTargetCoord = " + camTargetCoord);
   }
   //-----------------------------------------------------------------------------
   @OnClose

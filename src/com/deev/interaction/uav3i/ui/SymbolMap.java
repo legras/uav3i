@@ -72,6 +72,7 @@ public class SymbolMap extends Map implements Touchable
 	protected static BufferedImage _uavImage      = null;
 	protected static BufferedImage _uavGrayImage  = null;
 	protected static BufferedImage _waypointImage = null;
+	protected static BufferedImage _camImage      = null;
 
 	public SymbolMap()
 	{
@@ -102,6 +103,7 @@ public class SymbolMap extends Map implements Touchable
       _uavImage      = ImageIO.read(this.getClass().getResource("/img/rotorcraft.png"));
 			_uavGrayImage  = ImageIO.read(this.getClass().getResource("/img/uavGray.png"));
 			_waypointImage = ImageIO.read(this.getClass().getResource("/img/waypoint.png"));
+			_camImage      = ImageIO.read(this.getClass().getResource("/img/cam.png"));
 		}
 		catch (IOException e)
 		{
@@ -338,6 +340,27 @@ public class SymbolMap extends Map implements Touchable
 
 		}
 		g2.setTransform(old);
+		
+		// Cam status
+		if(UAVModel.getCamCoord() != null && UAVModel.getCamTargetCoord() != null)
+		{
+//	    old = g2.getTransform();
+//      Point2D.Double camCoord       = getScreenForLatLng(UAVModel.getCamCoord());
+//      Point2D.Double camTargetCoord = getScreenForLatLng(UAVModel.getCamTargetCoord());
+//      g2.drawImage(_camImage,  -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+		  
+      Point cam       = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamCoord().getLat(), UAVModel.getCamCoord().getLng(), false);
+      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamTargetCoord().getLat(), UAVModel.getCamTargetCoord().getLng(), false);
+      
+      g2.drawImage(_camImage,
+                   cam.x - _camImage.getWidth()/2,
+                   cam.y - _camImage.getHeight()/2,
+                   null);
+      g2.drawImage(_camImage,
+                   camTarget.x - _camImage.getWidth()/2,
+                   camTarget.y - _camImage.getHeight()/2,
+                   null);
+		}
 		
 		// Dessin UAV
 		old = g2.getTransform();	

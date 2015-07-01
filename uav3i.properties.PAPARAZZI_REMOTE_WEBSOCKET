@@ -24,25 +24,6 @@ VETO_SERVER_IP           = 192.168.233.130
 VETO_SERVER_PORT         = 8000
 
 
-# Only taken into account when MODE is PAPARAZZI_DIRECT
-# IVY_DOMAIN_BUS could be a domain of the form 10.0.0:1234 (similar to the
-# netmask without the trailing .255). It could also be the value 'null' or
-# an empty string => bus.start(null);
-
-IVY_DOMAIN_BUS = null
-
-
-
-# +---------------------------------------------------------------------------+
-# | Paparazzi settings                                                        |
-# +---------------------------------------------------------------------------+
-
-# Downloaded from server when mode is PAPARAZZI_WEBSOCKET
-PAPARAZZI_FLIGHT_PLAN = Paparazzi_params/flight_plans/rotorcraft_basic.xml
-PAPARAZZI_AIRFRAME    = Paparazzi_params/airframes/bebop.xml
-PAPARAZZI_IVY_MESSAGES = Paparazzi_params/ivyMessages/messages_v5.5_devel.xml
-
-
 
 # +---------------------------------------------------------------------------+
 # | Map settings for the JMapViewer component                                 |
