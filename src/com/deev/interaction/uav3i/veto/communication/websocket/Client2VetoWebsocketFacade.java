@@ -1,6 +1,5 @@
 package com.deev.interaction.uav3i.veto.communication.websocket;
 
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,20 +7,16 @@ import java.net.URISyntaxException;
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
 
-import uk.me.jstott.jcoord.LatLng;
-
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
-import com.deev.interaction.uav3i.veto.communication.dto.BoxMnvrDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.CircleMnvrDTO;
-import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.ConfigClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterClearClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterCommunicateClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.PaparazziTransmitterExecuteClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.RegisterClientEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddCamStatusClientEndPoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddFlightParamsClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterAddUavDataPointClientEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.Uav3iTransmitterResultAskExecutionClientEndpoint;
@@ -46,6 +41,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private Uav3iTransmitterUpdateWayPointClientEndpoint     uav3iTransmitterUpdateWayPoint;
   private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
   private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
+  private Uav3iTransmitterAddCamStatusClientEndPoint       uav3iTransmitterAddCamStatus;
   //-----------------------------------------------------------------------------
   public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   {
@@ -61,6 +57,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     uav3iTransmitterUpdateWayPoint     = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
     uav3iTransmitterAddFlightParams    = new Uav3iTransmitterAddFlightParamsClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddFlightParams"));
     uav3iTransmitterResultAskExecution = new Uav3iTransmitterResultAskExecutionClientEndpoint(new URI(baseURI + "/Uav3iTransmitterResultAskExecution"));
+    uav3iTransmitterAddCamStatus       = new Uav3iTransmitterAddCamStatusClientEndPoint(new URI(baseURI + "/Uav3iTransmitterAddCamStatus"));
 
     register.register();
     
