@@ -31,15 +31,13 @@ VETO_SERVER_PORT         = 8000
 
 # Possible values: MAPNIK | BING_AERIAL | OSM_CYCLE_MAP | OFF_LINE
 
-MAP_TYPE = MAPNIK
-
-
+MAP_TYPE = OFF_LINE
 
 # Only taken into account when MAP_TYPE is OFF_LINE
 
-OFF_LINE_PATH     =
-OFF_LINE_MIN_ZOOM =
-OFF_LINE_MAX_ZOOM =
+OFF_LINE_PATH     =  file:/home/uav3i/uav3i_tiles
+OFF_LINE_MIN_ZOOM = 7
+OFF_LINE_MAX_ZOOM = 18
 
 # Initial zoom for the JMapViewer component
 
