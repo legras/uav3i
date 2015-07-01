@@ -27,7 +27,21 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 	private Point2D.Double _lookAt;
 	static double LOOK_RADIUS = 32.;
 	
-	private static BufferedImage _imgObjectBig= null;
+  private static BufferedImage _imgObjectBig= null;
+  static
+  {
+    try
+    {
+      if (_imgObjectBig == null)
+      {
+        _imgObjectBig = ImageIO.read(SurfaceObjectMnvrDTO.class.getResource("/img/surfo obj big.png"));
+      }
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
 
 	
 	public SurfaceObjectMnvrDTO(int id, LatLng center, double angle, double lookX, double lookY)
@@ -37,18 +51,18 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 		_angle = angle;
 		_lookAt = new Point2D.Double(lookX, lookY);
 		
-		try
-		{
-			if (_imgObjectBig == null)
-			{
-				_imgObjectBig = ImageIO.read(this.getClass().getResource("/img/surfo obj big.png"));
-			}
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			if (_imgObjectBig == null)
+//			{
+//				_imgObjectBig = ImageIO.read(this.getClass().getResource("/img/surfo obj big.png"));
+//			}
+//		}
+//		catch (IOException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	
