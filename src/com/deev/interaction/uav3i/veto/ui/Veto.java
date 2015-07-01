@@ -62,7 +62,7 @@ public class Veto extends JFrame
   {
     super();
 
-    if(UAV3iSettings.getVetoMode() == VetoMode.MANUEL)
+    if(UAV3iSettings.getVetoMode() == VetoMode.MANUAL)
       this.setTitle("uav3i - Veto");
     else if(UAV3iSettings.getVetoMode() == VetoMode.AUTOMATIC)
       this.setTitle("uav3i - Veto (automatic mode)");

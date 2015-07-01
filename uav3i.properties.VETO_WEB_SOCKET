@@ -5,11 +5,11 @@
 # Possible values:
 # MODE        ---> REPLAY | PAPARAZZI_DIRECT | PAPARAZZI_REMOTE | VETO
 # REMOTE_TYPE ---> RMI | WEBSOCKET
-# VETO_MODE   ---> MANUEL | AUTOMATIC
+# VETO_MODE   ---> MANUAL | AUTOMATIC
 
 MODE        = VETO
 REMOTE_TYPE = WEBSOCKET
-VETO_MODE   = MANUEL
+VETO_MODE   = MANUAL
 
 
 
@@ -46,9 +46,7 @@ IVY_DOMAIN_BUS = null
 # Used for modes PAPARAZZI_DIRECT, VETO or VETO_AUTO
 # Note: must be the same as the files used by Paparazzi.
 
-#PAPARAZZI_FLIGHT_PLAN = Paparazzi_params/flight_plans/uav3i_france.xml
-#PAPARAZZI_AIRFRAME    = Paparazzi_params/airframes/microjet_v5.0.2_stable.xml
-PAPARAZZI_FLIGHT_PLAN = Paparazzi_params/flight_plans/rotorcraft_basic.xml
+PAPARAZZI_FLIGHT_PLAN = Paparazzi_params/flight_plans/rotorcraft_basic_telecom_bretagne.xml
 PAPARAZZI_AIRFRAME    = Paparazzi_params/airframes/bebop.xml
 PAPARAZZI_IVY_MESSAGES = Paparazzi_params/ivyMessages/messages_v5.5_devel.xml
 

@@ -23,7 +23,7 @@ public class UAVCamStatusListener extends UAVListener
     indexCAM_LAT         = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_lat");
     indexCAM_LONG        = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_long");
     indexCAM_TARGET_LAT  = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_target_lat");
-    indexCAM_TARGET_LONG = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_lat");
+    indexCAM_TARGET_LONG = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_target_long");
   }
   //-----------------------------------------------------------------------------
   @Override

@@ -98,7 +98,7 @@ public class PaparazziTransmitterWebsocket
     {
       if(mDTO.getId() == idMnvr)
       {
-        if(UAV3iSettings.getVetoMode() == VetoMode.MANUEL)
+        if(UAV3iSettings.getVetoMode() == VetoMode.MANUAL)
         {
           LoggerUtil.LOG.info("executeManoeuver("+mDTO+") asked");
           mDTO.addButtons();
