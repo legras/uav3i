@@ -13,12 +13,12 @@ import com.deev.interaction.uav3i.veto.ui.Veto.VetoState;
 
 import fr.dgac.ivy.IvyClient;
 
-public class CamStatusListener extends UAVListener
+public class UAVCamStatusListener extends UAVListener
 {
   //-----------------------------------------------------------------------------
   private int indexCAM_LAT, indexCAM_LONG, indexCAM_TARGET_LAT, indexCAM_TARGET_LONG;
   //-----------------------------------------------------------------------------
-  public CamStatusListener()
+  public UAVCamStatusListener()
   {
     indexCAM_LAT         = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_lat");
     indexCAM_LONG        = IvyMessagesFacade.getInstance().getFieldIndex("CAM_STATUS", "cam_long");

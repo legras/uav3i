@@ -13,6 +13,7 @@ import com.deev.interaction.uav3i.veto.communication.dto.LineMnvrDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterResultAskExecutionServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVCamStatusListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVNavStatusListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListener;
@@ -41,6 +42,7 @@ public class PaparazziTransmitterWebsocket
   private          UAVFlightParamsListener       uavFlightParamsListener       = null;
   private          UAVWayPointsListener          uavWayPointsListener          = null;
   private          UAVNavStatusListener          uavNavStatusListener          = null;
+  private          UAVCamStatusListener          uavCamStatusListener          = null;
 
   private static PaparazziTransmitterWebsocket instance;
   //-----------------------------------------------------------------------------
@@ -72,6 +74,7 @@ public class PaparazziTransmitterWebsocket
     //uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
     uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
+    uavCamStatusListener          = new UAVCamStatusListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -201,6 +204,9 @@ public class PaparazziTransmitterWebsocket
 
       // Mise en écoute des messages concernant les waypoints
       bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", uavWayPointsListener);
+      
+      // Mise en écoute des messages CAM_STATUS
+      bus.bindMsg("(.*)CAM_STATUS(.*)", uavCamStatusListener);
     }
     catch (IvyException e)
     {

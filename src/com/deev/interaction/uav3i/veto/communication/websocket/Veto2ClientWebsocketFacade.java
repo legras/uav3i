@@ -10,6 +10,7 @@ import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Pa
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterCommunicateServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.PaparazziTransmitterExecuteServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.RegisterServerEndpoint;
+import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddCamStatusServerEndPoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddFlightParamsServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterAddUavDataPointServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterResultAskExecutionServerEndpoint;
@@ -44,7 +45,8 @@ public class Veto2ClientWebsocketFacade
       Uav3iTransmitterAddUavDataPointServerEndpoint.class,
       Uav3iTransmitterUpdateWayPointServerEndpoint.class,
       Uav3iTransmitterAddFlightParamsServerEndpoint.class,
-      Uav3iTransmitterResultAskExecutionServerEndpoint.class
+      Uav3iTransmitterResultAskExecutionServerEndpoint.class,
+      Uav3iTransmitterAddCamStatusServerEndPoint.class
     };
     
     Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address
