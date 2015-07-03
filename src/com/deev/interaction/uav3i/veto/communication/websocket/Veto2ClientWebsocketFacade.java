@@ -46,7 +46,7 @@ public class Veto2ClientWebsocketFacade
       Uav3iTransmitterUpdateWayPointServerEndpoint.class,
       Uav3iTransmitterAddFlightParamsServerEndpoint.class,
       Uav3iTransmitterResultAskExecutionServerEndpoint.class
-//      Uav3iTransmitterAddCamStatusServerEndPoint.class
+      Uav3iTransmitterAddCamStatusServerEndPoint.class
     };
     
     Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address

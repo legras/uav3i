@@ -74,7 +74,7 @@ public class PaparazziTransmitterWebsocket
     //uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
     uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
-//    uavCamStatusListener          = new UAVCamStatusListener();
+    uavCamStatusListener          = new UAVCamStatusListener();
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------
@@ -205,8 +205,8 @@ public class PaparazziTransmitterWebsocket
       // Mise en écoute des messages concernant les waypoints
       bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", uavWayPointsListener);
       
-//      // Mise en écoute des messages CAM_STATUS
-//      bus.bindMsg("(.*)CAM_STATUS(.*)", uavCamStatusListener);
+      // Mise en écoute des messages CAM_STATUS
+      bus.bindMsg("(.*)CAM_STATUS(.*)", uavCamStatusListener);
     }
     catch (IvyException e)
     {
