@@ -35,7 +35,6 @@ public class UAVModel
 	private double groundAltitude;
 	private double groundSpeed;
 	private UAVWayPoints uavWayPoints = new UAVWayPoints();
-//	private LatLng camCoord, camTargetCoord;
 
 
 	public static void initialize(InputStream stream)
@@ -177,14 +176,6 @@ public class UAVModel
       store._dataPoints.add(new UAVDataPoint(lat, lon, c, alt, t, camTargetLat, camTargetLong));
     }
   }
-
-//	public static void addUAVDataPoint(UAVDataPoint point)
-//	{
-//	  if(store != null)
-//	  {
-//	    store._dataPoints.add(point);
-//	  }  
-//	}
 
 	public static UAVDataPoint getDataPointAtTime(long time)
 	{
@@ -429,34 +420,4 @@ public class UAVModel
 			return null;
 		return store.uavWayPoints;
 	}
-
-//  public static LatLng getCamCoord()
-//  {
-//    if(store == null)
-//      return null;
-//    return store.camCoord;
-//  }
-//
-//  public static void setCamCoord(LatLng camCoord)
-//  {
-//    if(store != null)
-//    {
-//      store.camCoord = camCoord;
-//    }
-//  }
-//
-//  public static LatLng getCamTargetCoord()
-//  {
-//    if(store == null)
-//      return null;
-//    return store.camTargetCoord;
-//  }
-//
-//  public static void setCamTargetCoord(LatLng camTargetCoord)
-//  {
-//    if(store != null)
-//    {
-//      store.camTargetCoord = camTargetCoord;
-//    }
-//  }
 }

@@ -45,7 +45,6 @@ public class Veto2ClientWebsocketFacade
       Uav3iTransmitterUpdateWayPointServerEndpoint.class,
       Uav3iTransmitterAddFlightParamsServerEndpoint.class,
       Uav3iTransmitterResultAskExecutionServerEndpoint.class
-//      Uav3iTransmitterAddCamStatusServerEndPoint.class
     };
     
     Server server = new Server(UAV3iSettings.getVetoServerIP(),   // hostname or IP address
@@ -56,8 +55,6 @@ public class Veto2ClientWebsocketFacade
     server.start();
     
     PaparazziTransmitterWebsocket.getInstance();
-
-    //new PaparazziTransmitterWebsocket();
   }
   //-----------------------------------------------------------------------------
   /**

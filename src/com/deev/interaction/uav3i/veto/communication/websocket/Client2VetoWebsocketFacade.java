@@ -40,7 +40,6 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private Uav3iTransmitterUpdateWayPointClientEndpoint     uav3iTransmitterUpdateWayPoint;
   private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
   private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
-//  private Uav3iTransmitterAddCamStatusClientEndPoint       uav3iTransmitterAddCamStatus;
   //-----------------------------------------------------------------------------
   public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   {
@@ -56,7 +55,6 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     uav3iTransmitterUpdateWayPoint     = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
     uav3iTransmitterAddFlightParams    = new Uav3iTransmitterAddFlightParamsClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddFlightParams"));
     uav3iTransmitterResultAskExecution = new Uav3iTransmitterResultAskExecutionClientEndpoint(new URI(baseURI + "/Uav3iTransmitterResultAskExecution"));
-//    uav3iTransmitterAddCamStatus       = new Uav3iTransmitterAddCamStatusClientEndPoint(new URI(baseURI + "/Uav3iTransmitterAddCamStatus"));
 
     register.register();
     
