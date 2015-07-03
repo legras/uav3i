@@ -103,7 +103,7 @@ public class SymbolMap extends Map implements Touchable
       _uavImage      = ImageIO.read(this.getClass().getResource("/img/rotorcraft.png"));
 			_uavGrayImage  = ImageIO.read(this.getClass().getResource("/img/uavGray.png"));
 			_waypointImage = ImageIO.read(this.getClass().getResource("/img/waypoint.png"));
-			_camImage      = ImageIO.read(this.getClass().getResource("/img/cam.png"));
+			_camImage      = ImageIO.read(this.getClass().getResource("/img/cam_target.png"));
 		}
 		catch (IOException e)
 		{
@@ -337,16 +337,20 @@ public class SymbolMap extends Map implements Touchable
 
 			g2.rotate(Math.PI/2.-course);
 			g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
+		}
+		g2.setTransform(old);
 
-			// Temporaire : dessin de la cible caméra
+    // Temporaire : dessin de la cible caméra
+    if(uavpoint.camTarget != null)
+    {
       Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.camTarget.getLat(), uavpoint.camTarget.getLng(), false);
       g2.drawImage(_camImage,
                    camTarget.x - _camImage.getWidth()/2,
                    camTarget.y - _camImage.getHeight()/2,
                    null);
-		}
-		g2.setTransform(old);
-		
+    }
+    g2.setTransform(old);
+
 //		// Cam status
 //		if(UAVModel.getCamCoord() != null && UAVModel.getCamTargetCoord() != null)
 //		{

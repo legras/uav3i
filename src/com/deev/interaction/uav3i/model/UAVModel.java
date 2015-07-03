@@ -174,7 +174,7 @@ public class UAVModel
   {
     if (store != null)
     {
-      store._dataPoints.add(new UAVDataPoint(lat, lon, c, alt, t));
+      store._dataPoints.add(new UAVDataPoint(lat, lon, c, alt, t, camTargetLat, camTargetLong));
     }
   }
 

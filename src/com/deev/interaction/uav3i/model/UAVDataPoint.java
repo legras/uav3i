@@ -90,4 +90,10 @@ public class UAVDataPoint
     camTarget = new LatLng(camTargetLat, camTargetLong);
   }
 
+  @Override
+  public String toString()
+  {
+    return "UAVDataPoint [latlng = " + latlng + ", altitude = " + altitude + ", course = " + course + ", time = " + time + ", camTarget = " + camTarget + "]";
+  }
+
 }
