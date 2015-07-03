@@ -56,12 +56,15 @@ public class Uav3iTransmitterAddUavDataPointClientEndpoint
         /*
          * lat,lon coordinates received
          */
-        int  latitude  = Integer.parseInt(st2.nextToken());
-        int  longitude = Integer.parseInt(st2.nextToken());
-        int  course    = Integer.parseInt(st2.nextToken());
-        int  altitude  = Integer.parseInt(st2.nextToken());
-        long time      = Long.parseLong(st2.nextToken());
-        UAVModel.addUAVDataPoint(latitude, longitude, course, altitude, time);
+        int    latitude      = Integer.parseInt(st2.nextToken());
+        int    longitude     = Integer.parseInt(st2.nextToken());
+        int    course        = Integer.parseInt(st2.nextToken());
+        int    altitude      = Integer.parseInt(st2.nextToken());
+        long   time          = Long.parseLong(st2.nextToken());
+        double camTargetLat  = Double.parseDouble(st2.nextToken());
+        double camTargetLong = Double.parseDouble(st2.nextToken());
+
+        UAVModel.addUAVDataPoint(latitude, longitude, course, altitude, time, camTargetLat, camTargetLong);
       }
       else if(what.equalsIgnoreCase("utm"))
       {

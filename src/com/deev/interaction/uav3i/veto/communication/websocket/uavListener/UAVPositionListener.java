@@ -62,6 +62,7 @@ public class UAVPositionListener extends UAVListener
     int  course   = Integer.parseInt(message[indexCOURSE]);
     int  altitude = Integer.parseInt(message[indexALT]);
     long time     = Long.parseLong(message[indexITOW]);
+    
     String message2Client = utmEast + "*" + utmNorth + "*" + utmZone + "*" + course + "*" + altitude + "*" + time;
 
     

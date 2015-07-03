@@ -338,24 +338,30 @@ public class SymbolMap extends Map implements Touchable
 			g2.rotate(Math.PI/2.-course);
 			g2.drawImage(uavImg, -uavImg.getWidth()/2, -uavImg.getHeight()/2, null);
 
-		}
-		g2.setTransform(old);
-		
-		// Cam status
-		if(UAVModel.getCamCoord() != null && UAVModel.getCamTargetCoord() != null)
-		{
-      Point cam       = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamCoord().getLat(), UAVModel.getCamCoord().getLng(), false);
-      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamTargetCoord().getLat(), UAVModel.getCamTargetCoord().getLng(), false);
-      
-      g2.drawImage(_camImage,
-                   cam.x - _camImage.getWidth()/2,
-                   cam.y - _camImage.getHeight()/2,
-                   null);
+			// Temporaire : dessin de la cible caméra
+      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.camTarget.getLat(), uavpoint.camTarget.getLng(), false);
       g2.drawImage(_camImage,
                    camTarget.x - _camImage.getWidth()/2,
                    camTarget.y - _camImage.getHeight()/2,
                    null);
 		}
+		g2.setTransform(old);
+		
+//		// Cam status
+//		if(UAVModel.getCamCoord() != null && UAVModel.getCamTargetCoord() != null)
+//		{
+//      Point cam       = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamCoord().getLat(), UAVModel.getCamCoord().getLng(), false);
+//      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(UAVModel.getCamTargetCoord().getLat(), UAVModel.getCamTargetCoord().getLng(), false);
+//      
+//      g2.drawImage(_camImage,
+//                   cam.x - _camImage.getWidth()/2,
+//                   cam.y - _camImage.getHeight()/2,
+//                   null);
+//      g2.drawImage(_camImage,
+//                   camTarget.x - _camImage.getWidth()/2,
+//                   camTarget.y - _camImage.getHeight()/2,
+//                   null);
+//		}
 		
 		// Dessin UAV
 		old = g2.getTransform();	

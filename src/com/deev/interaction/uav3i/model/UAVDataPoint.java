@@ -10,6 +10,7 @@ public class UAVDataPoint
 	public double altitude;
 	public double course;
 	public long time;
+	public LatLng camTarget;
 	
 	/**
 	 * <message name="GPS" id="8">
@@ -44,9 +45,10 @@ public class UAVDataPoint
     //System.out.println("utm = " + utm + " / utm2 = " + utm2);
     //System.out.println("utm_east : " + utm_east + " / utm_north : " + utm_north + " / utm_zone : " + utm_zone);
         
-		altitude = (double) alt / 1000.;
-		course = (double) c / 10.;
-		time = t;
+		altitude  = (double) alt / 1000.;
+		course    = (double) c / 10.;
+		time      = t;
+		camTarget = null;
 	}
 	
 	/**
@@ -72,10 +74,20 @@ public class UAVDataPoint
 	 */
   public UAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
-    latlng = new LatLng(lat / 10.e6, lon / 10.e6);
-    altitude = (double) alt / 100.;
-    course = (double) c;
-    time = t;
+    latlng    = new LatLng(lat / 10.e6, lon / 10.e6);
+    altitude  = (double) alt / 100.;
+    course    = (double) c;
+    time      = t;
+    camTarget = null;
+  }
+
+  public UAVDataPoint(int lat, int lon, int c, int alt, long t, double camTargetLat, double camTargetLong)
+  {
+    latlng    = new LatLng(lat / 10.e6, lon / 10.e6);
+    altitude  = (double) alt / 100.;
+    course    = (double) c;
+    time      = t;
+    camTarget = new LatLng(camTargetLat, camTargetLong);
   }
 
 }

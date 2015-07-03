@@ -70,11 +70,12 @@ public class PaparazziTransmitterWebsocket
                   null);
     uavPositionListener           = new UAVPositionListener();
     uavNavStatusListener          = new UAVNavStatusListener();
+    uavCamStatusListener          = new UAVCamStatusListener();
     uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
     //uavFlightParamsListener       = new UAVFlightParamsListener();
     uavWayPointsListener          = new UAVWayPointsListener();
     uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
-    uavCamStatusListener          = new UAVCamStatusListener();
+    uavPositionListenerRotorcraft.setUavCamStatusListener(uavCamStatusListener);
     LoggerUtil.LOG.config("Ivy initialized");
   }
   //-----------------------------------------------------------------------------

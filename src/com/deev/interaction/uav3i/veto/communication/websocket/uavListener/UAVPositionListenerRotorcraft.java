@@ -46,6 +46,7 @@ public class UAVPositionListenerRotorcraft extends UAVListener
 {
   //-----------------------------------------------------------------------------
   private UAVNavStatusListener uavNavStatusListener;
+  private UAVCamStatusListener uavCamStatusListener;
   private int indexLAT, indexLON, indexHMSL, indexTOW;
   //-----------------------------------------------------------------------------
   public UAVPositionListenerRotorcraft()
@@ -57,11 +58,19 @@ public class UAVPositionListenerRotorcraft extends UAVListener
   }
   //-----------------------------------------------------------------------------
   /**
-   * @param uavNavStatusListener the uavNavStatusListener to set
+   * @param uavNavStatusListener the {@link UAVNavStatusListener} to set
    */
   public void setUavNavStatusListener(UAVNavStatusListener uavNavStatusListener)
   {
     this.uavNavStatusListener = uavNavStatusListener;
+  }
+  //-----------------------------------------------------------------------------
+  /**
+   * @param uavCamStatusListener the {@link UAVCamStatusListener} to set
+   */
+  public void setUavCamStatusListener(UAVCamStatusListener uavCamStatusListener)
+  {
+    this.uavCamStatusListener = uavCamStatusListener;
   }
   //-----------------------------------------------------------------------------
   @Override
@@ -73,12 +82,15 @@ public class UAVPositionListenerRotorcraft extends UAVListener
   
     String[] message = tokens.split(" ");
     
-    int  latitude  = Integer.parseInt(message[indexLAT]);
-    int  longitude = Integer.parseInt(message[indexLON]);
-    int  course    = uavNavStatusListener.getLastCourseValue();
-    int  altitude  = Integer.parseInt(message[indexHMSL]);
-    long time      = Long.parseLong(message[indexTOW]);
-    String message2Client = latitude + "*" + longitude + "*" + course + "*" + altitude + "*" + time;
+    int    latitude      = Integer.parseInt(message[indexLAT]);
+    int    longitude     = Integer.parseInt(message[indexLON]);
+    int    course        = uavNavStatusListener.getLastCourseValue();
+    int    altitude      = Integer.parseInt(message[indexHMSL]);
+    long   time          = Long.parseLong(message[indexTOW]);
+    double camTargetLat  = uavCamStatusListener.getCamTargetLat();
+    double camTargetLong = uavCamStatusListener.getCamTargetLong();
+    
+    String message2Client = latitude + "*" + longitude + "*" + course + "*" + altitude + "*" + time + camTargetLat + "*" + camTargetLong;
   
     // On transmet via RMI à l'IHM table tactile la position du drone.
     //if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
