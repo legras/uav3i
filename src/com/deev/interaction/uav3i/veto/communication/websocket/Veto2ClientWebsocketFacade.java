@@ -45,7 +45,7 @@ public class Veto2ClientWebsocketFacade
       Uav3iTransmitterAddUavDataPointServerEndpoint.class,
       Uav3iTransmitterUpdateWayPointServerEndpoint.class,
       Uav3iTransmitterAddFlightParamsServerEndpoint.class,
-      Uav3iTransmitterResultAskExecutionServerEndpoint.class
+      Uav3iTransmitterResultAskExecutionServerEndpoint.class,
       Uav3iTransmitterAddCamStatusServerEndPoint.class
     };
     
