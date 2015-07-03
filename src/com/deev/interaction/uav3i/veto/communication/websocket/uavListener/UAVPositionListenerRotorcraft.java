@@ -90,7 +90,7 @@ public class UAVPositionListenerRotorcraft extends UAVListener
     double camTargetLat  = uavCamStatusListener.getCamTargetLat();
     double camTargetLong = uavCamStatusListener.getCamTargetLong();
     
-    String message2Client = latitude + "*" + longitude + "*" + course + "*" + altitude + "*" + time + camTargetLat + "*" + camTargetLong;
+    String message2Client = latitude + "*" + longitude + "*" + course + "*" + altitude + "*" + time + "*" + camTargetLat + "*" + camTargetLong;
   
     // On transmet via RMI à l'IHM table tactile la position du drone.
     //if(uav3iTransmitter != null && Veto.getVetoState() == VetoState.RECEIVING)
