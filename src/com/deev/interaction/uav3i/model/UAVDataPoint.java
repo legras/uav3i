@@ -74,6 +74,7 @@ public class UAVDataPoint
    *   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>
    * </message>
 	 */
+	@Deprecated
   public UAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
     latlng    = new LatLng(lat / 10.e6, lon / 10.e6);
