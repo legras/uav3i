@@ -54,7 +54,6 @@ public class UAVDataPoint
 	}
 	
 	/**
-	 * 
    * <message name="GPS_INT" id="155">
    *   <field name="ecef_x"  type="int32" unit="cm"   alt_unit="m"/>
    *   <field name="ecef_y"  type="int32" unit="cm"   alt_unit="m"/>
@@ -73,21 +72,55 @@ public class UAVDataPoint
    *   <field name="numsv"   type="uint8"/>
    *   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>
    * </message>
-	 */
+   * 
+   * @param lat           degree * 10^-6
+   * @param lon           degree * 10^-6
+   * @param c             degree
+   * @param alt           mm
+   * @param t             ms
+   */
 	@Deprecated
   public UAVDataPoint(int lat, int lon, int c, int alt, long t)
   {
     latlng    = new LatLng(lat / 10.e6, lon / 10.e6);
-    altitude  = (double) alt / 100.;
+    altitude  = (double) alt / 1000.;
     course    = (double) c;
     time      = t;
     _camTarget = null;
   }
 
+  /**
+   * <message name="GPS_INT" id="155">
+   *   <field name="ecef_x"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="ecef_y"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="ecef_z"  type="int32" unit="cm"   alt_unit="m"/>
+   *   <field name="lat"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
+   *   <field name="lon"     type="int32" unit="1e7deg" alt_unit="deg" alt_unit_coef="0.0000001"/>
+   *   <field name="alt"     type="int32" unit="mm"   alt_unit="m">altitude above WGS84 reference ellipsoid</field>
+   *   <field name="hmsl"    type="int32" unit="mm"   alt_unit="m">height above mean sea level (geoid)</field>
+   *   <field name="ecef_xd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="ecef_yd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="ecef_zd" type="int32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="pacc"    type="uint32" unit="cm"   alt_unit="m"/>
+   *   <field name="sacc"    type="uint32" unit="cm/s" alt_unit="m/s"/>
+   *   <field name="tow"     type="uint32"/>
+   *   <field name="pdop"    type="uint16"/>
+   *   <field name="numsv"   type="uint8"/>
+   *   <field name="fix"     type="uint8" values="NONE|UKN1|UKN2|3D"/>
+   * </message>
+   * 
+   * @param lat           degree * 10^-6
+   * @param lon           degree * 10^-6
+   * @param c             degree
+   * @param alt           mm
+   * @param t             ms
+   * @param camTargetLat  degree
+   * @param camTargetLong degree
+   */
   public UAVDataPoint(int lat, int lon, int c, int alt, long t, double camTargetLat, double camTargetLong)
   {
     latlng    = new LatLng(lat / 10.e6, lon / 10.e6);
-    altitude  = (double) alt / 100.;
+    altitude  = (double) alt / 1000.;
     course    = (double) c;
     time      = t;
     
