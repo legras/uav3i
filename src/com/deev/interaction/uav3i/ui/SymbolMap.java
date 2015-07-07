@@ -303,12 +303,17 @@ public class SymbolMap extends Map implements Touchable
 		// On la catche pour le moment...
 		try
 		{
-			GeneralPath foot = footPrintPath(VideoModel.video.getFootprintAtTime(time));
-			g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
-			g2.fill(foot);
-			g2.setStroke(new BasicStroke(2.f));
-			g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
-			g2.draw(foot);
+			CameraFootprint cfp = UAVModel.getDataPointAtTime(time).getCameraFootprint();
+
+			if (cfp != null)
+			{
+				GeneralPath foot = footPrintPath(cfp);
+				g2.setPaint(Palette3i.FOOTPRINT_FILL.getPaint());
+				g2.fill(foot);
+				g2.setStroke(new BasicStroke(2.f));
+				g2.setPaint(Palette3i.FOOTPRINT_DRAW.getPaint());
+				g2.draw(foot);
+			}
 		}
 		catch(NullPointerException npe)
 		{
@@ -341,9 +346,9 @@ public class SymbolMap extends Map implements Touchable
 		g2.setTransform(old);
 
     // Temporaire : dessin de la cible caméra
-    if(uavpoint.camTarget != null)
+    if(uavpoint.getCameraTarget() != null)
     {
-      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.camTarget.getLat(), uavpoint.camTarget.getLng(), false);
+      Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.getCameraTarget().getLat(), uavpoint.getCameraTarget().getLng(), false);
       g2.drawImage(_camImage,
                    camTarget.x - _camImage.getWidth()/2,
                    camTarget.y - _camImage.getHeight()/2,

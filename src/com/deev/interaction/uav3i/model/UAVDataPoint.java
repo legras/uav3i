@@ -10,7 +10,9 @@ public class UAVDataPoint
 	public double altitude;
 	public double course;
 	public long time;
-	public LatLng camTarget;
+	
+	protected LatLng _camTarget;
+	protected CameraFootprint _cameraFootPrint = null;
 	
 	/**
 	 * <message name="GPS" id="8">
@@ -48,7 +50,7 @@ public class UAVDataPoint
 		altitude  = (double) alt / 1000.;
 		course    = (double) c / 10.;
 		time      = t;
-		camTarget = null;
+		_camTarget = null;
 	}
 	
 	/**
@@ -78,7 +80,7 @@ public class UAVDataPoint
     altitude  = (double) alt / 100.;
     course    = (double) c;
     time      = t;
-    camTarget = null;
+    _camTarget = null;
   }
 
   public UAVDataPoint(int lat, int lon, int c, int alt, long t, double camTargetLat, double camTargetLong)
@@ -87,13 +89,25 @@ public class UAVDataPoint
     altitude  = (double) alt / 100.;
     course    = (double) c;
     time      = t;
-    camTarget = new LatLng(camTargetLat, camTargetLong);
+    
+    _camTarget = new LatLng(camTargetLat, camTargetLong);
+    _cameraFootPrint = new CameraFootprint(latlng, _camTarget, time);
   }
-
+  
+  public LatLng getCameraTarget()
+  {
+	  return _camTarget;
+  }
+  
+  public CameraFootprint getCameraFootprint()
+  {
+	  return _cameraFootPrint;
+  }
+  
   @Override
   public String toString()
   {
-    return "UAVDataPoint [latlng = " + latlng + ", altitude = " + altitude + ", course = " + course + ", time = " + time + ", camTarget = " + camTarget + "]";
+    return "UAVDataPoint [latlng = " + latlng + ", altitude = " + altitude + ", course = " + course + ", time = " + time + ", camTarget = " + _camTarget + "]";
   }
 
 }
