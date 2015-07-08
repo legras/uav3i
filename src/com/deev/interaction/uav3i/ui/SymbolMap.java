@@ -346,7 +346,7 @@ public class SymbolMap extends Map implements Touchable
 		g2.setTransform(old);
 
     // Temporaire : dessin de la cible caméra
-    if(uavpoint.getCameraTarget() != null)
+    if(uavpoint != null && uavpoint.getCameraTarget() != null)
     {
       Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.getCameraTarget().getLat(), uavpoint.getCameraTarget().getLng(), false);
       g2.drawImage(_camImage,
