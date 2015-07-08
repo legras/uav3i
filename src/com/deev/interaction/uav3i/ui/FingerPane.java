@@ -69,7 +69,7 @@ public class FingerPane extends JComponent implements Touchable
 		{
 			LatLng p = _smap.getLatLngForScreen((float) rectangle.x, (float) rectangle.y);
 		
-			if (gesture.getDuration() > 1500)
+			if (gesture.getDuration() > 600)
 			{
 				SurfaceObjectMnvr surfoMnvr = new SurfaceObjectMnvr(_smap, p);
 				_smap.addManoeuver(surfoMnvr);
