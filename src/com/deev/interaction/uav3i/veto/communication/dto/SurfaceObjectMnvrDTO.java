@@ -27,14 +27,20 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 	private Point2D.Double _lookAt;
 	static double LOOK_RADIUS = 32.;
 	
-  private static BufferedImage _imgObjectBig= null;
+	private static BufferedImage _imgObjectBig= null;
+	private static BufferedImage _imgObjectSmall= null;
+	private static BufferedImage _imgDataSmall= null;
+	
+	
   static
   {
     try
     {
       if (_imgObjectBig == null)
       {
-        _imgObjectBig = ImageIO.read(SurfaceObjectMnvrDTO.class.getResource("/img/surfo obj big.png"));
+          _imgObjectBig = ImageIO.read(SurfaceObjectMnvrDTO.class.getResource("/img/surfo obj big.png"));
+          _imgObjectSmall = ImageIO.read(SurfaceObjectMnvrDTO.class.getResource("/img/surfo obj small.png"));
+          _imgDataSmall = ImageIO.read(SurfaceObjectMnvrDTO.class.getResource("/img/surfo data small.png"));
       }
     }
     catch (IOException e)
@@ -73,20 +79,38 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 
 		Point2D.Double centerPx = Veto.getSymbolMapVeto().getScreenForLatLng(_center);
 		g2.translate(centerPx.x, centerPx.y);
-		
-		g2.rotate(_angle);
-		g2.drawImage(_imgObjectBig, (int) (-_imgObjectBig.getWidth()/2.), (int) (-_imgObjectBig.getHeight()/2.), null);
-		g2.rotate(-_angle);
-		g2.translate(128., 192.);
-		drawData(g2);
+	
+		if (isBigOnScreen())
+		{
+			
+			g2.rotate(_angle);
+			g2.drawImage(_imgObjectBig, (int) (-_imgObjectBig.getWidth()/2.), (int) (-_imgObjectBig.getHeight()/2.), null);
+			g2.rotate(-_angle);
+			g2.translate(128., 192.);
+			drawData(g2);
 
-		g2.setTransform(old);
-		
-		Point2D.Double c = lookPxFromRelative(_lookAt);
-		Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
-		paintFootprint(g2, ell);
+			g2.setTransform(old);
+			
+			Point2D.Double c = lookPxFromRelative(_lookAt);
+			Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
+			paintFootprint(g2, ell);
+		}
+		else
+		{
+			g2.drawImage(_imgDataSmall, 192-_imgDataSmall.getWidth(), (int) (-_imgDataSmall.getHeight()/2.), null);
+			g2.rotate(_angle);
+			g2.drawImage(_imgObjectSmall, (int) (-_imgObjectSmall.getWidth()/2.), (int) (-_imgObjectSmall.getHeight()/2.), null);
+			g2.rotate(-_angle);
+			g2.translate(_imgObjectSmall.getWidth()/2., 0);
+			drawData(g2);
+		}
 	}
 
+	public boolean isBigOnScreen()
+	{
+		return Veto.getSymbolMapVeto().getPPM() > 1.;
+	}
+	
 	@Override
 	public LatLng getCenter()
 	{
