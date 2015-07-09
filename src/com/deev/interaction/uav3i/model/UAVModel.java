@@ -417,7 +417,6 @@ public class UAVModel
 
 	public static UAVWayPoints getWayPoints()
 	{
-	  System.out.println("-----------------------> store = " + store);
 		if(store == null)
 			return null;
 		return store.uavWayPoints;
