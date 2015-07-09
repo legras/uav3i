@@ -66,8 +66,8 @@ public class SymbolMap extends Map implements Touchable
 	
 	private Ruler _ruler = null;
 
-	private LatLng _startPoint;
-	private int _maxDistanceFromHome;
+//	private LatLng _startPoint;
+//	private int _maxDistanceFromHome;
 
 	protected static BufferedImage _uavImage      = null;
 	protected static BufferedImage _uavGrayImage  = null;
@@ -92,8 +92,8 @@ public class SymbolMap extends Map implements Touchable
 		_ruler = new Ruler(this);
 		addTouchSymbol(_ruler);
 		
-		_startPoint          = FlightPlanFacade.getInstance().getStartPoint();
-		_maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+//		_startPoint          = FlightPlanFacade.getInstance().getStartPoint();
+//		_maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
 
 
 		// Dessin UAV + way points
@@ -157,10 +157,12 @@ public class SymbolMap extends Map implements Touchable
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		// Zone d'opérations
-		float radius = (float) (_maxDistanceFromHome * getPPM());
+//    float radius = (float) (_maxDistanceFromHome * getPPM());
+    float radius = (float) (FlightPlanFacade.getInstance().getMaxDistanceFromHome() * getPPM());
 		float THICK = 40.f;
 		
-		Point2D.Double center = getScreenForLatLng(_startPoint);
+//    Point2D.Double center = getScreenForLatLng(_startPoint);
+    Point2D.Double center = getScreenForLatLng(FlightPlanFacade.getInstance().getStartPoint());
 		float[] dist = {0.f, radius/(radius+THICK), radius/(radius+THICK)+.000001f, 1.f};
 		Color[] colors = {
 				(Color) Palette3i.getPaint(Palette3i.UAV_SCOPE_CLEAR),
