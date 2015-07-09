@@ -47,6 +47,7 @@ public class UAVModel
 	{
 		if (store == null)
 			store = new UAVModel();
+		
 	}
 
 	public UAVModel(InputStream stream)
