@@ -79,7 +79,8 @@ public class Trajectory
       }
 			mapViewer.setDisplayPositionByLatLon(ll.getLat(),
 					                                 ll.getLng(),
-					                                 UAV3iSettings.getTrajectoryZoom());
+                                           mapViewer.getZoom());
+//                                           UAV3iSettings.getTrajectoryZoom());
 		}
 	}
 

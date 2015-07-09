@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.Launcher;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
@@ -116,8 +117,10 @@ public class UAVModel
 	{
 		if(store != null)
 		{
-			store._dataPoints = new ArrayList<UAVDataPoint>();
-			store.uavWayPoints = new UAVWayPoints();
+			store._dataPoints              = new ArrayList<UAVDataPoint>();
+			store.uavWayPoints             = new UAVWayPoints();
+			store.client2VetoCommunication = null;
+			initConnection();
 		}
 	}
 	
@@ -288,7 +291,7 @@ public class UAVModel
 	public static void communicateManoeuver(Manoeuver mnvr)
 	{
 		// Communication of a manoeuver is only needed in PAPARAZZI_REMOTE mode.
-		if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE)
+		if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE && Launcher.connected)
 		{
 			LoggerUtil.LOG.log(Level.INFO, "Communication of manoeuver to Veto requested");
 			client2VetoCommunication.communicateManoeuver(mnvr.toDTO());
@@ -304,8 +307,11 @@ public class UAVModel
 				LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested... but we are in REPLAY mode, ignored");
 				break;
 			case PAPARAZZI_REMOTE:
-				LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
-				client2VetoCommunication.executeManoeuver(mnvr.getId());
+			  if(Launcher.connected)
+			  {
+			    LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
+			    client2VetoCommunication.executeManoeuver(mnvr.getId());
+			  }
 				break;
 			case PAPARAZZI_DIRECT:
 				LoggerUtil.LOG.log(Level.INFO, "Exection of manoeuver requested");
@@ -324,7 +330,10 @@ public class UAVModel
 			return;
 		}
 
-		client2VetoCommunication.clearManoeuver();
+    if(Launcher.connected)
+    {
+      client2VetoCommunication.clearManoeuver();
+    }
 	}
 
 	/**

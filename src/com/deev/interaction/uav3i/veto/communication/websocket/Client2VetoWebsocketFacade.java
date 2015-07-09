@@ -8,9 +8,11 @@ import java.util.Date;
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
 
+import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.Launcher;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
+import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
 import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.websocket.clientEndpoint.ConfigClientEndpoint;
@@ -111,6 +113,13 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     //config.getConfig("ivy_messages");
     
     Launcher.connected = true;
+  }
+  //-----------------------------------------------------------------------------
+  public static void disconnect()
+  {
+    Launcher.connected = false;
+    FlightPlanFacade.init();
+    UAVModel.reinit();
   }
   //-----------------------------------------------------------------------------
   @Override

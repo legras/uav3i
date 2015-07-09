@@ -103,6 +103,11 @@ public class FlightPlanFacade
     instance = new FlightPlanFacade(flightPlanXML);
   }
   //-----------------------------------------------------------------------------
+  public static void init()
+  {
+    instance = new FlightPlanFacade();
+  }
+  //-----------------------------------------------------------------------------
   /**
    * Pattern Singleton : la méthode renvoie l'unique instance de {@link FlightPlanFacade}.
    * @return l'instance de <code>FlightPlanFacade</code>.

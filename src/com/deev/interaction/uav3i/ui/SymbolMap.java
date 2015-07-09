@@ -17,21 +17,19 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
+import uk.me.jstott.jcoord.LatLng;
 import TUIO.TuioCursor;
 
 import com.deev.interaction.touch.Touchable;
@@ -39,15 +37,10 @@ import com.deev.interaction.uav3i.model.CameraFootprint;
 import com.deev.interaction.uav3i.model.UAVDataPoint;
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.UAVWayPoint;
-import com.deev.interaction.uav3i.model.VideoModel;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.UAV3iSettings.Mode;
-import com.deev.interaction.uav3i.util.log.LoggerUtil;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
-import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
-
-import uk.me.jstott.jcoord.LatLng;
 
 @SuppressWarnings("serial")
 public class SymbolMap extends Map implements Touchable
@@ -144,7 +137,16 @@ public class SymbolMap extends Map implements Touchable
 	}
 
 	public synchronized void paint(Graphics2D g2)
-	{	
+	{
+	  // TODO Very dirty!
+	  if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE && !Launcher.connected)
+	  {
+      _trajectory.reinit();
+      _manoeuvers = new ArrayList<Manoeuver>();
+      _touchSymbols = new ArrayList<Touchable>();
+      _touchedSymbols = new HashMap<Object, Touchable>();
+	  }
+	  
 		if (_currentMnvr != null)
 		{
 			_currentMnvr.instaMoveButtons();

@@ -18,6 +18,7 @@ import javax.websocket.CloseReason.CloseCodes;
 import org.glassfish.tyrus.client.ClientManager;
 
 import com.deev.interaction.uav3i.util.log.LoggerUtil;
+import com.deev.interaction.uav3i.veto.communication.websocket.Client2VetoWebsocketFacade;
 
 @ClientEndpoint
 public class RegisterClientEndpoint
@@ -58,6 +59,7 @@ public class RegisterClientEndpoint
   {
     LoggerUtil.LOG.log(reason.getCloseCode() == CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
                        reason.getCloseCode() + " - " + reason.getReasonPhrase());
+    Client2VetoWebsocketFacade.disconnect();
   }
   //-----------------------------------------------------------------------------
   @OnError
