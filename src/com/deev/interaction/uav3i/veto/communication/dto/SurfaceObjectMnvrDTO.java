@@ -103,6 +103,7 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 			g2.rotate(-_angle);
 			g2.translate(_imgObjectSmall.getWidth()/2., 0);
 			drawData(g2);
+      g2.setTransform(old);
 		}
 	}
 
