@@ -23,7 +23,6 @@ import fr.dgac.ivy.IvyException;
 public class Launcher
 {
   public static boolean connected = false;
-  public static double t0;
 
 	/**
 	 * @param args
@@ -56,8 +55,6 @@ public class Launcher
 				break;
 			case PAPARAZZI_DIRECT:
 			case PAPARAZZI_REMOTE:
-			  t0 = new Date().getTime();
-			  System.out.println("-----------------------> dans Lancher avant tout... : t0 = " + t0);
 				UAVModel.initialize();
 				VideoModel.initialize();
 				SwingUtilities.invokeLater(new Runnable()

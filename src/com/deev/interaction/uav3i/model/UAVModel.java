@@ -45,8 +45,10 @@ public class UAVModel
 	public static void initialize()
 	{
 		if (store == null)
-			store = new UAVModel();
-    System.out.println("-----------------------> UAVModel initialisé : " + (new Date().getTime() - Launcher.t0));
+		{
+      store = new UAVModel();
+      initConnection();
+		}
 	}
 
 	public UAVModel(InputStream stream)
@@ -109,28 +111,40 @@ public class UAVModel
 	 */
 	public UAVModel()
 	{
-    System.out.println("-----------------------> Constructeur UAVModel : " + (new Date().getTime() - Launcher.t0));
     uavWayPoints = new UAVWayPoints();
-		switch (UAV3iSettings.getMode())
+	}
+
+	public static void reinit()
+	{
+		if(store != null)
 		{
-		case PAPARAZZI_DIRECT:
-			client2VetoCommunication = new Client2VetoDirectCommunication();
-			break;
-		case PAPARAZZI_REMOTE:
-		  if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
-		  {
-	      try
-	      {
-	        client2VetoCommunication = new Client2VetoRMIFacade();
-	      }
-	      catch (RemoteException e)
-	      {
-	        LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-	        //e.printStackTrace();
-	      }
-		  }
-		  else if(UAV3iSettings.getRemoteType() == RemoteType.WEBSOCKET)
-		  {
+			store._dataPoints = new ArrayList<UAVDataPoint>();
+			store.uavWayPoints = new UAVWayPoints();
+		}
+	}
+	
+	private static void initConnection()
+	{
+    switch (UAV3iSettings.getMode())
+    {
+    case PAPARAZZI_DIRECT:
+      client2VetoCommunication = new Client2VetoDirectCommunication();
+      break;
+    case PAPARAZZI_REMOTE:
+      if(UAV3iSettings.getRemoteType() == RemoteType.RMI)
+      {
+        try
+        {
+          client2VetoCommunication = new Client2VetoRMIFacade();
+        }
+        catch (RemoteException e)
+        {
+          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+          //e.printStackTrace();
+        }
+      }
+      else if(UAV3iSettings.getRemoteType() == RemoteType.WEBSOCKET)
+      {
         client2VetoCommunication = new Client2VetoWebsocketFacade();
 //        try
 //        {
@@ -141,20 +155,11 @@ public class UAVModel
 //          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
 //          //e.printStackTrace();
 //        }
-		  }
-			break;
-		default:
-			break;
-		}
-	}
-
-	public static void reinit()
-	{
-		if(store != null)
-		{
-			store._dataPoints = new ArrayList<UAVDataPoint>();
-			store.uavWayPoints = new UAVWayPoints();
-		}
+      }
+      break;
+    default:
+      break;
+    }
 	}
 
   public static void addUAVDataPoint(int utm_east, int utm_north, int utm_zone, int course, int alt, long t)
@@ -420,7 +425,6 @@ public class UAVModel
 
 	public static UAVWayPoints getWayPoints()
 	{
-    System.out.println("-----------------------> UAVModel.getWayPoints() : " + (new Date().getTime() - Launcher.t0));
 		if(store == null)
 			return null;
 		return store.uavWayPoints;
