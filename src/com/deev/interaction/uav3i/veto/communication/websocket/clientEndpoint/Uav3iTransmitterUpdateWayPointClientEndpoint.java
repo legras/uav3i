@@ -48,6 +48,7 @@ public class Uav3iTransmitterUpdateWayPointClientEndpoint
   @OnMessage
   public void updateWayPoint(UAVWayPoint wayPoint)
   {
+    System.out.println("------------------------------> " + UAVModel.getWayPoints());
     UAVModel.getWayPoints().updateWayPoint(wayPoint);
     LoggerUtil.LOG.info("WayPoint updated: " + wayPoint);
   }

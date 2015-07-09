@@ -128,15 +128,16 @@ public class UAVModel
 		  }
 		  else if(UAV3iSettings.getRemoteType() == RemoteType.WEBSOCKET)
 		  {
-        try
-        {
-          client2VetoCommunication = new Client2VetoWebsocketFacade();
-        }
-        catch (DeploymentException | IOException | URISyntaxException e)
-        {
-          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
-          //e.printStackTrace();
-        }
+        client2VetoCommunication = new Client2VetoWebsocketFacade();
+//        try
+//        {
+//          client2VetoCommunication = new Client2VetoWebsocketFacade();
+//        }
+//        catch (DeploymentException | IOException | URISyntaxException e)
+//        {
+//          LoggerUtil.LOG.log(Level.SEVERE, e.getMessage());
+//          //e.printStackTrace();
+//        }
 		  }
 			break;
 		default:
@@ -416,6 +417,7 @@ public class UAVModel
 
 	public static UAVWayPoints getWayPoints()
 	{
+	  System.out.println("-----------------------> store = " + store);
 		if(store == null)
 			return null;
 		return store.uavWayPoints;

@@ -3,6 +3,9 @@ package com.deev.interaction.uav3i.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.StringTokenizer;
+
+import uk.me.jstott.jcoord.LatLng;
 
 public class UAV3iSettings
 {
@@ -111,6 +114,12 @@ public class UAV3iSettings
     if(trajectoryZoom == null)
       trajectoryZoom = Integer.parseInt(props.getProperty("TRAJECTORY_ZOOM"));
     return trajectoryZoom;
+  }
+  //-----------------------------------------------------------------------------
+  public static LatLng getInitialCenter()
+  {
+    StringTokenizer st = new StringTokenizer(props.getProperty("INITIAL_CENTER"), ",");
+    return new LatLng(Double.parseDouble(st.nextToken()), Double.parseDouble(st.nextToken()));
   }
   //-----------------------------------------------------------------------------
   public static String  getOffLinePath()            { return props.getProperty("OFF_LINE_PATH");                          }

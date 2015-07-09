@@ -92,8 +92,8 @@ public class SymbolMap extends Map implements Touchable
 		_ruler = new Ruler(this);
 		addTouchSymbol(_ruler);
 		
-	    _startPoint          = FlightPlanFacade.getInstance().getStartPoint();
-	    _maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
+		_startPoint          = FlightPlanFacade.getInstance().getStartPoint();
+		_maxDistanceFromHome = FlightPlanFacade.getInstance().getMaxDistanceFromHome();
 
 
 		// Dessin UAV + way points

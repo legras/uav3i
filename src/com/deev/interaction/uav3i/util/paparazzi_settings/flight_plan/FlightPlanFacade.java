@@ -47,29 +47,38 @@ public class FlightPlanFacade
   //-----------------------------------------------------------------------------
   /**
    * Constructeur : désérialisation JAXB.
+   * @throws FileNotFoundException 
    */
   private FlightPlanFacade()
   {
-    try
-    {
-      // Ouverture du fichier schéma XML
-     InputStream xmlStream = new FileInputStream(UAV3iSettings.getPaparazziFlightPlan());
-     
-     // Désérialisation dans l'arborescence de classes JAXB
-     flightPlan = JAXB.unmarshal(xmlStream, FlightPlan.class);
-     
-     LoggerUtil.LOG.config("Flight plan: " + flightPlan.getName());
-     wayPointsIndex = new HashMap<>();
-     processWaypoints();
-     LoggerUtil.LOG.config("Flight plan: waypoints recovered");
-     blocksIndex = new HashMap<>();
-     processBlocks();
-     LoggerUtil.LOG.config("Flight plan: blocks recovered");
-     processStartPoint();
+    if(UAV3iSettings.getPaparazziFlightPlan() == null)  // UAV3iSettings.getPaparazziFlightPlan() may be null 
+    {                                                   // when MODE is PAPARAZZI_REMOTE (with REMOTE_TYPE -> WEBSOCKET)
+      startPoint = UAV3iSettings.getInitialCenter();    // and the client is not connected to the Veto. In this case,
+      maxDistanceFromHome = 250000;                     // default values are used.
     }
-    catch (FileNotFoundException e)
+    else
     {
-      e.printStackTrace();
+      try
+      {
+        // Ouverture du fichier schéma XML
+       InputStream xmlStream = new FileInputStream(UAV3iSettings.getPaparazziFlightPlan());
+       
+       // Désérialisation dans l'arborescence de classes JAXB
+       flightPlan = JAXB.unmarshal(xmlStream, FlightPlan.class);
+
+       LoggerUtil.LOG.config("Flight plan: " + flightPlan.getName());
+       wayPointsIndex = new HashMap<>();
+       processWaypoints();
+       LoggerUtil.LOG.config("Flight plan: waypoints recovered");
+       blocksIndex = new HashMap<>();
+       processBlocks();
+       LoggerUtil.LOG.config("Flight plan: blocks recovered");
+       processStartPoint();
+      }
+      catch (FileNotFoundException e)
+      {
+        e.printStackTrace();
+      }
     }
   }
   //-----------------------------------------------------------------------------
@@ -97,6 +106,7 @@ public class FlightPlanFacade
   /**
    * Pattern Singleton : la méthode renvoie l'unique instance de {@link FlightPlanFacade}.
    * @return l'instance de <code>FlightPlanFacade</code>.
+   * @throws FileNotFoundException 
    */
   public final static FlightPlanFacade getInstance()
   {

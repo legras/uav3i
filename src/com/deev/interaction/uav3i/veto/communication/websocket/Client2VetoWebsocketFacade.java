@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
 
+import com.deev.interaction.uav3i.ui.Launcher;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.veto.communication.Client2VetoFacade;
@@ -41,11 +42,56 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
   private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
   //-----------------------------------------------------------------------------
-  public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
+//  public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
+  public Client2VetoWebsocketFacade()
+  {
+    
+    while(!Launcher.connected)
+    {
+      try
+      {
+        System.out.println("----------------------> Trying to connect!");
+        connect();
+      }
+      catch (DeploymentException | IOException | URISyntaxException e)
+      {
+//        e.printStackTrace();
+      }
+      try { Thread.sleep(500); } catch (InterruptedException e) {}
+    }
+    
+//    try
+//    {
+//      connect();
+//      register                           = new RegisterClientEndpoint(new URI(baseURI + "/Register"));
+//      config                             = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
+//      paparazziTransmitterCommunicate    = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
+//      paparazziTransmitterExecute        = new PaparazziTransmitterExecuteClientEndpoint(new URI(baseURI + "/PaparazziTransmitterExecute"));
+//      paparazziTransmitterClear          = new PaparazziTransmitterClearClientEndpoint(new URI(baseURI + "/PaparazziTransmitterClear"));
+//      uav3iTransmitterAddUavDataPoint    = new Uav3iTransmitterAddUavDataPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddUavDataPoint"));
+//      uav3iTransmitterUpdateWayPoint     = new Uav3iTransmitterUpdateWayPointClientEndpoint(new URI(baseURI + "/Uav3iTransmitterUpdateWayPoint"));
+//      uav3iTransmitterAddFlightParams    = new Uav3iTransmitterAddFlightParamsClientEndpoint(new URI(baseURI + "/Uav3iTransmitterAddFlightParams"));
+//      uav3iTransmitterResultAskExecution = new Uav3iTransmitterResultAskExecutionClientEndpoint(new URI(baseURI + "/Uav3iTransmitterResultAskExecution"));
+//
+//      register.register();
+//      
+//      config.getConfig("flight_plan");
+//      // TODO le fichier XML airframe est utile uniquement pour trouver le "default circle radius" : absent dans le cas d'un rotorcraft... 
+//      config.getConfig("airframe");
+//      // TODO le fichier XML des messages Ivy ne doit être utilsé que côté serveur... à confirmer !
+//      //config.getConfig("ivy_messages");
+//    }
+//    catch (DeploymentException | IOException | URISyntaxException e)
+//    {
+//      System.err.println("Not connected...");
+//    }
+  }
+  //-----------------------------------------------------------------------------
+  private void connect() throws DeploymentException, IOException, URISyntaxException
   {
     // Connection to server.
     String baseURI = "ws://" + UAV3iSettings.getVetoServerIP()+":" + UAV3iSettings.getVetoServerPort() + "/berisuas";
-    
+
     register                           = new RegisterClientEndpoint(new URI(baseURI + "/Register"));
     config                             = new ConfigClientEndpoint(new URI(baseURI + "/Config"));
     paparazziTransmitterCommunicate    = new PaparazziTransmitterCommunicateClientEndpoint(new URI(baseURI + "/PaparazziTransmitterCommunicate"));
@@ -63,6 +109,8 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     config.getConfig("airframe");
     // TODO le fichier XML des messages Ivy ne doit être utilsé que côté serveur... à confirmer !
     //config.getConfig("ivy_messages");
+    
+    Launcher.connected = true;
   }
   //-----------------------------------------------------------------------------
   @Override

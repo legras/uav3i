@@ -21,6 +21,7 @@ import fr.dgac.ivy.IvyException;
  */
 public class Launcher
 {
+  public static boolean connected = false;
 
 	/**
 	 * @param args

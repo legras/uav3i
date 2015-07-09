@@ -9,6 +9,7 @@ import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.Launcher;
 import com.deev.interaction.uav3i.ui.Map;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -24,9 +25,10 @@ public class OsmMapGround extends Map
     mapViewer = new JMapViewer(UAV3iSettings.getInteractionMode());
 
     LatLng startPoint = FlightPlanFacade.getInstance().getStartPoint();
+    int zoom = (Launcher.connected ? UAV3iSettings.getTrajectoryZoom() - 3 : UAV3iSettings.getInitialZoom());
     mapViewer.setDisplayPositionByLatLon(startPoint.getLat(),
                                          startPoint.getLng(),
-                                         UAV3iSettings.getTrajectoryZoom() - 3);
+                                         zoom);
     
     switch (UAV3iSettings.getMapType())
     {
