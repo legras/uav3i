@@ -49,11 +49,14 @@ public class MainFrame extends JFrame implements ActionListener
 	public static TimeLine TIMELINE;
 
 	public static Switcher3Buttons SWITCHER;
-	protected static SymbolMap _SMAP;;
+	protected static SymbolMap _SMAP;
+	private static JFrame instance = null;
+	
 
 	public MainFrame()
 	{
 		super();
+		instance = this;
 		// Il est nécessaire de nommer la frame pour capter les évenements
 		// TUIO via le bridge Touch2Tuio sous Windows (prend en paramètre le nom de la fenêtre).
     setTitle("uav3i");
@@ -305,5 +308,10 @@ public class MainFrame extends JFrame implements ActionListener
   public static SymbolMap getSymbolMap()
   {
     return _SMAP;
+  }
+  
+  public static JFrame getFrame()
+  {
+    return instance;
   }
 }

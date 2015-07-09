@@ -5,11 +5,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.ui.Launcher;
+import com.deev.interaction.uav3i.ui.MainFrame;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
 import com.deev.interaction.uav3i.util.paparazzi_settings.flight_plan.FlightPlanFacade;
@@ -44,6 +47,9 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private Uav3iTransmitterUpdateWayPointClientEndpoint     uav3iTransmitterUpdateWayPoint;
   private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
   private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
+  
+  private JDialog dialog = null;
+  private int nbOfTries = 0;
   //-----------------------------------------------------------------------------
 //  public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   public Client2VetoWebsocketFacade()
@@ -52,10 +58,16 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     {
       try
       {
+        nbOfTries++;
         connect();
       }
       catch (DeploymentException | IOException | URISyntaxException e)
       {
+        if(nbOfTries == 2)
+        {
+          System.out.println("-------------------------------> Je vais afficher le dialog !");
+          showDialogTryingToConnectToVeto();
+        }
       }
       try { Thread.sleep(500); } catch (InterruptedException e) {}
     }
@@ -85,6 +97,12 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     //config.getConfig("ivy_messages");
     
     Launcher.connected = true;
+    if(dialog != null)
+    {
+      dialog.dispose();
+      dialog = null;
+      nbOfTries = 0;
+    }
   }
   //-----------------------------------------------------------------------------
   public static void disconnect()
@@ -141,6 +159,24 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
     {
       e.printStackTrace();
     }
+  }
+  //-----------------------------------------------------------------------------
+  private void showDialogTryingToConnectToVeto()
+  {
+    JOptionPane optionPane = new JOptionPane("Trying to connect to " + UAV3iSettings.getVetoServerIP() + ":" + UAV3iSettings.getVetoServerPort(),
+                                             JOptionPane.INFORMATION_MESSAGE,
+                                             JOptionPane.DEFAULT_OPTION, 
+                                             null, 
+                                             new Object[]{}, 
+                                             null);
+    dialog = new JDialog(MainFrame.getFrame());
+    dialog.setTitle("Connection to Veto");
+    dialog.setModal(false);
+    dialog.setContentPane(optionPane);
+    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+    dialog.pack();
+    dialog.setLocationRelativeTo(MainFrame.getFrame());
+    dialog.setVisible(true);
   }
   //-----------------------------------------------------------------------------
 }
