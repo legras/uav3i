@@ -30,7 +30,7 @@ public class RegisterServerEndpoint
   public void onClose(Session session, CloseReason reason) throws IOException
   {
     Veto2ClientWebsocketFacade.unRegister();
-    LoggerUtil.LOG.log(reason.getCloseCode() != CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
+    LoggerUtil.LOG.log(reason.getCloseCode() == CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
                        reason.getCloseCode() + " - " + reason.getReasonPhrase());
   }
   //-----------------------------------------------------------------------------

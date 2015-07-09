@@ -82,7 +82,7 @@ public class PaparazziTransmitterExecuteServerEndpoint
   @OnClose
   public void onClose(Session session, CloseReason reason) throws IOException
   {
-    LoggerUtil.LOG.log(reason.getCloseCode() != CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
+    LoggerUtil.LOG.log(reason.getCloseCode() == CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
                        reason.getCloseCode() + " - " + reason.getReasonPhrase());
   }
   //-----------------------------------------------------------------------------

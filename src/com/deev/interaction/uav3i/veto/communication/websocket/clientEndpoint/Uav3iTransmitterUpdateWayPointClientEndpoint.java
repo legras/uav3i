@@ -48,7 +48,6 @@ public class Uav3iTransmitterUpdateWayPointClientEndpoint
   @OnMessage
   public void updateWayPoint(UAVWayPoint wayPoint)
   {
-    System.out.println("-----------------------> UAVModel.getWayPoints() = " + UAVModel.getWayPoints());
     if(UAVModel.getWayPoints() != null)
     {
       UAVModel.getWayPoints().updateWayPoint(wayPoint);
@@ -59,7 +58,7 @@ public class Uav3iTransmitterUpdateWayPointClientEndpoint
   @OnClose
   public void onClose(Session session, CloseReason reason) throws IOException
   {
-    LoggerUtil.LOG.log(reason.getCloseCode() != CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
+    LoggerUtil.LOG.log(reason.getCloseCode() == CloseCodes.NORMAL_CLOSURE ? Level.INFO : Level.WARNING,
                        reason.getCloseCode() + " - " + reason.getReasonPhrase());
   }
   //-----------------------------------------------------------------------------
