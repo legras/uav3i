@@ -3,6 +3,7 @@ package com.deev.interaction.uav3i.veto.communication.websocket;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import javax.websocket.DeploymentException;
 import javax.websocket.EncodeException;
@@ -45,7 +46,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
 //  public Client2VetoWebsocketFacade() throws DeploymentException, IOException, URISyntaxException
   public Client2VetoWebsocketFacade()
   {
-    
+    System.out.println("-----------------------> Constructeur Client2VetoWebsocketFacade : " + (new Date().getTime() - Launcher.t0));
     while(!Launcher.connected)
     {
       try
@@ -85,6 +86,7 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
 //    {
 //      System.err.println("Not connected...");
 //    }
+    System.out.println("-----------------------> Client2VetoWebsocketFacade construit et connecté : " + (new Date().getTime() - Launcher.t0));
   }
   //-----------------------------------------------------------------------------
   private void connect() throws DeploymentException, IOException, URISyntaxException

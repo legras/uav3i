@@ -4,16 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
-
-import javax.websocket.DeploymentException;
 
 import uk.me.jstott.jcoord.LatLng;
 
+import com.deev.interaction.uav3i.ui.Launcher;
 import com.deev.interaction.uav3i.ui.Manoeuver;
 import com.deev.interaction.uav3i.ui.Manoeuver.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.util.UAV3iSettings;
@@ -34,7 +33,7 @@ public class UAVModel
 	private double verticalSpeed;
 	private double groundAltitude;
 	private double groundSpeed;
-	private UAVWayPoints uavWayPoints = new UAVWayPoints();
+	private UAVWayPoints uavWayPoints = null;
 
 
 	public static void initialize(InputStream stream)
@@ -47,11 +46,12 @@ public class UAVModel
 	{
 		if (store == null)
 			store = new UAVModel();
-		
+    System.out.println("-----------------------> UAVModel initialisé : " + (new Date().getTime() - Launcher.t0));
 	}
 
 	public UAVModel(InputStream stream)
 	{
+	  uavWayPoints = new UAVWayPoints();
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		String strLine;
 		long delta = 0;
@@ -109,6 +109,8 @@ public class UAVModel
 	 */
 	public UAVModel()
 	{
+    System.out.println("-----------------------> Constructeur UAVModel : " + (new Date().getTime() - Launcher.t0));
+    uavWayPoints = new UAVWayPoints();
 		switch (UAV3iSettings.getMode())
 		{
 		case PAPARAZZI_DIRECT:
@@ -418,6 +420,7 @@ public class UAVModel
 
 	public static UAVWayPoints getWayPoints()
 	{
+    System.out.println("-----------------------> UAVModel.getWayPoints() : " + (new Date().getTime() - Launcher.t0));
 		if(store == null)
 			return null;
 		return store.uavWayPoints;
