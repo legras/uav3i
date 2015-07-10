@@ -130,6 +130,17 @@ public class SymbolMap extends Map implements Touchable
 			}
 		}
 	}
+	
+	private void reinit()
+	{
+    _trajectory.reinit();
+    for (Manoeuver m : _manoeuvers)
+      m.hidebuttons();
+    _manoeuvers = new ArrayList<Manoeuver>();
+    _touchSymbols = new ArrayList<Touchable>();
+    _touchedSymbols = new HashMap<Object, Touchable>();
+    manoeuverSequence = 0;
+	}
 
 	public void paintComponent(Graphics g)
 	{
@@ -139,17 +150,12 @@ public class SymbolMap extends Map implements Touchable
 
 	public synchronized void paint(Graphics2D g2)
 	{
-	  // TODO Very dirty!
-	  if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE && !Launcher.connected)
-	  {
-      _trajectory.reinit();
-      for(Manoeuver m : _manoeuvers)
-        m.hidebuttons();
-      _manoeuvers = new ArrayList<Manoeuver>();
-      _touchSymbols = new ArrayList<Touchable>();
-      _touchedSymbols = new HashMap<Object, Touchable>();
-	  }
-	  
+	  // FIXME: very dirty!
+    if(UAV3iSettings.getMode() == Mode.PAPARAZZI_REMOTE && !Launcher.connected)
+    {
+      reinit();
+    }
+
 		if (_currentMnvr != null)
 		{
 			_currentMnvr.instaMoveButtons();
