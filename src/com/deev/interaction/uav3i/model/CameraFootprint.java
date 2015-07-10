@@ -20,10 +20,10 @@ public class CameraFootprint extends ArrayList<LatLng>
 	{
 		super();
 		
-		double c = course + 45. * multisigmo(t);
+		double c = course;
 		
 		LatLng right, left;
-		double d = .002;
+		double d = .0005;
 		double a = 15.;
 		
 		right = new LatLng(d * Math.cos((c+a)/180*Math.PI),  d * Math.sin((c+a)/180*Math.PI));
@@ -38,7 +38,7 @@ public class CameraFootprint extends ArrayList<LatLng>
 	}
 	
 	/**
-	 * Slightly les dummy footprint, centered on the target.
+	 * Slightly less dummy footprint, centered on the target.
 	 * @param uavposition
 	 * @param camTarget
 	 * @param t
