@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
 import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import com.deev.interaction.uav3i.model.UAVModel;
 import com.deev.interaction.uav3i.model.VideoModel;
@@ -34,6 +34,16 @@ public class Launcher
 
 		// Lecture du fichier de configuration pour le système de logs.
 		System.setProperty("java.util.logging.config.file", "uav3i_logging.properties");
+		
+    try
+    {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    }
+    catch (Throwable e)
+    {
+      e.printStackTrace();
+    }
+
 
 		// TODO améliorer la gestion des différents cas de figure...
 		switch (UAV3iSettings.getMode())

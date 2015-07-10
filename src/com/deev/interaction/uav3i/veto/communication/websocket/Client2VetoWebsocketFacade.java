@@ -3,7 +3,6 @@ package com.deev.interaction.uav3i.veto.communication.websocket;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -43,9 +42,13 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
   private PaparazziTransmitterCommunicateClientEndpoint    paparazziTransmitterCommunicate;
   private PaparazziTransmitterExecuteClientEndpoint        paparazziTransmitterExecute;
   private PaparazziTransmitterClearClientEndpoint          paparazziTransmitterClear;
+  @SuppressWarnings("unused")
   private Uav3iTransmitterAddUavDataPointClientEndpoint    uav3iTransmitterAddUavDataPoint;
+  @SuppressWarnings("unused")
   private Uav3iTransmitterUpdateWayPointClientEndpoint     uav3iTransmitterUpdateWayPoint;
+  @SuppressWarnings("unused")
   private Uav3iTransmitterAddFlightParamsClientEndpoint    uav3iTransmitterAddFlightParams;
+  @SuppressWarnings("unused")
   private Uav3iTransmitterResultAskExecutionClientEndpoint uav3iTransmitterResultAskExecution;
   
   private JDialog dialog = null;

@@ -119,7 +119,7 @@ public class UAVModel
 		{
 			store._dataPoints              = new ArrayList<UAVDataPoint>();
 			store.uavWayPoints             = new UAVWayPoints();
-			store.client2VetoCommunication = null;
+			UAVModel.client2VetoCommunication = null;
 			initConnection();
 		}
 	}

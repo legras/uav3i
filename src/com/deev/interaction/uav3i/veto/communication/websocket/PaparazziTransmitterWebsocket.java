@@ -14,7 +14,6 @@ import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO;
 import com.deev.interaction.uav3i.veto.communication.dto.ManoeuverDTO.ManoeuverRequestedStatus;
 import com.deev.interaction.uav3i.veto.communication.websocket.serverEndpoint.Uav3iTransmitterResultAskExecutionServerEndpoint;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVCamStatusListener;
-import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVFlightParamsListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVNavStatusListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListener;
 import com.deev.interaction.uav3i.veto.communication.websocket.uavListener.UAVPositionListenerRotorcraft;
@@ -39,7 +38,7 @@ public class PaparazziTransmitterWebsocket
   private          Ivy                           bus;
   private          UAVPositionListener           uavPositionListener           = null;
   private          UAVPositionListenerRotorcraft uavPositionListenerRotorcraft = null;
-  private          UAVFlightParamsListener       uavFlightParamsListener       = null;
+  //private          UAVFlightParamsListener       uavFlightParamsListener       = null;
   private          UAVWayPointsListener          uavWayPointsListener          = null;
   private          UAVNavStatusListener          uavNavStatusListener          = null;
   private          UAVCamStatusListener          uavCamStatusListener          = null;

@@ -7,13 +7,13 @@ import java.util.logging.Level;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.CloseReason.CloseCodes;
 
 import org.glassfish.tyrus.client.ClientManager;
 
