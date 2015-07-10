@@ -54,7 +54,7 @@ public class Veto2ClientWebsocketFacade
                                endpoints);                        // endpoint(s)
     server.start();
     
-    PaparazziTransmitterWebsocket.getInstance();
+    //PaparazziTransmitterWebsocket.getInstance();
   }
   //-----------------------------------------------------------------------------
   /**

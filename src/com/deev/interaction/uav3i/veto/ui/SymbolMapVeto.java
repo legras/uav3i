@@ -18,6 +18,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -171,25 +172,31 @@ public class SymbolMapVeto extends JComponent
     Shape outline;
     synchronized (this)
     {
-      for (UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
+      try
       {
-        LatLng wayPointPosition = wayPoint.getWayPointPosition();
-        if (wayPointPosition != null)
+        for (UAVWayPoint wayPoint : UAVModel.getWayPoints().getWayPoints())
         {
-          Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
-          g2.drawImage(waypointImage, p.x - waypointImage.getWidth() / 2, p.y - waypointImage.getHeight() / 2, null);
+          LatLng wayPointPosition = wayPoint.getWayPointPosition();
+          if (wayPointPosition != null)
+          {
+            Point p = Veto.getMapViewer().getMapPosition(wayPointPosition.getLat(), wayPointPosition.getLng(), false);
+            g2.drawImage(waypointImage, p.x - waypointImage.getWidth() / 2, p.y - waypointImage.getHeight() / 2, null);
 
-          textTl = new TextLayout(wayPoint.getWayPointName(), f, frc);
-          outline = textTl.getOutline(null);
+            textTl = new TextLayout(wayPoint.getWayPointName(), f, frc);
+            outline = textTl.getOutline(null);
 
-          AffineTransform old = g2.getTransform();
-          g2.translate(p.x + waypointImage.getWidth() / 2, p.y + waypointImage.getHeight() / 2);
-          g2.setPaint(Palette3i.getPaint(Palette3i.WHITE_BG));
-          g2.draw(outline);
-          g2.setPaint(Color.GRAY);
-          g2.fill(outline);
-          g2.setTransform(old);
+            AffineTransform old = g2.getTransform();
+            g2.translate(p.x + waypointImage.getWidth() / 2, p.y + waypointImage.getHeight() / 2);
+            g2.setPaint(Palette3i.getPaint(Palette3i.WHITE_BG));
+            g2.draw(outline);
+            g2.setPaint(Color.GRAY);
+            g2.fill(outline);
+            g2.setTransform(old);
+          }
         }
+      }
+      catch(ConcurrentModificationException cme)
+      {
       }
     }
 	

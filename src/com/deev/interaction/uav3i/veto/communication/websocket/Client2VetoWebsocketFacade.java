@@ -65,7 +65,6 @@ public class Client2VetoWebsocketFacade extends Client2VetoFacade
       {
         if(nbOfTries == 2)
         {
-          System.out.println("-------------------------------> Je vais afficher le dialog !");
           showDialogTryingToConnectToVeto();
         }
       }

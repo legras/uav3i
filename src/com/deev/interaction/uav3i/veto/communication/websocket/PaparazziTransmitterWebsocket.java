@@ -64,19 +64,25 @@ public class PaparazziTransmitterWebsocket
    */
   private void initializeIvy() throws IvyException
   {
-    // initialization, name and ready message
-    bus = new Ivy(applicationName,
-                  applicationName + " Ready",
-                  null);
-    uavPositionListener           = new UAVPositionListener();
-    uavNavStatusListener          = new UAVNavStatusListener();
-    uavCamStatusListener          = new UAVCamStatusListener();
-    uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
-    //uavFlightParamsListener       = new UAVFlightParamsListener();
-    uavWayPointsListener          = new UAVWayPointsListener();
-    uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
-    uavPositionListenerRotorcraft.setUavCamStatusListener(uavCamStatusListener);
-    LoggerUtil.LOG.config("Ivy initialized");
+    if(bus == null)
+    {
+      // initialization, name and ready message
+      bus = new Ivy(applicationName,
+                    applicationName + " Ready",
+                    null);
+      uavPositionListener           = new UAVPositionListener();
+      uavNavStatusListener          = new UAVNavStatusListener();
+      uavCamStatusListener          = new UAVCamStatusListener();
+      uavPositionListenerRotorcraft = new UAVPositionListenerRotorcraft();
+      //uavFlightParamsListener       = new UAVFlightParamsListener();
+      uavWayPointsListener          = new UAVWayPointsListener();
+      uavPositionListenerRotorcraft.setUavNavStatusListener(uavNavStatusListener);
+      uavPositionListenerRotorcraft.setUavCamStatusListener(uavCamStatusListener);
+      LoggerUtil.LOG.config("Ivy initialized");
+    }
+    else
+      LoggerUtil.LOG.config("Ivy already initialized");
+      
   }
   //-----------------------------------------------------------------------------
   public void communicateManoeuver(ManoeuverDTO mnvrDTO)
@@ -191,21 +197,21 @@ public class PaparazziTransmitterWebsocket
     {
       Veto2ClientWebsocketFacade.setConnected(true);
       // Mise en écoute des messages GPS (version 3i)
-//      // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
+//        // TODO Attention, les messages de type GPS_SOL sont aussi filtrés par le pattern !
       bus.bindMsg("(.*)GPS(.*)", uavPositionListener);
-      
+
       // Mise en écoute des messages GPS (version Rotorcraft)
       bus.bindMsg("(.*)GPS_INT(.*)", uavPositionListenerRotorcraft);
 
       // Mise en écoute des messages NAV_STATUS
       bus.bindMsg("(.*) NAV_STATUS(.*)", uavNavStatusListener);
 
-//      // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
-//      bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
+//        // Mise en écoute des messages concernant l'altitude et la vitesse ascentionnelle
+//        bus.bindMsg("(.*)FLIGHT_PARAM(.*)", uavFlightParamsListener);
 
       // Mise en écoute des messages concernant les waypoints
       bus.bindMsg("(.*)WAYPOINT_MOVED(.*)", uavWayPointsListener);
-      
+
       // Mise en écoute des messages CAM_STATUS
       bus.bindMsg("(.*)CAM_STATUS(.*)", uavCamStatusListener);
     }
