@@ -14,6 +14,8 @@ public class UAVDataPoint
 	protected LatLng _camTarget;
 	protected CameraFootprint _cameraFootPrint = null;
 	
+	public static boolean DUMMY_CAMERA_FOOTPRINT = true;
+	
 	/**
 	 * <message name="GPS" id="8">
 	 *   <field name="mode"       type="uint8"  unit="byte_mask"/>
@@ -50,7 +52,9 @@ public class UAVDataPoint
 		altitude  = (double) alt / 1000.;
 		course    = (double) c / 10.;
 		time      = t;
-		_camTarget = null;
+
+		_camTarget = latlng;
+		_cameraFootPrint = new CameraFootprint(latlng, course, time);
 	}
 	
 	/**
@@ -124,8 +128,16 @@ public class UAVDataPoint
     course    = (double) c;
     time      = t;
     
-    _camTarget = new LatLng(camTargetLat, camTargetLong);
-    _cameraFootPrint = new CameraFootprint(latlng, _camTarget, time);
+    if (DUMMY_CAMERA_FOOTPRINT)
+    {
+    	_camTarget = latlng;
+		_cameraFootPrint = new CameraFootprint(latlng, course, time);
+    }
+    else
+    {
+		_camTarget = new LatLng(camTargetLat, camTargetLong);
+		_cameraFootPrint = new CameraFootprint(latlng, _camTarget, time);
+	}
   }
   
   public LatLng getCameraTarget()
