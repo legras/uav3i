@@ -69,7 +69,7 @@ OFF_LINE_MAX_ZOOM =
 # Initial zoom for the JMapViewer component
 
 INITIAL_ZOOM    = 7
-TRAJECTORY_ZOOM = 15
+TRAJECTORY_ZOOM = 18
 
 
 
