@@ -31,6 +31,8 @@ public class SurfaceObjectMnvr extends Manoeuver
 	private Point2D.Double _lookAt;
 	private Point2D.Double _lastLookAt;
 	static double LOOK_RADIUS = 32.;
+	static double BIG_RADIUS = 256.;
+	static double ZOOM_RADIUS = BIG_RADIUS-70.;
 	
 	private enum SurfaceObjectMnvrStates {NONE, TRANSLATE, ROTATE};
 	private SurfaceObjectMnvrStates _moveState = SurfaceObjectMnvrStates.NONE;
@@ -64,7 +66,7 @@ public class SurfaceObjectMnvr extends Manoeuver
 	{
 		_center = c;
 		_smap = map;
-		_lookAt = new Point2D.Double(0.5, 0);
+		_lookAt = new Point2D.Double(0., 0.5);
 			
 		try
 		{
@@ -132,6 +134,11 @@ public class SurfaceObjectMnvr extends Manoeuver
 	public boolean isBigOnScreen()
 	{
 		return _smap.getPPM() > 1.;
+	}
+	
+	public boolean isZoomedOut()
+	{
+		return _lookAt.distance(0, 0) > 1.;
 	}
 	
 	@Override
@@ -283,9 +290,19 @@ public class SurfaceObjectMnvr extends Manoeuver
 		
 		if (isBigOnScreen())
 		{
-			Point2D.Double c = lookPxFromRelative(_lookAt);
-			Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
-			paintFootprint(g2, ell, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
+			if (isZoomedOut())
+			{
+				Point2D.Double c = lookPxFromRelative(new Point2D.Double(0, 0));
+				double radius = ZOOM_RADIUS;
+				Ellipse2D.Double ell = new Ellipse2D.Double(c.x-radius, c.y-radius, 2*radius, 2*radius);
+				paintFootprint(g2, ell, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
+			}
+			else
+			{
+				Point2D.Double c = lookPxFromRelative(_lookAt);
+				Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
+				paintFootprint(g2, ell, getRequestedStatus() != ManoeuverRequestedStatus.NONE);
+			}	
 		}
 	}
 
@@ -411,15 +428,18 @@ public class SurfaceObjectMnvr extends Manoeuver
 			_lookAt.y += pr.y - _lastLookAt.y;
 			
 			_lastLookAt = pr;
-
-			// TODO: contraindre au cercle ?
-
+			
 			return true;
 		}
 
 		if (isAdjustmentInterestedAtPx(x, y))
 		{
-			_lastLookAt = pr;
+			if (isZoomedOut())
+			{
+				_lookAt = pr;
+			}
+
+			_lastLookAt = pr;	
 			_adjusting = true;
 		}
 
@@ -429,9 +449,18 @@ public class SurfaceObjectMnvr extends Manoeuver
 	@Override
 	public boolean isAdjustmentInterestedAtPx(double x, double y)
 	{
-		Point2D.Double L = lookPxFromRelative(_lookAt);
-		
-		return L.distance(x, y) < LOOK_RADIUS;
+		if (isZoomedOut())
+		{
+			Point2D.Double L = lookPxFromRelative(new Point2D.Double(0, 0));
+			
+			return L.distance(x, y) < ZOOM_RADIUS;
+		}
+		else
+		{
+			Point2D.Double L = lookPxFromRelative(_lookAt);
+			
+			return L.distance(x, y) < LOOK_RADIUS;
+		}
 	}
 
 }
