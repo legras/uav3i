@@ -110,6 +110,12 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 	{
 		return Veto.getSymbolMapVeto().getPPM() > 1.;
 	}
+
+	
+	public boolean isZoomedOut()
+	{
+		return _lookAt.distance(0, 0) > 1.;
+	}
 	
 	@Override
 	public LatLng getCenter()
