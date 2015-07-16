@@ -346,6 +346,7 @@ public class SymbolMap extends Map implements Touchable
 		g2.setTransform(old);
 
     // Temporaire : dessin de la cible caméra
+		/*
     if(uavpoint != null && uavpoint.getCameraTarget() != null)
     {
       Point camTarget = MainFrame.OSMMap.getMapViewer().getMapPosition(uavpoint.getCameraTarget().getLat(), uavpoint.getCameraTarget().getLng(), false);
@@ -355,6 +356,7 @@ public class SymbolMap extends Map implements Touchable
                    null);
     }
     g2.setTransform(old);
+    */
 
 //		// Cam status
 //		if(UAVModel.getCamCoord() != null && UAVModel.getCamTargetCoord() != null)
