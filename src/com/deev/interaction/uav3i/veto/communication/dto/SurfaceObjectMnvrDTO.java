@@ -26,6 +26,8 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 	private double _angle = 0.1;
 	private Point2D.Double _lookAt;
 	static double LOOK_RADIUS = 32.;
+	static double BIG_RADIUS = 256.;
+	static double ZOOM_RADIUS = BIG_RADIUS-70.;
 	
 	private static BufferedImage _imgObjectBig= null;
 	private static BufferedImage _imgObjectSmall= null;
@@ -91,9 +93,19 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 
 			g2.setTransform(old);
 			
-			Point2D.Double c = lookPxFromRelative(_lookAt);
-			Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
-			paintFootprint(g2, ell);
+			if (isZoomedOut())
+			{
+				Point2D.Double c = lookPxFromRelative(new Point2D.Double(0, 0));
+				double radius = ZOOM_RADIUS;
+				Ellipse2D.Double ell = new Ellipse2D.Double(c.x-radius, c.y-radius, 2*radius, 2*radius);
+				paintFootprint(g2, ell);
+			}
+			else
+			{
+				Point2D.Double c = lookPxFromRelative(_lookAt);
+				Ellipse2D.Double ell = new Ellipse2D.Double(c.x-LOOK_RADIUS, c.y-LOOK_RADIUS, 2*LOOK_RADIUS, 2*LOOK_RADIUS);
+				paintFootprint(g2, ell);
+			}
 		}
 		else
 		{
@@ -110,6 +122,12 @@ public class SurfaceObjectMnvrDTO extends ManoeuverDTO
 	public boolean isBigOnScreen()
 	{
 		return Veto.getSymbolMapVeto().getPPM() > 1.;
+	}
+
+	
+	public boolean isZoomedOut()
+	{
+		return _lookAt.distance(0, 0) > 1.;
 	}
 	
 	@Override
